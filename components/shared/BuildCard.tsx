@@ -1,0 +1,199 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { useRef, type MouseEvent } from "react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { SpecPill } from "@/components/shared/SpecPill";
+import { PriceBlock } from "@/components/shared/PriceBlock";
+import { ChassisArt } from "@/components/brand/ChassisArt";
+import { SKU_ACCENTS } from "@/lib/sku-accents";
+import type { Build } from "@/types/build";
+import { gameLabel } from "@/lib/mock/games";
+import { fpsTier, FPS_TIER_META } from "@/lib/fps-thresholds";
+
+type Variant = "compact" | "full";
+
+const RESOLUTION_LABEL = {
+  fullhd: "Full HD",
+  "2k": "2K",
+  "4k": "4K",
+} as const;
+
+export function BuildCard({
+  build,
+  variant = "full",
+  highlightGames,
+  badge,
+  className,
+}: {
+  build: Build;
+  variant?: Variant;
+  highlightGames?: string[];
+  badge?: string;
+  className?: string;
+}) {
+  const cardRef = useRef<HTMLAnchorElement>(null);
+  const accent = SKU_ACCENTS[build.slug];
+  const statusLabel =
+    build.status === "in_stock"
+      ? "В наявності"
+      : build.status === "assemble_on_order"
+        ? `Збираємо за ${build.assemblyDays} дні`
+        : build.status === "out_of_stock"
+          ? "Немає в наявності"
+          : "Архів";
+
+  function onMove(e: MouseEvent<HTMLAnchorElement>) {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+    el.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  }
+
+  return (
+    <Link
+      ref={cardRef}
+      href={`/pk/${build.slug}`}
+      onMouseMove={onMove}
+      className={cn(
+        "sku-glow smooth-hover group relative block overflow-hidden rounded-lg border border-border bg-surface",
+        "hover:-translate-y-1 hover:border-white/15 motion-reduce:transform-none",
+        className,
+      )}
+      style={{ ["--sku" as string]: accent }}
+    >
+      {/* SKU top shimmer line */}
+      <div
+        aria-hidden
+        className="sku-top-line pointer-events-none absolute inset-x-0 top-0 h-px opacity-70"
+      />
+      {/* Soft accent corner glow (ambient) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-24 -top-24 size-64 rounded-full opacity-25 blur-3xl transition-opacity duration-500 ease-out group-hover:opacity-45"
+        style={{ background: "var(--sku)" }}
+      />
+      {/* Pointer-follow spotlight */}
+      <div
+        aria-hidden
+        className="card-spotlight pointer-events-none absolute inset-0"
+      />
+
+      <div className="relative flex h-full flex-col gap-4 p-5">
+        <div className="flex items-start justify-between">
+          <div className="min-w-0">
+            <div className="font-display text-2xl font-bold uppercase tracking-wider">
+              {build.name}
+            </div>
+            <div className="mt-0.5 truncate text-xs text-muted-foreground">
+              {build.shortTagline}
+            </div>
+          </div>
+          {badge ? (
+            <div
+              className="rounded-full border border-white/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider"
+              style={{ color: "var(--sku)" }}
+            >
+              {badge}
+            </div>
+          ) : (
+            <div
+              className="mt-1 size-3 shrink-0 rounded-full ring-2 ring-background"
+              style={{ background: "var(--sku)" }}
+            />
+          )}
+        </div>
+
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md">
+          {build.heroImageUrl ? (
+            <>
+              <ChassisArt className="absolute inset-0 size-full" />
+              <Image
+                src={build.heroImageUrl}
+                alt={`${build.name} — ігровий ПК`}
+                fill
+                sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 90vw"
+                className={cn(
+                  "relative z-10 object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+                  "group-hover:scale-[1.035] motion-reduce:transform-none will-change-transform",
+                )}
+              />
+            </>
+          ) : (
+            <ChassisArt
+              className={cn(
+                "absolute inset-0 size-full transition-transform duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+                "group-hover:scale-[1.03] motion-reduce:transform-none will-change-transform",
+              )}
+            />
+          )}
+        </div>
+
+        <SpecPill
+          specs={[
+            { key: "cpu", value: build.spec.cpu },
+            { key: "gpu", value: build.spec.gpu, note: build.spec.gpuVram },
+            { key: "ram", value: build.spec.ram, note: build.spec.ramSpeed },
+            { key: "storage", value: build.spec.storage },
+          ]}
+        />
+
+        {variant === "full" && highlightGames && highlightGames.length > 0 && (
+          <div className="tabular space-y-1.5 rounded-md border border-border bg-background/40 p-3">
+            <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+              У твоїх іграх · {RESOLUTION_LABEL[build.targetResolution]}
+            </div>
+            {highlightGames.slice(0, 3).map((slug) => {
+              const entry = build.fps.find(
+                (f) => f.gameSlug === slug && f.resolution === build.targetResolution,
+              );
+              if (!entry) return null;
+              const tier = fpsTier(entry.fpsAvg);
+              const isGreen = tier === "green";
+              return (
+                <div
+                  key={slug}
+                  className="flex items-center justify-between text-sm"
+                >
+                  <span className="text-muted-foreground">
+                    {gameLabel(slug)}
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <span
+                      className={cn(
+                        "size-2 rounded-full",
+                        isGreen && "animate-fps-pulse",
+                      )}
+                      style={{ background: FPS_TIER_META[tier].colorVar }}
+                    />
+                    <span className="font-semibold">{entry.fpsAvg} FPS</span>
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        <div className="mt-auto flex items-end justify-between gap-3 pt-1">
+          <PriceBlock
+            priceUah={build.priceUah}
+            oldPriceUah={build.oldPriceUah}
+            size="sm"
+            showInstallment
+          />
+          <Button size="sm" variant="secondary" className="shrink-0">
+            Детальніше
+          </Button>
+        </div>
+
+        <div className="-mx-5 -mb-5 mt-0 border-t border-border bg-background/50 px-5 py-2 text-[11px] uppercase tracking-wider text-muted-foreground">
+          {build.status === "in_stock" ? "✓ " : "• "}
+          {statusLabel}
+        </div>
+      </div>
+    </Link>
+  );
+}
