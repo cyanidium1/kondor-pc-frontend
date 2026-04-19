@@ -95,7 +95,9 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
             max={200}
             step={5}
             value={budget}
-            onValueChange={(v) => setBudget([v[0]!, v[1]!] as [number, number])}
+            onValueChange={(v) => {
+              if (Array.isArray(v)) setBudget([v[0], v[1]] as [number, number]);
+            }}
           />
         </div>
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -66,7 +67,6 @@ export function CustomBuildForm() {
 
   async function onSubmit(values: CustomBuildValues) {
     const orderNumber = `UA-CB-${new Date().toISOString().slice(2, 10).replace(/-/g, "")}-${Math.floor(Math.random() * 9000 + 1000)}`;
-    // eslint-disable-next-line no-console
     console.log("[custom-build:stub]", { orderNumber, ...values });
     router.push(`/oformlennya/uspikh?order=${orderNumber}&payment=iban_individual`);
   }
@@ -87,7 +87,8 @@ export function CustomBuildForm() {
           step={5}
           value={budgetRange}
           onValueChange={(v) => {
-            const next: [number, number] = [v[0]!, v[1]!];
+            if (!Array.isArray(v)) return;
+            const next: [number, number] = [v[0], v[1]];
             setBudgetRange(next);
             setValue("budgetMin", next[0] * 1000);
             setValue("budgetMax", next[1] * 1000);
@@ -249,9 +250,9 @@ export function CustomBuildForm() {
       </Button>
       <p className="text-center text-[11px] uppercase tracking-wider text-muted-foreground">
         Натискаючи кнопку, ти погоджуєшся з{" "}
-        <a href="/legal/politika-konfidentsiynosti" className="underline underline-offset-4">
+        <Link href="/legal/politika-konfidentsiynosti" className="underline underline-offset-4">
           політикою конфіденційності
-        </a>
+        </Link>
       </p>
     </form>
   );

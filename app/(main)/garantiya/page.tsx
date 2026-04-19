@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { FaqBlock } from "@/components/shared/FaqBlock";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { faqsByScope, FAQS } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
 import { Shield, Wrench, Truck, Phone, MessageSquare, Mail } from "lucide-react";

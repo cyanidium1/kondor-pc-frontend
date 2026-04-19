@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 
 import { ProductGallery } from "@/components/shared/ProductGallery";
-import { Reveal } from "@/components/shared/Reveal";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { FpsTable } from "@/components/shared/FpsTable";
 import { ComponentList } from "@/components/shared/ComponentList";

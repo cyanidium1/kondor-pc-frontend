@@ -7,7 +7,6 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SKU_ACCENTS, type SkuSlug } from "@/lib/sku-accents";
-import { Cpu, Gpu, MemoryStick, HardDrive } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Styleguide",

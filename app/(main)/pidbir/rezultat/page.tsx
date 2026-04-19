@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { BuildCard } from "@/components/shared/BuildCard";
-import { SectionHeader } from "@/components/shared/SectionHeader";
 import { parseBudget, parseGames, pickBuilds, BADGE_META } from "@/lib/pidbir";
 import { gameLabel } from "@/lib/mock/games";
 import type { Resolution } from "@/types/build";

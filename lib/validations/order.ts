@@ -43,7 +43,7 @@ export const orderSchema = baseContact.extend({
   paymentMethod: z.enum(PAYMENT_METHODS),
   customerComment: z.string().max(500).optional().or(z.literal("")),
   consent: z.literal(true, {
-    errorMap: () => ({ message: "Потрібна згода з офертою" }),
+    message: "Потрібна згода з офертою",
   }),
 }).superRefine((v, ctx) => {
   if (v.deliveryMethod === "np_branch") {

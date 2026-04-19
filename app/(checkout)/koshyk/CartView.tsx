@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCart } from "@/lib/cart";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import Image from "next/image";
 import { PriceBlock } from "@/components/shared/PriceBlock";
 import { BuildCard } from "@/components/shared/BuildCard";

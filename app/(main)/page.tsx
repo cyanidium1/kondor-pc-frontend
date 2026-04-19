@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { TrustStrip } from "@/components/shared/TrustStrip";
 import { BuildCard } from "@/components/shared/BuildCard";

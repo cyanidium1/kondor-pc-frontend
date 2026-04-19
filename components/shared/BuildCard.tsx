@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useRef, type MouseEvent } from "react";
+import { useRef, useState, type MouseEvent } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { SpecPill } from "@/components/shared/SpecPill";
@@ -45,12 +46,29 @@ export function BuildCard({
           ? "Немає в наявності"
           : "Архів";
 
+  const images: string[] =
+    build.galleryImageUrls && build.galleryImageUrls.length > 0
+      ? build.galleryImageUrls
+      : build.heroImageUrl
+        ? [build.heroImageUrl]
+        : [];
+  const hasMany = images.length > 1;
+  const [imageIndex, setImageIndex] = useState(0);
+
   function onMove(e: MouseEvent<HTMLAnchorElement>) {
     const el = cardRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
     el.style.setProperty("--mx", `${e.clientX - rect.left}px`);
     el.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  }
+
+  // Arrow click must not navigate to product page.
+  function flip(e: MouseEvent<HTMLButtonElement>, delta: number) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (images.length === 0) return;
+    setImageIndex((i) => (i + delta + images.length) % images.length);
   }
 
   return (
@@ -108,27 +126,64 @@ export function BuildCard({
         </div>
 
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md">
-          {build.heroImageUrl ? (
-            <>
-              <ChassisArt className="absolute inset-0 size-full" />
+          <ChassisArt className="absolute inset-0 size-full" />
+
+          {images.map((src, i) => {
+            const visible = i === imageIndex;
+            return (
               <Image
-                src={build.heroImageUrl}
-                alt={`${build.name} — ігровий ПК`}
+                key={src + i}
+                src={src}
+                alt={visible ? `${build.name} — ігровий ПК` : ""}
                 fill
                 sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 90vw"
                 className={cn(
-                  "relative z-10 object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-                  "group-hover:scale-[1.035] motion-reduce:transform-none will-change-transform",
+                  "absolute inset-0 z-10 object-cover",
+                  "transition-opacity duration-400 ease-out",
+                  "group-hover:scale-[1.035] transition-transform duration-[700ms]",
+                  "motion-reduce:transform-none will-change-transform",
+                  visible ? "opacity-100" : "opacity-0 pointer-events-none",
                 )}
               />
+            );
+          })}
+
+          {hasMany && (
+            <>
+              <button
+                type="button"
+                onClick={(e) => flip(e, -1)}
+                aria-label="Попереднє фото"
+                className={cn(
+                  "absolute left-2 top-1/2 z-20 -translate-y-1/2",
+                  "flex size-8 items-center justify-center rounded-full",
+                  "bg-background/70 border border-white/10 text-foreground backdrop-blur",
+                  "transition-all duration-300 ease-out",
+                  "hover:bg-background hover:border-white/25 hover:scale-105",
+                  "active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60",
+                )}
+              >
+                <ChevronLeft className="size-4" strokeWidth={2} />
+              </button>
+              <button
+                type="button"
+                onClick={(e) => flip(e, +1)}
+                aria-label="Наступне фото"
+                className={cn(
+                  "absolute right-2 top-1/2 z-20 -translate-y-1/2",
+                  "flex size-8 items-center justify-center rounded-full",
+                  "bg-background/70 border border-white/10 text-foreground backdrop-blur",
+                  "transition-all duration-300 ease-out",
+                  "hover:bg-background hover:border-white/25 hover:scale-105",
+                  "active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60",
+                )}
+              >
+                <ChevronRight className="size-4" strokeWidth={2} />
+              </button>
+              <div className="tabular absolute bottom-2 left-1/2 z-20 -translate-x-1/2 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-medium backdrop-blur">
+                {imageIndex + 1} / {images.length}
+              </div>
             </>
-          ) : (
-            <ChassisArt
-              className={cn(
-                "absolute inset-0 size-full transition-transform duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-                "group-hover:scale-[1.03] motion-reduce:transform-none will-change-transform",
-              )}
-            />
           )}
         </div>
 

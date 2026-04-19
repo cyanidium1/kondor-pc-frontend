@@ -115,7 +115,6 @@ export function CheckoutView() {
   async function onSubmit(values: OrderFormValues) {
     const orderNumber = `UA-${new Date().toISOString().slice(2, 10).replace(/-/g, "")}-${String(Math.floor(Math.random() * 9000 + 1000))}`;
     // Stub: real server action will create Sanity Order + notify KeyCRM/Telegram/Sheets.
-    // eslint-disable-next-line no-console
     console.log("[order:stub]", {
       orderNumber,
       ...values,
