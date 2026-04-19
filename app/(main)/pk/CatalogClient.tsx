@@ -1,15 +1,16 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { BuildCard } from "@/components/shared/BuildCard";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { TechButton, TechButtonLink } from "@/components/shared/TechButton";
+import { buttonVariants } from "@/components/ui/button";
 import { GAMES } from "@/lib/mock/games";
 import { formatUah } from "@/lib/format";
 import type { Build, Resolution } from "@/types/build";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 
 const RESOLUTIONS: { value: "all" | Resolution; label: string }[] = [
   { value: "all", label: "Усі" },
@@ -105,18 +106,24 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
           <Label className="mb-2 block text-[11px] uppercase tracking-wider text-muted-foreground">
             Під гру
           </Label>
-          <select
-            value={gameSlug}
-            onChange={(e) => setGameSlug(e.target.value)}
-            className="h-9 w-full rounded-md border border-border bg-background px-3 text-sm focus-visible:border-ring focus-visible:outline-none"
-          >
-            <option value="all">Усі ігри</option>
-            {POPULAR_GAMES.map((g) => (
-              <option key={g.slug} value={g.slug}>
-                {g.ukrName || g.name}
-              </option>
-            ))}
-          </select>
+          <div className="tech-field h-9">
+            <select
+              value={gameSlug}
+              onChange={(e) => setGameSlug(e.target.value)}
+              className="h-full w-full appearance-none bg-transparent px-3 pr-8 text-sm text-foreground focus:outline-none"
+            >
+              <option value="all">Усі ігри</option>
+              {POPULAR_GAMES.map((g) => (
+                <option key={g.slug} value={g.slug}>
+                  {g.ukrName || g.name}
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              aria-hidden
+              className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+            />
+          </div>
         </div>
 
         <div>
@@ -146,17 +153,23 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
           <Label className="mb-2 block text-[11px] uppercase tracking-wider text-muted-foreground">
             Сортування
           </Label>
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value as typeof sort)}
-            className="h-9 w-full rounded-md border border-border bg-background px-3 text-sm focus-visible:border-ring focus-visible:outline-none"
-          >
-            {SORTS.map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
-              </option>
-            ))}
-          </select>
+          <div className="tech-field h-9">
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value as typeof sort)}
+              className="h-full w-full appearance-none bg-transparent px-3 pr-8 text-sm text-foreground focus:outline-none"
+            >
+              {SORTS.map((s) => (
+                <option key={s.value} value={s.value}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              aria-hidden
+              className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+            />
+          </div>
         </div>
       </aside>
 
@@ -175,9 +188,8 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
               Спробуй: збільшити бюджет, прибрати обмеження по роздільній або
               обрати іншу гру.
             </p>
-            <div className="mt-5 flex justify-center gap-3">
-              <Button
-                variant="default"
+            <div className="mt-5 flex flex-wrap justify-center gap-3">
+              <TechButton
                 onClick={() => {
                   setBudget([20, 200]);
                   setGameSlug("all");
@@ -185,13 +197,8 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
                 }}
               >
                 Скинути фільтри
-              </Button>
-              <Link
-                href="/pidbir"
-                className={cn(buttonVariants({ variant: "outline" }))}
-              >
-                Пройти підбір
-              </Link>
+              </TechButton>
+              <TechButtonLink href="/pidbir">Пройти підбір</TechButtonLink>
             </div>
           </div>
         ) : (

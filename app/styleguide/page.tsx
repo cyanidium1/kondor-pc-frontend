@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TechButton } from "@/components/shared/TechButton";
 import { SKU_ACCENTS, type SkuSlug } from "@/lib/sku-accents";
 
 export const metadata: Metadata = {
@@ -319,6 +320,38 @@ export default function StyleguidePage() {
           <Badge variant="secondary">Збираємо під замовлення</Badge>
           <Badge variant="outline">Рекомендовано</Badge>
           <Badge variant="destructive">-10%</Badge>
+        </div>
+      </Section>
+
+      {/* TECH BUTTON */}
+      <Section kicker="07·½" title="Tech button — angular CTA">
+        <p className="mb-6 max-w-2xl text-sm text-muted-foreground">
+          Кутова CTA-кнопка з рамкою в accent-кольорі і маркерами на кутах.
+          Колір рамки керується через <code className="font-mono text-xs">--tech-accent</code>,
+          який за замовчуванням бере <code className="font-mono text-xs">--sku</code> на
+          картках сборки. Використовуй як конверсійну кнопку там, де потрібен
+          tech-характер (каталог, кастомна збірка, SEO-лендинги).
+        </p>
+        <div className="space-y-6">
+          <div className="flex flex-wrap items-center gap-4">
+            <TechButton size="sm">Подробнее</TechButton>
+            <TechButton size="md">Підібрати ПК</TechButton>
+            <TechButton size="lg">Купити зараз</TechButton>
+            <TechButton disabled>Недоступно</TechButton>
+          </div>
+
+          <div>
+            <div className="mb-3 text-[11px] uppercase tracking-wider text-muted-foreground">
+              По SKU-акцентах (передача через проп accent)
+            </div>
+            <div className="flex flex-wrap items-center gap-4">
+              {(["vega", "nebula", "orbitra", "nyx", "velar", "pulsar"] as SkuSlug[]).map((slug) => (
+                <TechButton key={slug} accent={SKU_ACCENTS[slug]} size="md">
+                  {slug}
+                </TechButton>
+              ))}
+            </div>
+          </div>
         </div>
       </Section>
 

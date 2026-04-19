@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { TechButton } from "@/components/shared/TechButton";
 import { cn } from "@/lib/utils";
 import { formatUah } from "@/lib/format";
 import { useState } from "react";
@@ -240,14 +241,14 @@ export function CustomBuildForm() {
         </div>
       </div>
 
-      <Button
+      <TechButton
         type="submit"
         size="lg"
-        className="h-12 w-full px-6"
+        className="w-full"
         disabled={isSubmitting}
       >
-        {isSubmitting ? "Надсилаємо..." : "Надіслати заявку →"}
-      </Button>
+        {isSubmitting ? "Надсилаємо..." : "Надіслати заявку"}
+      </TechButton>
       <p className="text-center text-[11px] uppercase tracking-wider text-muted-foreground">
         Натискаючи кнопку, ти погоджуєшся з{" "}
         <Link href="/legal/politika-konfidentsiynosti" className="underline underline-offset-4">

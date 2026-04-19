@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { TechButton } from "@/components/shared/TechButton";
 import { useCart } from "@/lib/cart";
 import { useProductConfiguratorOptional } from "@/components/shared/ProductConfigurator";
 import type { SkuSlug } from "@/types/build";
@@ -19,7 +19,7 @@ export function PurchaseActions({
   slug: SkuSlug;
   name: string;
   priceUah: number;
-  size?: "default" | "lg";
+  size?: "md" | "lg";
   className?: string;
 }) {
   const cart = useCart();
@@ -31,39 +31,25 @@ export function PurchaseActions({
   const options = config?.cartOptions;
 
   function addAndStay() {
-    cart.add({
-      slug,
-      name,
-      priceUah,
-      unitPriceUah,
-      options,
-    });
+    cart.add({ slug, name, priceUah, unitPriceUah, options });
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1800);
   }
 
   function buyNow() {
-    cart.add({
-      slug,
-      name,
-      priceUah,
-      unitPriceUah,
-      options,
-    });
+    cart.add({ slug, name, priceUah, unitPriceUah, options });
     router.push("/oformlennya");
   }
 
-  const heightClass = size === "lg" ? "h-12 px-6" : "h-9 px-4";
-
   return (
     <div className={cn("flex flex-col gap-3 sm:flex-row", className)}>
-      <Button size={size} className={cn("flex-1", heightClass)} onClick={buyNow}>
+      <TechButton size={size} className="flex-1" onClick={buyNow}>
         Купити зараз
-      </Button>
-      <Button
+      </TechButton>
+      <TechButton
         size={size}
-        variant="outline"
-        className={cn("flex-1", heightClass)}
+        className="flex-1"
+        style={{ ["--tech-accent" as string]: "oklch(1 0 0 / 0.35)" }}
         onClick={addAndStay}
       >
         {justAdded ? (
@@ -74,7 +60,7 @@ export function PurchaseActions({
         ) : (
           "Додати в кошик"
         )}
-      </Button>
+      </TechButton>
     </div>
   );
 }

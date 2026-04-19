@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TechButton } from "@/components/shared/TechButton";
 import { GameTile } from "@/components/brand/GameTile";
 import { GAMES } from "@/lib/mock/games";
 import { cn } from "@/lib/utils";
@@ -201,19 +202,19 @@ export function SelectionForm() {
 
       {/* SUBMIT */}
       <div className="sticky bottom-4 rounded-xl border border-border bg-surface/95 p-4 backdrop-blur md:static md:bg-transparent md:p-0">
-        <Button
+        <TechButton
           type="button"
           size="lg"
-          className="h-12 w-full px-6"
+          className="w-full"
           disabled={!canSubmit}
           onClick={submit}
         >
           {canSubmit
-            ? "Показати збірки →"
+            ? "Показати збірки"
             : games.length === 0
               ? "Обери хоча б одну гру"
               : "Обери бюджет"}
-        </Button>
+        </TechButton>
       </div>
     </div>
   );

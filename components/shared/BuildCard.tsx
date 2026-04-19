@@ -5,9 +5,9 @@ import Image from "next/image";
 import { useRef, useState, type MouseEvent } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { SpecPill } from "@/components/shared/SpecPill";
 import { PriceBlock } from "@/components/shared/PriceBlock";
+import { TechButtonDisplay } from "@/components/shared/TechButton";
 import { ChassisArt } from "@/components/brand/ChassisArt";
 import { SKU_ACCENTS } from "@/lib/sku-accents";
 import type { Build } from "@/types/build";
@@ -77,7 +77,7 @@ export function BuildCard({
       href={`/pk/${build.slug}`}
       onMouseMove={onMove}
       className={cn(
-        "sku-glow smooth-hover group relative block overflow-hidden rounded-lg border border-border bg-surface",
+        "sku-glow smooth-hover clip-angular-md group relative block overflow-hidden border border-border bg-surface",
         "hover:-translate-y-1 hover:border-white/15 motion-reduce:transform-none",
         className,
       )}
@@ -232,16 +232,16 @@ export function BuildCard({
           </div>
         )}
 
-        <div className="mt-auto flex items-end justify-between gap-3 pt-1">
+        <div className="mt-auto space-y-3 pt-1">
           <PriceBlock
             priceUah={build.priceUah}
             oldPriceUah={build.oldPriceUah}
             size="sm"
             showInstallment
           />
-          <Button size="sm" variant="secondary" className="shrink-0">
+          <TechButtonDisplay size="sm" className="w-full">
             Детальніше
-          </Button>
+          </TechButtonDisplay>
         </div>
 
         <div className="-mx-5 -mb-5 mt-0 border-t border-border bg-background/50 px-5 py-2 text-[11px] uppercase tracking-wider text-muted-foreground">

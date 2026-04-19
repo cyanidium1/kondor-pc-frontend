@@ -6,9 +6,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TechButton } from "@/components/shared/TechButton";
 import Image from "next/image";
 import { ChassisArt } from "@/components/brand/ChassisArt";
 import { SKU_ACCENTS } from "@/lib/sku-accents";
@@ -475,16 +476,14 @@ export function CheckoutView() {
               </div>
             )}
 
-            <Button
+            <TechButton
               type="submit"
               size="lg"
-              className="h-12 w-full px-6"
+              className="w-full"
               disabled={isSubmitting}
             >
-              {isSubmitting
-                ? "Оформлюємо..."
-                : "Підтвердити замовлення →"}
-            </Button>
+              {isSubmitting ? "Оформлюємо..." : "Підтвердити замовлення"}
+            </TechButton>
             <p className="text-center text-[11px] uppercase tracking-wider text-muted-foreground">
               Гарантія 12 міс · Повернення 14 днів · Доставка НП безкоштовно
             </p>

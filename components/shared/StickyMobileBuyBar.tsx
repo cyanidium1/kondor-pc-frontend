@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { TechButton } from "@/components/shared/TechButton";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { SKU_ACCENTS, type SkuSlug } from "@/lib/sku-accents";
@@ -70,9 +70,9 @@ export function StickyMobileBuyBar({
             </div>
           </div>
         </div>
-        <Button size="sm" className="shrink-0 h-9 px-4" onClick={buy}>
+        <TechButton size="sm" className="shrink-0" onClick={buy}>
           Купити
-        </Button>
+        </TechButton>
       </div>
     </div>
   );

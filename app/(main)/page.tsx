@@ -16,6 +16,7 @@ import {
   faqPageJsonLd,
 } from "@/lib/seo";
 import { Reveal } from "@/components/shared/Reveal";
+import { TechButtonLink } from "@/components/shared/TechButton";
 import { cn } from "@/lib/utils";
 import {
   Video,
@@ -131,12 +132,9 @@ export default function HomePage() {
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
-                href="/pidbir"
-                className={cn(buttonVariants({ size: "lg" }), "h-12 px-6 text-sm")}
-              >
-                Підібрати ПК за 30 секунд →
-              </Link>
+              <TechButtonLink href="/pidbir" size="lg">
+                Підібрати ПК за 30 секунд
+              </TechButtonLink>
             </div>
 
             <div className="mt-6 flex flex-wrap items-center gap-2">
@@ -235,12 +233,9 @@ export default function HomePage() {
             ))}
           </div>
           <div className="mt-8 flex justify-center">
-            <Link
-              href="/pidbir"
-              className={cn(buttonVariants({ size: "lg" }), "h-12 px-6")}
-            >
-              Почати підбір →
-            </Link>
+            <TechButtonLink href="/pidbir" size="lg">
+              Почати підбір
+            </TechButtonLink>
           </div>
           </Reveal>
         </div>
@@ -363,12 +358,9 @@ export default function HomePage() {
           </Reveal>
           <Reveal delay={80}>
           <div className="mb-12 flex flex-wrap items-center justify-center gap-3">
-            <Link
-              href="/pidbir"
-              className={cn(buttonVariants({ size: "lg" }), "h-12 px-6")}
-            >
-              Підібрати ПК →
-            </Link>
+            <TechButtonLink href="/pidbir" size="lg">
+              Підібрати ПК
+            </TechButtonLink>
             {BUDGET_BUCKETS.map((b) => (
               <Link
                 key={b.href}

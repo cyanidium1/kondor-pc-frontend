@@ -19,7 +19,7 @@ export function ReviewCard({
   return (
     <article
       className={cn(
-        "flex h-full flex-col gap-4 rounded-lg border border-border bg-surface p-5",
+        "clip-angular-md flex h-full flex-col gap-4 border border-border bg-surface p-5",
         className,
       )}
     >

@@ -243,17 +243,55 @@
     letter-spacing: 0.06em;
   }
 
-  /* Subtle accent glow used on SKU cards */
+  /*
+   * Subtle accent glow used on SKU cards.
+   * Uses `filter: drop-shadow(...)` rather than `box-shadow` so it follows
+   * `clip-path` geometry — angular cards cast angular shadows, not
+   * rectangular ones clipped at the corners.
+   */
   .sku-glow {
-    box-shadow:
-      0 0 0 1px oklch(from var(--sku) l c h / 0.25),
-      0 24px 60px -20px oklch(from var(--sku) l c h / 0.35);
-    transition: box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1);
+    filter:
+      drop-shadow(0 0 0.5px oklch(from var(--sku) l c h / 0.45))
+      drop-shadow(0 24px 40px oklch(from var(--sku) l c h / 0.28));
+    transition: filter 500ms cubic-bezier(0.22, 1, 0.36, 1);
   }
   .sku-glow:hover {
-    box-shadow:
-      0 0 0 1px oklch(from var(--sku) l c h / 0.4),
-      0 30px 80px -20px oklch(from var(--sku) l c h / 0.55);
+    filter:
+      drop-shadow(0 0 0.7px oklch(from var(--sku) l c h / 0.7))
+      drop-shadow(0 30px 60px oklch(from var(--sku) l c h / 0.5));
+  }
+
+  /*
+   * Global "bevelled" clip-path utilities — cuts at top-left + bottom-right,
+   * matching the TechButton geometry. Apply to buttons, cards, containers.
+   */
+  .clip-angular-xs {
+    clip-path: polygon(
+      4px 0%, 100% 0%,
+      100% calc(100% - 4px), calc(100% - 4px) 100%,
+      0% 100%, 0% 4px
+    );
+  }
+  .clip-angular-sm {
+    clip-path: polygon(
+      6px 0%, 100% 0%,
+      100% calc(100% - 6px), calc(100% - 6px) 100%,
+      0% 100%, 0% 6px
+    );
+  }
+  .clip-angular-md {
+    clip-path: polygon(
+      20px 0%, 100% 0%,
+      100% calc(100% - 20px), calc(100% - 20px) 100%,
+      0% 100%, 0% 20px
+    );
+  }
+  .clip-angular-lg {
+    clip-path: polygon(
+      28px 0%, 100% 0%,
+      100% calc(100% - 28px), calc(100% - 28px) 100%,
+      0% 100%, 0% 28px
+    );
   }
 
   /*
@@ -339,6 +377,148 @@
       oklch(from var(--sku) l c h / 0.9) 50%,
       transparent 100%
     );
+  }
+
+  /*
+   * TechButton — angular/clipped CTA used on SKU cards and tech-heavy CTAs.
+   * Accent color comes from `--tech-accent` (falls back to `--sku`, then `--foreground`).
+   *
+   * Geometry:
+   *   Two stacked layers inside the button share a clip-path polygon with
+   *   top-left + bottom-right corners cut. The outer layer is the accent fill,
+   *   the inner layer is inset by `--tech-border` (dark) — the delta paints
+   *   the visible edge. Four corner markers sit at the bounding rectangle.
+   */
+  .tech-btn {
+    --tech-accent: var(--sku, var(--foreground));
+    --tech-cut: 10px;
+    --tech-border: 1.5px;
+    --tech-fill: oklch(0.1 0.012 265);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--tech-accent);
+    background: transparent;
+    transition: color 200ms ease-out;
+    isolation: isolate;
+  }
+  .tech-btn[data-size="sm"] {
+    height: 2.25rem;
+    padding-inline: 1.25rem;
+    font-size: 0.72rem;
+  }
+  .tech-btn[data-size="md"] {
+    height: 2.75rem;
+    padding-inline: 1.75rem;
+    font-size: 0.78rem;
+  }
+  .tech-btn[data-size="lg"] {
+    height: 3.25rem;
+    padding-inline: 2.25rem;
+    font-size: 0.88rem;
+  }
+
+  .tech-btn__edge,
+  .tech-btn__fill {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    clip-path: polygon(
+      var(--tech-cut) 0%,
+      100% 0%,
+      100% calc(100% - var(--tech-cut)),
+      calc(100% - var(--tech-cut)) 100%,
+      0% 100%,
+      0% var(--tech-cut)
+    );
+    transition: background-color 200ms ease-out;
+  }
+  .tech-btn__edge {
+    background-color: var(--tech-accent);
+    z-index: -2;
+  }
+  .tech-btn__fill {
+    inset: var(--tech-border);
+    background-color: var(--tech-fill);
+    z-index: -1;
+  }
+
+  /* Hover — swap fill/accent */
+  .tech-btn:not(:disabled):hover {
+    color: var(--tech-fill);
+  }
+  .tech-btn:not(:disabled):hover .tech-btn__fill {
+    background-color: var(--tech-accent);
+  }
+  .tech-btn:not(:disabled):active {
+    transform: scale(0.985);
+    transition: transform 80ms ease-out;
+  }
+
+  /* Focus ring around the full bounding rect — outside clip */
+  .tech-btn:focus-visible {
+    outline: 2px solid var(--tech-accent);
+    outline-offset: 3px;
+  }
+
+  /* Disabled */
+  .tech-btn:disabled {
+    cursor: not-allowed;
+    color: oklch(0.55 0 0);
+  }
+  .tech-btn:disabled .tech-btn__edge {
+    background-color: oklch(0.3 0 0);
+  }
+
+  /*
+   * TechField — same clipped-corner treatment for form surfaces
+   * (selects, inputs). Neutral border by default, highlights on focus.
+   */
+  .tech-field {
+    --tech-accent: oklch(1 0 0 / 0.18);
+    --tech-cut: 8px;
+    --tech-border: 1px;
+    --tech-fill: var(--surface);
+    position: relative;
+    display: flex;
+    align-items: center;
+    isolation: isolate;
+    transition: --tech-accent 200ms ease-out;
+  }
+  .tech-field::before,
+  .tech-field::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    clip-path: polygon(
+      var(--tech-cut) 0%,
+      100% 0%,
+      100% calc(100% - var(--tech-cut)),
+      calc(100% - var(--tech-cut)) 100%,
+      0% 100%,
+      0% var(--tech-cut)
+    );
+    transition: background-color 200ms ease-out;
+  }
+  .tech-field::before {
+    background-color: var(--tech-accent);
+    z-index: -2;
+  }
+  .tech-field::after {
+    inset: var(--tech-border);
+    background-color: var(--tech-fill);
+    z-index: -1;
+  }
+  .tech-field:hover::before {
+    background-color: oklch(1 0 0 / 0.3);
+  }
+  .tech-field:focus-within::before {
+    background-color: var(--ring);
   }
 }
 
