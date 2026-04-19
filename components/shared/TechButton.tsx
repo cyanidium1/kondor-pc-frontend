@@ -77,21 +77,22 @@ export function TechButtonLink({
   target,
   rel,
   style,
-  ...rest
+  onClick,
 }: TechButtonBaseProps & {
   href: string;
   target?: string;
   rel?: string;
+  onClick?: () => void;
 }) {
   return (
     <Link
       href={href}
       target={target}
       rel={rel}
+      onClick={onClick}
       data-size={size}
       className={cn("tech-btn font-display", className)}
       style={accent ? { ...style, ["--tech-accent" as string]: accent } : style}
-      {...rest}
     >
       <Frame>{children}</Frame>
     </Link>

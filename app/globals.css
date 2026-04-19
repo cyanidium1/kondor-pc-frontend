@@ -295,6 +295,60 @@
   }
 
   /*
+   * Card frame — polygonal card with a visible 1px border that FOLLOWS the
+   * diagonal cuts (not just the straight edges). The outer element is filled
+   * with the edge color and clipped to the polygon; ::before renders the
+   * fill color, inset by 1px. The ::before inherits the outer's clip-path so
+   * the cuts stay parallel.
+   */
+  .card-frame-sm,
+  .card-frame-md,
+  .card-frame-lg {
+    position: relative;
+    isolation: isolate;
+    background: var(--card-edge, oklch(1 0 0 / 0.1));
+    transition: background-color 300ms ease-out;
+  }
+  .card-frame-sm {
+    --cut: 10px;
+    clip-path: polygon(
+      var(--cut) 0%, 100% 0%,
+      100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%,
+      0% 100%, 0% var(--cut)
+    );
+  }
+  .card-frame-md {
+    --cut: 20px;
+    clip-path: polygon(
+      var(--cut) 0%, 100% 0%,
+      100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%,
+      0% 100%, 0% var(--cut)
+    );
+  }
+  .card-frame-lg {
+    --cut: 28px;
+    clip-path: polygon(
+      var(--cut) 0%, 100% 0%,
+      100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%,
+      0% 100%, 0% var(--cut)
+    );
+  }
+  .card-frame-sm::before,
+  .card-frame-md::before,
+  .card-frame-lg::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    background: var(--card-fill, var(--surface));
+    clip-path: inherit;
+    z-index: -1;
+  }
+  .card-frame-md:hover,
+  .card-frame-lg:hover {
+    --card-edge: oklch(1 0 0 / 0.2);
+  }
+
+  /*
    * Generic smooth hover wrapper — applies to any card-like element that lifts
    * or scales on hover. Consolidates duration + easing + will-change so cards
    * don't need to declare each one.
@@ -379,6 +433,14 @@
     );
   }
 
+}
+
+/*
+ * Component-level classes live in `@layer components` so Tailwind utilities
+ * (like `.hidden`, `.inline-flex`, responsive variants) always override their
+ * defaults at equal specificity.
+ */
+@layer components {
   /*
    * TechButton — angular/clipped CTA used on SKU cards and tech-heavy CTAs.
    * Accent color comes from `--tech-accent` (falls back to `--sku`, then `--foreground`).
@@ -387,7 +449,7 @@
    *   Two stacked layers inside the button share a clip-path polygon with
    *   top-left + bottom-right corners cut. The outer layer is the accent fill,
    *   the inner layer is inset by `--tech-border` (dark) — the delta paints
-   *   the visible edge. Four corner markers sit at the bounding rectangle.
+   *   the visible edge.
    */
   .tech-btn {
     --tech-accent: var(--sku, var(--foreground));

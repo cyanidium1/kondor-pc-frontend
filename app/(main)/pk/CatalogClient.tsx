@@ -1,9 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ChevronDown } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { BuildCard } from "@/components/shared/BuildCard";
 import { TechButton, TechButtonLink } from "@/components/shared/TechButton";
 import { buttonVariants } from "@/components/ui/button";
@@ -106,24 +112,28 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
           <Label className="mb-2 block text-[11px] uppercase tracking-wider text-muted-foreground">
             Під гру
           </Label>
-          <div className="tech-field h-9">
-            <select
-              value={gameSlug}
-              onChange={(e) => setGameSlug(e.target.value)}
-              className="h-full w-full appearance-none bg-transparent px-3 pr-8 text-sm text-foreground focus:outline-none"
-            >
-              <option value="all">Усі ігри</option>
+          <Select
+            value={gameSlug}
+            onValueChange={(v) => setGameSlug(v ?? "all")}
+          >
+            <SelectTrigger className="h-9 w-full">
+              <SelectValue>
+                {gameSlug === "all"
+                  ? "Усі ігри"
+                  : POPULAR_GAMES.find((g) => g.slug === gameSlug)?.ukrName ||
+                    POPULAR_GAMES.find((g) => g.slug === gameSlug)?.name ||
+                    gameSlug}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Усі ігри</SelectItem>
               {POPULAR_GAMES.map((g) => (
-                <option key={g.slug} value={g.slug}>
+                <SelectItem key={g.slug} value={g.slug}>
                   {g.ukrName || g.name}
-                </option>
+                </SelectItem>
               ))}
-            </select>
-            <ChevronDown
-              aria-hidden
-              className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-            />
-          </div>
+            </SelectContent>
+          </Select>
         </div>
 
         <div>
@@ -153,23 +163,25 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
           <Label className="mb-2 block text-[11px] uppercase tracking-wider text-muted-foreground">
             Сортування
           </Label>
-          <div className="tech-field h-9">
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value as typeof sort)}
-              className="h-full w-full appearance-none bg-transparent px-3 pr-8 text-sm text-foreground focus:outline-none"
-            >
+          <Select
+            value={sort}
+            onValueChange={(v) => {
+              if (v) setSort(v as typeof sort);
+            }}
+          >
+            <SelectTrigger className="h-9 w-full">
+              <SelectValue>
+                {SORTS.find((s) => s.value === sort)?.label}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
               {SORTS.map((s) => (
-                <option key={s.value} value={s.value}>
+                <SelectItem key={s.value} value={s.value}>
                   {s.label}
-                </option>
+                </SelectItem>
               ))}
-            </select>
-            <ChevronDown
-              aria-hidden
-              className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-            />
-          </div>
+            </SelectContent>
+          </Select>
         </div>
       </aside>
 

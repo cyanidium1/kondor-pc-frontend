@@ -77,8 +77,8 @@ export function BuildCard({
       href={`/pk/${build.slug}`}
       onMouseMove={onMove}
       className={cn(
-        "sku-glow smooth-hover clip-angular-md group relative block overflow-hidden border border-border bg-surface",
-        "hover:-translate-y-1 hover:border-white/15 motion-reduce:transform-none",
+        "sku-glow smooth-hover card-frame-md group relative block overflow-hidden",
+        "hover:-translate-y-1 motion-reduce:transform-none",
         className,
       )}
       style={{ ["--sku" as string]: accent }}

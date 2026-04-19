@@ -15,7 +15,7 @@ export function CartButton() {
       aria-label={count > 0 ? `Кошик — ${count}` : "Кошик"}
       className={cn(
         buttonVariants({ variant: "ghost", size: "icon-sm" }),
-        "relative",
+        "relative transition-transform duration-200 ease-out hover:scale-110",
       )}
     >
       <ShoppingBag className="size-4" />

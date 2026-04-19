@@ -17,7 +17,7 @@ export function BuildRepeatCta() {
   );
 
   return (
-    <div className="relative mx-auto overflow-hidden clip-angular-lg border border-border bg-surface p-8 md:p-12">
+    <div className="card-frame-lg relative mx-auto overflow-hidden p-8 md:p-12">
       <div
         aria-hidden
         className="pointer-events-none absolute -right-20 -top-20 size-80 rounded-full opacity-30 blur-3xl"
