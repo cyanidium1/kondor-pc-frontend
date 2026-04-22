@@ -64,8 +64,10 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const activeVariant: ColorVariant | undefined = variants[variantIdx];
-  const photos = activeVariant?.photos ?? [];
-  const mainPhoto = photos[photoIdx];
+  const photos = useMemo(
+    () => activeVariant?.photos ?? [],
+    [activeVariant],
+  );
 
   const hasDiscount =
     typeof item.priceDiscount === "number" && item.priceDiscount < item.price;

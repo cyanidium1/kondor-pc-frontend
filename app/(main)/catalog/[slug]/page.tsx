@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { Suspense } from "react";
 import { ChevronRight } from "lucide-react";
 
 import {
@@ -87,7 +88,11 @@ export default async function CatalogDetailPage({
         <span className="text-foreground">{item.name}</span>
       </div>
 
-      <CatalogDetailView item={item} />
+      {/* Suspense boundary required because CatalogDetailView calls
+          useSearchParams() — Next's prerender needs this to bail out safely. */}
+      <Suspense fallback={null}>
+        <CatalogDetailView item={item} />
+      </Suspense>
 
       {similar.length > 0 && (
         <section className="container-site py-12 md:py-16">
