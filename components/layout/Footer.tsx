@@ -6,6 +6,7 @@ const COLUMNS = [
     title: "Розділи",
     links: [
       { href: "/pk", label: "Ігрові ПК" },
+      { href: "/catalog", label: "Аксесуари" },
       { href: "/pidbir", label: "Підбір" },
       { href: "/sborka", label: "Кастомна збірка" },
       { href: "/garantiya", label: "Гарантія" },

@@ -28,6 +28,7 @@ import { StickyMobileBuyBar } from "@/components/shared/StickyMobileBuyBar";
 import { ProductConfiguratorProvider } from "@/components/shared/ProductConfigurator";
 import { BuildIdentityColumn } from "@/components/shared/BuildIdentityColumn";
 import { BuildRepeatCta } from "@/components/shared/BuildRepeatCta";
+import { AccessoriesRail } from "@/components/catalog/AccessoriesRail";
 import { SKU_ACCENTS } from "@/lib/sku-accents";
 import {
   JsonLd,
@@ -219,6 +220,13 @@ export default async function BuildPage({
         />
         <IncludedFeaturesBlock featureKeys={build.includedFeatureKeys} />
       </Section>
+
+      {/* BLOCK 6.5 — ACCESSORIES CROSS-SELL */}
+      <AccessoriesRail
+        title={`Аксесуари до ${build.name}`}
+        subtitle="Клавіатура, миша, ігрова поверхня — обираються окремо й доповнюють збірку."
+        limit={4}
+      />
 
       {/* BLOCK 7 — HOW WE BUILD */}
       <Section>

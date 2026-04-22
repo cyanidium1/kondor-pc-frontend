@@ -14,7 +14,7 @@ import Image from "next/image";
 import { ChassisArt } from "@/components/brand/ChassisArt";
 import { SKU_ACCENTS } from "@/lib/sku-accents";
 import { buildBySlug } from "@/lib/mock/builds";
-import { useCart } from "@/lib/cart";
+import { useCartStore, lineKey as cartLineKey } from "@/lib/cartStore";
 import {
   orderSchema,
   type OrderFormValues,
@@ -66,8 +66,9 @@ const PAYMENT_OPTIONS: {
 const COD_LIMIT = 50000;
 
 export function CheckoutView() {
-  const cart = useCart();
+  const { items: cartItems, totalUah, clear } = useCartStore();
   const router = useRouter();
+  const cartTotal = totalUah();
 
   const [cityQuery, setCityQuery] = useState("");
   const [cityOpen, setCityOpen] = useState(false);
@@ -105,7 +106,7 @@ export function CheckoutView() {
   );
 
   const codDisabled =
-    cart.totalUah > COD_LIMIT || deliveryMethod === "self_pickup";
+    cartTotal > COD_LIMIT || deliveryMethod === "self_pickup";
 
   useEffect(() => {
     if (paymentMethod === "cod" && codDisabled) {
@@ -119,16 +120,16 @@ export function CheckoutView() {
     console.log("[order:stub]", {
       orderNumber,
       ...values,
-      items: cart.items,
-      totalUah: cart.totalUah,
+      items: cartItems,
+      totalUah: cartTotal,
     });
-    cart.clear();
+    clear();
     router.push(
       `/oformlennya/uspikh?order=${orderNumber}&payment=${values.paymentMethod}`,
     );
   }
 
-  if (hydrated && cart.items.length === 0) {
+  if (hydrated && cartItems.length === 0) {
     return (
       <div className="rounded-lg border border-border bg-surface p-10 text-center">
         <div className="font-display text-xl font-bold">Кошик порожній</div>
@@ -371,20 +372,20 @@ export function CheckoutView() {
                     )}
                     {opt.value === "monobank_parts" && (
                       <div className="tabular mt-1 text-xs text-muted-foreground">
-                        {formatInstallment(cart.totalUah, 4)}
+                        {formatInstallment(cartTotal, 4)}
                       </div>
                     )}
                     {opt.value === "monopay" && (
                       <div className="tabular mt-1 text-xs text-muted-foreground">
                         Підсумок з комісією:{" "}
                         <span className="font-semibold text-foreground">
-                          {formatPrice(Math.round(cart.totalUah * 1.013))}
+                          {formatPrice(Math.round(cartTotal * 1.013))}
                         </span>
                       </div>
                     )}
                     {opt.value === "cod" && codDisabled && (
                       <div className="mt-1 text-xs text-destructive">
-                        {cart.totalUah > COD_LIMIT
+                        {cartTotal > COD_LIMIT
                           ? `Доступно лише до ${formatPrice(COD_LIMIT)}`
                           : "Недоступно при самовивозі"}
                       </div>
@@ -497,24 +498,35 @@ export function CheckoutView() {
           Твоє замовлення
         </div>
         <ul className="space-y-3">
-          {cart.items.map((item) => {
-            const build = buildBySlug(item.slug);
-            const key = cart.lineKey(item.slug, item.options);
+          {cartItems.map((item) => {
+            const isBuild = item.itemType === "build";
+            const build = isBuild ? buildBySlug(item.slug) : undefined;
+            const key = cartLineKey({
+              slug: item.slug,
+              options: item.options,
+              colorCode: item.colorCode,
+            });
+            const imageSrc = item.image ?? build?.heroImageUrl;
             return (
             <li
               key={key}
               className="flex items-start gap-3"
-              style={{ ["--sku" as string]: SKU_ACCENTS[item.slug] }}
+              style={
+                isBuild
+                  ? { ["--sku" as string]: SKU_ACCENTS[item.slug as keyof typeof SKU_ACCENTS] }
+                  : undefined
+              }
             >
               <div className="relative size-12 shrink-0 overflow-hidden rounded-md">
-                <ChassisArt compact className="absolute inset-0 size-full" />
-                {build?.heroImageUrl && (
+                {isBuild && <ChassisArt compact className="absolute inset-0 size-full" />}
+                {imageSrc && (
                   <Image
-                    src={build.heroImageUrl}
+                    src={imageSrc}
                     alt=""
                     fill
                     sizes="48px"
                     className="relative z-10 object-cover"
+                    unoptimized={!isBuild}
                   />
                 )}
               </div>
@@ -522,6 +534,11 @@ export function CheckoutView() {
                 <div className="font-display text-sm font-bold uppercase">
                   {item.name}
                 </div>
+                {item.colorName && (
+                  <div className="mt-0.5 text-[10px] text-muted-foreground">
+                    Колір: {item.colorName}
+                  </div>
+                )}
                 {item.options && item.options.length > 0 && (
                   <ul className="mt-0.5 text-[10px] text-muted-foreground">
                     {item.options.map((o) => (
@@ -547,7 +564,7 @@ export function CheckoutView() {
         <div className="space-y-1.5 border-t border-border pt-4 text-sm">
           <div className="flex justify-between text-muted-foreground">
             <span>Товарів на</span>
-            <span className="tabular">{formatPrice(cart.totalUah)}</span>
+            <span className="tabular">{formatPrice(cartTotal)}</span>
           </div>
           <div className="flex justify-between text-muted-foreground">
             <span>Доставка</span>
@@ -560,12 +577,12 @@ export function CheckoutView() {
           </div>
           <div className="tabular font-display text-3xl font-bold">
             {paymentMethod === "monopay"
-              ? formatPrice(Math.round(cart.totalUah * 1.013))
-              : formatPrice(cart.totalUah)}
+              ? formatPrice(Math.round(cartTotal * 1.013))
+              : formatPrice(cartTotal)}
           </div>
           {paymentMethod === "monobank_parts" && (
             <div className="tabular mt-1 text-xs text-muted-foreground">
-              {formatInstallment(cart.totalUah, 4)} Monobank без %
+              {formatInstallment(cartTotal, 4)} Monobank без %
             </div>
           )}
         </div>

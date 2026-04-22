@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/pk", label: "Ігрові ПК" },
+  { href: "/catalog", label: "Аксесуари" },
   { href: "/pidbir", label: "Підбір" },
   { href: "/sborka", label: "Кастомна збірка" },
   { href: "/garantiya", label: "Гарантія" },
@@ -60,10 +61,10 @@ export function Header() {
         className={cn(
           "sticky top-0 z-30 isolate",
           "transition-[background-color,backdrop-filter,box-shadow] duration-300 ease-out",
-          "bg-background/50 backdrop-blur-md",
-          "data-[scrolled=true]:bg-background/80 data-[scrolled=true]:backdrop-blur-xl",
-          "data-[menu-open=true]:bg-background/90 data-[menu-open=true]:backdrop-blur-xl",
-          "data-[scrolled=true]:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.7)]",
+          "bg-background/85 backdrop-blur-lg",
+          "data-[scrolled=true]:bg-background/95 data-[scrolled=true]:backdrop-blur-xl",
+          "data-[menu-open=true]:bg-background/95 data-[menu-open=true]:backdrop-blur-xl",
+          "data-[scrolled=true]:shadow-[0_18px_40px_-18px_rgba(0,0,0,0.75)]",
         )}
       >
         {/* Top shimmer hairline */}

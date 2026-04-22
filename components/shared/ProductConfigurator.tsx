@@ -10,7 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { formatUah } from "@/lib/format";
 import type { Build, BuildSpecShort, ConfigOption } from "@/types/build";
-import type { CartItemOption } from "@/lib/cart";
+import type { CartItemOption } from "@/lib/cartStore";
 
 export interface ConfiguratorSelection {
   groupId: string;

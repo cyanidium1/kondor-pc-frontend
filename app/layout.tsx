@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Unbounded, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { CartProvider } from "@/lib/cart";
+import { ScrollToTopButton } from "@/components/shared/ScrollToTopButton";
+import { CartDrawer } from "@/components/cart/CartDrawer";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -48,7 +49,9 @@ export default function RootLayout({
       className={`${inter.variable} ${unbounded.variable} ${jetbrainsMono.variable}`}
     >
       <body>
-        <CartProvider>{children}</CartProvider>
+        {children}
+        <CartDrawer />
+        <ScrollToTopButton />
       </body>
     </html>
   );

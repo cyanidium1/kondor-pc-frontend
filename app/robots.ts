@@ -11,7 +11,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         disallow: [
           "/api/",
-          "/koshyk",
           "/oformlennya",
           "/oformlennya/uspikh",
           "/styleguide",

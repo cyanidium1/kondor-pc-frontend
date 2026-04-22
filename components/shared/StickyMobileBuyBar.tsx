@@ -6,8 +6,9 @@ import { TechButton } from "@/components/shared/TechButton";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { SKU_ACCENTS, type SkuSlug } from "@/lib/sku-accents";
-import { useCart } from "@/lib/cart";
+import { useCartStore } from "@/lib/cartStore";
 import { useProductConfiguratorOptional } from "@/components/shared/ProductConfigurator";
+import { buildBySlug } from "@/lib/mock/builds";
 
 export function StickyMobileBuyBar({
   name,
@@ -22,10 +23,11 @@ export function StickyMobileBuyBar({
 }) {
   const [visible, setVisible] = useState(false);
   const router = useRouter();
-  const cart = useCart();
+  const { add } = useCartStore();
   const config = useProductConfiguratorOptional();
 
   const displayPrice = config?.resolvedPriceUah ?? priceUah;
+  const image = buildBySlug(slug)?.heroImageUrl;
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > triggerPx);
@@ -35,12 +37,14 @@ export function StickyMobileBuyBar({
   }, [triggerPx]);
 
   function buy() {
-    cart.add({
+    add({
+      itemType: "build",
       slug,
       name,
       priceUah,
       unitPriceUah: displayPrice,
       options: config?.cartOptions,
+      image,
     });
     router.push("/oformlennya");
   }
