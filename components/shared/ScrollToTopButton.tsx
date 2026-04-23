@@ -9,7 +9,6 @@ export function ScrollToTopButton() {
 
   useEffect(() => {
     const compute = () => {
-      // Show after the user has scrolled past ~1.5 screens of content.
       const threshold = Math.max(480, window.innerHeight * 1.25);
       setVisible(window.scrollY > threshold);
     };
@@ -38,19 +37,38 @@ export function ScrollToTopButton() {
       tabIndex={visible ? 0 : -1}
       onClick={toTop}
       className={cn(
-        "fixed right-4 bottom-4 z-40 sm:right-6 sm:bottom-6",
-        "clip-angular-sm flex size-11 items-center justify-center",
-        "bg-surface/90 backdrop-blur-md text-foreground",
-        "border border-white/10 shadow-[0_10px_24px_-12px_rgba(0,0,0,0.55)]",
+        // Mobile: lift above the sticky Buy bar (~64–72px) so the chip never
+        // overlaps the primary CTA. Desktop keeps standard corner offset.
+        "fixed right-4 bottom-[88px] z-40 sm:right-6 sm:bottom-6",
+        // Outer layer is the "border" colour. Its clip-path follows the angular
+        // shape, so the painted pixels always include the diagonal edge — no
+        // gap at the cut corners (unlike a normal `border` which is clipped out).
+        // `fixed` above already creates a positioning context for the inset
+        // inner layer — don't add `relative`, it would override `fixed`.
+        "clip-angular-sm size-11",
+        "bg-[color:oklch(0.35_0.012_265)]",
+        "shadow-[0_10px_24px_-12px_rgba(0,0,0,0.55)]",
         "transition-[opacity,transform] duration-300 ease-out will-change-transform",
-        "hover:border-white/25 hover:scale-105 active:scale-95",
+        "hover:scale-105 active:scale-95",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
         visible
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 translate-y-2 pointer-events-none",
       )}
     >
-      <ArrowUp className="size-4" strokeWidth={2} />
+      {/* Inner fill layer, inset by 1.5px from every edge. Same clip-path, so
+          the visible outer colour reads as a uniform 1.5px outline that stays
+          present on the two cut diagonals too. */}
+      <span
+        aria-hidden
+        className={cn(
+          "clip-angular-sm absolute inset-[1.5px]",
+          "bg-surface/95 backdrop-blur-md",
+        )}
+      />
+      <span className="relative z-10 flex size-full items-center justify-center text-foreground">
+        <ArrowUp className="size-4" strokeWidth={2} />
+      </span>
     </button>
   );
 }

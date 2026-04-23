@@ -3,6 +3,8 @@
 import { PriceBlock } from "@/components/shared/PriceBlock";
 import { PurchaseActions } from "@/components/shared/PurchaseActions";
 import { Configurator, useProductConfigurator } from "@/components/shared/ProductConfigurator";
+import { ContactManager } from "@/components/shared/ContactManager";
+import { UpgradeSuggestion } from "@/components/shared/UpgradeSuggestion";
 import { formatInstallment } from "@/lib/format";
 import type { BuildStatus } from "@/types/build";
 
@@ -109,6 +111,8 @@ export function BuildIdentityColumn() {
         )}
       </div>
 
+      <UpgradeSuggestion />
+
       <PurchaseActions
         slug={build.slug}
         name={build.name}
@@ -118,6 +122,8 @@ export function BuildIdentityColumn() {
       <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
         Доставка безкоштовно · Гарантія 12 міс · Повернення 14 днів
       </div>
+
+      <ContactManager buildName={build.name} priceUah={build.priceUah} />
     </div>
   );
 }

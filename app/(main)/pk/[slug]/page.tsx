@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { Suspense } from "react";
 import {
   Play,
   ChevronRight,
@@ -27,6 +28,7 @@ import { BuildCard } from "@/components/shared/BuildCard";
 import { StickyMobileBuyBar } from "@/components/shared/StickyMobileBuyBar";
 import { ProductConfiguratorProvider } from "@/components/shared/ProductConfigurator";
 import { BuildIdentityColumn } from "@/components/shared/BuildIdentityColumn";
+import { BuildAudience } from "@/components/shared/BuildAudience";
 import { BuildRepeatCta } from "@/components/shared/BuildRepeatCta";
 import { AccessoriesRail } from "@/components/catalog/AccessoriesRail";
 import { SKU_ACCENTS } from "@/lib/sku-accents";
@@ -106,6 +108,7 @@ export default async function BuildPage({
   const similar = similarBuilds(build.slug, 3);
 
   return (
+    <Suspense fallback={null}>
     <ProductConfiguratorProvider build={build}>
     <div style={{ ["--sku" as string]: accent }}>
       <JsonLd
@@ -138,7 +141,10 @@ export default async function BuildPage({
               "radial-gradient(ellipse 60% 50% at 30% 20%, oklch(from var(--sku) l c h / 0.5), transparent 70%)",
           }}
         />
-        <div className="relative mx-auto grid max-w-7xl gap-10 px-6 pb-12 pt-4 lg:grid-cols-[1.1fr_1fr]">
+        {/* Matches `container-site` paddings (px-4 sm:px-6 lg:px-8) so every
+            card under this column aligns edge-to-edge with BuildAudience and
+            the later full-width sections on mobile. */}
+        <div className="container-site relative grid gap-10 pt-4 pb-12 lg:grid-cols-[1.1fr_1fr]">
           {/* Gallery */}
           <ProductGallery
             images={
@@ -155,6 +161,11 @@ export default async function BuildPage({
           <BuildIdentityColumn />
         </div>
       </section>
+
+      {/* BLOCK 1.5 — "Для кого цей ПК" */}
+      <div className="container-site pb-2">
+        <BuildAudience build={build} />
+      </div>
 
       {/* BLOCK 2 — FPS TABLE */}
       <Section>
@@ -344,5 +355,6 @@ export default async function BuildPage({
       <div className="h-20 md:h-0" />
     </div>
     </ProductConfiguratorProvider>
+    </Suspense>
   );
 }

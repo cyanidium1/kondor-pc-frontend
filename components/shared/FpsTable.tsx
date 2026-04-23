@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import type { Build, Resolution } from "@/types/build";
 import { fpsTier, FPS_TIER_META } from "@/lib/fps-thresholds";
-import { gameLabel } from "@/lib/mock/games";
+import { gameShortLabel } from "@/lib/mock/games";
 
 const RESOLUTIONS: Resolution[] = ["fullhd", "2k", "4k"];
 const RESOLUTION_LABEL: Record<Resolution, string> = {
@@ -23,10 +23,10 @@ export function FpsTable({
     <div className={cn("overflow-hidden rounded-lg border border-border", className)}>
       <div className="tabular">
         {/* header */}
-        <div className="grid grid-cols-[1fr_repeat(3,minmax(0,1fr))] gap-px bg-border/50 text-xs uppercase tracking-wider text-muted-foreground">
+        <div className="grid grid-cols-[1.2fr_repeat(3,minmax(0,1fr))] gap-px bg-border/50 text-xs uppercase tracking-wider text-muted-foreground">
           <div className="bg-surface px-4 py-3">Гра</div>
           {RESOLUTIONS.map((r) => (
-            <div key={r} className="bg-surface px-3 py-3 text-right">
+            <div key={r} className="bg-surface px-3 py-3 text-center">
               {RESOLUTION_LABEL[r]}
             </div>
           ))}
@@ -41,17 +41,21 @@ export function FpsTable({
             return (
               <div
                 key={slug}
-                className="grid grid-cols-[1fr_repeat(3,minmax(0,1fr))] gap-px bg-border/50"
+                className="grid grid-cols-[1.2fr_repeat(3,minmax(0,1fr))] gap-px bg-border/50"
               >
-                <div className="bg-surface px-4 py-3 text-sm font-medium">
-                  {gameLabel(slug)}
+                {/* Game name cell — clamp to 2 lines so every row keeps the
+                    same vertical rhythm regardless of title length. */}
+                <div className="flex min-h-14 items-center bg-surface px-4 py-2 text-sm font-medium">
+                  <span className="line-clamp-2 leading-tight">
+                    {gameShortLabel(slug)}
+                  </span>
                 </div>
                 {row.map((entry, i) => {
                   if (!entry) {
                     return (
                       <div
                         key={i}
-                        className="bg-surface px-3 py-3 text-right text-xs text-muted-foreground/40"
+                        className="flex min-h-14 items-center justify-center bg-surface px-2 py-2 text-xs text-muted-foreground/40"
                       >
                         —
                       </div>
@@ -61,10 +65,10 @@ export function FpsTable({
                   return (
                     <div
                       key={i}
-                      className="bg-surface px-3 py-3 text-right"
+                      className="flex min-h-14 items-center justify-center bg-surface px-2 py-2"
                       title={FPS_TIER_META[tier].note}
                     >
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center gap-1.5">
                         <span
                           className={cn(
                             "size-2 shrink-0 rounded-full",
@@ -72,18 +76,17 @@ export function FpsTable({
                           )}
                           style={{ background: FPS_TIER_META[tier].colorVar }}
                         />
-                        <span className="text-sm font-semibold">
-                          {entry.fpsAvg}
-                        </span>
-                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                          fps
-                        </span>
-                      </div>
-                      {entry.notes && (
-                        <div className="mt-0.5 text-[10px] text-muted-foreground">
-                          {entry.notes}
+                        {/* Number on top, "FPS" stacked underneath so the cell
+                            reads as a clean two-line metric. */}
+                        <div className="flex flex-col items-center leading-none">
+                          <span className="text-sm font-semibold">
+                            {entry.fpsAvg}
+                          </span>
+                          <span className="mt-0.5 text-[9px] uppercase tracking-[0.15em] text-muted-foreground">
+                            fps
+                          </span>
                         </div>
-                      )}
+                      </div>
                     </div>
                   );
                 })}

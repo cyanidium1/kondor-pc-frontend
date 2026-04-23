@@ -8,6 +8,7 @@ import { useCartStore, lineKey } from "@/lib/cartStore";
 import { TechButtonLink } from "@/components/shared/TechButton";
 import { formatPrice } from "@/lib/format";
 import { CartListItem } from "./CartListItem";
+import { CartCrossSell } from "./CartCrossSell";
 
 const drawerVariants = {
   hidden: { x: "100%" },
@@ -151,6 +152,9 @@ export function CartDrawer() {
                 </AnimatePresence>
               </ul>
             )}
+
+            {/* Cross-sell — appears when cart contains a PC build */}
+            {items.length > 0 && <CartCrossSell />}
 
             {/* Footer */}
             {items.length > 0 && (

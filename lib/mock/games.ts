@@ -100,3 +100,25 @@ export function gameLabel(slug: string): string {
   const g = gameBySlug(slug);
   return g?.ukrName || g?.name || slug;
 }
+
+/**
+ * Compact label used in dense data tables (FPS table, card chips).
+ * Keeps the row visual consistent — all labels fit inside two lines at mobile
+ * widths without truncation.
+ */
+const SHORT_OVERRIDES: Record<string, string> = {
+  cs2: "CS2",
+  warzone: "Warzone",
+  gta5: "GTA 5",
+  fortnite: "Fortnite",
+  dota2: "Dota 2",
+  valorant: "Valorant",
+  minecraft: "Minecraft",
+  cyberpunk: "CP 2077",
+  pubg: "PUBG",
+  apex: "Apex",
+};
+export function gameShortLabel(slug: string): string {
+  if (SHORT_OVERRIDES[slug]) return SHORT_OVERRIDES[slug];
+  return gameLabel(slug);
+}
