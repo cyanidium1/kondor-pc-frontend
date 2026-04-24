@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { TechButton } from "@/components/shared/TechButton";
 import {
   AddToCartAnimation,
@@ -109,6 +109,7 @@ export function CatalogCard({
   const swatches = useMemo(() => buildSwatches(group), [group]);
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+  const [galleryIdx, setGalleryIdx] = useState(0);
   const activeIdx = hoverIdx ?? selectedIdx;
   const activeSwatch = swatches[activeIdx];
   const committedSwatch = swatches[selectedIdx];
@@ -120,8 +121,24 @@ export function CatalogCard({
   const committedVariant: CatalogProductListItem =
     committedSwatch?.variant ?? group.variants[0];
 
+  const fallbackGallery = useMemo(() => {
+    const seen = new Set<string>();
+    const out: SanityImageRef[] = [];
+    for (const v of group.variants) {
+      const img = v.heroImage;
+      const key = img?.asset?._ref;
+      if (!img || !key || seen.has(key)) continue;
+      seen.add(key);
+      out.push(img);
+    }
+    return out;
+  }, [group.variants]);
+  const hasManyPhotos = swatches.length > 1 || fallbackGallery.length > 1;
+
   const displayImage: SanityImageRef | undefined =
-    activeSwatch?.photo ?? activeVariant.heroImage;
+    swatches.length > 0
+      ? (activeSwatch?.photo ?? activeVariant.heroImage)
+      : (fallbackGallery[galleryIdx] ?? activeVariant.heroImage);
   const heroUrl = imageUrl(displayImage, 900);
   const thumbUrl = imageUrl(displayImage, 240);
 
@@ -184,6 +201,22 @@ export function CatalogCard({
     }, FLY_DURATION_MS);
   }
 
+  // Photo arrows should not navigate to details page.
+  function flipPhoto(e: React.MouseEvent<HTMLButtonElement>, delta: number) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (swatches.length > 1) {
+      setHoverIdx(null);
+      setSelectedIdx((i) => (i + delta + swatches.length) % swatches.length);
+      return;
+    }
+    if (fallbackGallery.length > 1) {
+      setGalleryIdx(
+        (i) => (i + delta + fallbackGallery.length) % fallbackGallery.length,
+      );
+    }
+  }
+
   // Detail link always points at the *committed* (clicked) variant slug so the
   // detail page opens the exact same SKU the user will see in the cart.
   const detailHref = committedSwatch
@@ -196,61 +229,96 @@ export function CatalogCard({
     <>
       <div
         className={cn(
-          "card-frame-md group relative flex flex-col overflow-hidden bg-surface/60",
-          // Hover lift — keep the same 4px movement; softer cubic-bezier easing
-          // so the transform doesn't feel snappy.
-          "transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-          "hover:-translate-y-1 hover:bg-surface/80",
+          "sku-glow card-frame-md group relative flex flex-col overflow-hidden motion-reduce:transform-none",
           className,
         )}
+        style={{ ["--sku" as string]: "var(--primary)" }}
       >
         {/* Image area */}
         <Link
           href={detailHref}
           className="relative block aspect-square overflow-hidden"
         >
-          {heroUrl ? (
-            <Image
-              key={heroUrl}
-              src={heroUrl}
-              alt={displayImage?.alt || activeVariant.name}
-              fill
-              sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, 90vw"
-              quality={85}
-              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center bg-surface text-[10px] uppercase tracking-wider text-muted-foreground">
-              Без фото
-            </div>
-          )}
+            {heroUrl ? (
+              <Image
+                key={heroUrl}
+                src={heroUrl}
+                alt={displayImage?.alt || activeVariant.name}
+                fill
+                sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, 90vw"
+                quality={85}
+                className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-surface text-[10px] uppercase tracking-wider text-muted-foreground">
+                Без фото
+              </div>
+            )}
 
-          {activeVariant.badge && (
-            <span
-              className="absolute left-3 top-3 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black"
-              style={{
-                background:
-                  activeVariant.badge.hex || "var(--sku-pulsar, #ffc857)",
-              }}
-            >
-              {activeVariant.badge.text}
-            </span>
-          )}
-          {activeVariant.newItem && !activeVariant.badge && (
-            <span className="absolute left-3 top-3 rounded-full bg-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-background">
-              Новинка
-            </span>
-          )}
-          {activeVariant.preorder && (
-            <span className="absolute right-3 top-3 rounded-full border border-border bg-background/80 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground backdrop-blur">
-              Передзамовлення
-            </span>
-          )}
-          {hasDiscount && (
-            <span className="absolute bottom-3 left-3 rounded-sm bg-foreground px-1.5 py-0.5 text-[10px] font-bold text-background">
-              −{discountPct}%
-            </span>
-          )}
+            {activeVariant.badge && (
+              <span
+                className="absolute left-3 top-3 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black"
+                style={{
+                  background:
+                    activeVariant.badge.hex || "var(--sku-pulsar, #ffc857)",
+                }}
+              >
+                {activeVariant.badge.text}
+              </span>
+            )}
+            {activeVariant.newItem && !activeVariant.badge && (
+              <span className="absolute left-3 top-3 rounded-full bg-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-background">
+                Новинка
+              </span>
+            )}
+            {activeVariant.preorder && (
+              <span className="absolute right-3 top-3 rounded-full border border-border bg-background/80 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground backdrop-blur">
+                Передзамовлення
+              </span>
+            )}
+            {hasDiscount && (
+              <span className="absolute bottom-3 left-3 rounded-sm bg-foreground px-1.5 py-0.5 text-[10px] font-bold text-background">
+                −{discountPct}%
+              </span>
+            )}
+            {hasManyPhotos && (
+              <>
+                <button
+                  type="button"
+                  onClick={(e) => flipPhoto(e, -1)}
+                  aria-label="Попереднє фото"
+                  className={cn(
+                    "absolute left-2 top-1/2 z-20 -translate-y-1/2",
+                    "flex size-8 items-center justify-center rounded-full",
+                    "border border-white/10 bg-background/70 text-foreground backdrop-blur",
+                    "transition-all duration-300 ease-out",
+                    "hover:scale-105 hover:border-white/25 hover:bg-background",
+                    "active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60",
+                  )}
+                >
+                  <ChevronLeft className="size-4" strokeWidth={2} />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => flipPhoto(e, 1)}
+                  aria-label="Наступне фото"
+                  className={cn(
+                    "absolute right-2 top-1/2 z-20 -translate-y-1/2",
+                    "flex size-8 items-center justify-center rounded-full",
+                    "border border-white/10 bg-background/70 text-foreground backdrop-blur",
+                    "transition-all duration-300 ease-out",
+                    "hover:scale-105 hover:border-white/25 hover:bg-background",
+                    "active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60",
+                  )}
+                >
+                  <ChevronRight className="size-4" strokeWidth={2} />
+                </button>
+                <div className="tabular absolute bottom-2 left-1/2 z-20 -translate-x-1/2 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-medium backdrop-blur">
+                  {swatches.length > 1 ? selectedIdx + 1 : galleryIdx + 1} /{" "}
+                  {swatches.length > 1 ? swatches.length : fallbackGallery.length}
+                </div>
+              </>
+            )}
         </Link>
 
         {/* Body */}
@@ -280,7 +348,7 @@ export function CatalogCard({
             })()}
             <Link
               href={detailHref}
-              className="font-display text-base font-bold uppercase leading-tight tracking-wide hover:opacity-80"
+              className="font-display text-base font-bold uppercase leading-tight tracking-wide transition-colors duration-300 ease-out hover:text-primary group-hover:text-primary"
             >
               {committedVariant.name}
             </Link>

@@ -77,8 +77,8 @@ export function BuildCard({
       href={`/pk/${build.slug}`}
       onMouseMove={onMove}
       className={cn(
-        "sku-glow smooth-hover card-frame-md group relative block overflow-hidden",
-        "hover:-translate-y-1 motion-reduce:transform-none",
+        "sku-glow card-frame-md group relative block overflow-hidden",
+        "motion-reduce:transform-none",
         className,
       )}
       style={{ ["--sku" as string]: accent }}
@@ -103,7 +103,7 @@ export function BuildCard({
       <div className="relative flex h-full flex-col gap-4 p-5">
         <div className="flex items-start justify-between">
           <div className="min-w-0">
-            <div className="font-display text-2xl font-bold uppercase tracking-wider">
+            <div className="font-display text-2xl font-bold uppercase tracking-wider transition-colors duration-300 ease-out group-hover:text-primary">
               {build.name}
             </div>
             <div className="mt-0.5 truncate text-xs text-muted-foreground">

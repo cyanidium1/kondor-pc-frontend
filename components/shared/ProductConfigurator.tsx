@@ -120,6 +120,10 @@ export function ProductConfiguratorProvider({
     }
     const query = sp.toString();
     const next = `${window.location.pathname}${query ? `?${query}` : ""}`;
+    const current = `${window.location.pathname}${window.location.search}`;
+    // Avoid no-op navigations: they still trigger Next.js route updates
+    // and can cause repeated server requests in development.
+    if (next === current) return;
     router.replace(next, { scroll: false });
   }, [selections, build.configurableOptions, defaults, router]);
 
