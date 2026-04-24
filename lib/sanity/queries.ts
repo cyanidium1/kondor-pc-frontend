@@ -16,6 +16,7 @@ const LISTING_PROJECTION = `
   "id": _id,
   "slug": slug,
   name,
+  generalname,
   price,
   priceDiscount,
   "badge": badge->{text, "hex": backgroundColor.hex},

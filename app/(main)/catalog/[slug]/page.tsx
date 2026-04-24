@@ -11,6 +11,7 @@ import {
 } from "@/lib/sanity/fetchers";
 import { urlFor } from "@/lib/sanity/image";
 import { CatalogCard } from "@/components/catalog/CatalogCard";
+import { groupProducts } from "@/lib/catalog/group";
 import { CatalogDetailView } from "./CatalogDetailView";
 
 export const revalidate = 600;
@@ -105,8 +106,8 @@ export default async function CatalogDetailPage({
             </h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {similar.slice(0, 4).map((s) => (
-              <CatalogCard key={s.id} item={s} />
+            {groupProducts(similar).slice(0, 4).map((g) => (
+              <CatalogCard key={g.key} group={g} />
             ))}
           </div>
         </section>

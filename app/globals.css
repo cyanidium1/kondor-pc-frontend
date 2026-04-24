@@ -339,7 +339,15 @@
     position: relative;
     isolation: isolate;
     background: var(--card-edge, oklch(1 0 0 / 0.1));
-    transition: background-color 500ms cubic-bezier(0.16, 1, 0.3, 1);
+    /*
+     * Both axes transition. Without the `transform` entry, the card's
+     * `-translate-y-1` hover lift snaps instantly (0ms) because the bg-only
+     * shorthand resets transition on every other property.
+     */
+    transition:
+      background-color 500ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
   }
   .card-frame-sm {
     --cut: 10px;

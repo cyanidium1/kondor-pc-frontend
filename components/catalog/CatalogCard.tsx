@@ -15,6 +15,7 @@ import { urlFor } from "@/lib/sanity/image";
 import { cn } from "@/lib/utils";
 import type {
   CatalogColorDot,
+  CatalogProductGroup,
   CatalogProductListItem,
   SanityImageRef,
 } from "@/types/catalog";
@@ -25,47 +26,117 @@ function imageUrl(source: SanityImageRef | undefined, size: number) {
     : undefined;
 }
 
+/**
+ * Build a unified swatch model:
+ *   - when the group has >1 variant, each variant contributes one swatch
+ *     (swatches reference whole variants → cart gets the real ID/slug)
+ *   - when there's one variant, fall back to that variant's own `coloropts`
+ *     (photo variants inside a single item)
+ */
+interface Swatch {
+  /** Stable key for React. */
+  key: string;
+  /** Label shown in the UI + stored in cart as `colorName`. */
+  label: string;
+  /** Dot hex — falls back to #999 when absent. */
+  hex?: string;
+  /** Used as `colorCode` in cart — the internal variant code. */
+  code?: string;
+  /** The variant this swatch resolves to. */
+  variant: CatalogProductListItem;
+  /** The specific photo source this swatch should display. */
+  photo?: SanityImageRef;
+}
+
+function buildSwatches(group: CatalogProductGroup): Swatch[] {
+  if (group.variants.length > 1) {
+    // One swatch per variant — this is the cart-safe path.
+    const seen = new Set<string>();
+    const out: Swatch[] = [];
+    for (const variant of group.variants) {
+      const primary: CatalogColorDot | undefined =
+        variant.colors?.find((c) => c?.color) ?? variant.colors?.[0];
+      const label =
+        primary?.color?.trim() ||
+        // Last-resort label: strip the product name and take what's left (e.g.
+        // "Aviator Білий" → "Білий"). If nothing usable is left, keep the slug.
+        variant.slug;
+      const dedupeKey = label.toLowerCase();
+      if (seen.has(dedupeKey)) continue;
+      seen.add(dedupeKey);
+      out.push({
+        key: variant.id || variant.slug,
+        label,
+        hex: primary?.hex,
+        code: primary?.code,
+        variant,
+        photo: primary?.photo ?? variant.heroImage,
+      });
+    }
+    return out;
+  }
+
+  // Single-variant fallback: surface the variant's own colour photo options.
+  const variant = group.variants[0];
+  const seen = new Set<string>();
+  const out: Swatch[] = [];
+  for (const c of variant.colors ?? []) {
+    if (!c?.color) continue;
+    const key = c.color.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push({
+      key: (c.code ?? "") + c.color,
+      label: c.color,
+      hex: c.hex,
+      code: c.code,
+      variant,
+      photo: c.photo ?? variant.heroImage,
+    });
+  }
+  return out;
+}
+
 export function CatalogCard({
-  item,
+  group,
   className,
 }: {
-  item: CatalogProductListItem;
+  group: CatalogProductGroup;
   className?: string;
 }) {
   const { add, openDrawer } = useCartStore();
 
-  const colors: CatalogColorDot[] = useMemo(() => {
-    if (!item.colors || item.colors.length === 0) return [];
-    // De-dupe on color name — same item sometimes has multiple empty entries.
-    const seen = new Set<string>();
-    const out: CatalogColorDot[] = [];
-    for (const c of item.colors) {
-      if (!c?.color) continue;
-      const key = c.color.toLowerCase();
-      if (seen.has(key)) continue;
-      seen.add(key);
-      out.push(c);
-    }
-    return out;
-  }, [item.colors]);
-
-  // The selected (clicked) color drives both the displayed photo and
-  // the color sent to cart. Hover on a dot previews without committing.
+  const swatches = useMemo(() => buildSwatches(group), [group]);
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
   const activeIdx = hoverIdx ?? selectedIdx;
-  const activeColor = colors[activeIdx];
+  const activeSwatch = swatches[activeIdx];
+  const committedSwatch = swatches[selectedIdx];
+
+  // The variant that drives everything the user actually buys.
+  // Falls back to the group's first variant when the group has no swatches.
+  const activeVariant: CatalogProductListItem =
+    activeSwatch?.variant ?? group.variants[0];
+  const committedVariant: CatalogProductListItem =
+    committedSwatch?.variant ?? group.variants[0];
 
   const displayImage: SanityImageRef | undefined =
-    activeColor?.photo ?? item.heroImage;
+    activeSwatch?.photo ?? activeVariant.heroImage;
   const heroUrl = imageUrl(displayImage, 900);
   const thumbUrl = imageUrl(displayImage, 240);
 
   const hasDiscount =
-    typeof item.priceDiscount === "number" && item.priceDiscount < item.price;
-  const finalPrice = hasDiscount ? item.priceDiscount! : item.price;
+    typeof activeVariant.priceDiscount === "number" &&
+    activeVariant.priceDiscount < activeVariant.price;
+  const finalPrice = hasDiscount
+    ? activeVariant.priceDiscount!
+    : activeVariant.price;
   const discountPct = hasDiscount
-    ? Math.round(((item.price - item.priceDiscount!) / item.price) * 100)
+    ? Math.round(
+        ((activeVariant.price - activeVariant.priceDiscount!) /
+          activeVariant.price) *
+          100,
+      )
     : 0;
 
   const [animationKey, setAnimationKey] = useState<number | null>(null);
@@ -75,10 +146,19 @@ export function CatalogCard({
   const [justAdded, setJustAdded] = useState(false);
 
   function handleAdd(e: React.MouseEvent<HTMLButtonElement>) {
-    const committedColor = colors[selectedIdx];
-    // Open drawer immediately — item will "fly in" to the already-open cart.
     openDrawer();
-    if (thumbUrl) {
+    const committedHasDiscount =
+      typeof committedVariant.priceDiscount === "number" &&
+      committedVariant.priceDiscount < committedVariant.price;
+    const committedFinalPrice = committedHasDiscount
+      ? committedVariant.priceDiscount!
+      : committedVariant.price;
+    const committedThumb = imageUrl(
+      committedSwatch?.photo ?? committedVariant.heroImage,
+      240,
+    );
+
+    if (committedThumb) {
       const rect = e.currentTarget.getBoundingClientRect();
       setStartPos({
         top: rect.top + rect.height / 2 - 30,
@@ -89,28 +169,38 @@ export function CatalogCard({
     window.setTimeout(() => {
       add({
         itemType: "accessory",
-        slug: item.slug,
-        name: item.name,
-        priceUah: item.price,
-        unitPriceUah: finalPrice,
-        image: thumbUrl,
-        colorCode: committedColor?.code,
-        colorName: committedColor?.color,
+        // Cart receives the real, variant-specific slug/name/price — not the
+        // group key — so KCM/checkout dispatch the correct SKU.
+        slug: committedVariant.slug,
+        name: committedVariant.name,
+        priceUah: committedVariant.price,
+        unitPriceUah: committedFinalPrice,
+        image: committedThumb,
+        colorCode: committedSwatch?.code,
+        colorName: committedSwatch?.label,
       });
       setJustAdded(true);
       window.setTimeout(() => setJustAdded(false), 1500);
     }, FLY_DURATION_MS);
   }
 
-  const detailHref = activeColor?.color
-    ? `/catalog/${item.slug}?color=${encodeURIComponent(activeColor.color)}`
-    : `/catalog/${item.slug}`;
+  // Detail link always points at the *committed* (clicked) variant slug so the
+  // detail page opens the exact same SKU the user will see in the cart.
+  const detailHref = committedSwatch
+    ? `/catalog/${committedVariant.slug}?color=${encodeURIComponent(
+        committedSwatch.label,
+      )}`
+    : `/catalog/${committedVariant.slug}`;
 
   return (
     <>
       <div
         className={cn(
-          "card-frame-md group relative flex flex-col overflow-hidden bg-surface/60 transition-all duration-300 hover:-translate-y-1 hover:bg-surface/80",
+          "card-frame-md group relative flex flex-col overflow-hidden bg-surface/60",
+          // Hover lift — keep the same 4px movement; softer cubic-bezier easing
+          // so the transform doesn't feel snappy.
+          "transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "hover:-translate-y-1 hover:bg-surface/80",
           className,
         )}
       >
@@ -123,7 +213,7 @@ export function CatalogCard({
             <Image
               key={heroUrl}
               src={heroUrl}
-              alt={displayImage?.alt || item.name}
+              alt={displayImage?.alt || activeVariant.name}
               fill
               sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, 90vw"
               quality={85}
@@ -135,30 +225,27 @@ export function CatalogCard({
             </div>
           )}
 
-          {/* Badge (top-left) */}
-          {item.badge && (
+          {activeVariant.badge && (
             <span
               className="absolute left-3 top-3 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black"
               style={{
-                background: item.badge.hex || "var(--sku-pulsar, #ffc857)",
+                background:
+                  activeVariant.badge.hex || "var(--sku-pulsar, #ffc857)",
               }}
             >
-              {item.badge.text}
+              {activeVariant.badge.text}
             </span>
           )}
-          {/* NEW indicator */}
-          {item.newItem && !item.badge && (
+          {activeVariant.newItem && !activeVariant.badge && (
             <span className="absolute left-3 top-3 rounded-full bg-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-background">
               Новинка
             </span>
           )}
-          {/* Preorder pill (top-right) */}
-          {item.preorder && (
+          {activeVariant.preorder && (
             <span className="absolute right-3 top-3 rounded-full border border-border bg-background/80 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground backdrop-blur">
               Передзамовлення
             </span>
           )}
-          {/* Discount % chip */}
           {hasDiscount && (
             <span className="absolute bottom-3 left-3 rounded-sm bg-foreground px-1.5 py-0.5 text-[10px] font-bold text-background">
               −{discountPct}%
@@ -169,30 +256,49 @@ export function CatalogCard({
         {/* Body */}
         <div className="flex flex-1 flex-col gap-3 p-4">
           <div>
-            {item.category && (
-              <div className="mb-1 text-[10px] uppercase tracking-wider text-muted-foreground">
-                {item.category.name}
-              </div>
-            )}
+            {/*
+              Structural labels (category + name) are anchored to the
+              *committed* variant — the one the user actually picked. Hover
+              previews on swatches only affect visual attributes (image, price,
+              discount %, preorder pill, badge). Without this, hovering a
+              swatch whose variant happens to have no `category` field would
+              make the category row disappear and the card would shift upward.
+
+              We also pick the first variant that actually has a category as a
+              fallback, so a missing field on the committed variant can't blank
+              out the line either.
+            */}
+            {(() => {
+              const anchoredCategory =
+                committedVariant.category ??
+                group.variants.find((v) => v.category)?.category;
+              return anchoredCategory ? (
+                <div className="mb-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+                  {anchoredCategory.name}
+                </div>
+              ) : null;
+            })()}
             <Link
               href={detailHref}
               className="font-display text-base font-bold uppercase leading-tight tracking-wide hover:opacity-80"
             >
-              {item.name}
+              {committedVariant.name}
             </Link>
           </div>
 
-          {/* Color dots */}
-          {colors.length > 0 && (
+          {/* Swatches — when the group has >1 variant these represent the
+              actual variants (cart-safe). Otherwise they represent the single
+              variant's own colour photos. */}
+          {swatches.length > 0 && (
             <div className="flex flex-wrap items-center gap-1.5">
-              {colors.map((c, i) => {
+              {swatches.map((s, i) => {
                 const active = i === selectedIdx;
                 return (
                   <button
-                    key={(c.code ?? "") + i}
+                    key={s.key}
                     type="button"
-                    aria-label={c.color}
-                    title={c.color}
+                    aria-label={s.label}
+                    title={s.label}
                     onClick={() => setSelectedIdx(i)}
                     onMouseEnter={() => setHoverIdx(i)}
                     onMouseLeave={() => setHoverIdx(null)}
@@ -202,19 +308,19 @@ export function CatalogCard({
                         ? "border-foreground ring-1 ring-foreground/40 ring-offset-1 ring-offset-background"
                         : "border-border hover:border-white/40",
                     )}
-                    style={{ background: c.hex || "#999" }}
+                    style={{ background: s.hex || "#999" }}
                   />
                 );
               })}
-              {activeColor && (
+              {activeSwatch && (
                 <span className="ml-1 truncate text-[10px] uppercase tracking-wider text-muted-foreground">
-                  {activeColor.color}
+                  {activeSwatch.label}
                 </span>
               )}
             </div>
           )}
 
-          {/* Price + CTA group — primary "Купити" + secondary "Детальніше" */}
+          {/* Price + CTA */}
           <div className="mt-auto space-y-3">
             <div className="flex items-baseline gap-2">
               <div className="font-display tabular text-xl font-bold">
@@ -222,7 +328,7 @@ export function CatalogCard({
               </div>
               {hasDiscount && (
                 <div className="tabular text-xs text-muted-foreground line-through">
-                  {formatPrice(item.price)}
+                  {formatPrice(activeVariant.price)}
                 </div>
               )}
             </div>
@@ -237,7 +343,7 @@ export function CatalogCard({
                   <Check className="mr-1 size-3.5" strokeWidth={2.5} />
                   Додано
                 </>
-              ) : item.preorder ? (
+              ) : activeVariant.preorder ? (
                 "Передзамовити"
               ) : (
                 "Купити"

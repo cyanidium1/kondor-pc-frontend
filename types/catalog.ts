@@ -37,6 +37,7 @@ export interface CatalogProductListItem {
   id: string;
   slug: string;
   name: string;
+  generalname?: string;
   price: number;
   priceDiscount?: number;
   newItem?: boolean;
@@ -45,6 +46,21 @@ export interface CatalogProductListItem {
   category?: { name: string; slug: string };
   heroImage?: SanityImageRef;
   colors?: CatalogColorDot[];
+}
+
+/**
+ * A catalog grouping unit: a "product" as the shopper perceives it
+ * (one card in the listing), regardless of how many colour-variant items
+ * with different IDs represent it in the admin.
+ *
+ * Contract for cart/KCM: `variants[i]` is a full `CatalogProductListItem`,
+ * so whatever the user picks still has a real Sanity `id`/`slug`.
+ */
+export interface CatalogProductGroup {
+  /** Stable key used by React — derived from the grouping signal. */
+  key: string;
+  /** All the real items that fall into this visual group. `variants[0]` is the default display. */
+  variants: CatalogProductListItem[];
 }
 
 export interface ColorVariant {

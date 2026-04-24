@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getAddonItems } from "@/lib/sanity/fetchers";
+import { groupProducts } from "@/lib/catalog/group";
 import { CatalogCard } from "./CatalogCard";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 
@@ -21,7 +22,9 @@ export async function AccessoriesRail({
   const addons = await getAddonItems();
   if (!addons || addons.length === 0) return null;
 
-  const items = addons.slice(0, limit);
+  // Grouping here collapses admin duplicates (same product sold as two rows)
+  // so the rail shows distinct products, not the same thing twice.
+  const groups = groupProducts(addons).slice(0, limit);
 
   return (
     <section className="border-y border-border bg-surface/30">
@@ -38,8 +41,8 @@ export async function AccessoriesRail({
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map((item) => (
-            <CatalogCard key={item.id} item={item} />
+          {groups.map((group) => (
+            <CatalogCard key={group.key} group={group} />
           ))}
         </div>
       </div>
