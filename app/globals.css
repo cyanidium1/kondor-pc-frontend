@@ -54,11 +54,11 @@
  * Per-SKU accents live as --sku-* and can be pushed into --sku at component scope.
  */
 :root {
-  --background: oklch(0.14 0.012 265);
-  --foreground: oklch(0.96 0.005 260);
+  --background: #07090e;
+  --foreground: #f0f2f5;
 
-  --surface: oklch(0.18 0.012 265);
-  --surface-elevated: oklch(0.22 0.014 265);
+  --surface: #0f1217;
+  --surface-elevated: #171b21;
 
   --card: var(--surface);
   --card-foreground: var(--foreground);
@@ -66,41 +66,41 @@
   --popover: var(--surface-elevated);
   --popover-foreground: var(--foreground);
 
-  --primary: oklch(0.96 0.005 260);
-  --primary-foreground: oklch(0.14 0.012 265);
+  --primary: #f0f2f5;
+  --primary-foreground: #07090e;
 
-  --secondary: oklch(0.26 0.012 265);
+  --secondary: #21242a;
   --secondary-foreground: var(--foreground);
 
-  --muted: oklch(0.24 0.010 265);
-  --muted-foreground: oklch(0.66 0.018 258);
+  --muted: #1d1f24;
+  --muted-foreground: #8b939d;
 
-  --accent: oklch(0.28 0.014 265);
+  --accent: #252930;
   --accent-foreground: var(--foreground);
 
-  --destructive: oklch(0.68 0.21 25);
+  --destructive: #ff5251;
 
-  --border: oklch(1 0 0 / 0.08);
-  --input: oklch(1 0 0 / 0.06);
-  --ring: oklch(0.78 0.02 260);
+  --border: #ffffff14;
+  --input: #ffffff0f;
+  --ring: #b0b8c5;
 
   --radius: 0.5rem;
 
   /* FPS indicators (TZ §6.2.3: 144+/60-143/30-59/<30) */
-  --fps-green:  oklch(0.82 0.19 152);
-  --fps-yellow: oklch(0.86 0.17 90);
-  --fps-orange: oklch(0.77 0.19 50);
-  --fps-red:    oklch(0.68 0.22 22);
+  --fps-green:  #47e684;
+  --fps-yellow: #fcca21;
+  --fps-orange: #ff8928;
+  --fps-red:    #ff4b57;
 
   /* Per-SKU accents — derived from IG RGB lighting of each chassis */
-  --sku-vega:    oklch(0.75 0.17 295);  /* violet */
-  --sku-hyper:   oklch(0.70 0.20 20);   /* red */
-  --sku-nebula:  oklch(0.86 0.17 88);   /* amber */
-  --sku-orbitra: oklch(0.78 0.19 155);  /* emerald */
-  --sku-nyx:     oklch(0.70 0.21 10);   /* rose */
-  --sku-velar:   oklch(0.76 0.19 305);  /* plum */
-  --sku-pulsar:  oklch(0.74 0.17 250);  /* blue */
-  --sku-comet:   oklch(0.90 0.02 260);  /* soft white */
+  --sku-vega:    #b795ff;  /* violet */
+  --sku-hyper:   #ff5d69;   /* red */
+  --sku-nebula:  #ffc921;   /* amber */
+  --sku-orbitra: #13d97f;  /* emerald */
+  --sku-nyx:     #ff5680;   /* rose */
+  --sku-velar:   #ce8dff;  /* plum */
+  --sku-pulsar:  #47b0ff;  /* blue */
+  --sku-comet:   #d6dfec;  /* soft white */
 
   /* Default SKU slot — overridden via style=--sku:... on card scope */
   --sku: var(--sku-vega);
@@ -134,7 +134,7 @@
      */
     scrollbar-gutter: stable;
     scrollbar-width: thin;
-    scrollbar-color: oklch(0.35 0.01 265) transparent;
+    scrollbar-color: #383b40 transparent;
   }
 
   /* Dark scrollbar — WebKit / Chromium. Matches the dark-first surface tokens. */
@@ -146,14 +146,14 @@
     background: transparent;
   }
   *::-webkit-scrollbar-thumb {
-    background-color: oklch(0.32 0.012 265);
+    background-color: #303339;
     border: 2px solid transparent;
     border-radius: 999px;
     background-clip: padding-box;
     transition: background-color 150ms ease;
   }
   *::-webkit-scrollbar-thumb:hover {
-    background-color: oklch(0.44 0.015 265);
+    background-color: #4e535b;
     background-clip: padding-box;
   }
   *::-webkit-scrollbar-corner {
@@ -186,12 +186,12 @@
     background:
       radial-gradient(
         ellipse 110% 55% at 50% -4%,
-        oklch(0.32 0.09 275 / 0.4),
+        #272d6066,
         transparent 60%
       ),
       radial-gradient(
         ellipse 70% 50% at 100% 100%,
-        oklch(0.28 0.08 260 / 0.18),
+        #0f27502e,
         transparent 60%
       );
   }
@@ -199,8 +199,8 @@
   body::after {
     z-index: -1;
     background-image:
-      linear-gradient(to right, oklch(1 0 0 / 0.028) 1px, transparent 1px),
-      linear-gradient(to bottom, oklch(1 0 0 / 0.028) 1px, transparent 1px);
+      linear-gradient(to right, #ffffff07 1px, transparent 1px),
+      linear-gradient(to bottom, #ffffff07 1px, transparent 1px);
     background-size: 64px 64px;
     mask-image: radial-gradient(
       ellipse 115% 85% at 50% 25%,
@@ -229,7 +229,7 @@
   }
 
   ::selection {
-    background: oklch(1 0 0 / 0.15);
+    background: #ffffff26;
   }
 
   /* Pointer cursor for every interactive control — native buttons default to default cursor. */
@@ -283,14 +283,14 @@
    */
   .sku-glow {
     filter:
-      drop-shadow(0 0 0.5px oklch(from var(--sku) l c h / 0.45))
-      drop-shadow(0 24px 40px oklch(from var(--sku) l c h / 0.28));
+      drop-shadow(0 0 0.5px color-mix(in srgb, var(--sku) 45%, transparent))
+      drop-shadow(0 24px 40px color-mix(in srgb, var(--sku) 28.000000000000004%, transparent));
     transition: filter 700ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .sku-glow:hover {
     filter:
-      drop-shadow(0 0 0.7px oklch(from var(--sku) l c h / 0.7))
-      drop-shadow(0 30px 60px oklch(from var(--sku) l c h / 0.5));
+      drop-shadow(0 0 0.7px color-mix(in srgb, var(--sku) 70%, transparent))
+      drop-shadow(0 30px 60px color-mix(in srgb, var(--sku) 50%, transparent));
   }
 
   /*
@@ -339,7 +339,7 @@
     position: relative;
     isolation: isolate;
     --card-inset: 1px;
-    background: var(--card-edge, oklch(1 0 0 / 0.1));
+    background: var(--card-edge, #ffffff1a);
     /*
      * Both axes transition. Without the `transform` entry, the card's
      * `-translate-y-1` hover lift snaps instantly (0ms) because the bg-only
@@ -392,8 +392,8 @@
   .card-frame-lg:hover {
     --card-inset: 2px;
     transform: translateY(-0.25rem);
-    --card-edge: oklch(from var(--primary) l c h / 0.52);
-    box-shadow: inset 0 0 0 1px oklch(from var(--primary) l c h / 0.28);
+    --card-edge: color-mix(in srgb, var(--primary) 52%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 28.000000000000004%, transparent);
   }
 
   /*
@@ -412,16 +412,16 @@
   /* Tech grid background — used in hero zones only */
   .bg-grid {
     background-image:
-      linear-gradient(to right, oklch(1 0 0 / 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, oklch(1 0 0 / 0.04) 1px, transparent 1px);
+      linear-gradient(to right, #ffffff0a 1px, transparent 1px),
+      linear-gradient(to bottom, #ffffff0a 1px, transparent 1px);
     background-size: 56px 56px;
     mask-image: radial-gradient(ellipse 85% 70% at 50% 0%, black 0%, transparent 85%);
     -webkit-mask-image: radial-gradient(ellipse 85% 70% at 50% 0%, black 0%, transparent 85%);
   }
   .bg-grid-dense {
     background-image:
-      linear-gradient(to right, oklch(1 0 0 / 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, oklch(1 0 0 / 0.05) 1px, transparent 1px);
+      linear-gradient(to right, #ffffff0d 1px, transparent 1px),
+      linear-gradient(to bottom, #ffffff0d 1px, transparent 1px);
     background-size: 32px 32px;
     mask-image: radial-gradient(ellipse 80% 70% at 30% 30%, black 0%, transparent 75%);
     -webkit-mask-image: radial-gradient(ellipse 80% 70% at 30% 30%, black 0%, transparent 75%);
@@ -431,7 +431,7 @@
   .card-spotlight {
     background: radial-gradient(
       260px circle at var(--mx, 50%) var(--my, 50%),
-      oklch(from var(--sku) l c h / 0.22),
+      color-mix(in srgb, var(--sku) 22%, transparent),
       transparent 50%
     );
     opacity: 0;
@@ -445,11 +445,11 @@
   @keyframes fps-pulse {
     0%, 100% {
       transform: scale(1);
-      box-shadow: 0 0 0 0 oklch(from var(--fps-green) l c h / 0.45);
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--fps-green) 45%, transparent);
     }
     50% {
       transform: scale(1.15);
-      box-shadow: 0 0 0 4px oklch(from var(--fps-green) l c h / 0);
+      box-shadow: 0 0 0 4px transparent;
     }
   }
   .animate-fps-pulse {
@@ -475,7 +475,7 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      oklch(from var(--sku) l c h / 0.9) 50%,
+      color-mix(in srgb, var(--sku) 90%, transparent) 50%,
       transparent 100%
     );
   }
@@ -502,7 +502,7 @@
     --tech-accent: var(--sku, var(--foreground));
     --tech-cut: 10px;
     --tech-border: 1.5px;
-    --tech-fill: oklch(0.1 0.012 265);
+    --tech-fill: #020306;
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -587,10 +587,10 @@
   /* Disabled */
   .tech-btn:disabled {
     cursor: not-allowed;
-    color: oklch(0.55 0 0);
+    color: #717171;
   }
   .tech-btn:disabled .tech-btn__edge {
-    background-color: oklch(0.3 0 0);
+    background-color: #2e2e2e;
   }
 
   /*
@@ -598,7 +598,7 @@
    * (selects, inputs). Neutral border by default, highlights on focus.
    */
   .tech-field {
-    --tech-accent: oklch(1 0 0 / 0.18);
+    --tech-accent: #ffffff2e;
     --tech-cut: 8px;
     --tech-border: 1px;
     --tech-fill: var(--surface);
@@ -634,7 +634,7 @@
     z-index: -1;
   }
   .tech-field:hover::before {
-    background-color: oklch(1 0 0 / 0.3);
+    background-color: #ffffff4d;
   }
   .tech-field:focus-within::before {
     background-color: var(--ring);

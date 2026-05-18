@@ -46,7 +46,7 @@ export function ScrollToTopButton() {
         // `fixed` above already creates a positioning context for the inset
         // inner layer — don't add `relative`, it would override `fixed`.
         "clip-angular-sm size-11",
-        "bg-[color:oklch(0.35_0.012_265)]",
+        "bg-[color:#373b41]",
         "shadow-[0_10px_24px_-12px_rgba(0,0,0,0.55)]",
         "transition-[opacity,transform] duration-300 ease-out will-change-transform",
         "hover:scale-105 active:scale-95",

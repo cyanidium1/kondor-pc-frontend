@@ -56,7 +56,7 @@ export default function WarrantyPage() {
           className="pointer-events-none absolute inset-0 opacity-30"
           style={{
             background:
-              "radial-gradient(ellipse 60% 50% at 50% 0%, oklch(0.35 0.08 150 / 0.5), transparent 70%)",
+              "radial-gradient(ellipse 60% 50% at 50% 0%, #14462380, transparent 70%)",
           }}
         />
         <div className="container-site relative py-20 md:py-28 text-center">

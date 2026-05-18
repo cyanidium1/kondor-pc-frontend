@@ -111,7 +111,7 @@ export default function HomePage() {
           className="pointer-events-none absolute inset-0 opacity-[0.35]"
           style={{
             background:
-              "radial-gradient(ellipse 70% 60% at 50% 0%, oklch(0.35 0.07 280 / 0.55), transparent 70%)",
+              "radial-gradient(ellipse 70% 60% at 50% 0%, #34365e8c, transparent 70%)",
           }}
         />
         <div

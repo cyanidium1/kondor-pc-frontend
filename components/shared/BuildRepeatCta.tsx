@@ -29,7 +29,7 @@ export function BuildRepeatCta() {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2"
         style={{
           background:
-            "radial-gradient(ellipse 70% 100% at 50% 100%, oklch(from var(--sku) l c h / 0.18), transparent 70%)",
+            "radial-gradient(ellipse 70% 100% at 50% 100%, color-mix(in srgb, var(--sku) 18%, transparent), transparent 70%)",
         }}
       />
       <div className="relative grid gap-8 md:grid-cols-[1.2fr_1fr] md:items-end">

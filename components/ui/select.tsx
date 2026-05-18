@@ -85,7 +85,7 @@ function SelectContent({
           data-align-trigger={alignItemWithTrigger}
           className={cn(
             "card-frame-sm relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-44 origin-(--transform-origin) overflow-x-hidden overflow-y-auto p-1.5 text-popover-foreground",
-            "[--card-edge:oklch(1_0_0_/_0.22)] [--card-fill:oklch(0.18_0.012_265)]",
+            "[--card-edge:#ffffff38] [--card-fill:#0f1217]",
             "[filter:drop-shadow(0_20px_32px_rgba(0,0,0,0.5))_drop-shadow(0_0_1px_rgba(255,255,255,0.08))]",
             "duration-150 ease-out data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
             className,

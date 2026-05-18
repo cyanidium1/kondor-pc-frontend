@@ -60,8 +60,8 @@ export function UpgradeSuggestion({ className }: { className?: string }) {
       onClick={() => select(suggestion.groupId, suggestion.optionId)}
       className={cn(
         "group/upgrade flex w-full items-center justify-between gap-3 rounded-md border border-dashed px-3 py-2 text-left transition",
-        "border-[color:var(--sku,oklch(1_0_0/0.25))]",
-        "hover:border-[color:var(--sku,oklch(1_0_0/0.5))] hover:bg-surface/60",
+        "border-[color:var(--sku,#ffffff40)]",
+        "hover:border-[color:var(--sku,#ffffff80)] hover:bg-surface/60",
         className,
       )}
     >
