@@ -1,25 +1,27 @@
 import type { Metadata } from "next";
-import { Inter, Unbounded, JetBrains_Mono } from "next/font/google";
+import { Montserrat, Unbounded } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { ScrollToTopButton } from "@/components/shared/ScrollToTopButton";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 
-const inter = Inter({
-  variable: "--font-sans",
+const montserrat = Montserrat({
+  variable: "--font-body",
   subsets: ["latin", "cyrillic"],
+  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 
 const unbounded = Unbounded({
-  variable: "--font-display",
+  variable: "--font-heading",
   subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin", "cyrillic"],
+const zenterSP = localFont({
+  src: "../public/fonts/ZenterSPDemo.woff2",
+  variable: "--font-display",
   display: "swap",
 });
 
@@ -46,7 +48,7 @@ export default function RootLayout({
   return (
     <html
       lang="uk"
-      className={`${inter.variable} ${unbounded.variable} ${jetbrainsMono.variable}`}
+      className={`${montserrat.variable} ${unbounded.variable} ${zenterSP.variable}`}
     >
       <body>
         {children}
