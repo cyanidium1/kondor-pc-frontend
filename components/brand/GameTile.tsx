@@ -9,22 +9,22 @@ interface GameStyle {
 }
 
 const GAME_STYLES: Record<string, GameStyle> = {
-  cs2: { from: "oklch(0.55 0.18 35)", to: "oklch(0.25 0.14 30)", accent: "oklch(0.8 0.18 60)", emoji: "🎯" },
-  warzone: { from: "oklch(0.55 0.15 55)", to: "oklch(0.22 0.1 45)", accent: "oklch(0.78 0.17 75)", emoji: "🎖️" },
-  gta5: { from: "oklch(0.55 0.17 150)", to: "oklch(0.22 0.1 140)", accent: "oklch(0.82 0.16 135)", emoji: "🚗" },
-  fortnite: { from: "oklch(0.55 0.2 280)", to: "oklch(0.22 0.15 290)", accent: "oklch(0.78 0.17 290)", emoji: "⚡" },
-  dota2: { from: "oklch(0.45 0.17 25)", to: "oklch(0.18 0.12 20)", accent: "oklch(0.72 0.2 30)", emoji: "⚔️" },
-  valorant: { from: "oklch(0.55 0.18 15)", to: "oklch(0.22 0.14 10)", accent: "oklch(0.78 0.19 15)", emoji: "💥" },
-  minecraft: { from: "oklch(0.5 0.14 155)", to: "oklch(0.2 0.1 150)", accent: "oklch(0.78 0.17 150)", emoji: "⛏️" },
-  cyberpunk: { from: "oklch(0.55 0.2 85)", to: "oklch(0.22 0.15 80)", accent: "oklch(0.85 0.18 95)", emoji: "🌆" },
-  pubg: { from: "oklch(0.5 0.1 65)", to: "oklch(0.2 0.08 60)", accent: "oklch(0.78 0.13 70)", emoji: "🪖" },
-  apex: { from: "oklch(0.55 0.17 20)", to: "oklch(0.22 0.13 15)", accent: "oklch(0.78 0.18 25)", emoji: "🏹" },
+  cs2: { from: "#c43b15", to: "#520000", accent: "#ff9d20", emoji: "🎯" },
+  warzone: { from: "#b15300", to: "#3c0000", accent: "#f5a400", emoji: "🎖️" },
+  gta5: { from: "#008b35", to: "#002400", accent: "#95db6c", emoji: "🚗" },
+  fortnite: { from: "#6159e1", to: "#210059", accent: "#b7a2ff", emoji: "⚡" },
+  dota2: { from: "#9e141e", to: "#360000", accent: "#ff6853", emoji: "⚔️" },
+  valorant: { from: "#c4334f", to: "#47000b", accent: "#ff7c90", emoji: "💥" },
+  minecraft: { from: "#00793d", to: "#002100", accent: "#56d57b", emoji: "⛏️" },
+  cyberpunk: { from: "#a56100", to: "#3b0200", accent: "#f3cb00", emoji: "🌆" },
+  pubg: { from: "#8a5619", to: "#2e0700", accent: "#eca851", emoji: "🪖" },
+  apex: { from: "#c13a46", to: "#450005", accent: "#ff827b", emoji: "🏹" },
 };
 
 const DEFAULT_STYLE: GameStyle = {
-  from: "oklch(0.3 0.02 265)",
-  to: "oklch(0.15 0.02 265)",
-  accent: "oklch(0.75 0.05 260)",
+  from: "#292e38",
+  to: "#070b14",
+  accent: "#9cafce",
   emoji: "🎮",
 };
 
@@ -87,7 +87,7 @@ export function GameTile({
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg, transparent 10%, oklch(0 0 0 / 0.1) 40%, oklch(0 0 0 / 0.85) 100%)",
+              "linear-gradient(180deg, transparent 10%, #0000001a 40%, #000000d9 100%)",
           }}
         />
       )}

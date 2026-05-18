@@ -91,7 +91,7 @@ function Swatch({
         style={{ background: cssVar }}
       />
       <div className="min-w-0 flex-1">
-        <div className="font-mono text-sm text-foreground">{name}</div>
+        <div className="font-body text-sm text-foreground">{name}</div>
         <div className="text-xs text-muted-foreground">{role}</div>
       </div>
     </div>
@@ -146,8 +146,8 @@ export default function StyleguidePage() {
           <p className="mt-4 max-w-2xl text-muted-foreground">
             Тимчасові токени на основі Instagram. Коли клієнт надасть брендбук і
             логотип — колір, шрифти та радіуси зміняться у двох файлах
-            (<code className="font-mono text-xs">globals.css</code> і{" "}
-            <code className="font-mono text-xs">layout.tsx</code>) без правок
+            (<code className="font-body text-xs">globals.css</code> і{" "}
+            <code className="font-body text-xs">layout.tsx</code>) без правок
             компонентів.
           </p>
         </div>
@@ -173,7 +173,7 @@ export default function StyleguidePage() {
 
           <div className="rounded-md border border-border bg-surface p-6">
             <div className="mb-2 text-[11px] uppercase tracking-wider text-muted-foreground">
-              Body · Inter
+              Body · Montserrat
             </div>
             <p className="text-lg">
               Збираємо готові ігрові ПК з реальними FPS-тестами. Гарантія 12
@@ -291,7 +291,7 @@ export default function StyleguidePage() {
               key={r.name}
               className={`flex h-24 items-center justify-center border border-border bg-surface-elevated ${r.class}`}
             >
-              <span className="font-mono text-xs text-muted-foreground">
+              <span className="font-body text-xs text-muted-foreground">
                 {r.name}
               </span>
             </div>
@@ -327,8 +327,8 @@ export default function StyleguidePage() {
       <Section kicker="07·½" title="Tech button — angular CTA">
         <p className="mb-6 max-w-2xl text-sm text-muted-foreground">
           Кутова CTA-кнопка з рамкою в accent-кольорі і маркерами на кутах.
-          Колір рамки керується через <code className="font-mono text-xs">--tech-accent</code>,
-          який за замовчуванням бере <code className="font-mono text-xs">--sku</code> на
+          Колір рамки керується через <code className="font-body text-xs">--tech-accent</code>,
+          який за замовчуванням бере <code className="font-body text-xs">--sku</code> на
           картках сборки. Використовуй як конверсійну кнопку там, де потрібен
           tech-характер (каталог, кастомна збірка, SEO-лендинги).
         </p>
@@ -368,7 +368,7 @@ export default function StyleguidePage() {
             Повторює структуру Instagram-плитки: 2×2 сітка специфікацій з
             іконками, табулярними цифрами і короткими примітками (частота, обсяг
             VRAM). Фон — surface-elevated з тонкою роздільною сіткою через{" "}
-            <code className="font-mono text-xs">gap-px</code> + border color,
+            <code className="font-body text-xs">gap-px</code> + border color,
             без важких ліній. Використовується в каталозі, на картці ПК, в
             результатах підбору, в кошику.
           </div>

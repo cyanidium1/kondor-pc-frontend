@@ -25,7 +25,7 @@ export function ChassisArt({
         className="pointer-events-none absolute inset-0 opacity-60"
         style={{
           background:
-            "radial-gradient(ellipse 60% 60% at 50% 50%, oklch(from var(--sku) l c h / 0.35), transparent 70%)",
+            "radial-gradient(ellipse 60% 60% at 50% 50%, color-mix(in srgb, var(--sku) 35%, transparent), transparent 70%)",
         }}
       />
       <svg
@@ -38,13 +38,13 @@ export function ChassisArt({
       >
         <defs>
           <linearGradient id="case-body" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="oklch(0.22 0.008 265)" />
-            <stop offset="100%" stopColor="oklch(0.12 0.012 265)" />
+            <stop offset="0%" stopColor="#191b1e" />
+            <stop offset="100%" stopColor="#04060a" />
           </linearGradient>
           <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="oklch(0.15 0 0)" stopOpacity="0.4" />
-            <stop offset="60%" stopColor="oklch(0.08 0 0)" stopOpacity="0.85" />
-            <stop offset="100%" stopColor="oklch(0.06 0 0)" stopOpacity="1" />
+            <stop offset="0%" stopColor="#0b0b0b" stopOpacity="0.4" />
+            <stop offset="60%" stopColor="#020202" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#010101" stopOpacity="1" />
           </linearGradient>
           <radialGradient id="fan-glow" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="var(--sku)" stopOpacity="0.95" />
@@ -64,18 +64,18 @@ export function ChassisArt({
           height="356"
           rx="10"
           fill="url(#case-body)"
-          stroke="oklch(1 0 0 / 0.06)"
+          stroke="#ffffff0f"
           strokeWidth="1.5"
         />
 
         {/* Top bezel */}
-        <rect x="38" y="24" width="224" height="14" rx="10" fill="oklch(0.09 0 0)" />
+        <rect x="38" y="24" width="224" height="14" rx="10" fill="#020202" />
         {/* Bottom bezel */}
-        <rect x="38" y="366" width="224" height="14" rx="10" fill="oklch(0.09 0 0)" />
+        <rect x="38" y="366" width="224" height="14" rx="10" fill="#020202" />
 
         {/* Main glass panel */}
         <rect x="52" y="46" width="150" height="312" rx="4" fill="url(#glass)" />
-        <rect x="52" y="46" width="150" height="312" rx="4" fill="none" stroke="oklch(1 0 0 / 0.1)" />
+        <rect x="52" y="46" width="150" height="312" rx="4" fill="none" stroke="#ffffff1a" />
 
         {/* Interior ambient accent glow */}
         <rect
@@ -89,25 +89,25 @@ export function ChassisArt({
         />
 
         {/* GPU block */}
-        <rect x="64" y="160" width="128" height="26" rx="3" fill="oklch(0.10 0 0)" stroke="oklch(1 0 0 / 0.08)" />
+        <rect x="64" y="160" width="128" height="26" rx="3" fill="#030303" stroke="#ffffff14" />
         <rect x="66" y="162" width="6" height="22" rx="1" fill="var(--sku)" opacity="0.9" />
-        <rect x="76" y="162" width="6" height="22" rx="1" fill="oklch(0.25 0 0)" />
-        <text x="100" y="178" fill="oklch(0.55 0 0)" fontSize="8" fontFamily="monospace" letterSpacing="0.05em">GPU</text>
+        <rect x="76" y="162" width="6" height="22" rx="1" fill="#222222" />
+        <text x="100" y="178" fill="#717171" fontSize="8" fontFamily="monospace" letterSpacing="0.05em">GPU</text>
 
         {/* Two RGB fans */}
         {[95, 155].map((cx) => (
           <g key={cx}>
             <circle cx={cx} cy={260} r={30} fill="url(#fan-glow)" />
-            <circle cx={cx} cy={260} r={26} fill="oklch(0.08 0 0)" />
+            <circle cx={cx} cy={260} r={26} fill="#020202" />
             <circle cx={cx} cy={260} r={26} fill="none" stroke="var(--sku)" strokeWidth="2.5" opacity="0.9" />
-            <circle cx={cx} cy={260} r={4} fill="oklch(0.2 0 0)" stroke="var(--sku)" strokeOpacity="0.6" />
+            <circle cx={cx} cy={260} r={4} fill="#161616" stroke="var(--sku)" strokeOpacity="0.6" />
             {[0, 72, 144, 216, 288].map((deg) => (
               <path
                 key={deg}
                 d={`M ${cx} ${260} L ${cx + Math.cos((deg * Math.PI) / 180) * 22} ${
                   260 + Math.sin((deg * Math.PI) / 180) * 22
                 }`}
-                stroke="oklch(0.25 0 0)"
+                stroke="#222222"
                 strokeWidth="1"
               />
             ))}
@@ -115,7 +115,7 @@ export function ChassisArt({
         ))}
 
         {/* CPU cooler hint at top */}
-        <rect x="76" y="78" width="104" height="48" rx="4" fill="oklch(0.11 0 0)" stroke="oklch(1 0 0 / 0.06)" />
+        <rect x="76" y="78" width="104" height="48" rx="4" fill="#040404" stroke="#ffffff0f" />
         {Array.from({ length: 6 }).map((_, i) => (
           <line
             key={i}
@@ -123,15 +123,15 @@ export function ChassisArt({
             y1={82}
             x2={80 + i * 17}
             y2={122}
-            stroke="oklch(0.2 0 0)"
+            stroke="#161616"
             strokeWidth="1"
           />
         ))}
 
         {/* Right panel (mesh/io) */}
-        <rect x="206" y="42" width="52" height="316" rx="3" fill="oklch(0.11 0 0)" />
+        <rect x="206" y="42" width="52" height="316" rx="3" fill="#040404" />
         <circle cx="232" cy="52" r="2" fill="var(--sku)" opacity="0.85" />
-        <circle cx="232" cy="60" r="1.5" fill="oklch(0.5 0 0)" />
+        <circle cx="232" cy="60" r="1.5" fill="#636363" />
         {/* I/O hints */}
         {Array.from({ length: 12 }).map((_, i) => (
           <rect
@@ -140,7 +140,7 @@ export function ChassisArt({
             y={100 + i * 14}
             width="36"
             height="1.5"
-            fill="oklch(0.22 0 0)"
+            fill="#1b1b1b"
           />
         ))}
 

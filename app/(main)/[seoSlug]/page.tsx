@@ -112,7 +112,7 @@ export default async function SeoLandingPage({
           className="pointer-events-none absolute inset-0 opacity-30"
           style={{
             background:
-              "radial-gradient(ellipse 60% 50% at 50% 0%, oklch(0.35 0.07 280 / 0.5), transparent 70%)",
+              "radial-gradient(ellipse 60% 50% at 50% 0%, #34365e80, transparent 70%)",
           }}
         />
         <div className="container-site relative py-20 md:py-28">

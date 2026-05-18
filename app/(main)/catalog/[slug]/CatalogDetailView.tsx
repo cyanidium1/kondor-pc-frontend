@@ -353,7 +353,7 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
               <TechButton
                 size="lg"
                 className="flex-1"
-                style={{ ["--tech-accent" as string]: "oklch(1 0 0 / 0.35)" }}
+                style={{ ["--tech-accent" as string]: "#ffffff59" }}
                 onClick={addToCart}
               >
                 {justAdded ? (

@@ -101,7 +101,7 @@ export function PurchaseActions({
         <TechButton
           size={size}
           className="flex-1"
-          style={{ ["--tech-accent" as string]: "oklch(1 0 0 / 0.35)" }}
+          style={{ ["--tech-accent" as string]: "#ffffff59" }}
           onClick={addAndStay}
         >
           {justAdded ? (

@@ -111,7 +111,7 @@ export default function HomePage() {
           className="pointer-events-none absolute inset-0 opacity-[0.35]"
           style={{
             background:
-              "radial-gradient(ellipse 70% 60% at 50% 0%, oklch(0.35 0.07 280 / 0.55), transparent 70%)",
+              "radial-gradient(ellipse 70% 60% at 50% 0%, #34365e8c, transparent 70%)",
           }}
         />
         <div
@@ -124,7 +124,7 @@ export default function HomePage() {
               Готові ігрові ПК · Збираємо під замовлення
             </div>
             <h1 className="font-display text-5xl font-bold leading-[1.02] tracking-tight md:text-6xl lg:text-[80px]">
-              Знайдемо ПК під твої ігри та бюджет.
+              МАЄМО ПК
             </h1>
             <p className="mt-6 max-w-xl text-lg text-muted-foreground md:text-xl">
               Показуємо реальні FPS у твоїх іграх, а не абстрактні
@@ -133,7 +133,7 @@ export default function HomePage() {
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <TechButtonLink href="/pidbir" size="lg">
-                Підібрати ПК за 30 секунд
+                ПІДІБРАТИ ПК ЗА 30 СЕКУНД
               </TechButtonLink>
             </div>
 

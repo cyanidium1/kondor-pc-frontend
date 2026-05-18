@@ -138,7 +138,7 @@ export default async function BuildPage({
           className="pointer-events-none absolute inset-0 opacity-30"
           style={{
             background:
-              "radial-gradient(ellipse 60% 50% at 30% 20%, oklch(from var(--sku) l c h / 0.5), transparent 70%)",
+              "radial-gradient(ellipse 60% 50% at 30% 20%, color-mix(in srgb, var(--sku) 50%, transparent), transparent 70%)",
           }}
         />
         {/* Matches `container-site` paddings (px-4 sm:px-6 lg:px-8) so every
@@ -192,7 +192,7 @@ export default async function BuildPage({
               className="pointer-events-none absolute inset-0 opacity-25"
               style={{
                 background:
-                  "radial-gradient(ellipse 60% 60% at 50% 40%, oklch(from var(--sku) l c h / 0.6), transparent 70%)",
+                  "radial-gradient(ellipse 60% 60% at 50% 40%, color-mix(in srgb, var(--sku) 60%, transparent), transparent 70%)",
               }}
             />
             <button
