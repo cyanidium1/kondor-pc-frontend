@@ -51,7 +51,7 @@ function nameStem(name: string, primaryColour?: string): string {
 
   // Split name into words on whitespace/dash; strip trailing words whose
   // lowercased prefix matches any colour root.
-  let words = base.split(/\s+/);
+  const words = base.split(/\s+/);
   while (words.length > 0) {
     const last = words[words.length - 1].toLowerCase();
     const matches = roots.some((r) => last.startsWith(r));

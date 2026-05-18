@@ -76,7 +76,7 @@ export function BuildAudience({
       {bullets.map((b, i) => (
         <div key={i} className="flex items-start gap-3">
           <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
-            <b.icon className="size-4" strokeWidth={2} />
+            <b.icon className="size-4" />
           </div>
           <div className="min-w-0">
             <div className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
