@@ -25,7 +25,7 @@ export function PriceBlock({
   return (
     <div className={cn("tabular space-y-1", className)}>
       <div className="flex items-baseline gap-3">
-        <span className={cn("font-display font-bold", sizes[size])}>
+        <span className={cn("font-heading font-bold", sizes[size])}>
           {formatPrice(priceUah)}
         </span>
         {oldPriceUah && (

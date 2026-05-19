@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useRef, useState, type MouseEvent } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { SpecPill } from "@/components/shared/SpecPill";
 import { PriceBlock } from "@/components/shared/PriceBlock";
 import { TechButtonDisplay } from "@/components/shared/TechButton";
 import { ChassisArt } from "@/components/brand/ChassisArt";
@@ -120,7 +119,7 @@ export function BuildHeroCard({
           ) : (
             <div
               className="mt-1 size-3 shrink-0 rounded-full ring-2 ring-background"
-              style={{ background: "var(--sku)" }}
+              style={{ background: "var(--brand-primary)" }}
             />
           )}
         </div>
