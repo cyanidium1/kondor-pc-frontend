@@ -31,15 +31,19 @@ export function TrustStrip({
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center gap-x-5 gap-y-2 text-xs uppercase tracking-wider text-muted-foreground",
+        "flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] uppercase tracking-wider",
         className,
       )}
     >
       {TRUST_SIGNALS.slice(0, 4).map((s, i) => (
         <span key={s.key} className="flex items-center gap-2">
-          <span className="font-semibold text-foreground">{s.value}</span>
-          <span>{s.label}</span>
-          {i < 3 && <span aria-hidden className="text-muted-foreground/40">·</span>}
+          <span className="font-semibold">{s.value}</span>
+          <span className="text-brand-primary">{s.label}</span>
+          {i < 3 && (
+            <span aria-hidden className="text-muted-foreground">
+              ·
+            </span>
+          )}
         </span>
       ))}
     </div>

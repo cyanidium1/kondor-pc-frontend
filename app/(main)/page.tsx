@@ -16,6 +16,7 @@ import {
   faqPageJsonLd,
 } from "@/lib/seo";
 import { Reveal } from "@/components/shared/Reveal";
+import { BudgetChipLink } from "@/components/shared/BudgetChipLink";
 import { TechButtonLink } from "@/components/shared/TechButton";
 import { cn } from "@/lib/utils";
 import {
@@ -176,21 +177,21 @@ export default function HomePage() {
             </div>
 
             <div className="mt-6 flex flex-wrap items-center gap-2">
-              <span className="mr-2 text-[10px] uppercase tracking-wider leading-[120%]">
+              <p className="text-[10px] uppercase tracking-wider leading-[120%]">
                 або за бюджетом:
-              </span>
-              {BUDGET_BUCKETS.map((b) => (
-                <Link
-                  key={b.href}
-                  href={b.href}
-                  className={cn(
-                    buttonVariants({ variant: "outline", size: "sm" }),
-                    "tabular",
-                  )}
-                >
-                  {b.label}
-                </Link>
-              ))}
+              </p>
+              <div className="flex flex-wrap items-center gap-3 mt-3">
+                {" "}
+                {BUDGET_BUCKETS.map((b) => (
+                  <BudgetChipLink
+                    key={b.href}
+                    href={b.href}
+                    className="tabular"
+                  >
+                    {b.label}
+                  </BudgetChipLink>
+                ))}
+              </div>
             </div>
 
             <div className="mt-10">
@@ -199,7 +200,7 @@ export default function HomePage() {
           </div>
 
           {/* Right hero — showcase SKU card */}
-          <div className="relative hidden lg:block">
+          <div className="relative">
             <div
               aria-hidden
               className="pointer-events-none absolute -inset-8 -z-10 rounded-full opacity-40 blur-3xl"
@@ -400,16 +401,9 @@ export default function HomePage() {
                 Підібрати ПК
               </TechButtonLink>
               {BUDGET_BUCKETS.map((b) => (
-                <Link
-                  key={b.href}
-                  href={b.href}
-                  className={cn(
-                    buttonVariants({ variant: "outline", size: "sm" }),
-                    "tabular",
-                  )}
-                >
+                <BudgetChipLink key={b.href} href={b.href} className="tabular">
                   {b.label}
-                </Link>
+                </BudgetChipLink>
               ))}
             </div>
 

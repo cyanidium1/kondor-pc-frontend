@@ -39,6 +39,7 @@
 
   --color-sku: var(--sku);
   --color-black: var(--black);
+  --color-white: var(--white);
   --color-brand-primary: var(--brand-primary);
 
   --radius-sm: calc(var(--radius) * 0.6);
@@ -71,6 +72,7 @@
   --primary-foreground: #07090e;
 
   --black: #000000;
+  --white: #ffffff;
   --brand-primary: #20deff;
 
   --secondary: #21242a;
@@ -680,6 +682,61 @@
   }
   .tech-btn:disabled .tech-btn__fill {
     background-color: #1d1f24;
+  }
+
+  /* Budget chips — chamfer mask + white fill (hero / CTA budget links) */
+  .budget-chip {
+    --tech-cut: 6px;
+    --tech-border: 1px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 26px;
+    padding-inline: 0.875rem;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--black);
+    background: transparent;
+    isolation: isolate;
+    transition:
+      color 300ms ease-out,
+      transform 80ms ease-out;
+  }
+  .budget-chip__edge,
+  .budget-chip__fill {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    clip-path: polygon(
+      var(--tech-cut) 0%,
+      100% 0%,
+      100% calc(100% - var(--tech-cut)),
+      calc(100% - var(--tech-cut)) 100%,
+      0% 100%,
+      0% var(--tech-cut)
+    );
+    transition: background-color 300ms ease-out;
+  }
+  .budget-chip__edge {
+    background-color: var(--white);
+    z-index: -2;
+  }
+  .budget-chip__fill {
+    inset: var(--tech-border);
+    background-color: var(--white);
+    z-index: -1;
+  }
+  .budget-chip:hover {
+    color: var(--black);
+  }
+  .budget-chip:active {
+    transform: scale(0.985);
+  }
+  .budget-chip:focus-visible {
+    outline: 2px solid var(--brand-primary);
+    outline-offset: 3px;
   }
 
   /*
