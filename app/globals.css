@@ -786,7 +786,6 @@
     .header-bar__fill {
       inset: var(--header-border);
       background: color-mix(in srgb, var(--background) 83%, transparent);
-      -webkit-backdrop-filter: blur(37.900001525878906px);
       backdrop-filter: blur(37.900001525878906px);
       z-index: -1;
     }

@@ -60,7 +60,7 @@ export function Header() {
         data-scrolled={scrolled}
         data-menu-open={menuOpen}
         className={cn(
-          "sticky top-0 xl:top-4 z-30 isolate bg-transparent",
+          "sticky top-0 xl:top-4 z-30 isolate bg-black xl:bg-transparent",
           "transition-[box-shadow] duration-300 ease-out",
           "data-[scrolled=true]:shadow-[0_18px_40px_-18px_rgba(0,0,0,0.75)]",
         )}
@@ -77,7 +77,7 @@ export function Header() {
           <div className="header-bar">
             <span aria-hidden className="header-bar__edge" />
             <span aria-hidden className="header-bar__fill" />
-            <div className="relative z-10 flex items-center justify-between gap-4 px-4 py-3.5 xl:px-7 xl:py-4">
+            <div className="relative z-10 flex items-center justify-between gap-4 py-3.5 xl:px-7 xl:py-4">
               {/* LOGO */}
               <Link
                 href="/"
