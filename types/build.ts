@@ -161,7 +161,7 @@ export interface TrustSignal {
   key:
     | "total_builds"
     | "years_active"
-    | "google_rating"
+    | "instagram_followers"
     | "reviews_count"
     | "warranty_max_years";
   value: string;

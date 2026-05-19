@@ -326,31 +326,42 @@ export default function StyleguidePage() {
       {/* TECH BUTTON */}
       <Section kicker="07·½" title="Tech button — angular CTA">
         <p className="mb-6 max-w-2xl text-sm text-muted-foreground">
-          Кутова CTA-кнопка з рамкою в accent-кольорі і маркерами на кутах.
-          Колір рамки керується через <code className="font-body text-xs">--tech-accent</code>,
-          який за замовчуванням бере <code className="font-body text-xs">--sku</code> на
-          картках сборки. Використовуй як конверсійну кнопку там, де потрібен
-          tech-характер (каталог, кастомна збірка, SEO-лендинги).
+          Кутова CTA з chamfer-маскою. На мобілці текст{" "}
+          <code className="font-body text-xs">12px</code> (<code className="font-body text-xs">text-xs</code>
+          ), на десктопі — за розміром. Варіанти:{" "}
+          <code className="font-body text-xs">primary</code> (cyan fill / black text → hover black fill,
+          cyan border + text),{" "}
+          <code className="font-body text-xs">inverse</code> (стани навпаки),{" "}
+          <code className="font-body text-xs">swap</code> (чорний fill / cyan text → hover обмін
+          fill і edge). Ховер: <code className="font-body text-xs">duration-300 ease-out</code>.
+          Проп <code className="font-body text-xs">accent</code> — колір рамки.
         </p>
         <div className="space-y-6">
           <div className="flex flex-wrap items-center gap-4">
-            <TechButton size="sm">Подробнее</TechButton>
-            <TechButton size="md">Підібрати ПК</TechButton>
-            <TechButton size="lg">Купити зараз</TechButton>
-            <TechButton disabled>Недоступно</TechButton>
+            <TechButton variant="primary" size="md">
+              Primary
+            </TechButton>
+            <TechButton variant="inverse" size="md">
+              Inverse
+            </TechButton>
+            <TechButton variant="swap" size="md">
+              Swap
+            </TechButton>
           </div>
 
-          <div>
-            <div className="mb-3 text-[11px] uppercase tracking-wider text-muted-foreground">
-              По SKU-акцентах (передача через проп accent)
-            </div>
-            <div className="flex flex-wrap items-center gap-4">
-              {(["vega", "nebula", "orbitra", "nyx", "velar", "pulsar"] as SkuSlug[]).map((slug) => (
-                <TechButton key={slug} accent={SKU_ACCENTS[slug]} size="md">
-                  {slug}
-                </TechButton>
-              ))}
-            </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <TechButton variant="primary" size="sm">
+              sm
+            </TechButton>
+            <TechButton variant="primary" size="md">
+              md
+            </TechButton>
+            <TechButton variant="primary" size="lg">
+              lg
+            </TechButton>
+            <TechButton variant="primary" disabled>
+              Disabled
+            </TechButton>
           </div>
         </div>
       </Section>
