@@ -103,7 +103,7 @@ export function BuildCard({
       <div className="relative flex h-full flex-col gap-4 p-5">
         <div className="flex items-start justify-between">
           <div className="min-w-0">
-            <div className="font-display text-2xl font-bold uppercase tracking-wider transition-colors duration-300 ease-out group-hover:text-primary">
+            <div className="font-heading text-2xl font-bold uppercase tracking-wider transition-colors duration-300 ease-out group-hover:text-primary">
               {build.name}
             </div>
             <div className="mt-0.5 truncate text-xs text-muted-foreground">
@@ -203,7 +203,9 @@ export function BuildCard({
             </div>
             {highlightGames.slice(0, 3).map((slug) => {
               const entry = build.fps.find(
-                (f) => f.gameSlug === slug && f.resolution === build.targetResolution,
+                (f) =>
+                  f.gameSlug === slug &&
+                  f.resolution === build.targetResolution,
               );
               if (!entry) return null;
               const tier = fpsTier(entry.fpsAvg);

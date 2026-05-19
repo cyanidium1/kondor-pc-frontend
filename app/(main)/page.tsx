@@ -34,9 +34,9 @@ import {
 import Image from "next/image";
 
 const BUDGET_BUCKETS = [
-  { label: "До 25 000 ₴", href: "/pidbir/rezultat?budget=0-25" },
-  { label: "25–50 000 ₴", href: "/pidbir/rezultat?budget=25-50" },
-  { label: "50 000 ₴+", href: "/pidbir/rezultat?budget=50-200" },
+  { label: "До 40 000 ₴", href: "/pidbir/rezultat?budget=0-40" },
+  { label: "40–80 000 ₴", href: "/pidbir/rezultat?budget=40-80" },
+  { label: "80 000 ₴+", href: "/pidbir/rezultat?budget=80-200" },
 ];
 
 const TRUST_PILLARS = [
@@ -209,7 +209,6 @@ export default function HomePage() {
             <BuildCard
               build={top3[2]}
               variant="full"
-              badge="Рекомендовано"
               highlightGames={["cs2", "warzone", "cyberpunk"]}
             />
           </div>
