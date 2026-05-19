@@ -61,8 +61,6 @@ export function Header() {
         data-menu-open={menuOpen}
         className={cn(
           "sticky top-0 xl:top-4 z-30 isolate bg-black xl:bg-transparent",
-          "transition-[box-shadow] duration-300 ease-out",
-          "data-[scrolled=true]:shadow-[0_18px_40px_-18px_rgba(0,0,0,0.75)]",
         )}
       >
         {/* Top shimmer hairline */}
