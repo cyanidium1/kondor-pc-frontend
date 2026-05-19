@@ -30,6 +30,7 @@ import {
   Baby,
   Swords,
 } from "lucide-react";
+import Image from "next/image";
 
 const BUDGET_BUCKETS = [
   { label: "До 25 000 ₴", href: "/pidbir/rezultat?budget=0-25" },
@@ -61,12 +62,42 @@ const TRUST_PILLARS = [
 ];
 
 const USE_CASES = [
-  { icon: Target, label: "Для CS2 та Valorant", href: "/pk-dlya-cs2", sku: "nebula" as const },
-  { icon: Gamepad2, label: "Для Warzone та CoD", href: "/pk-dlya-warzone", sku: "hyper" as const },
-  { icon: Car, label: "Для GTA V та GTA VI", href: "/pk-dlya-gta5", sku: "vega" as const },
-  { icon: Radio, label: "Для стрімінгу та монтажу", href: "/pk-dlya-strimu", sku: "pulsar" as const },
-  { icon: Baby, label: "Для дитини-початківця", href: "/pk-dlya-pochatkivtsya", sku: "comet" as const },
-  { icon: Swords, label: "Для Dota 2 та ліги", href: "/pk-dlya-dota2", sku: "orbitra" as const },
+  {
+    icon: Target,
+    label: "Для CS2 та Valorant",
+    href: "/pk-dlya-cs2",
+    sku: "nebula" as const,
+  },
+  {
+    icon: Gamepad2,
+    label: "Для Warzone та CoD",
+    href: "/pk-dlya-warzone",
+    sku: "hyper" as const,
+  },
+  {
+    icon: Car,
+    label: "Для GTA V та GTA VI",
+    href: "/pk-dlya-gta5",
+    sku: "vega" as const,
+  },
+  {
+    icon: Radio,
+    label: "Для стрімінгу та монтажу",
+    href: "/pk-dlya-strimu",
+    sku: "pulsar" as const,
+  },
+  {
+    icon: Baby,
+    label: "Для дитини-початківця",
+    href: "/pk-dlya-pochatkivtsya",
+    sku: "comet" as const,
+  },
+  {
+    icon: Swords,
+    label: "Для Dota 2 та ліги",
+    href: "/pk-dlya-dota2",
+    sku: "orbitra" as const,
+  },
 ];
 
 const STEPS = [
@@ -98,11 +129,7 @@ export default function HomePage() {
   return (
     <>
       <JsonLd
-        data={[
-          organizationJsonLd(),
-          websiteJsonLd(),
-          faqPageJsonLd(homeFaqs),
-        ]}
+        data={[organizationJsonLd(), websiteJsonLd(), faqPageJsonLd(homeFaqs)]}
       />
       {/* 1 · HERO */}
       <section className="relative overflow-hidden border-b border-border">
@@ -120,25 +147,36 @@ export default function HomePage() {
         />
         <div className="container-site relative grid gap-12 py-20 md:py-28 lg:grid-cols-[1.3fr_1fr] lg:items-center lg:py-32">
           <div>
-            <div className="mb-4 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-              Готові ігрові ПК · Збираємо під замовлення
-            </div>
-            <h1 className="font-display text-5xl font-bold leading-[1.02] tracking-tight md:text-6xl lg:text-[80px]">
+            <h1 className="relative font-display text-[44px] font-bold leading-[1.02] tracking-tight md:text-6xl lg:text-[80px]">
               МАЄМО ПК
+              <Image
+                src="/images/home/hero/triangle.svg"
+                alt="triangle decoration"
+                width={41}
+                height={41}
+                className="absolute top-0 lg:top-1 -left-1 -z-10"
+              />
             </h1>
-            <p className="mt-6 max-w-xl text-lg text-muted-foreground md:text-xl">
+            <p className="max-w-[148px] mt-3.5 font-heading text-[14px] uppercase font-bold leading-[120%]">
+              під твої ігри та бюджет
+            </p>
+            <p className="mt-6 max-w-[190px] text-[14px] font-light md:text-xl leading-[120%]">
               Показуємо реальні FPS у твоїх іграх, а не абстрактні
               характеристики. Підбір за 30 секунд, гарантія до 3 років.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <TechButtonLink href="/pidbir" size="lg">
+            <div className="mt-12 flex flex-wrap items-center gap-3">
+              <TechButtonLink
+                href="/pidbir"
+                size="lg"
+                className="w-full h-[42px]"
+              >
                 ПІДІБРАТИ ПК ЗА 30 СЕКУНД
               </TechButtonLink>
             </div>
 
             <div className="mt-6 flex flex-wrap items-center gap-2">
-              <span className="mr-2 text-[11px] uppercase tracking-wider text-muted-foreground">
+              <span className="mr-2 text-[10px] uppercase tracking-wider leading-[120%]">
                 або за бюджетом:
               </span>
               {BUDGET_BUCKETS.map((b) => (
@@ -211,32 +249,32 @@ export default function HomePage() {
             />
           </Reveal>
           <Reveal delay={80}>
-          <div className="grid gap-4 md:grid-cols-3">
-            {STEPS.map((s) => (
-              <div
-                key={s.n}
-                className="relative overflow-hidden rounded-lg border border-border bg-surface p-6"
-              >
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
-                    <s.icon className="size-5" strokeWidth={1.5} />
+            <div className="grid gap-4 md:grid-cols-3">
+              {STEPS.map((s) => (
+                <div
+                  key={s.n}
+                  className="relative overflow-hidden rounded-lg border border-border bg-surface p-6"
+                >
+                  <div className="mb-4 flex items-center justify-between">
+                    <div className="flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
+                      <s.icon className="size-5" strokeWidth={1.5} />
+                    </div>
+                    <div className="tabular font-display text-2xl font-bold text-muted-foreground/30">
+                      {s.n}
+                    </div>
                   </div>
-                  <div className="tabular font-display text-2xl font-bold text-muted-foreground/30">
-                    {s.n}
+                  <div className="font-display text-lg font-semibold">
+                    {s.title}
                   </div>
+                  <p className="mt-2 text-sm text-muted-foreground">{s.text}</p>
                 </div>
-                <div className="font-display text-lg font-semibold">
-                  {s.title}
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">{s.text}</p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-8 flex justify-center">
-            <TechButtonLink href="/pidbir" size="lg">
-              Почати підбір
-            </TechButtonLink>
-          </div>
+              ))}
+            </div>
+            <div className="mt-8 flex justify-center">
+              <TechButtonLink href="/pidbir" size="lg">
+                Почати підбір
+              </TechButtonLink>
+            </div>
           </Reveal>
         </div>
       </section>
@@ -280,31 +318,31 @@ export default function HomePage() {
             />
           </Reveal>
           <Reveal delay={80}>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {USE_CASES.map((u) => (
-              <Link
-                key={u.href}
-                href={u.href}
-                className="smooth-hover group relative flex items-center gap-4 overflow-hidden rounded-lg border border-border bg-surface p-5 hover:-translate-y-0.5 hover:border-white/15"
-                style={{ ["--sku" as string]: SKU_ACCENTS[u.sku] }}
-              >
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute -right-12 -top-12 size-32 rounded-full opacity-25 blur-2xl transition-opacity duration-500 ease-out group-hover:opacity-45"
-                  style={{ background: "var(--sku)" }}
-                />
-                <div className="relative flex size-10 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
-                  <u.icon className="size-5" strokeWidth={1.5} />
-                </div>
-                <div className="relative flex-1 text-sm font-medium">
-                  {u.label}
-                </div>
-                <div className="relative text-muted-foreground transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:text-foreground">
-                  →
-                </div>
-              </Link>
-            ))}
-          </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {USE_CASES.map((u) => (
+                <Link
+                  key={u.href}
+                  href={u.href}
+                  className="smooth-hover group relative flex items-center gap-4 overflow-hidden rounded-lg border border-border bg-surface p-5 hover:-translate-y-0.5 hover:border-white/15"
+                  style={{ ["--sku" as string]: SKU_ACCENTS[u.sku] }}
+                >
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute -right-12 -top-12 size-32 rounded-full opacity-25 blur-2xl transition-opacity duration-500 ease-out group-hover:opacity-45"
+                    style={{ background: "var(--sku)" }}
+                  />
+                  <div className="relative flex size-10 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
+                    <u.icon className="size-5" strokeWidth={1.5} />
+                  </div>
+                  <div className="relative flex-1 text-sm font-medium">
+                    {u.label}
+                  </div>
+                  <div className="relative text-muted-foreground transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:text-foreground">
+                    →
+                  </div>
+                </Link>
+              ))}
+            </div>
           </Reveal>
         </div>
       </section>
@@ -357,25 +395,25 @@ export default function HomePage() {
             />
           </Reveal>
           <Reveal delay={80}>
-          <div className="mb-12 flex flex-wrap items-center justify-center gap-3">
-            <TechButtonLink href="/pidbir" size="lg">
-              Підібрати ПК
-            </TechButtonLink>
-            {BUDGET_BUCKETS.map((b) => (
-              <Link
-                key={b.href}
-                href={b.href}
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "sm" }),
-                  "tabular",
-                )}
-              >
-                {b.label}
-              </Link>
-            ))}
-          </div>
+            <div className="mb-12 flex flex-wrap items-center justify-center gap-3">
+              <TechButtonLink href="/pidbir" size="lg">
+                Підібрати ПК
+              </TechButtonLink>
+              {BUDGET_BUCKETS.map((b) => (
+                <Link
+                  key={b.href}
+                  href={b.href}
+                  className={cn(
+                    buttonVariants({ variant: "outline", size: "sm" }),
+                    "tabular",
+                  )}
+                >
+                  {b.label}
+                </Link>
+              ))}
+            </div>
 
-          <FaqBlock items={homeFaqs} />
+            <FaqBlock items={homeFaqs} />
           </Reveal>
         </div>
       </section>

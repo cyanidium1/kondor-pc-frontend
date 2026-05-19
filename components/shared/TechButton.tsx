@@ -11,9 +11,15 @@ import { cn } from "@/lib/utils";
 
 type Size = "sm" | "md" | "lg";
 
+/** primary — cyan fill / black text → hover black fill / cyan text (border stays cyan) */
+/** inverse — default and hover swapped vs primary */
+/** swap — black fill / cyan text → hover cyan fill / black text (edge swaps too) */
+export type TechButtonVariant = "primary" | "inverse" | "swap";
+
 interface TechButtonBaseProps {
   size?: Size;
-  /** CSS color for the edge + corners. Defaults to --sku on SKU-scoped cards, else foreground. */
+  variant?: TechButtonVariant;
+  /** CSS color for the edge (border). Defaults to brand-primary per variant. */
   accent?: string;
   children: ReactNode;
   className?: string;
@@ -28,13 +34,22 @@ export const TechButton = forwardRef<
   HTMLButtonElement,
   TechButtonBaseProps & ButtonHTMLAttributes<HTMLButtonElement>
 >(function TechButton(
-  { size = "md", accent, className, children, style, ...rest },
+  {
+    size = "md",
+    variant = "primary",
+    accent,
+    className,
+    children,
+    style,
+    ...rest
+  },
   ref,
 ) {
   return (
     <button
       ref={ref}
       data-size={size}
+      data-variant={variant}
       className={cn("tech-btn font-display", className)}
       style={accent ? { ...style, ["--tech-accent" as string]: accent } : style}
       {...rest}
@@ -51,6 +66,7 @@ export const TechButton = forwardRef<
  */
 export function TechButtonDisplay({
   size = "md",
+  variant = "primary",
   accent,
   className,
   children,
@@ -59,8 +75,10 @@ export function TechButtonDisplay({
   return (
     <span
       data-size={size}
+      data-variant={variant}
       className={cn("tech-btn font-display", className)}
       style={accent ? { ...style, ["--tech-accent" as string]: accent } : style}
+      aria-hidden
     >
       <Frame>{children}</Frame>
     </span>
@@ -71,6 +89,7 @@ export function TechButtonDisplay({
 export function TechButtonLink({
   href,
   size = "md",
+  variant = "primary",
   accent,
   className,
   children,
@@ -91,6 +110,7 @@ export function TechButtonLink({
       rel={rel}
       onClick={onClick}
       data-size={size}
+      data-variant={variant}
       className={cn("tech-btn font-display", className)}
       style={accent ? { ...style, ["--tech-accent" as string]: accent } : style}
     >

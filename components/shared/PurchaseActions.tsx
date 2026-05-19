@@ -95,13 +95,19 @@ export function PurchaseActions({
   return (
     <>
       <div className={cn("flex flex-col gap-3 sm:flex-row", className)}>
-        <TechButton size={size} className="flex-1" onClick={buyNow}>
+        <TechButton
+          size={size}
+          variant="primary"
+          className="flex-1"
+          onClick={buyNow}
+        >
           Купити зараз
         </TechButton>
         <TechButton
           size={size}
+          variant="inverse"
           className="flex-1"
-          style={{ ["--tech-accent" as string]: "#ffffff59" }}
+          accent="#ffffff59"
           onClick={addAndStay}
         >
           {justAdded ? (
