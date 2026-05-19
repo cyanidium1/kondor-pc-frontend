@@ -739,7 +739,7 @@
     isolation: isolate;
     transition:
       color 300ms ease-out,
-      transform 80ms ease-out;
+      transform 300ms ease-out;
   }
   .budget-chip__edge,
   .budget-chip__fill {
@@ -767,9 +767,10 @@
   }
   .budget-chip:hover {
     color: var(--black);
+    transform: translateY(-2px);
   }
   .budget-chip:active {
-    transform: scale(0.985);
+    transform: translateY(0) scale(0.985);
   }
   .budget-chip:focus-visible {
     outline: 2px solid var(--brand-primary);

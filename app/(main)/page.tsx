@@ -138,14 +138,7 @@ export default function HomePage() {
         <div className="absolute bottom-[-92px] md:bottom-[-319px] left-[-261px] size-[469px] rounded-full bg-[#00FFFE] blur-[100px]" />
         <div className="absolute bottom-[-395px] lg:bottom-[-403px] right-[-235px] md:left-0 size-[469px] rounded-full bg-[#0097FF] blur-[100px]" />
         <div className="hidden md:block absolute bottom-[-100px] lg:bottom-[-490px] right-[-585px] size-[735px] rounded-full bg-[#005996] blur-[226px]" />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.35]"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 60% at 50% 0%, #34365e8c, transparent 70%)",
-          }}
-        />
+
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
