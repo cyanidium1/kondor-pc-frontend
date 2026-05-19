@@ -2,13 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useRef, useState, type MouseEvent } from "react";
+import { useState, type MouseEvent } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PriceBlock } from "@/components/shared/PriceBlock";
 import { TechButtonDisplay } from "@/components/shared/TechButton";
 import { ChassisArt } from "@/components/brand/ChassisArt";
-import { SKU_ACCENTS } from "@/lib/sku-accents";
 import type { Build } from "@/types/build";
 import { gameLabel } from "@/lib/mock/games";
 import { fpsTier, FPS_TIER_META } from "@/lib/fps-thresholds";
@@ -34,17 +33,6 @@ export function BuildHeroCard({
   badge?: string;
   className?: string;
 }) {
-  const cardRef = useRef<HTMLAnchorElement>(null);
-  const accent = SKU_ACCENTS[build.slug];
-  const statusLabel =
-    build.status === "in_stock"
-      ? "В наявності"
-      : build.status === "assemble_on_order"
-        ? `Збираємо за ${build.assemblyDays} дні`
-        : build.status === "out_of_stock"
-          ? "Немає в наявності"
-          : "Архів";
-
   const images: string[] =
     build.galleryImageUrls && build.galleryImageUrls.length > 0
       ? build.galleryImageUrls
@@ -54,15 +42,6 @@ export function BuildHeroCard({
   const hasMany = images.length > 1;
   const [imageIndex, setImageIndex] = useState(0);
 
-  function onMove(e: MouseEvent<HTMLAnchorElement>) {
-    const el = cardRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    el.style.setProperty("--mx", `${e.clientX - rect.left}px`);
-    el.style.setProperty("--my", `${e.clientY - rect.top}px`);
-  }
-
-  // Arrow click must not navigate to product page.
   function flip(e: MouseEvent<HTMLButtonElement>, delta: number) {
     e.preventDefault();
     e.stopPropagation();
@@ -72,37 +51,17 @@ export function BuildHeroCard({
 
   return (
     <Link
-      ref={cardRef}
       href={`/pk/${build.slug}`}
-      onMouseMove={onMove}
       className={cn(
-        "sku-glow card-frame-md group relative block overflow-hidden",
+        "build-hero-card relative block overflow-hidden",
         "motion-reduce:transform-none",
         className,
       )}
-      style={{ ["--sku" as string]: accent }}
     >
-      {/* SKU top shimmer line */}
-      <div
-        aria-hidden
-        className="sku-top-line pointer-events-none absolute inset-x-0 top-0 h-px opacity-70"
-      />
-      {/* Soft accent corner glow (ambient) */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-24 -top-24 size-64 rounded-full opacity-25 blur-3xl transition-opacity duration-500 ease-out group-hover:opacity-45"
-        style={{ background: "var(--sku)" }}
-      />
-      {/* Pointer-follow spotlight */}
-      <div
-        aria-hidden
-        className="card-spotlight pointer-events-none absolute inset-0"
-      />
-
       <div className="relative flex h-full flex-col gap-4 p-5">
         <div className="flex items-start justify-between">
           <div className="min-w-0">
-            <div className="font-heading text-2xl font-bold uppercase tracking-wider transition-colors duration-300 ease-out group-hover:text-primary">
+            <div className="font-heading text-2xl font-bold uppercase tracking-wider">
               {build.name}
             </div>
             <div className="mt-0.5 truncate text-xs text-muted-foreground">
@@ -110,17 +69,11 @@ export function BuildHeroCard({
             </div>
           </div>
           {badge ? (
-            <div
-              className="rounded-full border border-white/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider"
-              style={{ color: "var(--sku)" }}
-            >
+            <div className="rounded-full border border-white/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[rgba(19,158,217,0.9)]">
               {badge}
             </div>
           ) : (
-            <div
-              className="mt-1 size-3 shrink-0 rounded-full ring-2 ring-background"
-              style={{ background: "var(--brand-primary)" }}
-            />
+            <div className="mt-1 size-3 shrink-0 rounded-full bg-brand-primary ring-2 ring-background" />
           )}
         </div>
 
@@ -139,8 +92,7 @@ export function BuildHeroCard({
                 className={cn(
                   "absolute inset-0 z-10 object-cover",
                   "transition-opacity duration-400 ease-out",
-                  "group-hover:scale-[1.035] transition-transform duration-[700ms]",
-                  "motion-reduce:transform-none will-change-transform",
+                  "motion-reduce:transform-none",
                   visible ? "opacity-100" : "opacity-0 pointer-events-none",
                 )}
               />
@@ -185,15 +137,6 @@ export function BuildHeroCard({
             </>
           )}
         </div>
-
-        {/* <SpecPill
-          specs={[
-            { key: "cpu", value: build.spec.cpu },
-            { key: "gpu", value: build.spec.gpu, note: build.spec.gpuVram },
-            { key: "ram", value: build.spec.ram, note: build.spec.ramSpeed },
-            { key: "storage", value: build.spec.storage },
-          ]}
-        /> */}
 
         {variant === "full" && highlightGames && highlightGames.length > 0 && (
           <div className="tabular space-y-1.5 rounded-md border border-border bg-background/40 p-3">

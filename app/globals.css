@@ -434,6 +434,43 @@
       color-mix(in srgb, var(--primary) 28.000000000000004%, transparent);
   }
 
+  /* Hero card — cyan gradient on top edge only, lift-only hover */
+  .build-hero-card {
+    position: relative;
+    isolation: isolate;
+    --cut: 20px;
+    clip-path: polygon(
+      var(--cut) 0%,
+      100% 0%,
+      100% calc(100% - var(--cut)),
+      calc(100% - var(--cut)) 100%,
+      0% 100%,
+      0% var(--cut)
+    );
+    background: var(--card-fill, var(--surface));
+    box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.05) inset;
+    transition: transform 300ms ease-out;
+  }
+  .build-hero-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      rgba(19, 188, 217, 0) 0%,
+      rgba(19, 158, 217, 0.9) 50%,
+      rgba(19, 217, 211, 0) 100%
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+  .build-hero-card:hover {
+    transform: translateY(-0.25rem);
+  }
+
   /*
    * Generic smooth hover wrapper — applies to any card-like element that lifts
    * or scales on hover. Longer duration + softer easing = premium, not snappy.
@@ -798,7 +835,9 @@
     animation: none !important;
   }
   .sku-glow,
-  .sku-glow:hover {
+  .sku-glow:hover,
+  .build-hero-card,
+  .build-hero-card:hover {
     transition: none !important;
   }
 }

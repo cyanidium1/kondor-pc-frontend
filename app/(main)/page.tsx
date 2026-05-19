@@ -177,7 +177,7 @@ export default function HomePage() {
               </TechButtonLink>
             </div>
 
-            <div className="mt-6 flex flex-wrap items-center gap-2">
+            <div className="mt-6 flex flex-col gap-2">
               <p className="text-[10px] uppercase tracking-wider leading-[120%]">
                 або за бюджетом:
               </p>
@@ -202,11 +202,6 @@ export default function HomePage() {
 
           {/* Right hero — showcase SKU card */}
           <div className="relative">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -inset-8 -z-10 rounded-full opacity-40 blur-3xl"
-              style={{ background: SKU_ACCENTS.orbitra }}
-            />
             <BuildHeroCard
               build={top3[2]}
               variant="full"
