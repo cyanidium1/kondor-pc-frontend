@@ -600,12 +600,12 @@
    * flex-col parent — still get the intended tap-target height.
    */
   .tech-btn[data-size="sm"] {
-    min-height: 2.25rem;
-    padding-inline: 1.25rem;
+    min-height: 1rem;
+    padding-inline: 0.5rem;
     --tech-cut: 8px;
   }
   .tech-btn[data-size="md"] {
-    min-height: 2.75rem;
+    min-height: 1rem;
     padding-inline: 1.75rem;
   }
   .tech-btn[data-size="lg"] {
@@ -698,6 +698,26 @@
   .tech-btn[data-variant="swap"]:not(:disabled):hover .tech-btn__edge,
   .tech-btn[data-variant="swap"]:not(:disabled):hover .tech-btn__fill {
     background-color: var(--brand-primary);
+  }
+
+  /* white — white fill / black text → hover black fill / white text */
+  .tech-btn[data-variant="white"] {
+    color: var(--black);
+  }
+  .tech-btn[data-variant="white"] .tech-btn__edge {
+    background-color: var(--tech-accent, var(--white));
+  }
+  .tech-btn[data-variant="white"] .tech-btn__fill {
+    background-color: var(--white);
+  }
+  .tech-btn[data-variant="white"]:not(:disabled):hover {
+    color: var(--white);
+  }
+  .tech-btn[data-variant="white"]:not(:disabled):hover .tech-btn__fill {
+    background-color: var(--black);
+  }
+  .tech-btn[data-variant="white"]:focus-visible {
+    outline-color: var(--white);
   }
 
   .tech-btn:not(:disabled):active {

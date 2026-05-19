@@ -9,6 +9,7 @@ import { TechButtonLink } from "@/components/shared/TechButton";
 import { CartButton } from "@/components/layout/CartButton";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { cn } from "@/lib/utils";
+import MenuIcon from "@/components/icons/MenuIcon";
 
 const NAV = [
   { href: "/pk", label: "Ігрові ПК" },
@@ -68,94 +69,103 @@ export function Header() {
         )}
       >
         {/* Top shimmer hairline */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent"
-        />
+
         {/* Bottom sector line */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent transition-opacity duration-300"
+          className="xl:hidden pointer-events-none absolute inset-x-0 bottom-0 border-b [border-image:linear-gradient(90deg,_#183B42_0%,_#09B5FF_100%)_1] transition-opacity duration-300"
         />
 
-        <div className="container-site flex items-center justify-between gap-4 py-3.5 md:py-4">
-          {/* LOGO */}
-          <Link
-            href="/"
-            aria-label="Kondor PC — головна"
-            className="group/logo relative inline-flex items-center transition-opacity duration-200 hover:opacity-90"
-          >
-            <Wordmark size="md" />
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 -bottom-1 h-px scale-x-0 bg-foreground/50 transition-transform duration-300 ease-out group-hover/logo:scale-x-100"
-            />
-          </Link>
-
-          {/* DESKTOP NAV */}
-          <nav className="hidden items-center gap-0.5 lg:flex">
-            {NAV.map((n) => (
-              <Link
-                key={n.href}
-                href={n.href}
-                className={cn(
-                  "group/nav relative rounded-sm px-3 py-1.5",
-                  "text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground",
-                  "transition-colors duration-200 ease-out hover:text-foreground",
-                )}
+        <div className="container-site">
+          <div className="flex items-center justify-between gap-4 py-4.5 xl:px-7">
+            {" "}
+            {/* LOGO */}
+            <Link
+              href="/"
+              aria-label="Kondor PC — головна"
+              className="group/logo relative inline-flex items-center transition-opacity duration-200 hover:opacity-90"
+            >
+              <Wordmark size="sm" />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 -bottom-1 h-px scale-x-0 bg-foreground/50 transition-transform duration-300 ease-out group-hover/logo:scale-x-100"
+              />
+            </Link>
+            {/* DESKTOP NAV */}
+            <nav className="hidden items-center gap-0.5 lg:flex">
+              {NAV.map((n) => (
+                <Link
+                  key={n.href}
+                  href={n.href}
+                  className={cn(
+                    "group/nav relative rounded-sm px-2.5 xl:px-3 py-1.5",
+                    "text-[8px] xl:text-[10px] font-medium uppercase tracking-[0.18em]",
+                    "transition-colors duration-200 ease-out hover:text-foreground",
+                  )}
+                >
+                  {n.label}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-x-3 bottom-0.5 h-px origin-left scale-x-0 bg-foreground/40 transition-transform duration-300 ease-out group-hover/nav:scale-x-100"
+                  />
+                </Link>
+              ))}
+            </nav>
+            {/* ACTIONS */}
+            <div className="flex items-center gap-3.5 lg:gap-6">
+              <TechButtonLink
+                href="/pidbir"
+                size="sm"
+                variant="white"
+                className="ml-1 inline-flex lg:hidden h-[22px] text-[8px]"
               >
-                {n.label}
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute inset-x-3 bottom-0.5 h-px origin-left scale-x-0 bg-foreground/40 transition-transform duration-300 ease-out group-hover/nav:scale-x-100"
-                />
-              </Link>
-            ))}
-          </nav>
+                Підібрати ПК
+              </TechButtonLink>
+              <CartButton />
 
-          {/* ACTIONS */}
-          <div className="flex items-center gap-1.5">
-            <CartButton />
-
-            {/* Burger — mobile only */}
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              aria-label={menuOpen ? "Закрити меню" : "Відкрити меню"}
-              aria-expanded={menuOpen}
-              aria-controls="mobile-menu"
-              onClick={() => setMenuOpen((v) => !v)}
-              className="lg:hidden transition-transform duration-200 ease-out active:scale-95"
-            >
-              <span className="relative block size-4">
-                <Menu
+              {/* Burger — mobile only */}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                aria-label={menuOpen ? "Закрити меню" : "Відкрити меню"}
+                aria-expanded={menuOpen}
+                aria-controls="mobile-menu"
+                onClick={() => setMenuOpen((v) => !v)}
+                className="lg:hidden transition-transform duration-200 ease-out active:scale-95"
+              >
+                <span className="relative block w-6 h-4">
+                  {/* <Menu
                   className={cn(
-                    "absolute inset-0 size-4 transition-all duration-200",
-                    menuOpen
-                      ? "scale-75 opacity-0"
-                      : "scale-100 opacity-100",
+                    "absolute inset-0 w-6 h-4 transition-all duration-200",
+                    menuOpen ? "scale-75 opacity-0" : "scale-100 opacity-100",
                   )}
-                />
-                <X
-                  className={cn(
-                    "absolute inset-0 size-4 transition-all duration-200",
-                    menuOpen
-                      ? "scale-100 opacity-100"
-                      : "scale-75 opacity-0",
-                  )}
-                />
-              </span>
-            </Button>
+                /> */}
+                  <MenuIcon
+                    className={cn(
+                      "absolute inset-0 !w-6 !h-4 transition duration-300 ease-out",
+                      menuOpen ? "scale-75 opacity-0" : "scale-100 opacity-100",
+                    )}
+                  />
+                  <X
+                    className={cn(
+                      "absolute inset-0 size-5 transition-all duration-200",
+                      menuOpen ? "scale-100 opacity-100" : "scale-75 opacity-0",
+                    )}
+                  />
+                </span>
+              </Button>
 
-            {/* Primary CTA — desktop only. Mobile CTA lives inside MobileMenu. */}
-            <TechButtonLink
-              href="/pidbir"
-              size="sm"
-              className="ml-1 hidden lg:inline-flex"
-            >
-              Підібрати ПК
-            </TechButtonLink>
+              {/* Primary CTA — desktop only. Mobile CTA lives inside MobileMenu. */}
+              <TechButtonLink
+                href="/pidbir"
+                size="sm"
+                variant="white"
+                className="ml-1 hidden lg:inline-flex h-[34px]"
+              >
+                Підібрати ПК
+              </TechButtonLink>
+            </div>
           </div>
         </div>
       </header>
