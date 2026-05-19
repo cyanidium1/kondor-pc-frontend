@@ -134,7 +134,10 @@ export default function HomePage() {
         data={[organizationJsonLd(), websiteJsonLd(), faqPageJsonLd(homeFaqs)]}
       />
       {/* 1 · HERO */}
-      <section className="relative overflow-hidden border-b border-border">
+      <section className="relative overflow-hidden rounded-b-[28px]">
+        <div className="absolute bottom-[-92px] md:bottom-[-319px] left-[-261px] size-[469px] rounded-full bg-[#00FFFE] blur-[100px]" />
+        <div className="absolute bottom-[-395px] lg:bottom-[-403px] right-[-235px] md:left-0 size-[469px] rounded-full bg-[#0097FF] blur-[100px]" />
+        <div className="hidden md:block absolute bottom-[-100px] lg:bottom-[-490px] right-[-585px] size-[735px] rounded-full bg-[#005996] blur-[226px]" />
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-[0.35]"
@@ -147,42 +150,52 @@ export default function HomePage() {
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
         />
-        <div className="container-site relative grid gap-12 py-20 md:py-28 lg:grid-cols-[1.3fr_1fr] lg:items-center lg:py-32">
+        <div className="container-site relative grid gap-12 py-10 md:py-16 md:grid-cols-[1.3fr_1fr] lg:items-center">
           <div>
-            <h1 className="relative font-display text-[44px] font-bold leading-[1.02] tracking-tight md:text-6xl lg:text-[80px]">
+            <h1 className="relative md:max-w-[448px] lg:max-w-full font-display text-[44px] font-bold leading-[1.02] tracking-tight md:text-6xl lg:text-[102px]">
               МАЄМО ПК
               <Image
                 src="/images/home/hero/triangle.svg"
                 alt="triangle decoration"
                 width={41}
                 height={41}
-                className="absolute top-0 lg:top-1 -left-1 -z-10"
+                className="absolute top-0 lg:top-1 -left-1 -z-10 w-[41px] lg:w-[62px] h-auto"
               />
             </h1>
-            <p className="max-w-[148px] mt-3.5 font-heading text-[14px] uppercase font-bold leading-[120%]">
+            <p className="max-w-[148px] lg:max-w-[358px] mt-3.5 font-heading text-[14px] lg:text-[33px] uppercase font-bold leading-[120%]">
               під твої ігри та бюджет
             </p>
-            <p className="mt-6 max-w-[190px] text-[14px] font-light md:text-xl leading-[120%]">
+            <p className="mt-6 max-w-[190px] lg:max-w-[346px] text-[14px] font-light lg:text-[16px] leading-[120%]">
               Показуємо реальні FPS у твоїх іграх, а не абстрактні
               характеристики. Підбір за 30 секунд, гарантія до 3 років.
             </p>
 
-            <div className="mt-12 flex flex-wrap items-center gap-3">
+            <div className="mt-12 flex flex-wrap items-center gap-3 relative">
+              <div className="absolute bottom-[-120px] lg:bottom-[-40px] left-[197px] lg:left-[357px] xl:left-[417px] w-[338px] lg:w-[395px] aspect-[395/527] h-auto -z-10">
+                {" "}
+                <Image
+                  src="/images/home/hero/pc.webp"
+                  alt="pc"
+                  width={395}
+                  height={527}
+                  className="w-[338px] lg:w-[395px] h-auto"
+                />
+                <div className="absolute bottom-[-58px] lg:bottom-[-140px] left-[-131px] w-[495px] lg:w-[882px] h-[270px] lg:h-[316px] z-10 bg-black rounded-full blur-[46px]" />
+              </div>
               <TechButtonLink
                 href="/pidbir"
                 size="lg"
-                className="w-full h-[42px]"
+                className="w-full max-w-[320px] lg:max-w-[555px] h-[42px]"
               >
                 ПІДІБРАТИ ПК ЗА 30 СЕКУНД
               </TechButtonLink>
             </div>
 
-            <div className="mt-6 flex flex-col gap-2">
+            <div className="mt-6 flex flex-col lg:flex-row lg:items-center gap-2">
               <p className="text-[10px] uppercase tracking-wider leading-[120%]">
                 або за бюджетом:
               </p>
-              <div className="flex flex-wrap items-center gap-3 mt-3">
-                {" "}
+              <div className="flex flex-wrap items-center gap-3 mt-3 lg:mt-0">
                 {BUDGET_BUCKETS.map((b) => (
                   <BudgetChipLink
                     key={b.href}
@@ -195,7 +208,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="mt-10">
+            <div className="mt-10  md:max-w-[461px] lg:max-w-full">
               <TrustStrip />
             </div>
           </div>
@@ -212,7 +225,7 @@ export default function HomePage() {
       </section>
 
       {/* 2 · TOP-3 BUILDS */}
-      <section className="container-site py-20 md:py-24">
+      <section className="container-site py-10 md:py-14">
         <Reveal>
           <SectionHeader
             kicker="Найчастіше обирають цього місяця"
@@ -237,7 +250,7 @@ export default function HomePage() {
 
       {/* 3 · HOW IT WORKS */}
       <section className="border-y border-border bg-surface/30">
-        <div className="container-site py-20 md:py-24">
+        <div className="container-site py-10 md:py-14">
           <Reveal>
             <SectionHeader
               kicker="Як це працює"
@@ -276,7 +289,7 @@ export default function HomePage() {
       </section>
 
       {/* 4 · TRUST PILLARS */}
-      <section className="container-site py-20 md:py-24">
+      <section className="container-site py-10 md:py-14">
         <Reveal>
           <SectionHeader
             kicker="Чому нам довіряють"

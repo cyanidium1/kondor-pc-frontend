@@ -11,6 +11,7 @@ import { ChassisArt } from "@/components/brand/ChassisArt";
 import type { Build } from "@/types/build";
 import { gameLabel } from "@/lib/mock/games";
 import { fpsTier, FPS_TIER_META } from "@/lib/fps-thresholds";
+import { formatPrice } from "@/lib/format";
 
 type Variant = "compact" | "full";
 
@@ -58,6 +59,7 @@ export function BuildHeroCard({
         className,
       )}
     >
+      <div className="size-[256px] absolute top-[-100px] right-[-100px] bg-brand-primary/25 rounded-full blur-[64px]" />
       <div className="relative flex h-full flex-col gap-4 p-5">
         <div className="flex items-start justify-between">
           <div className="min-w-0">
@@ -184,7 +186,7 @@ export function BuildHeroCard({
             showInstallment
           />
           <TechButtonDisplay size="sm" variant="inverse" className="w-full">
-            Купити за {build.priceUah} ₴
+            Купити за {formatPrice(build.priceUah)}
           </TechButtonDisplay>
         </div>
       </div>
