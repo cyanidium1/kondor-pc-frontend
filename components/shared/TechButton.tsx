@@ -14,7 +14,8 @@ type Size = "sm" | "md" | "lg";
 /** primary — cyan fill / black text → hover black fill / cyan text (border stays cyan) */
 /** inverse — default and hover swapped vs primary */
 /** swap — black fill / cyan text → hover cyan fill / black text (edge swaps too) */
-export type TechButtonVariant = "primary" | "inverse" | "swap";
+/** white — white fill / black text → hover black fill / white text (border stays white) */
+export type TechButtonVariant = "primary" | "inverse" | "swap" | "white";
 
 interface TechButtonBaseProps {
   size?: Size;

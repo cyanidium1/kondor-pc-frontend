@@ -185,7 +185,7 @@ export function BuildHeroCard({
             size="sm"
             showInstallment
           />
-          <TechButtonDisplay size="sm" variant="inverse" className="w-full">
+          <TechButtonDisplay size="sm" variant="inverse" className="w-full h-9">
             Купити за {formatPrice(build.priceUah)}
           </TechButtonDisplay>
         </div>

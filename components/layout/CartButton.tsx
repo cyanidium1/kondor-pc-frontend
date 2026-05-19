@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingBag } from "lucide-react";
+import CartIcon from "@/components/icons/CartIcon";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/lib/cartStore";
@@ -30,7 +30,7 @@ export function CartButton() {
           "transition-transform duration-200 ease-out hover:scale-110 active:scale-95",
         )}
       >
-        <ShoppingBag className="size-4" />
+        <CartIcon className="size-5 lg:size-[27px]" />
       </Button>
       {count > 0 && (
         <span
