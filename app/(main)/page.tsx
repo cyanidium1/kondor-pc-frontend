@@ -3,6 +3,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { TrustStrip } from "@/components/shared/TrustStrip";
 import { BuildCard } from "@/components/shared/BuildCard";
+import { BuildHeroCard } from "@/components/shared/BuildHeroCard";
 import { ReviewCard } from "@/components/shared/ReviewCard";
 import { FaqBlock } from "@/components/shared/FaqBlock";
 import { SKU_ACCENTS } from "@/lib/sku-accents";
@@ -206,7 +207,7 @@ export default function HomePage() {
               className="pointer-events-none absolute -inset-8 -z-10 rounded-full opacity-40 blur-3xl"
               style={{ background: SKU_ACCENTS.orbitra }}
             />
-            <BuildCard
+            <BuildHeroCard
               build={top3[2]}
               variant="full"
               highlightGames={["cs2", "warzone", "cyberpunk"]}
