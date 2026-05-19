@@ -241,7 +241,7 @@ export function BuildCard({
             size="sm"
             showInstallment
           />
-          <TechButtonDisplay size="sm" variant="inverse" className="w-full">
+          <TechButtonDisplay size="sm" variant="inverse" className="w-full h-9">
             Детальніше
           </TechButtonDisplay>
         </div>

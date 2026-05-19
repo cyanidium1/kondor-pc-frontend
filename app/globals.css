@@ -741,6 +741,57 @@
     background-color: #1d1f24;
   }
 
+  /* Header bar — .card-frame-md technique: gradient = 1px edge, inner layer covers center */
+  .header-bar {
+    position: relative;
+    width: 100%;
+  }
+  .header-bar__edge,
+  .header-bar__fill {
+    display: none;
+  }
+  @media (min-width: 1280px) {
+    .header-bar {
+      isolation: isolate;
+      --header-cut: 12px;
+      --header-border: 1px;
+      clip-path: polygon(
+        var(--header-cut) 0%,
+        100% 0%,
+        100% calc(100% - var(--header-cut)),
+        calc(100% - var(--header-cut)) 100%,
+        0% 100%,
+        0% var(--header-cut)
+      );
+    }
+    .header-bar__edge,
+    .header-bar__fill {
+      display: block;
+      position: absolute;
+      pointer-events: none;
+      clip-path: polygon(
+        var(--header-cut) 0%,
+        100% 0%,
+        100% calc(100% - var(--header-cut)),
+        calc(100% - var(--header-cut)) 100%,
+        0% 100%,
+        0% var(--header-cut)
+      );
+    }
+    .header-bar__edge {
+      inset: 0;
+      background: linear-gradient(90deg, #183b42 0%, #09b5ff 100%);
+      z-index: -2;
+    }
+    .header-bar__fill {
+      inset: var(--header-border);
+      background: color-mix(in srgb, var(--background) 83%, transparent);
+      -webkit-backdrop-filter: blur(37.900001525878906px);
+      backdrop-filter: blur(37.900001525878906px);
+      z-index: -1;
+    }
+  }
+
   /* Budget chips — chamfer mask + white fill (hero / CTA budget links) */
   .budget-chip {
     --tech-cut: 6px;
