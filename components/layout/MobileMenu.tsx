@@ -125,7 +125,7 @@ export function MobileMenu({
           <TechButtonLink
             href="/pidbir"
             size="md"
-            className="w-full"
+            className="w-full h-9"
             onClick={() => onClose()}
           >
             Підібрати ПК
