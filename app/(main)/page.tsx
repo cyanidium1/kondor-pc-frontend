@@ -43,22 +43,22 @@ const BUDGET_BUCKETS = [
 const TRUST_PILLARS = [
   {
     icon: Video,
-    title: "Збираємо при тобі на відео",
-    text: "Кожна збірка — з відеопроцесом. Бачиш, що всередині та як упаковано.",
+    title: "ВІДЕОЗВІТ",
+    text: "Знімаємо відео саме твого готового ПК. Ти бачиш, що саме отримуєш",
   },
   {
     icon: ShieldCheck,
-    title: "Оригінальні компоненти з гарантією",
-    text: "Тільки нові деталі з офіційною гарантією виробника. Жодних сумнівних постачальників.",
+    title: "ОРИГІНАЛЬНІ КОМПОНЕНТИ З ГАРАНТІЄЮ",
+    text: "Нові комплектуючі та перевірені б/у відеокарти з гарантією до 12 місяців. Кожен ПК проходить обслуговування та тестування перед продажем.",
   },
   {
     icon: Truck,
-    title: "Якщо зламається — ми забираємо НП",
+    title: "ЯКЩО ЗЛАМАЄТЬСЯ — МИ ЗАБИРАЄМО НП",
     text: "Безкоштовна доставка до сервісу за наш рахунок. Ремонт або заміна за 3–10 днів.",
   },
   {
     icon: RotateCcw,
-    title: "Повернення протягом 14 днів",
+    title: "ПОВЕРНЕННЯ ПРОТЯГОМ 14 ДНІВ",
     text: "Не підійшло — повертаємо кошти без зайвих питань за українським законом.",
   },
 ];
@@ -339,12 +339,32 @@ export default function HomePage() {
       </section>
 
       {/* 4 · TRUST PILLARS */}
-      <section className="container-site py-10 md:py-14">
+      <section className="relative container-site pt-20 pb-10 lg:py-30">
+        <div className="absolute -z-10 top-[272px] sm:top-[182px] right-0 lg:right-[-180px] w-[275px] h-[286px] lg:w-[477px] lg:h-[496px]">
+          <Image
+            src="/images/home/trust/pc.webp"
+            alt="pc"
+            width="477"
+            height="496"
+            className="object-cover"
+          />
+        </div>
+        <div className="absolute -z-10 bottom-[18px] lg:bottom-[83px] left-[-2px] w-[247px] h-[247px]">
+          <Image
+            src="/images/home/trust/figure.svg"
+            alt="pc"
+            width="247"
+            height="247"
+            className="object-cover"
+          />
+        </div>
         <Reveal>
           <SectionHeader
             kicker="Чому нам довіряють"
-            title="5000+ клієнтів обирають Kondor PC"
+            title="5000+ КЛІЄНТІВ ОБИРАЮТЬ KONDOR PC"
             subtitle="Ми беремо на себе все — від пошуку комплектуючих до післяпродажного обслуговування."
+            titleClassName="mt-3 mb-5 max-w-[320px] md:max-w-full"
+            subtitleClassName="mb-[60px] max-w-[320px] md:max-w-[473px]"
           />
         </Reveal>
         <Reveal delay={80}>
@@ -352,15 +372,17 @@ export default function HomePage() {
             {TRUST_PILLARS.map((p) => (
               <div
                 key={p.title}
-                className="rounded-lg border border-border bg-surface p-6"
+                className="rounded-lg border border-border bg-surface p-6 min-h-[256px]"
               >
                 <div className="mb-4 flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
                   <p.icon className="size-5" strokeWidth={1.5} />
                 </div>
-                <div className="font-display text-base font-semibold leading-tight">
+                <div className="font-display text-[20px] lg:text-[16px] font-semibold leading-[120%]">
                   {p.title}
                 </div>
-                <p className="mt-2 text-sm text-muted-foreground">{p.text}</p>
+                <p className="mt-4 text-[12px] leading-[120%] text-muted-foreground">
+                  {p.text}
+                </p>
               </div>
             ))}
           </div>
