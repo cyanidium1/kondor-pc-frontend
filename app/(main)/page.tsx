@@ -33,6 +33,7 @@ import {
   Swords,
 } from "lucide-react";
 import Image from "next/image";
+import ArrowIcon from "@/components/icons/ArrowIcon";
 
 const BUDGET_BUCKETS = [
   { label: "До 40 000 ₴", href: "/pidbir/rezultat?budget=0-40" },
@@ -71,22 +72,16 @@ const USE_CASES = [
     sku: "nebula" as const,
   },
   {
-    icon: Gamepad2,
-    label: "Для Warzone та CoD",
-    href: "/pk-dlya-warzone",
-    sku: "hyper" as const,
-  },
-  {
-    icon: Car,
-    label: "Для GTA V та GTA VI",
-    href: "/pk-dlya-gta5",
-    sku: "vega" as const,
-  },
-  {
     icon: Radio,
     label: "Для стрімінгу та монтажу",
     href: "/pk-dlya-strimu",
     sku: "pulsar" as const,
+  },
+  {
+    icon: Gamepad2,
+    label: "Для Warzone та CoD",
+    href: "/pk-dlya-warzone",
+    sku: "hyper" as const,
   },
   {
     icon: Baby,
@@ -94,6 +89,13 @@ const USE_CASES = [
     href: "/pk-dlya-pochatkivtsya",
     sku: "comet" as const,
   },
+  {
+    icon: Car,
+    label: "Для GTA V та GTA VI",
+    href: "/pk-dlya-gta5",
+    sku: "vega" as const,
+  },
+
   {
     icon: Swords,
     label: "Для Dota 2 та ліги",
@@ -390,12 +392,13 @@ export default function HomePage() {
       </section>
 
       {/* 5 · USE CASES */}
-      <section className="border-y border-border bg-surface/30">
-        <div className="container-site py-20 md:py-24">
+      <section className="border-y border-border bg-surface/30 rounded-[15px]">
+        <div className="container-site pt-[200px] pb-20 md:py-24">
           <Reveal>
             <SectionHeader
               kicker="Під задачу"
-              title="Для яких задач збираємо ПК"
+              title="ДЛЯ ЯКИХ ЗАДАЧ ЗБИРАЄМО ПК"
+              titleClassName="mt-2.5"
             />
           </Reveal>
           <Reveal delay={80}>
@@ -405,21 +408,15 @@ export default function HomePage() {
                   key={u.href}
                   href={u.href}
                   className="smooth-hover group relative flex items-center gap-4 overflow-hidden rounded-lg border border-border bg-surface p-5 hover:-translate-y-0.5 hover:border-white/15"
-                  style={{ ["--sku" as string]: SKU_ACCENTS[u.sku] }}
                 >
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute -right-12 -top-12 size-32 rounded-full opacity-25 blur-2xl transition-opacity duration-500 ease-out group-hover:opacity-45"
-                    style={{ background: "var(--sku)" }}
-                  />
                   <div className="relative flex size-10 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
                     <u.icon className="size-5" strokeWidth={1.5} />
                   </div>
-                  <div className="relative flex-1 text-sm font-medium">
+                  <div className="relative flex-1 font-heading uppercase text-[14px] leading-[120%]">
                     {u.label}
                   </div>
-                  <div className="relative text-muted-foreground transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:text-foreground">
-                    →
+                  <div className="relative rounded-full size-9 bg-white flex items-center justify-center text-black transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:text-foreground">
+                    <ArrowIcon />
                   </div>
                 </Link>
               ))}
