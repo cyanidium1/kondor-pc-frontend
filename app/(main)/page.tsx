@@ -219,7 +219,7 @@ export default function HomePage() {
 
       {/* 2 · TOP-3 BUILDS */}
       <section className="relative container-site py-[92px] lg:pt-[154px] lg:pb-[90px]">
-        <div className="hidden lg:block absolute top-[-96px] left-[-43px] w-[2245px] h-[2316px]">
+        <div className="hidden lg:block absolute -z-10 top-[-96px] left-[-43px] w-[2245px] h-[2316px]">
           <Image
             src="/images/home/top-rated/shadow-desk.svg"
             alt="shadow-desk"
@@ -228,7 +228,7 @@ export default function HomePage() {
             className="object-cover"
           />
         </div>
-        <div className="block lg:hidden absolute top-[-20px] left-[-43px] w-[878px] h-[906px]">
+        <div className="block lg:hidden absolute -z-10 top-[-20px] left-[-43px] w-[878px] h-[906px]">
           <Image
             src="/images/home/top-rated/shadow-mob.svg"
             alt="shadow-mob"
@@ -284,11 +284,11 @@ export default function HomePage() {
             />
           </Reveal>
           <Reveal delay={80}>
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-3">
               {STEPS.map((s) => (
                 <div
                   key={s.n}
-                  className="relative overflow-hidden clip-angular-12 border border-border bg-surface p-6 min-h-[183px]"
+                  className="relative overflow-hidden clip-angular-12 border border-border bg-surface p-6 min-h-[183px sm:min-h-[230px] md:min-h-[183px]"
                 >
                   <div className="mb-4 flex items-center justify-between"></div>
                   <div className="font-display text-[20px] font-semibold leading-[120%]">
@@ -297,21 +297,23 @@ export default function HomePage() {
                   <p className="max-w-[204px] mt-3 text-[12px] leading-[120%] text-muted-foreground">
                     {s.text}
                   </p>
-                  <div className="absolute bottom-[0px] right-[0px] tabular font-heading text-[60px] font-bold text-muted-foreground/30">
+                  <div className="absolute bottom-[0px] lg:bottom-[-27px] right-[0px] lg:right-[-27px] tabular font-heading text-[60px] lg:text-[104px] font-bold text-muted-foreground/30">
                     {s.n}
                   </div>
                 </div>
               ))}
             </div>
-            <div className="mt-8 flex justify-center">
+            <div className="relative mt-8 flex justify-center md:justify-start">
               <TechButtonLink
                 href="/pidbir"
-                size="lg"
+                size="md"
                 variant="swap"
-                className="w-full h-[49px]"
+                className="w-full md:max-w-[209px] h-[49px]"
               >
                 Почати підбір
               </TechButtonLink>
+              <div className="absolute -z-10 top-[20px] hidden md:block h-[3px] w-full bg-black"></div>
+              <div className="size-[19px] rounded-full bg-black absolute top-[11px] right-0" />
             </div>
           </Reveal>
         </div>
