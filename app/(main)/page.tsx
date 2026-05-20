@@ -392,8 +392,36 @@ export default function HomePage() {
       </section>
 
       {/* 5 · USE CASES */}
-      <section className="border-y border-border bg-surface/30 rounded-[15px]">
-        <div className="container-site pt-[200px] pb-20 md:py-24">
+      <section className="relative border-y border-border bg-surface/30 rounded-[15px] overflow-hidden">
+        <div className="lg:hidden absolute -z-10 bottom-[-20px] left-[-200px] w-[618px] h-[347px]">
+          <Image
+            src="/images/home/use-cases/bottom-shadows-mob.webp"
+            alt="top-image-mob"
+            width="618"
+            height="347"
+            className="object-cover"
+          />
+        </div>
+        <div className="lg:hidden absolute -z-10 bottom-[-80px] right-[-260px] w-[686px] h-[436px]">
+          <Image
+            src="/images/home/use-cases/bottom-decor-mob.webp"
+            alt="bottom-decor-mob"
+            width="686"
+            height="436"
+            className="object-cover"
+          />
+        </div>
+        <div className="relative container-site pt-[200px] pb-20 md:py-24">
+          <div className="absolute -z-10 top-[50px] left-[calc(50%-180px)] w-[360px] h-[450px]">
+            <Image
+              src="/images/home/use-cases/top-image-mob.webp"
+              alt="top-image-mob"
+              width="360"
+              height="450"
+              className="object-cover"
+            />
+          </div>
+
           <Reveal>
             <SectionHeader
               kicker="Під задачу"
