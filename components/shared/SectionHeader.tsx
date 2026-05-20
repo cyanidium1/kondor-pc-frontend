@@ -7,6 +7,7 @@ export function SectionHeader({
   subtitle,
   align = "start",
   className,
+  kickerClassName,
   titleClassName,
   subtitleClassName,
 }: {
@@ -15,6 +16,7 @@ export function SectionHeader({
   subtitle?: ReactNode;
   align?: "start" | "center";
   className?: string;
+  kickerClassName?: string;
   titleClassName?: string;
   subtitleClassName?: string;
 }) {
@@ -27,7 +29,12 @@ export function SectionHeader({
       )}
     >
       {kicker && (
-        <div className="text-[8px] lg:text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
+        <div
+          className={cn(
+            "text-[8px] lg:text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground",
+            kickerClassName,
+          )}
+        >
           {kicker}
           <span className="inline-block ml-3 lg:ml-5.5 size-2 lg:size-3 rounded-full bg-brand-primary" />
         </div>
