@@ -273,8 +273,27 @@ export default function HomePage() {
       </section>
 
       {/* 3 · HOW IT WORKS */}
-      <section className="bg-brand-primary rounded-[40px]">
+      <section className="relative rounded-[40px] overflow-hidden">
+        <div className="absolute -z-10 inset-0 bg-brand-primary rounded-[40px]" />
         <div className="container-site py-10 md:py-14">
+          <div className="absolute top-[-424px] left-[-540px] w-[1113px] h-[997px]">
+            <Image
+              src="/images/home/how-it-works/top-shadow.svg"
+              alt="top-shadow"
+              width="1113"
+              height="997"
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute bottom-[-209px] right-0 w-[633px] h-[633px]">
+            <Image
+              src="/images/home/how-it-works/bottom-shadow.webp"
+              alt="top-shadow"
+              width="633"
+              height="633"
+              className="object-cover"
+            />
+          </div>
           <Reveal>
             <SectionHeader
               kicker="Як це працює"
@@ -288,7 +307,7 @@ export default function HomePage() {
               {STEPS.map((s) => (
                 <div
                   key={s.n}
-                  className="relative overflow-hidden clip-angular-12 border border-border bg-surface p-6 min-h-[183px sm:min-h-[230px] md:min-h-[183px]"
+                  className="relative overflow-hidden clip-angular-12 border border-border bg-surface p-6 min-h-[183px] sm:min-h-[230px] md:min-h-[183px]"
                 >
                   <div className="mb-4 flex items-center justify-between"></div>
                   <div className="font-display text-[20px] font-semibold leading-[120%]">
