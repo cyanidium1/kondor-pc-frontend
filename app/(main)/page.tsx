@@ -106,7 +106,7 @@ const STEPS = [
   {
     n: "01",
     icon: Target,
-    title: "Обери гри",
+    title: "Обери ігри",
     text: "Показуємо FPS саме у твоїх іграх — CS2, Warzone, GTA V та інших",
   },
   {
@@ -273,12 +273,14 @@ export default function HomePage() {
       </section>
 
       {/* 3 · HOW IT WORKS */}
-      <section className="border-y border-border bg-surface/30">
+      <section className="bg-brand-primary rounded-[40px]">
         <div className="container-site py-10 md:py-14">
           <Reveal>
             <SectionHeader
               kicker="Як це працює"
               title="Як знайти свій ПК за 30 секунд"
+              titleClassName="text-black"
+              kickerClassName="text-black mb-3"
             />
           </Reveal>
           <Reveal delay={80}>
@@ -286,20 +288,18 @@ export default function HomePage() {
               {STEPS.map((s) => (
                 <div
                   key={s.n}
-                  className="relative overflow-hidden rounded-lg border border-border bg-surface p-6"
+                  className="relative overflow-hidden rounded-lg border border-border bg-surface p-6 min-h-[183px]"
                 >
-                  <div className="mb-4 flex items-center justify-between">
-                    <div className="flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
-                      <s.icon className="size-5" strokeWidth={1.5} />
-                    </div>
-                    <div className="tabular font-display text-2xl font-bold text-muted-foreground/30">
-                      {s.n}
-                    </div>
-                  </div>
-                  <div className="font-display text-lg font-semibold">
+                  <div className="mb-4 flex items-center justify-between"></div>
+                  <div className="font-display text-[20px] font-semibold leading-[120%]">
                     {s.title}
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{s.text}</p>
+                  <p className="max-w-[204px] mt-3 text-[12px] leading-[120%] text-muted-foreground">
+                    {s.text}
+                  </p>
+                  <div className="absolute bottom-[0px] right-[0px] tabular font-heading text-[60px] font-bold text-muted-foreground/30">
+                    {s.n}
+                  </div>
                 </div>
               ))}
             </div>
