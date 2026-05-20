@@ -288,7 +288,7 @@ export default function HomePage() {
               {STEPS.map((s) => (
                 <div
                   key={s.n}
-                  className="relative overflow-hidden rounded-lg border border-border bg-surface p-6 min-h-[183px]"
+                  className="relative overflow-hidden clip-angular-12 border border-border bg-surface p-6 min-h-[183px]"
                 >
                   <div className="mb-4 flex items-center justify-between"></div>
                   <div className="font-display text-[20px] font-semibold leading-[120%]">
@@ -304,7 +304,12 @@ export default function HomePage() {
               ))}
             </div>
             <div className="mt-8 flex justify-center">
-              <TechButtonLink href="/pidbir" size="lg">
+              <TechButtonLink
+                href="/pidbir"
+                size="lg"
+                variant="swap"
+                className="w-full h-[49px]"
+              >
                 Почати підбір
               </TechButtonLink>
             </div>
