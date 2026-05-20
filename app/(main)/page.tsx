@@ -33,6 +33,7 @@ import {
   Swords,
 } from "lucide-react";
 import Image from "next/image";
+import ArrowIcon from "@/components/icons/ArrowIcon";
 
 const BUDGET_BUCKETS = [
   { label: "До 40 000 ₴", href: "/pidbir/rezultat?budget=0-40" },
@@ -71,22 +72,16 @@ const USE_CASES = [
     sku: "nebula" as const,
   },
   {
-    icon: Gamepad2,
-    label: "Для Warzone та CoD",
-    href: "/pk-dlya-warzone",
-    sku: "hyper" as const,
-  },
-  {
-    icon: Car,
-    label: "Для GTA V та GTA VI",
-    href: "/pk-dlya-gta5",
-    sku: "vega" as const,
-  },
-  {
     icon: Radio,
     label: "Для стрімінгу та монтажу",
     href: "/pk-dlya-strimu",
     sku: "pulsar" as const,
+  },
+  {
+    icon: Gamepad2,
+    label: "Для Warzone та CoD",
+    href: "/pk-dlya-warzone",
+    sku: "hyper" as const,
   },
   {
     icon: Baby,
@@ -94,6 +89,13 @@ const USE_CASES = [
     href: "/pk-dlya-pochatkivtsya",
     sku: "comet" as const,
   },
+  {
+    icon: Car,
+    label: "Для GTA V та GTA VI",
+    href: "/pk-dlya-gta5",
+    sku: "vega" as const,
+  },
+
   {
     icon: Swords,
     label: "Для Dota 2 та ліги",
@@ -390,36 +392,101 @@ export default function HomePage() {
       </section>
 
       {/* 5 · USE CASES */}
-      <section className="border-y border-border bg-surface/30">
-        <div className="container-site py-20 md:py-24">
+      <section className="relative  bg-surface/30 rounded-[15px] lg:rounded-[40px] overflow-hidden">
+        <div className="lg:hidden absolute -z-10 bottom-[-20px] left-[-200px] w-[618px] h-[347px]">
+          <Image
+            src="/images/home/use-cases/bottom-shadows-mob.webp"
+            alt="top-image-mob"
+            width="618"
+            height="347"
+            className="object-cover"
+          />
+        </div>
+
+        <div className="lg:hidden absolute -z-10 bottom-[-80px] right-[-260px] w-[686px] h-[436px]">
+          <Image
+            src="/images/home/use-cases/bottom-decor-mob.webp"
+            alt="bottom-decor-mob"
+            width="686"
+            height="436"
+            className="object-cover"
+          />
+        </div>
+
+        <div className="absolute -z-20 bottom-[-529px] right-[-559px] w-[735px] h-[735px] rounded-full bg-[#005996] blur-[255px]" />
+
+        <div className="relative container-site pt-[200px] pb-20 lg:pt-[213px] lg:pb-[109px] lg:max-w-[825px]">
+          <div className="hidden lg:block absolute -z-10 bottom-[-600px] left-[-1130px] w-[1631px] h-[1253px]">
+            <Image
+              src="/images/home/use-cases/bottom-shadows-desk.webp"
+              alt="bottom-shadows-desk"
+              width="1631"
+              height="1253"
+              className="object-cover"
+            />
+          </div>
+          <div className="lg:hidden absolute -z-10 top-[50px] left-[calc(50%-180px)] w-[360px] h-[450px]">
+            <Image
+              src="/images/home/use-cases/top-image-mob.webp"
+              alt="top-image-mob"
+              width="360"
+              height="450"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-20 top-[30px] left-[calc(50%-840px)] w-[890px] h-[916px]">
+            <Image
+              src="/images/home/use-cases/top-left-image-desk.webp"
+              alt="top-left-image-desk"
+              width="890"
+              height="916"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-10 top-[-20px] right-[calc(50%-960px)] w-[1430px] h-[803px]">
+            <Image
+              src="/images/home/use-cases/top-right-image-desk.webp"
+              alt="top-right-image-desk"
+              width="1430"
+              height="803"
+              className="object-cover"
+            />
+          </div>
+
+          <div className="hidden lg:block absolute -z-20 bottom-[-624px] right-[calc(50%-1260px)] w-[1607px] h-[1500px]">
+            <Image
+              src="/images/home/use-cases/bottom-right-shadows-desk.webp"
+              alt="bottom-right-shadows-desk"
+              width="1607"
+              height="1500"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-20 top-[0px] right-[calc(50%-310px)] w-[733px] h-[1133px] rounded-full bg-black blur-[105px]" />
+
           <Reveal>
             <SectionHeader
               kicker="Під задачу"
-              title="Для яких задач збираємо ПК"
+              title="ДЛЯ ЯКИХ ЗАДАЧ ЗБИРАЄМО ПК"
+              titleClassName="mt-2.5"
             />
           </Reveal>
           <Reveal delay={80}>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-2">
               {USE_CASES.map((u) => (
                 <Link
                   key={u.href}
                   href={u.href}
                   className="smooth-hover group relative flex items-center gap-4 overflow-hidden rounded-lg border border-border bg-surface p-5 hover:-translate-y-0.5 hover:border-white/15"
-                  style={{ ["--sku" as string]: SKU_ACCENTS[u.sku] }}
                 >
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute -right-12 -top-12 size-32 rounded-full opacity-25 blur-2xl transition-opacity duration-500 ease-out group-hover:opacity-45"
-                    style={{ background: "var(--sku)" }}
-                  />
                   <div className="relative flex size-10 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
                     <u.icon className="size-5" strokeWidth={1.5} />
                   </div>
-                  <div className="relative flex-1 text-sm font-medium">
+                  <div className="relative flex-1 font-heading uppercase text-[14px] leading-[120%]">
                     {u.label}
                   </div>
-                  <div className="relative text-muted-foreground transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:text-foreground">
-                    →
+                  <div className="relative rounded-full size-9 bg-white flex items-center justify-center text-black transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:text-foreground">
+                    <ArrowIcon />
                   </div>
                 </Link>
               ))}
