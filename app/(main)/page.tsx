@@ -43,22 +43,22 @@ const BUDGET_BUCKETS = [
 const TRUST_PILLARS = [
   {
     icon: Video,
-    title: "Збираємо при тобі на відео",
-    text: "Кожна збірка — з відеопроцесом. Бачиш, що всередині та як упаковано.",
+    title: "ВІДЕОЗВІТ",
+    text: "Знімаємо відео саме твого готового ПК. Ти бачиш, що саме отримуєш",
   },
   {
     icon: ShieldCheck,
-    title: "Оригінальні компоненти з гарантією",
-    text: "Тільки нові деталі з офіційною гарантією виробника. Жодних сумнівних постачальників.",
+    title: "ОРИГІНАЛЬНІ КОМПОНЕНТИ З ГАРАНТІЄЮ",
+    text: "Нові комплектуючі та перевірені б/у відеокарти з гарантією до 12 місяців. Кожен ПК проходить обслуговування та тестування перед продажем.",
   },
   {
     icon: Truck,
-    title: "Якщо зламається — ми забираємо НП",
+    title: "ЯКЩО ЗЛАМАЄТЬСЯ — МИ ЗАБИРАЄМО НП",
     text: "Безкоштовна доставка до сервісу за наш рахунок. Ремонт або заміна за 3–10 днів.",
   },
   {
     icon: RotateCcw,
-    title: "Повернення протягом 14 днів",
+    title: "ПОВЕРНЕННЯ ПРОТЯГОМ 14 ДНІВ",
     text: "Не підійшло — повертаємо кошти без зайвих питань за українським законом.",
   },
 ];
@@ -339,12 +339,14 @@ export default function HomePage() {
       </section>
 
       {/* 4 · TRUST PILLARS */}
-      <section className="container-site py-10 md:py-14">
+      <section className="container-site pt-20 pb-10 lg:py-30">
         <Reveal>
           <SectionHeader
             kicker="Чому нам довіряють"
-            title="5000+ клієнтів обирають Kondor PC"
+            title="5000+ КЛІЄНТІВ ОБИРАЮТЬ KONDOR PC"
             subtitle="Ми беремо на себе все — від пошуку комплектуючих до післяпродажного обслуговування."
+            titleClassName="mt-3 mb-5"
+            subtitleClassName="lg:max-w-[473px]"
           />
         </Reveal>
         <Reveal delay={80}>
@@ -357,10 +359,12 @@ export default function HomePage() {
                 <div className="mb-4 flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
                   <p.icon className="size-5" strokeWidth={1.5} />
                 </div>
-                <div className="font-display text-base font-semibold leading-tight">
+                <div className="font-display text-[20px] lg:text-[16px] font-semibold leading-[120%]">
                   {p.title}
                 </div>
-                <p className="mt-2 text-sm text-muted-foreground">{p.text}</p>
+                <p className="mt-4 text-[12px] leading-[120%] text-muted-foreground">
+                  {p.text}
+                </p>
               </div>
             ))}
           </div>
