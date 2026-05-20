@@ -339,14 +339,32 @@ export default function HomePage() {
       </section>
 
       {/* 4 · TRUST PILLARS */}
-      <section className="container-site pt-20 pb-10 lg:py-30">
+      <section className="relative container-site pt-20 pb-10 lg:py-30">
+        <div className="absolute -z-10 top-[272px] sm:top-[182px] right-0 lg:right-[-180px] w-[275px] h-[286px] lg:w-[477px] lg:h-[496px]">
+          <Image
+            src="/images/home/trust/pc.webp"
+            alt="pc"
+            width="477"
+            height="496"
+            className="object-cover"
+          />
+        </div>
+        <div className="absolute -z-10 bottom-[18px] lg:bottom-[83px] left-[-2px] w-[247px] h-[247px]">
+          <Image
+            src="/images/home/trust/figure.svg"
+            alt="pc"
+            width="247"
+            height="247"
+            className="object-cover"
+          />
+        </div>
         <Reveal>
           <SectionHeader
             kicker="Чому нам довіряють"
             title="5000+ КЛІЄНТІВ ОБИРАЮТЬ KONDOR PC"
             subtitle="Ми беремо на себе все — від пошуку комплектуючих до післяпродажного обслуговування."
-            titleClassName="mt-3 mb-5"
-            subtitleClassName="lg:max-w-[473px]"
+            titleClassName="mt-3 mb-5 max-w-[320px] md:max-w-full"
+            subtitleClassName="mb-[60px] max-w-[320px] md:max-w-[473px]"
           />
         </Reveal>
         <Reveal delay={80}>
@@ -354,7 +372,7 @@ export default function HomePage() {
             {TRUST_PILLARS.map((p) => (
               <div
                 key={p.title}
-                className="rounded-lg border border-border bg-surface p-6"
+                className="rounded-lg border border-border bg-surface p-6 min-h-[256px]"
               >
                 <div className="mb-4 flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
                   <p.icon className="size-5" strokeWidth={1.5} />
