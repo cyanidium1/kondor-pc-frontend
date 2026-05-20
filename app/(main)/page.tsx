@@ -218,12 +218,15 @@ export default function HomePage() {
       </section>
 
       {/* 2 · TOP-3 BUILDS */}
-      <section className="container-site py-10 md:py-14">
+      <section className="container-site py-[92px] lg:pt-[154px] lg:pb-[90px]">
         <Reveal>
           <SectionHeader
             kicker="Найчастіше обирають цього місяця"
             title="Три перевірені збірки в різних бюджетах"
             subtitle="По одній оптимальній моделі на кожен ціновий діапазон — з реальними FPS у популярних іграх."
+            className="lg:mb-[130px]"
+            titleClassName="lg:max-w-[891px] lg:mt-7 lg:mb-10"
+            subtitleClassName="lg:max-w-[428px]"
           />
         </Reveal>
         <Reveal delay={80}>

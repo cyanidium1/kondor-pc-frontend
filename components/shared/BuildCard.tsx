@@ -21,6 +21,16 @@ const RESOLUTION_LABEL = {
   "4k": "4K",
 } as const;
 
+/** Українські закінчення: 1 день, 2–4 дні, 5+ днів (з винятками 11–14). */
+function ukrainianDaysWord(count: number): string {
+  const n = Math.abs(Math.trunc(count)) % 100;
+  const last = n % 10;
+  if (n >= 11 && n <= 14) return "днів";
+  if (last === 1) return "день";
+  if (last >= 2 && last <= 4) return "дні";
+  return "днів";
+}
+
 export function BuildCard({
   build,
   variant = "full",
@@ -38,7 +48,7 @@ export function BuildCard({
     build.status === "in_stock"
       ? "В наявності"
       : build.status === "assemble_on_order"
-        ? `Збираємо за ${build.assemblyDays} дні`
+        ? `Збираємо за ${build.assemblyDays} ${ukrainianDaysWord(build.assemblyDays)}`
         : build.status === "out_of_stock"
           ? "Немає в наявності"
           : "Архів";
@@ -77,9 +87,6 @@ export function BuildCard({
             <div className="font-heading text-2xl font-bold uppercase tracking-wider">
               {build.name}
             </div>
-            <div className="mt-0.5 truncate text-xs text-muted-foreground">
-              {build.shortTagline}
-            </div>
           </div>
           {badge ? (
             <div className="rounded-full border border-white/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[rgba(19,158,217,0.9)]">
@@ -91,6 +98,9 @@ export function BuildCard({
         </div>
 
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md">
+          <div className="absolute z-20 top-3 left-3 truncate font-heading text-[8px] text-black uppercase leading-none bg-brand-primary rounded-full px-3 py-2">
+            {build.shortTagline}
+          </div>
           <ChassisArt className="absolute inset-0 size-full" />
 
           {images.map((src, i) => {
