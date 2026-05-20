@@ -392,7 +392,7 @@ export default function HomePage() {
       </section>
 
       {/* 5 · USE CASES */}
-      <section className="relative border-y border-border bg-surface/30 rounded-[15px] overflow-hidden">
+      <section className="relative  bg-surface/30 rounded-[15px] lg:rounded-[40px] overflow-hidden">
         <div className="lg:hidden absolute -z-10 bottom-[-20px] left-[-200px] w-[618px] h-[347px]">
           <Image
             src="/images/home/use-cases/bottom-shadows-mob.webp"
@@ -402,6 +402,7 @@ export default function HomePage() {
             className="object-cover"
           />
         </div>
+
         <div className="lg:hidden absolute -z-10 bottom-[-80px] right-[-260px] w-[686px] h-[436px]">
           <Image
             src="/images/home/use-cases/bottom-decor-mob.webp"
@@ -411,8 +412,20 @@ export default function HomePage() {
             className="object-cover"
           />
         </div>
-        <div className="relative container-site pt-[200px] pb-20 md:py-24">
-          <div className="absolute -z-10 top-[50px] left-[calc(50%-180px)] w-[360px] h-[450px]">
+
+        <div className="absolute -z-20 bottom-[-529px] right-[-559px] w-[735px] h-[735px] rounded-full bg-[#005996] blur-[255px]" />
+
+        <div className="relative container-site pt-[200px] pb-20 lg:pt-[213px] lg:pb-[109px] lg:max-w-[825px]">
+          <div className="hidden lg:block absolute -z-10 bottom-[-600px] left-[-1130px] w-[1631px] h-[1253px]">
+            <Image
+              src="/images/home/use-cases/bottom-shadows-desk.webp"
+              alt="bottom-shadows-desk"
+              width="1631"
+              height="1253"
+              className="object-cover"
+            />
+          </div>
+          <div className="lg:hidden absolute -z-10 top-[50px] left-[calc(50%-180px)] w-[360px] h-[450px]">
             <Image
               src="/images/home/use-cases/top-image-mob.webp"
               alt="top-image-mob"
@@ -421,6 +434,35 @@ export default function HomePage() {
               className="object-cover"
             />
           </div>
+          <div className="hidden lg:block absolute -z-20 top-[30px] left-[calc(50%-840px)] w-[890px] h-[916px]">
+            <Image
+              src="/images/home/use-cases/top-left-image-desk.webp"
+              alt="top-left-image-desk"
+              width="890"
+              height="916"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-10 top-[-20px] right-[calc(50%-960px)] w-[1430px] h-[803px]">
+            <Image
+              src="/images/home/use-cases/top-right-image-desk.webp"
+              alt="top-right-image-desk"
+              width="1430"
+              height="803"
+              className="object-cover"
+            />
+          </div>
+
+          <div className="hidden lg:block absolute -z-20 bottom-[-624px] right-[calc(50%-1260px)] w-[1607px] h-[1500px]">
+            <Image
+              src="/images/home/use-cases/bottom-right-shadows-desk.webp"
+              alt="bottom-right-shadows-desk"
+              width="1607"
+              height="1500"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-20 top-[0px] right-[calc(50%-310px)] w-[733px] h-[1133px] rounded-full bg-black blur-[105px]" />
 
           <Reveal>
             <SectionHeader
@@ -430,7 +472,7 @@ export default function HomePage() {
             />
           </Reveal>
           <Reveal delay={80}>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-2">
               {USE_CASES.map((u) => (
                 <Link
                   key={u.href}
