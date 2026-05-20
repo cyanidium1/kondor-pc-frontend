@@ -22,15 +22,18 @@ export function SectionHeader({
       )}
     >
       {kicker && (
-        <div className="text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
+        <div className="text-[8px] lg:text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
           {kicker}
+          <span className="inline-block ml-3 lg:ml-5.5 size-2 lg:size-3 rounded-full bg-brand-primary" />
         </div>
       )}
-      <h2 className="font-display text-3xl font-bold md:text-4xl">{title}</h2>
+      <h2 className="font-display text-[24px] font-bold md:text-[48px]">
+        {title}{" "}
+      </h2>
       {subtitle && (
         <p
           className={cn(
-            "max-w-2xl text-muted-foreground",
+            "max-w-2xl text-muted-foreground text-[14px] lg:text-[16px] leading-[120%]",
             align === "center" && "mx-auto",
           )}
         >
