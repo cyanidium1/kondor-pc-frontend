@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 export function SectionHeader({
@@ -6,12 +7,16 @@ export function SectionHeader({
   subtitle,
   align = "start",
   className,
+  titleClassName,
+  subtitleClassName,
 }: {
   kicker?: string;
-  title: React.ReactNode;
-  subtitle?: React.ReactNode;
+  title: ReactNode;
+  subtitle?: ReactNode;
   align?: "start" | "center";
   className?: string;
+  titleClassName?: string;
+  subtitleClassName?: string;
 }) {
   return (
     <header
@@ -22,16 +27,25 @@ export function SectionHeader({
       )}
     >
       {kicker && (
-        <div className="text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
+        <div className="text-[8px] lg:text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
           {kicker}
+          <span className="inline-block ml-3 lg:ml-5.5 size-2 lg:size-3 rounded-full bg-brand-primary" />
         </div>
       )}
-      <h2 className="font-display text-3xl font-bold md:text-4xl">{title}</h2>
+      <h2
+        className={cn(
+          "font-display text-[24px] font-bold lg:text-[48px] leading-[120%]",
+          titleClassName,
+        )}
+      >
+        {title}
+      </h2>
       {subtitle && (
         <p
           className={cn(
-            "max-w-2xl text-muted-foreground",
+            "max-w-2xl text-muted-foreground text-[14px] lg:text-[16px] leading-[120%]",
             align === "center" && "mx-auto",
+            subtitleClassName,
           )}
         >
           {subtitle}

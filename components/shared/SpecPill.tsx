@@ -48,7 +48,7 @@ export function SpecPill({
         return (
           <div
             key={s.key}
-            className="flex flex-col gap-1 bg-surface-elevated/80 px-3 py-2.5 backdrop-blur"
+            className="flex flex-col gap-1 bg-surface-elevated/80 px-1.5 py-2.5 backdrop-blur"
           >
             <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-muted-foreground">
               <Icon className="size-3.5" strokeWidth={1.75} />

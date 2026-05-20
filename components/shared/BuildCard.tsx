@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useRef, useState, type MouseEvent } from "react";
+import { useState, type MouseEvent } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SpecPill } from "@/components/shared/SpecPill";
 import { PriceBlock } from "@/components/shared/PriceBlock";
 import { TechButtonDisplay } from "@/components/shared/TechButton";
 import { ChassisArt } from "@/components/brand/ChassisArt";
-import { SKU_ACCENTS } from "@/lib/sku-accents";
 import type { Build } from "@/types/build";
 import { gameLabel } from "@/lib/mock/games";
 import { fpsTier, FPS_TIER_META } from "@/lib/fps-thresholds";
@@ -21,6 +20,16 @@ const RESOLUTION_LABEL = {
   "2k": "2K",
   "4k": "4K",
 } as const;
+
+/** Українські закінчення: 1 день, 2–4 дні, 5+ днів (з винятками 11–14). */
+function ukrainianDaysWord(count: number): string {
+  const n = Math.abs(Math.trunc(count)) % 100;
+  const last = n % 10;
+  if (n >= 11 && n <= 14) return "днів";
+  if (last === 1) return "день";
+  if (last >= 2 && last <= 4) return "дні";
+  return "днів";
+}
 
 export function BuildCard({
   build,
@@ -35,13 +44,11 @@ export function BuildCard({
   badge?: string;
   className?: string;
 }) {
-  const cardRef = useRef<HTMLAnchorElement>(null);
-  const accent = SKU_ACCENTS[build.slug];
   const statusLabel =
     build.status === "in_stock"
       ? "В наявності"
       : build.status === "assemble_on_order"
-        ? `Збираємо за ${build.assemblyDays} дні`
+        ? `Збираємо за ${build.assemblyDays} ${ukrainianDaysWord(build.assemblyDays)}`
         : build.status === "out_of_stock"
           ? "Немає в наявності"
           : "Архів";
@@ -55,14 +62,6 @@ export function BuildCard({
   const hasMany = images.length > 1;
   const [imageIndex, setImageIndex] = useState(0);
 
-  function onMove(e: MouseEvent<HTMLAnchorElement>) {
-    const el = cardRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    el.style.setProperty("--mx", `${e.clientX - rect.left}px`);
-    el.style.setProperty("--my", `${e.clientY - rect.top}px`);
-  }
-
   // Arrow click must not navigate to product page.
   function flip(e: MouseEvent<HTMLButtonElement>, delta: number) {
     e.preventDefault();
@@ -73,59 +72,35 @@ export function BuildCard({
 
   return (
     <Link
-      ref={cardRef}
       href={`/pk/${build.slug}`}
-      onMouseMove={onMove}
       className={cn(
-        "sku-glow card-frame-md group relative block overflow-hidden",
+        "build-hero-card relative block overflow-hidden",
         "motion-reduce:transform-none",
         className,
       )}
-      style={{ ["--sku" as string]: accent }}
     >
-      {/* SKU top shimmer line */}
-      <div
-        aria-hidden
-        className="sku-top-line pointer-events-none absolute inset-x-0 top-0 h-px opacity-70"
-      />
-      {/* Soft accent corner glow (ambient) */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-24 -top-24 size-64 rounded-full opacity-25 blur-3xl transition-opacity duration-500 ease-out group-hover:opacity-45"
-        style={{ background: "var(--sku)" }}
-      />
-      {/* Pointer-follow spotlight */}
-      <div
-        aria-hidden
-        className="card-spotlight pointer-events-none absolute inset-0"
-      />
+      <div className="pointer-events-none absolute top-[-100px] right-[-100px] size-[256px] rounded-full bg-brand-primary/25 blur-[64px]" />
 
       <div className="relative flex h-full flex-col gap-4 p-5">
         <div className="flex items-start justify-between">
           <div className="min-w-0">
-            <div className="font-heading text-2xl font-bold uppercase tracking-wider transition-colors duration-300 ease-out group-hover:text-primary">
+            <div className="font-heading text-2xl font-bold uppercase tracking-wider">
               {build.name}
-            </div>
-            <div className="mt-0.5 truncate text-xs text-muted-foreground">
-              {build.shortTagline}
             </div>
           </div>
           {badge ? (
-            <div
-              className="rounded-full border border-white/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider"
-              style={{ color: "var(--sku)" }}
-            >
+            <div className="rounded-full border border-white/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[rgba(19,158,217,0.9)]">
               {badge}
             </div>
           ) : (
-            <div
-              className="mt-1 size-3 shrink-0 rounded-full ring-2 ring-background"
-              style={{ background: "var(--sku)" }}
-            />
+            <div className="mt-1 size-3 shrink-0 rounded-full bg-brand-primary ring-2 ring-background" />
           )}
         </div>
 
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md">
+          <div className="absolute z-20 top-3 left-3 truncate font-heading text-[8px] text-black uppercase leading-none bg-brand-primary rounded-full px-3 py-2">
+            {build.shortTagline}
+          </div>
           <ChassisArt className="absolute inset-0 size-full" />
 
           {images.map((src, i) => {
@@ -140,8 +115,7 @@ export function BuildCard({
                 className={cn(
                   "absolute inset-0 z-10 object-cover",
                   "transition-opacity duration-400 ease-out",
-                  "group-hover:scale-[1.035] transition-transform duration-[700ms]",
-                  "motion-reduce:transform-none will-change-transform",
+                  "motion-reduce:transform-none",
                   visible ? "opacity-100" : "opacity-0 pointer-events-none",
                 )}
               />
@@ -197,7 +171,7 @@ export function BuildCard({
         />
 
         {variant === "full" && highlightGames && highlightGames.length > 0 && (
-          <div className="tabular space-y-1.5 rounded-md border border-border bg-background/40 p-3">
+          <div className="tabular space-y-1.5 rounded-md border border-border bg-background/40 py-3 px-1.5">
             <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
               У твоїх іграх · {RESOLUTION_LABEL[build.targetResolution]}
             </div>

@@ -218,12 +218,43 @@ export default function HomePage() {
       </section>
 
       {/* 2 · TOP-3 BUILDS */}
-      <section className="container-site py-10 md:py-14">
+      <section className="relative container-site py-[92px] lg:pt-[154px] lg:pb-[90px]">
+        <div className="hidden lg:block absolute top-[-96px] left-[-43px] w-[2245px] h-[2316px]">
+          <Image
+            src="/images/home/top-rated/shadow-desk.svg"
+            alt="shadow-desk"
+            width="2245"
+            height="2316"
+            className="object-cover"
+          />
+        </div>
+        <div className="block lg:hidden absolute top-[-20px] left-[-43px] w-[878px] h-[906px]">
+          <Image
+            src="/images/home/top-rated/shadow-mob.svg"
+            alt="shadow-mob"
+            width="878"
+            height="906"
+            className="object-cover"
+          />
+        </div>
+        <div className="hidden lg:block absolute top-[281px] lg:left-[787px] xl:left-[897px] w-[354px] h-[346px]">
+          <Image
+            src="/images/home/top-rated/figure.svg"
+            alt="figure"
+            width="354"
+            height="346"
+            className="object-cover"
+          />
+          <div className="absolute bottom-[-388px] left-[-138px] w-[617px] h-[582px] rounded-full bg-black blur-[35px]" />
+        </div>
         <Reveal>
           <SectionHeader
             kicker="Найчастіше обирають цього місяця"
             title="Три перевірені збірки в різних бюджетах"
             subtitle="По одній оптимальній моделі на кожен ціновий діапазон — з реальними FPS у популярних іграх."
+            className="lg:mb-[130px]"
+            titleClassName="lg:max-w-[891px] lg:mt-7 lg:mb-10"
+            subtitleClassName="lg:max-w-[428px]"
           />
         </Reveal>
         <Reveal delay={80}>
