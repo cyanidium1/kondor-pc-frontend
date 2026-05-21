@@ -6,7 +6,6 @@ import { BuildCard } from "@/components/shared/BuildCard";
 import { BuildHeroCard } from "@/components/shared/BuildHeroCard";
 import { ReviewCard } from "@/components/shared/ReviewCard";
 import { FaqBlock } from "@/components/shared/FaqBlock";
-import { SKU_ACCENTS } from "@/lib/sku-accents";
 import { popularBuilds } from "@/lib/mock/builds";
 import { REVIEWS } from "@/lib/mock/reviews";
 import { faqsByScope } from "@/lib/mock/faqs";
@@ -539,7 +538,7 @@ export default function HomePage() {
               align="center"
               kicker="Готовий?"
               title="Обери свій ПК"
-              subtitle="Підбір за 30 секунд або обирай за бюджетом. Доставка Новою Поштою безкоштовно."
+              subtitle="Підбір за 30 секунд або обирай за бюджетом. Доставка Новою Поштою."
               kickerClassName="text-black"
               titleClassName="text-black py-4"
               subtitleClassName="text-black"
