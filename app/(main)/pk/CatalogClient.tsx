@@ -72,7 +72,7 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
   return (
     <div className="grid gap-8 md:grid-cols-[260px_1fr]">
       <aside className="sticky top-[calc(var(--header-h,64px)+16px)] z-10 h-fit space-y-6 rounded-lg border border-border bg-surface/95 p-5 backdrop-blur-md">
-        <div className="md:hidden flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
             Фільтри
           </p>
@@ -83,7 +83,7 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
             aria-label={
               filtersExpanded ? "Згорнути фільтри" : "Розгорнути фільтри"
             }
-            className="text-foreground transition-opacity hover:opacity-80"
+            className="md:hidden text-foreground transition-opacity hover:opacity-80"
           >
             <ArrowInCircleIcon
               className={cn(

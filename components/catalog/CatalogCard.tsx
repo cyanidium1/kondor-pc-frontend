@@ -157,9 +157,10 @@ export function CatalogCard({
     : 0;
 
   const [animationKey, setAnimationKey] = useState<number | null>(null);
-  const [startPos, setStartPos] = useState<{ top: number; left: number } | null>(
-    null,
-  );
+  const [startPos, setStartPos] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
   const [justAdded, setJustAdded] = useState(false);
 
   function handleAdd(e: React.MouseEvent<HTMLButtonElement>) {
@@ -239,86 +240,86 @@ export function CatalogCard({
           href={detailHref}
           className="relative block aspect-square overflow-hidden"
         >
-            {heroUrl ? (
-              <Image
-                key={heroUrl}
-                src={heroUrl}
-                alt={displayImage?.alt || activeVariant.name}
-                fill
-                sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, 90vw"
-                quality={85}
-                className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-surface text-[10px] uppercase tracking-wider text-muted-foreground">
-                Без фото
-              </div>
-            )}
+          {heroUrl ? (
+            <Image
+              key={heroUrl}
+              src={heroUrl}
+              alt={displayImage?.alt || activeVariant.name}
+              fill
+              sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, 90vw"
+              quality={85}
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-surface text-[10px] uppercase tracking-wider text-muted-foreground">
+              Без фото
+            </div>
+          )}
 
-            {activeVariant.badge && (
-              <span
-                className="absolute left-3 top-3 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black"
-                style={{
-                  background:
-                    activeVariant.badge.hex || "var(--sku-pulsar, #ffc857)",
-                }}
+          {activeVariant.badge && (
+            <span
+              className="absolute left-3 top-3 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black"
+              style={{
+                background:
+                  activeVariant.badge.hex || "var(--sku-pulsar, #ffc857)",
+              }}
+            >
+              {activeVariant.badge.text}
+            </span>
+          )}
+          {activeVariant.newItem && !activeVariant.badge && (
+            <span className="absolute left-3 top-3 rounded-full bg-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-background">
+              Новинка
+            </span>
+          )}
+          {activeVariant.preorder && (
+            <span className="absolute right-3 top-3 rounded-full border border-border bg-background/80 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground backdrop-blur">
+              Передзамовлення
+            </span>
+          )}
+          {hasDiscount && (
+            <span className="absolute bottom-3 left-3 rounded-sm bg-foreground px-1.5 py-0.5 text-[10px] font-bold text-background">
+              −{discountPct}%
+            </span>
+          )}
+          {hasManyPhotos && (
+            <>
+              <button
+                type="button"
+                onClick={(e) => flipPhoto(e, -1)}
+                aria-label="Попереднє фото"
+                className={cn(
+                  "absolute left-2 top-1/2 z-20 -translate-y-1/2",
+                  "flex size-8 items-center justify-center rounded-full",
+                  "border border-white/10 bg-background/70 text-foreground backdrop-blur",
+                  "transition-all duration-300 ease-out",
+                  "hover:scale-105 hover:border-white/25 hover:bg-background",
+                  "active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60",
+                )}
               >
-                {activeVariant.badge.text}
-              </span>
-            )}
-            {activeVariant.newItem && !activeVariant.badge && (
-              <span className="absolute left-3 top-3 rounded-full bg-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-background">
-                Новинка
-              </span>
-            )}
-            {activeVariant.preorder && (
-              <span className="absolute right-3 top-3 rounded-full border border-border bg-background/80 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground backdrop-blur">
-                Передзамовлення
-              </span>
-            )}
-            {hasDiscount && (
-              <span className="absolute bottom-3 left-3 rounded-sm bg-foreground px-1.5 py-0.5 text-[10px] font-bold text-background">
-                −{discountPct}%
-              </span>
-            )}
-            {hasManyPhotos && (
-              <>
-                <button
-                  type="button"
-                  onClick={(e) => flipPhoto(e, -1)}
-                  aria-label="Попереднє фото"
-                  className={cn(
-                    "absolute left-2 top-1/2 z-20 -translate-y-1/2",
-                    "flex size-8 items-center justify-center rounded-full",
-                    "border border-white/10 bg-background/70 text-foreground backdrop-blur",
-                    "transition-all duration-300 ease-out",
-                    "hover:scale-105 hover:border-white/25 hover:bg-background",
-                    "active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60",
-                  )}
-                >
-                  <ChevronLeft className="size-4" strokeWidth={2} />
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => flipPhoto(e, 1)}
-                  aria-label="Наступне фото"
-                  className={cn(
-                    "absolute right-2 top-1/2 z-20 -translate-y-1/2",
-                    "flex size-8 items-center justify-center rounded-full",
-                    "border border-white/10 bg-background/70 text-foreground backdrop-blur",
-                    "transition-all duration-300 ease-out",
-                    "hover:scale-105 hover:border-white/25 hover:bg-background",
-                    "active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60",
-                  )}
-                >
-                  <ChevronRight className="size-4" strokeWidth={2} />
-                </button>
-                <div className="tabular absolute bottom-2 left-1/2 z-20 -translate-x-1/2 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-medium backdrop-blur">
-                  {swatches.length > 1 ? selectedIdx + 1 : galleryIdx + 1} /{" "}
-                  {swatches.length > 1 ? swatches.length : fallbackGallery.length}
-                </div>
-              </>
-            )}
+                <ChevronLeft className="size-4" strokeWidth={2} />
+              </button>
+              <button
+                type="button"
+                onClick={(e) => flipPhoto(e, 1)}
+                aria-label="Наступне фото"
+                className={cn(
+                  "absolute right-2 top-1/2 z-20 -translate-y-1/2",
+                  "flex size-8 items-center justify-center rounded-full",
+                  "border border-white/10 bg-background/70 text-foreground backdrop-blur",
+                  "transition-all duration-300 ease-out",
+                  "hover:scale-105 hover:border-white/25 hover:bg-background",
+                  "active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60",
+                )}
+              >
+                <ChevronRight className="size-4" strokeWidth={2} />
+              </button>
+              <div className="tabular absolute bottom-2 left-1/2 z-20 -translate-x-1/2 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-medium backdrop-blur">
+                {swatches.length > 1 ? selectedIdx + 1 : galleryIdx + 1} /{" "}
+                {swatches.length > 1 ? swatches.length : fallbackGallery.length}
+              </div>
+            </>
+          )}
         </Link>
 
         {/* Body */}
@@ -402,7 +403,8 @@ export function CatalogCard({
             </div>
             <TechButton
               size="sm"
-              className="w-full"
+              variant="inverse"
+              className="w-full h-9"
               onClick={handleAdd}
               disabled={justAdded}
             >
