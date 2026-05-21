@@ -134,6 +134,8 @@ export interface IncludedFeature {
 
 export interface Review {
   authorName: string;
+  /** Author photo — defaults to shared review avatar in mock data. */
+  imageUrl: string;
   rating: 1 | 2 | 3 | 4 | 5;
   text: string;
   sourcePlatform: "google" | "instagram" | "telegram" | "direct";
