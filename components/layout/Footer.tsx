@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { Wordmark } from "@/components/brand/Wordmark";
 import ArrowIcon from "@/components/icons/ArrowIcon";
+import CodeSiteIcon from "../icons/CodeSiteIcon";
+import TagIcon from "../icons/TagIcon";
+
+const CODE_SITE_URL = "https://www.code-site.art";
 
 const COLUMNS = [
   {
@@ -46,8 +50,8 @@ const COLUMNS = [
 
 export function Footer() {
   return (
-    <footer className="bg-background">
-      <div className="container-site grid gap-10 pt-[92px] pb-12 md:grid-cols-[1.2fr_repeat(3,minmax(0,1fr))]">
+    <footer className="bg-background  pt-[92px] pb-12">
+      <div className="container-site grid gap-10 md:grid-cols-[1.2fr_repeat(3,minmax(0,1fr))]">
         <div className="space-y-4">
           <Wordmark size="md" />
           <p className="max-w-sm text-[12px] leading-[120%] text-muted-foreground">
@@ -110,14 +114,22 @@ export function Footer() {
           </div>
         ))}
       </div>
-      <div className="border-t border-border">
-        <div className="container-site flex flex-col gap-2 py-5 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
-          <div>
-            © {new Date().getFullYear()} Kondor PC · ФОП [назва клієнта] ·
-            ЄДРПОУ [XXXXXXXX]
-          </div>
-          <div>Сайт працює на Next.js 15 · Sanity · Vercel</div>
+      <div className="container-site">
+        <div className="py-5 text-[14px] text-white uppercase font-heading">
+          © 2020 - {new Date().getFullYear()} Kondor PC
         </div>
+        <p className="text-[8px] leading-[120%] font-medium uppercase">
+          Created by:
+        </p>
+
+        <a
+          href={CODE_SITE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-[13px] leading-[120%] font-heading"
+        >
+          CODE-SITE.ART <TagIcon className="mb-1" />
+        </a>
       </div>
     </footer>
   );
