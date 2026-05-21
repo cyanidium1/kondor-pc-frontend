@@ -28,6 +28,8 @@ import type {
   CatalogProductGroup,
   CatalogProductListItem,
 } from "@/types/catalog";
+import ArrowInCircleIcon from "@/components/icons/ArrowInCircleIcon";
+import { cn } from "@/lib/utils";
 
 /**
  * Number of grouped product cards revealed at a time as the user scrolls
@@ -89,6 +91,7 @@ export function CatalogClient({
   // Number of cards currently revealed across both primary + secondary lists.
   // Grows by REVEAL_BATCH each time the bottom sentinel enters the viewport.
   const [visibleCount, setVisibleCount] = useState(REVEAL_BATCH);
+  const [filtersExpanded, setFiltersExpanded] = useState(true);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   function toggleCategory(slug: string) {
@@ -228,19 +231,26 @@ export function CatalogClient({
   return (
     <div className="grid gap-8 md:grid-cols-[260px_1fr]">
       <aside className="z-10 h-fit space-y-6 rounded-lg border border-border bg-surface/95 p-5 backdrop-blur-md md:sticky md:top-[calc(var(--header-h,64px)+16px)]">
-        <div className="flex items-center justify-between">
-          <Label className="text-[11px] uppercase tracking-wider text-muted-foreground">
+        <div className="md:hidden flex items-center justify-between">
+          <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
             Фільтри
-          </Label>
-          {activeFilters > 0 && (
-            <button
-              type="button"
-              onClick={resetAll}
-              className="text-xs text-muted-foreground transition hover:text-foreground"
-            >
-              Скинути
-            </button>
-          )}
+          </p>
+          <button
+            type="button"
+            onClick={() => setFiltersExpanded((open) => !open)}
+            aria-expanded={filtersExpanded}
+            aria-label={
+              filtersExpanded ? "Згорнути фільтри" : "Розгорнути фільтри"
+            }
+            className="text-foreground transition-opacity hover:opacity-80"
+          >
+            <ArrowInCircleIcon
+              className={cn(
+                "transition-transform duration-300",
+                !filtersExpanded && "rotate-180",
+              )}
+            />
+          </button>
         </div>
 
         {/* Categories */}
@@ -349,11 +359,7 @@ export function CatalogClient({
             <span className="font-semibold text-foreground">
               {filtered.length}
             </span>
-            {hasFilters && (
-              <>
-                {" "}із {groups.length}
-              </>
-            )}
+            {hasFilters && <> із {groups.length}</>}
           </div>
         </div>
 
@@ -451,4 +457,3 @@ function OtherProductsDivider() {
     </div>
   );
 }
-

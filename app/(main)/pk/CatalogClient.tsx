@@ -73,7 +73,9 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
     <div className="grid gap-8 md:grid-cols-[260px_1fr]">
       <aside className="sticky top-[calc(var(--header-h,64px)+16px)] z-10 h-fit space-y-6 rounded-lg border border-border bg-surface/95 p-5 backdrop-blur-md">
         <div className="md:hidden flex items-center justify-between">
-          <p>Фільтри</p>
+          <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
+            Фільтри
+          </p>
           <button
             type="button"
             onClick={() => setFiltersExpanded((open) => !open)}

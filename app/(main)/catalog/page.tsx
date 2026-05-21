@@ -20,13 +20,13 @@ export default async function CatalogPage() {
   return (
     <div className="container-site py-12 md:py-16">
       <div className="mb-8">
-        <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
+        <div className="mb-4 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
           Аксесуари
         </div>
-        <h1 className="font-display text-4xl font-bold md:text-5xl">
+        <h1 className="font-display text-[24px] font-bold md:text-5xl">
           Клавіатури, миші, поверхні
         </h1>
-        <p className="mt-2 max-w-2xl text-muted-foreground">
+        <p className="mt-4 max-w-2xl text-[14px] leading-[120%] text-muted-foreground">
           Клавіатури, миші, ігрові поверхні та кейкапи — все, що потрібно для
           робочого місця навколо твого ПК.
         </p>
