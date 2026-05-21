@@ -532,26 +532,41 @@ export default function HomePage() {
       </section>
 
       {/* 7 · BOTTOM CTA + FAQ */}
-      <section className="border-t border-border bg-surface/30">
-        <div className="container-prose py-20 md:py-24">
+      <section className="bg-brand-primary rounded-[40px]">
+        <div className="container-prose pt-[233px] pb-20.5 md:py-24">
           <Reveal>
             <SectionHeader
               align="center"
               kicker="Готовий?"
               title="Обери свій ПК"
               subtitle="Підбір за 30 секунд або обирай за бюджетом. Доставка Новою Поштою безкоштовно."
+              kickerClassName="text-black"
+              titleClassName="text-black py-4"
+              subtitleClassName="text-black"
             />
           </Reveal>
           <Reveal delay={80}>
-            <div className="mb-12 flex flex-wrap items-center justify-center gap-3">
-              <TechButtonLink href="/pidbir" size="lg">
+            <div className="mb-12 flex flex-col items-center justify-center gap-5">
+              <TechButtonLink
+                href="/pidbir"
+                size="sm"
+                variant="swap"
+                className="w-full md:max-w-[209px] h-[49px]"
+              >
                 Підібрати ПК
               </TechButtonLink>
-              {BUDGET_BUCKETS.map((b) => (
-                <BudgetChipLink key={b.href} href={b.href} className="tabular">
-                  {b.label}
-                </BudgetChipLink>
-              ))}
+              <div className="flex flex-wrap items-center gap-2">
+                {" "}
+                {BUDGET_BUCKETS.map((b) => (
+                  <BudgetChipLink
+                    key={b.href}
+                    href={b.href}
+                    className="tabular text-[12px]"
+                  >
+                    {b.label}
+                  </BudgetChipLink>
+                ))}
+              </div>
             </div>
 
             <FaqBlock items={homeFaqs} />
