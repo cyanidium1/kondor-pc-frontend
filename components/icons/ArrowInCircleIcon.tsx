@@ -26,9 +26,9 @@ export default function ArrowInCircleIcon({
       <path
         d="M15.5293 13.26L11.9993 9.74001L8.4693 13.26"
         stroke="white"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
