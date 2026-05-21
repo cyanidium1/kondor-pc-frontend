@@ -495,12 +495,13 @@ export default function HomePage() {
       </section>
 
       {/* 6 · REVIEWS */}
-      <section className="container-site py-20 md:py-24">
+      <section className="container-site pt-[92px] pb-10 lg:pt-30 lg:pb-[86px]">
         <Reveal>
           <SectionHeader
             kicker="Відгуки клієнтів"
-            title="Реальні відгуки наших клієнтів"
-            subtitle="500+ відгуків у Google, 800+ у соцмережах. Посилання ведуть на платформи — відгуки не підроблені."
+            title="РЕАЛЬНІ ВІДГУКИ НАШИХ КЛІЄНТІВ"
+            subtitle="500+ відгуків та відміток у Instagram. Клієнти самі показують результати після покупки та діляться враженнями від ПК."
+            titleClassName="mt-3 mb-5"
           />
         </Reveal>
         <Reveal delay={80}>
@@ -514,18 +515,18 @@ export default function HomePage() {
               href="https://g.page/kondor-pc"
               target="_blank"
               rel="noopener noreferrer"
-              className={cn(buttonVariants({ variant: "outline" }))}
+              className={cn(buttonVariants({ variant: "default" }), "w-full")}
             >
-              Всі відгуки в Google Maps ↗
+              Всі відгуки в Google <ArrowIcon className="-rotate-45 size-5" />
             </a>
-            <a
+            <Link
               href="https://instagram.com/kondor_pc"
               target="_blank"
               rel="noopener noreferrer"
-              className={cn(buttonVariants({ variant: "ghost" }))}
+              className={cn(buttonVariants({ variant: "default" }), "w-full")}
             >
-              Instagram ↗
-            </a>
+              Instagram <ArrowIcon className="-rotate-45 size-5" />
+            </Link>
           </div>
         </Reveal>
       </section>
