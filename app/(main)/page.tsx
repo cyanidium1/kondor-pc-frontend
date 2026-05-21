@@ -476,7 +476,7 @@ export default function HomePage() {
                 <Link
                   key={u.href}
                   href={u.href}
-                  className="smooth-hover group relative flex items-center gap-4 overflow-hidden rounded-lg border border-border bg-surface p-5 hover:-translate-y-0.5 hover:border-white/15"
+                  className="group relative flex items-center gap-4 overflow-hidden rounded-lg border border-border bg-surface p-5 hover:-translate-y-0.5 hover:border-white/15 transition-all duration-300 ease-out"
                 >
                   <div className="relative flex size-10 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
                     <u.icon className="size-5" strokeWidth={1.5} />
@@ -484,7 +484,7 @@ export default function HomePage() {
                   <div className="relative flex-1 font-heading uppercase text-[14px] leading-[120%]">
                     {u.label}
                   </div>
-                  <div className="relative rounded-full size-9 bg-white flex items-center justify-center text-black transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:text-foreground">
+                  <div className="relative rounded-full size-9 bg-white flex items-center justify-center text-black transition duration-300 ease-out group-hover:translate-x-0.5">
                     <ArrowIcon />
                   </div>
                 </Link>

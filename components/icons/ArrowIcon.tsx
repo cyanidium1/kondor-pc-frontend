@@ -15,7 +15,7 @@ export default function ArrowIcon({ className = "" }: ArrowIconProps) {
     >
       <path
         d="M8.60227 18L7.72727 17.1364L11.3295 13.5341H2V12.2841H11.3295L7.72727 8.69318L8.60227 7.81818L13.6932 12.9091L8.60227 18Z"
-        fill="#080B11"
+        fill="currentColor"
       />
     </svg>
   );
