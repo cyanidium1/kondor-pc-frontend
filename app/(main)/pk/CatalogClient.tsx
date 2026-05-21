@@ -39,6 +39,7 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
   const [gameSlug, setGameSlug] = useState<string | "all">("all");
   const [resolution, setResolution] = useState<"all" | Resolution>("all");
   const [sort, setSort] = useState<(typeof SORTS)[number]["value"]>("popular");
+  const [filtersExpanded, setFiltersExpanded] = useState(true);
 
   const filtered = useMemo(() => {
     const min = budget[0] * 1000;
@@ -71,127 +72,146 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
   return (
     <div className="grid gap-8 md:grid-cols-[260px_1fr]">
       <aside className="sticky top-[calc(var(--header-h,64px)+16px)] z-10 h-fit space-y-6 rounded-lg border border-border bg-surface/95 p-5 backdrop-blur-md">
-        <div className="flex items-center justify-between">
+        <div className="md:hidden flex items-center justify-between">
           <p>Фільтри</p>
-          <button>
-            <ArrowInCircleIcon />{" "}
+          <button
+            type="button"
+            onClick={() => setFiltersExpanded((open) => !open)}
+            aria-expanded={filtersExpanded}
+            aria-label={
+              filtersExpanded ? "Згорнути фільтри" : "Розгорнути фільтри"
+            }
+            className="text-foreground transition-opacity hover:opacity-80"
+          >
+            <ArrowInCircleIcon
+              className={cn(
+                "transition-transform duration-300",
+                !filtersExpanded && "rotate-180",
+              )}
+            />
           </button>
         </div>
-        <div>
-          <div className="flex items-center justify-between">
-            <Label className="text-[11px] uppercase tracking-wider text-muted-foreground">
-              Бюджет
-            </Label>
-            {activeFilters > 0 && (
-              <button
-                type="button"
-                onClick={() => {
-                  setBudget([20, 200]);
-                  setGameSlug("all");
-                  setResolution("all");
-                }}
-                className="text-xs text-muted-foreground transition hover:text-foreground"
-              >
-                Скинути
-              </button>
-            )}
-          </div>
-          <div className="tabular mt-2 flex items-baseline justify-between text-sm">
-            <span className="font-semibold">
-              {formatUah(budget[0] * 1000)} ₴
-            </span>
-            <span className="text-muted-foreground">—</span>
-            <span className="font-semibold">
-              {formatUah(budget[1] * 1000)} ₴
-            </span>
-          </div>
-          <Slider
-            className="mt-3"
-            min={20}
-            max={200}
-            step={5}
-            value={budget}
-            onValueChange={(v) => {
-              if (Array.isArray(v)) setBudget([v[0], v[1]] as [number, number]);
-            }}
-          />
-        </div>
-
-        <div>
-          <Label className="mb-2 block text-[11px] uppercase tracking-wider text-muted-foreground">
-            Під гру
-          </Label>
-          <Select
-            value={gameSlug}
-            onValueChange={(v) => setGameSlug(v ?? "all")}
-          >
-            <SelectTrigger className="h-9 w-full">
-              <SelectValue>
-                {gameSlug === "all"
-                  ? "Усі ігри"
-                  : POPULAR_GAMES.find((g) => g.slug === gameSlug)?.ukrName ||
-                    POPULAR_GAMES.find((g) => g.slug === gameSlug)?.name ||
-                    gameSlug}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Усі ігри</SelectItem>
-              {POPULAR_GAMES.map((g) => (
-                <SelectItem key={g.slug} value={g.slug}>
-                  {g.ukrName || g.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div>
-          <Label className="mb-2 block text-[11px] uppercase tracking-wider text-muted-foreground">
-            Роздільна
-          </Label>
-          <div className="flex flex-wrap gap-1.5">
-            {RESOLUTIONS.map((r) => (
-              <button
-                key={r.value}
-                type="button"
-                onClick={() => setResolution(r.value)}
-                className={cn(
-                  buttonVariants({
-                    variant: resolution === r.value ? "default" : "outline",
-                    size: "xs",
-                  }),
+        {filtersExpanded && (
+          <>
+            <div>
+              <div className="flex items-center justify-between">
+                <Label className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                  Бюджет
+                </Label>
+                {activeFilters > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBudget([20, 200]);
+                      setGameSlug("all");
+                      setResolution("all");
+                    }}
+                    className="text-xs text-muted-foreground transition hover:text-foreground"
+                  >
+                    Скинути
+                  </button>
                 )}
-              >
-                {r.label}
-              </button>
-            ))}
-          </div>
-        </div>
+              </div>
+              <div className="tabular mt-2 flex items-baseline justify-between text-sm">
+                <span className="font-semibold">
+                  {formatUah(budget[0] * 1000)} ₴
+                </span>
+                <span className="text-muted-foreground">—</span>
+                <span className="font-semibold">
+                  {formatUah(budget[1] * 1000)} ₴
+                </span>
+              </div>
+              <Slider
+                className="mt-3"
+                min={20}
+                max={200}
+                step={5}
+                value={budget}
+                onValueChange={(v) => {
+                  if (Array.isArray(v))
+                    setBudget([v[0], v[1]] as [number, number]);
+                }}
+              />
+            </div>
 
-        <div>
-          <Label className="mb-2 block text-[11px] uppercase tracking-wider text-muted-foreground">
-            Сортування
-          </Label>
-          <Select
-            value={sort}
-            onValueChange={(v) => {
-              if (v) setSort(v as typeof sort);
-            }}
-          >
-            <SelectTrigger className="h-9 w-full">
-              <SelectValue>
-                {SORTS.find((s) => s.value === sort)?.label}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              {SORTS.map((s) => (
-                <SelectItem key={s.value} value={s.value}>
-                  {s.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+            <div>
+              <Label className="mb-2 block text-[11px] uppercase tracking-wider text-muted-foreground">
+                Під гру
+              </Label>
+              <Select
+                value={gameSlug}
+                onValueChange={(v) => setGameSlug(v ?? "all")}
+              >
+                <SelectTrigger className="h-9 w-full">
+                  <SelectValue>
+                    {gameSlug === "all"
+                      ? "Усі ігри"
+                      : POPULAR_GAMES.find((g) => g.slug === gameSlug)
+                          ?.ukrName ||
+                        POPULAR_GAMES.find((g) => g.slug === gameSlug)?.name ||
+                        gameSlug}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Усі ігри</SelectItem>
+                  {POPULAR_GAMES.map((g) => (
+                    <SelectItem key={g.slug} value={g.slug}>
+                      {g.ukrName || g.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label className="mb-2 block text-[11px] uppercase tracking-wider text-muted-foreground">
+                Роздільна
+              </Label>
+              <div className="flex flex-wrap gap-1.5">
+                {RESOLUTIONS.map((r) => (
+                  <button
+                    key={r.value}
+                    type="button"
+                    onClick={() => setResolution(r.value)}
+                    className={cn(
+                      buttonVariants({
+                        variant: resolution === r.value ? "default" : "outline",
+                        size: "xs",
+                      }),
+                    )}
+                  >
+                    {r.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <Label className="mb-2 block text-[11px] uppercase tracking-wider text-muted-foreground">
+                Сортування
+              </Label>
+              <Select
+                value={sort}
+                onValueChange={(v) => {
+                  if (v) setSort(v as typeof sort);
+                }}
+              >
+                <SelectTrigger className="h-9 w-full">
+                  <SelectValue>
+                    {SORTS.find((s) => s.value === sort)?.label}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {SORTS.map((s) => (
+                    <SelectItem key={s.value} value={s.value}>
+                      {s.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        )}
       </aside>
 
       <div>
