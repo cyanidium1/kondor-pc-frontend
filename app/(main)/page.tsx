@@ -6,7 +6,6 @@ import { BuildCard } from "@/components/shared/BuildCard";
 import { BuildHeroCard } from "@/components/shared/BuildHeroCard";
 import { ReviewCard } from "@/components/shared/ReviewCard";
 import { FaqBlock } from "@/components/shared/FaqBlock";
-import { SKU_ACCENTS } from "@/lib/sku-accents";
 import { popularBuilds } from "@/lib/mock/builds";
 import { REVIEWS } from "@/lib/mock/reviews";
 import { faqsByScope } from "@/lib/mock/faqs";
@@ -532,26 +531,133 @@ export default function HomePage() {
       </section>
 
       {/* 7 · BOTTOM CTA + FAQ */}
-      <section className="border-t border-border bg-surface/30">
-        <div className="container-prose py-20 md:py-24">
+      <section className="relative rounded-[40px] overflow-hidden">
+        <div className="absolute -z-30 inset-0 bg-brand-primary rounded-[40px]" />
+        <div className="relative container-prose pt-[233px] pb-20.5 lg:py-[66px] lg:max-w-[706px]">
+          <div className="lg:hidden absolute -z-20 top-[-125px] left-[calc(50%-460px)] w-[630px] h-[487px]">
+            <Image
+              src="/images/home/faq/top-decor-mob.webp"
+              alt="top-decor-mob"
+              width="630"
+              height="487"
+              className="object-cover"
+            />
+          </div>
+          <div className="lg:hidden absolute -z-10 top-[-520px] left-[calc(50%-710px)] w-[1175px] h-[1153px]">
+            <Image
+              src="/images/home/faq/top-shadows-mob.svg"
+              alt="top-shadows-mob"
+              width="1175"
+              height="1153"
+              className="object-cover"
+            />
+          </div>
+          <div className="lg:hidden absolute -z-10 bottom-[-345px] left-[calc(50%-340px)] w-[748px] h-[549px]">
+            <Image
+              src="/images/home/faq/bottom-decor-mob.webp"
+              alt="bottom-decor-mob"
+              width="748"
+              height="549"
+              className="object-cover"
+            />
+          </div>
+          <div className="lg:hidden absolute -z-20 bottom-[-265px] left-[calc(50%-467px)] w-[975px] h-[975px]">
+            <Image
+              src="/images/home/faq/bottom-shadows-mob.svg"
+              alt="bottom-shadows-mob"
+              width="975"
+              height="975"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-20 top-[22px] left-[calc(50%-1440px)] w-[1231px] h-[767px]">
+            <Image
+              src="/images/home/faq/left-decor-desk.webp"
+              alt="left-decor-desk"
+              width="1231"
+              height="767"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-20 top-[-69px] right-[calc(50%-1000px)] w-[1160px] h-[852px]">
+            <Image
+              src="/images/home/faq/right-decor-desk.webp"
+              alt="right-decor-desk"
+              width="1160"
+              height="852"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-10 top-[0px] left-[calc(50%-502px)] w-[1004px] h-[695px]">
+            <Image
+              src="/images/home/faq/center-shadows-desk.svg"
+              alt="center-decor-desk"
+              width="1004"
+              height="695"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-10 top-[-453px] left-[calc(50%-1480px)] w-[1056px] h-[1021px]">
+            <Image
+              src="/images/home/faq/top-left-shadows-desk.svg"
+              alt="top-left-shadows-desk"
+              width="1056"
+              height="1021"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-10 bottom-[-462px] left-[calc(50%-1377px)] w-[975px] h-[975px]">
+            <Image
+              src="/images/home/faq/bottom-left-shadows-desk.svg"
+              alt="bottom-left-shadows-desk"
+              width="975"
+              height="975"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-10 bottom-[-404px] right-[calc(50%-1277px)] w-[735px] h-[735px]">
+            <Image
+              src="/images/home/faq/bottom-right-shadows-desk.svg"
+              alt="bottom-right-shadows-desk"
+              width="735"
+              height="735"
+              className="object-cover"
+            />
+          </div>
+
           <Reveal>
             <SectionHeader
               align="center"
               kicker="Готовий?"
               title="Обери свій ПК"
-              subtitle="Підбір за 30 секунд або обирай за бюджетом. Доставка Новою Поштою безкоштовно."
+              subtitle="Підбір за 30 секунд або обирай за бюджетом. Доставка Новою Поштою."
+              kickerClassName="text-black"
+              titleClassName="text-black py-4"
+              subtitleClassName="text-black lg:max-w-[424px]"
             />
           </Reveal>
           <Reveal delay={80}>
-            <div className="mb-12 flex flex-wrap items-center justify-center gap-3">
-              <TechButtonLink href="/pidbir" size="lg">
+            <div className="mb-12 flex flex-col lg:flex-row items-center justify-center gap-5">
+              <TechButtonLink
+                href="/pidbir"
+                size="sm"
+                variant="swap"
+                className="w-full md:max-w-[209px] h-[49px] lg:h-[51px] lg:text-[14px]"
+              >
                 Підібрати ПК
               </TechButtonLink>
-              {BUDGET_BUCKETS.map((b) => (
-                <BudgetChipLink key={b.href} href={b.href} className="tabular">
-                  {b.label}
-                </BudgetChipLink>
-              ))}
+              <div className="flex flex-wrap items-center gap-2">
+                {" "}
+                {BUDGET_BUCKETS.map((b) => (
+                  <BudgetChipLink
+                    key={b.href}
+                    href={b.href}
+                    className="tabular text-[12px]"
+                  >
+                    {b.label}
+                  </BudgetChipLink>
+                ))}
+              </div>
             </div>
 
             <FaqBlock items={homeFaqs} />

@@ -16,14 +16,16 @@ export function FaqBlock({
   if (items.length === 0) return null;
   return (
     <Accordion
-      className={`divide-y divide-border overflow-hidden rounded-lg border border-border bg-surface ${className ?? ""}`}
+      className={`divide-y divide-border overflow-hidden rounded-lg border border-border gap-2 ${className ?? ""}`}
     >
       {items.map((f) => (
-        <AccordionItem key={f.key} value={f.key} className="border-0 px-5">
-          <AccordionTrigger className="text-left hover:no-underline [&_svg]:text-muted-foreground">
-            <span className="text-base font-medium">{f.question}</span>
+        <AccordionItem key={f.key} value={f.key} className="border-0">
+          <AccordionTrigger className="text-left hover:no-underline [&_svg]:text-muted-foreground bg-white text-black p-5">
+            <span className="text-[12px] lg:text-[14px] font-medium leading-[120%]">
+              {f.question}
+            </span>
           </AccordionTrigger>
-          <AccordionContent className="pb-5 text-sm leading-relaxed text-muted-foreground">
+          <AccordionContent className="p-5 mt-0.5 text-[12px] lg:text-[14px] leading-[120%] text-black bg-white rounded-[8px]">
             {f.answer}
           </AccordionContent>
         </AccordionItem>
