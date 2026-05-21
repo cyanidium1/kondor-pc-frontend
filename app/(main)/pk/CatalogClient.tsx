@@ -17,6 +17,7 @@ import { GAMES } from "@/lib/mock/games";
 import { formatUah } from "@/lib/format";
 import type { Build, Resolution } from "@/types/build";
 import { cn } from "@/lib/utils";
+import ArrowInCircleIcon from "@/components/icons/ArrowInCircleIcon";
 
 const RESOLUTIONS: { value: "all" | Resolution; label: string }[] = [
   { value: "all", label: "Усі" },
@@ -72,7 +73,9 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
       <aside className="sticky top-[calc(var(--header-h,64px)+16px)] z-10 h-fit space-y-6 rounded-lg border border-border bg-surface/95 p-5 backdrop-blur-md">
         <div className="flex items-center justify-between">
           <p>Фільтри</p>
-          <button>Скинути</button>
+          <button>
+            <ArrowInCircleIcon />{" "}
+          </button>
         </div>
         <div>
           <div className="flex items-center justify-between">
