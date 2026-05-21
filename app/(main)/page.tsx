@@ -531,8 +531,46 @@ export default function HomePage() {
       </section>
 
       {/* 7 · BOTTOM CTA + FAQ */}
-      <section className="bg-brand-primary rounded-[40px]">
-        <div className="container-prose pt-[233px] pb-20.5 lg:py-[66px] lg:max-w-[706px]">
+      <section className="relative rounded-[40px] overflow-hidden">
+        <div className="absolute -z-30 inset-0 bg-brand-primary rounded-[40px]" />
+        <div className="relative container-prose pt-[233px] pb-20.5 lg:py-[66px] lg:max-w-[706px]">
+          <div className="absolute -z-20 top-[-125px] left-[calc(50%-460px)] w-[630px] h-[487px]">
+            <Image
+              src="/images/home/faq/top-decor-mob.webp"
+              alt="top-decor-mob"
+              width="630"
+              height="487"
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute -z-10 top-[-520px] left-[calc(50%-710px)] w-[1175px] h-[1153px]">
+            <Image
+              src="/images/home/faq/top-shadows-mob.svg"
+              alt="top-shadows-mob"
+              width="1175"
+              height="1153"
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute -z-10 bottom-[-345px] left-[calc(50%-340px)] w-[748px] h-[549px]">
+            <Image
+              src="/images/home/faq/bottom-decor-mob.webp"
+              alt="bottom-decor-mob"
+              width="748"
+              height="549"
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute -z-20 bottom-[-265px] left-[calc(50%-467px)] w-[975px] h-[975px]">
+            <Image
+              src="/images/home/faq/bottom-shadows-mob.svg"
+              alt="bottom-shadows-mob"
+              width="975"
+              height="975"
+              className="object-cover"
+            />
+          </div>
+
           <Reveal>
             <SectionHeader
               align="center"
