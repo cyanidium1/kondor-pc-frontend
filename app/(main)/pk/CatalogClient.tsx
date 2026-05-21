@@ -42,9 +42,7 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
   const filtered = useMemo(() => {
     const min = budget[0] * 1000;
     const max = budget[1] * 1000;
-    let res = builds.filter(
-      (b) => b.priceUah >= min && b.priceUah <= max,
-    );
+    let res = builds.filter((b) => b.priceUah >= min && b.priceUah <= max);
     if (resolution !== "all") {
       res = res.filter((b) => b.fps.some((f) => f.resolution === resolution));
     }
@@ -72,6 +70,10 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
   return (
     <div className="grid gap-8 md:grid-cols-[260px_1fr]">
       <aside className="sticky top-[calc(var(--header-h,64px)+16px)] z-10 h-fit space-y-6 rounded-lg border border-border bg-surface/95 p-5 backdrop-blur-md">
+        <div className="flex items-center justify-between">
+          <p>Фільтри</p>
+          <button>Скинути</button>
+        </div>
         <div>
           <div className="flex items-center justify-between">
             <Label className="text-[11px] uppercase tracking-wider text-muted-foreground">
@@ -92,9 +94,13 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
             )}
           </div>
           <div className="tabular mt-2 flex items-baseline justify-between text-sm">
-            <span className="font-semibold">{formatUah(budget[0] * 1000)} ₴</span>
+            <span className="font-semibold">
+              {formatUah(budget[0] * 1000)} ₴
+            </span>
             <span className="text-muted-foreground">—</span>
-            <span className="font-semibold">{formatUah(budget[1] * 1000)} ₴</span>
+            <span className="font-semibold">
+              {formatUah(budget[1] * 1000)} ₴
+            </span>
           </div>
           <Slider
             className="mt-3"
@@ -188,7 +194,10 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
       <div>
         <div className="mb-4 flex items-center justify-between text-sm text-muted-foreground">
           <div>
-            Знайдено: <span className="font-semibold text-foreground">{filtered.length}</span>
+            Знайдено:{" "}
+            <span className="font-semibold text-foreground">
+              {filtered.length}
+            </span>
           </div>
         </div>
         {filtered.length === 0 ? (
