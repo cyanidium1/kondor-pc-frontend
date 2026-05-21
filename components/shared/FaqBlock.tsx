@@ -21,11 +21,11 @@ export function FaqBlock({
       {items.map((f) => (
         <AccordionItem key={f.key} value={f.key} className="border-0">
           <AccordionTrigger className="text-left hover:no-underline [&_svg]:text-muted-foreground bg-white text-black p-5">
-            <span className="text-[12px] font-medium leading-[120%]">
+            <span className="text-[12px] lg:text-[14px] font-medium leading-[120%]">
               {f.question}
             </span>
           </AccordionTrigger>
-          <AccordionContent className="p-5 mt-0.5 text-[12px] leading-[120%] text-black bg-white rounded-[8px]">
+          <AccordionContent className="p-5 mt-0.5 text-[12px] lg:text-[14px] leading-[120%] text-black bg-white rounded-[8px]">
             {f.answer}
           </AccordionContent>
         </AccordionItem>

@@ -532,7 +532,7 @@ export default function HomePage() {
 
       {/* 7 · BOTTOM CTA + FAQ */}
       <section className="bg-brand-primary rounded-[40px]">
-        <div className="container-prose pt-[233px] pb-20.5 md:py-24">
+        <div className="container-prose pt-[233px] pb-20.5 lg:py-[66px] lg:max-w-[706px]">
           <Reveal>
             <SectionHeader
               align="center"
@@ -541,16 +541,16 @@ export default function HomePage() {
               subtitle="Підбір за 30 секунд або обирай за бюджетом. Доставка Новою Поштою."
               kickerClassName="text-black"
               titleClassName="text-black py-4"
-              subtitleClassName="text-black"
+              subtitleClassName="text-black lg:max-w-[424px]"
             />
           </Reveal>
           <Reveal delay={80}>
-            <div className="mb-12 flex flex-col items-center justify-center gap-5">
+            <div className="mb-12 flex flex-col lg:flex-row items-center justify-center gap-5">
               <TechButtonLink
                 href="/pidbir"
                 size="sm"
                 variant="swap"
-                className="w-full md:max-w-[209px] h-[49px]"
+                className="w-full md:max-w-[209px] h-[49px] lg:h-[51px] lg:text-[14px]"
               >
                 Підібрати ПК
               </TechButtonLink>
