@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Wordmark } from "@/components/brand/Wordmark";
 import ArrowIcon from "@/components/icons/ArrowIcon";
-import CodeSiteIcon from "../icons/CodeSiteIcon";
+import Image from "next/image";
 import TagIcon from "../icons/TagIcon";
 
 const CODE_SITE_URL = "https://www.code-site.art";
@@ -50,7 +50,7 @@ const COLUMNS = [
 
 export function Footer() {
   return (
-    <footer className="bg-background  pt-[92px] pb-12">
+    <footer className="relative bg-background pt-[92px] pb-10 md:pb-5">
       <div className="container-site grid gap-10 md:grid-cols-[1.2fr_repeat(3,minmax(0,1fr))]">
         <div className="space-y-4">
           <Wordmark size="md" />
@@ -114,23 +114,39 @@ export function Footer() {
           </div>
         ))}
       </div>
-      <div className="container-site">
-        <div className="py-5 text-[14px] text-white uppercase font-heading">
+      <div className="relative container-site lg:mt-5 md:flex md:items-center md:justify-between">
+        <div className="py-5 md:pb-0 text-[14px] text-white uppercase font-heading">
           © 2020 - {new Date().getFullYear()} Kondor PC
         </div>
-        <p className="text-[8px] leading-[120%] font-medium uppercase">
-          Created by:
-        </p>
-
-        <a
-          href={CODE_SITE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 text-[13px] leading-[120%] font-heading"
-        >
-          CODE-SITE.ART <TagIcon className="mb-1" />
-        </a>
+        <div className="mt-5 md:mr-[120px] lg:mr-[260px]">
+          {" "}
+          <p className="text-[8px] leading-[120%] font-medium uppercase">
+            Created by:
+          </p>
+          <a
+            href={CODE_SITE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-[13px] leading-[120%] font-heading"
+          >
+            CODE-SITE.ART <TagIcon className="mb-1" />
+          </a>
+        </div>
+        <Image
+          src="/images/footer/decor-desk.svg"
+          alt="Footer background"
+          width="416"
+          height="184"
+          className="hidden md:block md:right-[10px] lg:right-[160px] absolute bottom-[-20px]"
+        />
       </div>
+      <Image
+        src="/images/footer/decor-mob.svg"
+        alt="Footer background"
+        width="226"
+        height="92"
+        className="md:hidden left-0 absolute bottom-0"
+      />
     </footer>
   );
 }
