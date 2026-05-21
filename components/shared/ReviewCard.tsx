@@ -1,6 +1,7 @@
 import { Star } from "lucide-react";
 import type { Review } from "@/types/build";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const PLATFORM_LABEL: Record<Review["sourcePlatform"], string> = {
   google: "Google Maps",
@@ -18,11 +19,16 @@ export function ReviewCard({
 }) {
   return (
     <article
-      className={cn(
-        "card-frame-md flex h-full flex-col gap-4 p-5",
-        className,
-      )}
+      className={cn("card-frame-md flex h-full flex-col gap-4 p-5", className)}
     >
+      <div className="relative w-full aspect-[290/146]">
+        <Image
+          src={review.imageUrl}
+          alt={review.authorName}
+          fill
+          className="object-cover"
+        />
+      </div>
       <div className="flex items-center justify-between">
         <div>
           <div className="font-medium">{review.authorName}</div>
@@ -39,16 +45,18 @@ export function ReviewCard({
                 strokeWidth={1.5}
               />
             ))}
-            <span className="ml-1">· {PLATFORM_LABEL[review.sourcePlatform]}</span>
+            <span className="ml-1 text-[12px] md:text-[8px] lg:text-[10px] xl:text-[12px]">
+              · {PLATFORM_LABEL[review.sourcePlatform]}
+            </span>
           </div>
         </div>
         {review.isVerified && (
-          <div className="rounded-full border border-border bg-background/50 px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
+          <div className="rounded-full border border-border bg-background/50 px-2 py-0.5 text-[10px] md:text-[7px] lg:text-[10px] uppercase tracking-wider text-muted-foreground">
             Перевірено
           </div>
         )}
       </div>
-      <p className="text-sm leading-relaxed text-muted-foreground">
+      <p className="text-sm leading-[120%] text-muted-foreground">
         {review.text}
       </p>
       {review.relatedBuildSlug && (

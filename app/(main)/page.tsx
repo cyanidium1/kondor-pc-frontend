@@ -495,12 +495,14 @@ export default function HomePage() {
       </section>
 
       {/* 6 · REVIEWS */}
-      <section className="container-site py-20 md:py-24">
+      <section className="relative container-site pt-[92px] pb-10 lg:pt-30 lg:pb-[86px]">
+        <div className="absolute -z-30 bottom-[-123px] lg:bottom-[-431px] right-[-685px] w-[735px] h-[735px] bg-[#005996] rounded-full blur-[220px]" />
         <Reveal>
           <SectionHeader
             kicker="Відгуки клієнтів"
-            title="Реальні відгуки наших клієнтів"
-            subtitle="500+ відгуків у Google, 800+ у соцмережах. Посилання ведуть на платформи — відгуки не підроблені."
+            title="РЕАЛЬНІ ВІДГУКИ НАШИХ КЛІЄНТІВ"
+            subtitle="500+ відгуків та відміток у Instagram. Клієнти самі показують результати після покупки та діляться враженнями від ПК."
+            titleClassName="mt-3 mb-5"
           />
         </Reveal>
         <Reveal delay={80}>
@@ -509,22 +511,28 @@ export default function HomePage() {
               <ReviewCard key={i} review={r} />
             ))}
           </div>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a
-              href="https://g.page/kondor-pc"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(buttonVariants({ variant: "outline" }))}
-            >
-              Всі відгуки в Google Maps ↗
-            </a>
+          <div className="mt-8 flex flex-col md:flex-row items-center gap-3">
             <a
               href="https://instagram.com/kondor_pc"
               target="_blank"
               rel="noopener noreferrer"
-              className={cn(buttonVariants({ variant: "ghost" }))}
+              className={cn(
+                buttonVariants({ variant: "default" }),
+                "w-full md:max-w-[176px]",
+              )}
             >
-              Instagram ↗
+              Instagram <ArrowIcon className="-rotate-45 size-5" />
+            </a>
+            <a
+              href="https://g.page/kondor-pc"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                buttonVariants({ variant: "default" }),
+                "w-full md:max-w-[276px]",
+              )}
+            >
+              Всі відгуки в Google <ArrowIcon className="-rotate-45 size-5" />
             </a>
           </div>
         </Reveal>
