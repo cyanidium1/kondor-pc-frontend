@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { BUILDS } from "@/lib/mock/builds";
 import { CatalogClient } from "./CatalogClient";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import ArrowIcon from "@/components/icons/ArrowIcon";
+import { TechButtonLink } from "@/components/shared/TechButton";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Каталог ігрових ПК",
@@ -13,28 +13,40 @@ export const metadata: Metadata = {
 
 export default function CatalogPage() {
   return (
-    <div className="container-site py-12 md:py-16">
-      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
+    <section className="relative container-site py-12 md:py-16">
+      <div className="absolute -z-10 top-[-223px] lg:top-[-154px] left-[-860px] lg:left-[-160px] w-[1929px] h-[2007px]">
+        <Image
+          src="/images/pk/shadows.svg"
+          alt="PK background"
+          width="1929"
+          height="2007"
+          className="object-cover"
+        />
+      </div>
+      <div className="mb-8 flex flex-wrap md:flex-nowrap items-end justify-between gap-4">
+        <div className="mb-5 md:mb-0">
+          <div className="mb-2 text-[8px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
             Каталог
           </div>
-          <h1 className="font-display text-4xl font-bold md:text-5xl">
+          <h1 className="py-2 font-display text-[24px] font-bold md:text-5xl">
             Ігрові ПК
           </h1>
-          <p className="mt-2 text-muted-foreground">
+          <p className="mt-2 text-[14px] leading-[120%] text-muted-foreground">
             {BUILDS.length} перевірених збірок у всіх цінових категоріях
           </p>
         </div>
-        <Link
+        <TechButtonLink
           href="/pidbir"
-          className={cn(buttonVariants({ variant: "outline" }))}
+          variant="white"
+          size="sm"
+          className="w-full md:max-w-[411px] h-[30px] px-2 font-heading text-[10px] lg:text-[13px] font-medium leading-none tracking-normal"
         >
-          Не знаєш, що обрати? Пройди підбір →
-        </Link>
+          <span>Не знаєш, що обрати? Пройди підбір</span>
+          <ArrowIcon className="inline-block size-4 mb-0.5 ml-1" />
+        </TechButtonLink>
       </div>
 
       <CatalogClient builds={BUILDS} />
-    </div>
+    </section>
   );
 }
