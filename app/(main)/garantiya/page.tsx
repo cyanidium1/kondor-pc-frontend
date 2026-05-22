@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Reveal } from "@/components/shared/Reveal";
 import Image from "next/image";
+import MarqueeLine from "@/components/shared/MarqueeLine";
 
 export const metadata: Metadata = {
   title: "Гарантія на ігрові ПК до 3 років",
@@ -117,7 +118,7 @@ export default function WarrantyPage() {
       </section>
 
       {/* Covered / Not covered */}
-      <section className="relative container-site pt-[46px] pb-16 lg:py-15">
+      <section className="relative container-site pt-[46px] pb-[92px] lg:pt-15 lg:pb-[111px]">
         <div className="absolute -z-10 bottom-[23px] lg:bottom-[114px] right-[-40px] lg:right-[-30px] w-[247px] h-[247px]">
           <Image
             src="/images/garantiya/square.svg"
@@ -161,6 +162,8 @@ export default function WarrantyPage() {
           </div>
         </div>
       </section>
+
+      <MarqueeLine />
 
       {/* Process */}
       <section className="rounded-b-[40px] overflow-hidden">
