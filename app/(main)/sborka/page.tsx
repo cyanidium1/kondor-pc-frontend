@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { CustomBuildForm } from "./CustomBuildForm";
 import { Gamepad2, Briefcase, Palette } from "lucide-react";
+import { Reveal } from "@/components/shared/Reveal";
+import { SectionHeader } from "@/components/shared/SectionHeader";
 
 export const metadata: Metadata = {
   title: "Кастомна збірка ПК під замовлення",
@@ -35,19 +37,17 @@ const STEPS = [
 
 export default function SborkaPage() {
   return (
-    <div className="container-prose py-16 md:py-24">
-      <div className="mb-12">
-        <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-          Кастомна збірка
-        </div>
-        <h1 className="font-display text-4xl font-bold md:text-5xl">
-          Збірка під твої задачі
-        </h1>
-        <p className="mt-3 max-w-2xl text-muted-foreground">
-          Не знайшов ідеальну конфігурацію в каталозі? Зберемо саме те, що тобі
-          потрібно.
-        </p>
-      </div>
+    <div className="container-site py-16 md:py-24">
+      <Reveal>
+        <SectionHeader
+          kicker="Кастомна збірка"
+          title="ЗБІРКА ПІД ТВОЇ ЗАДАЧІ"
+          subtitle="Не знайшов ідеальну конфігурацію в каталозі? Зберемо саме те, що тобі потрібно."
+          titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
+          subtitleClassName="text-[16px] leading-[120%]"
+          className="mb-12"
+        />
+      </Reveal>
 
       <div className="mb-12 grid gap-4 md:grid-cols-3">
         {WHAT_WE_CAN.map((c) => (
