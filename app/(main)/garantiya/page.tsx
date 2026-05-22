@@ -13,6 +13,7 @@ import {
   Mail,
 } from "lucide-react";
 import { Reveal } from "@/components/shared/Reveal";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Гарантія на ігрові ПК до 3 років",
@@ -83,7 +84,17 @@ export default function WarrantyPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section className="relative">
+        <div className="absolute -z-10 top-[-223px] lg:top-[-154px] left-[-860px] lg:left-[-120px] w-[1929px] h-[2007px]">
+          <Image
+            src="/images/pk/shadows.svg"
+            alt="PK background"
+            width="1929"
+            height="2007"
+            className="object-cover"
+          />
+        </div>
+
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-30"
@@ -106,11 +117,20 @@ export default function WarrantyPage() {
       </section>
 
       {/* Covered / Not covered */}
-      <section className="container-site pt-[46px] pb-16 lg:py-15">
+      <section className="relative container-site pt-[46px] pb-16 lg:py-15">
+        <div className="absolute -z-10 bottom-[23px] lg:bottom-[114px] right-[-40px] lg:right-[-30px] w-[247px] h-[247px]">
+          <Image
+            src="/images/garantiya/square.svg"
+            alt="Square background"
+            width="247"
+            height="247"
+            className="object-cover"
+          />
+        </div>
         <SectionHeader
           kicker="Що входить"
           title="ЩО ПОКРИВАЄ НАША ГАРАНТІЯ"
-          titleClassName="mt-3 lg:mt-7"
+          titleClassName="mt-3 lg:mt-7 lg:text-[32px]"
         />
         <div className="grid gap-4 md:grid-cols-2">
           <div className="rounded-lg border border-[#20DEFF66]/60 bg-surface p-6">
