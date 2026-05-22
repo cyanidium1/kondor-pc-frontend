@@ -349,7 +349,7 @@ export function CatalogCard({
             })()}
             <Link
               href={detailHref}
-              className="font-display text-base font-bold uppercase leading-tight tracking-wide transition-colors duration-300 ease-out hover:text-primary group-hover:text-primary"
+              className="font-heading text-base font-bold uppercase leading-tight tracking-wide transition-colors duration-300 ease-out hover:text-primary group-hover:text-primary"
             >
               {committedVariant.name}
             </Link>
@@ -392,7 +392,7 @@ export function CatalogCard({
           {/* Price + CTA */}
           <div className="mt-auto space-y-3">
             <div className="flex items-baseline gap-2">
-              <div className="font-display tabular text-xl font-bold">
+              <div className="font-heading tabular text-xl font-bold">
                 {formatPrice(finalPrice)}
               </div>
               {hasDiscount && (
