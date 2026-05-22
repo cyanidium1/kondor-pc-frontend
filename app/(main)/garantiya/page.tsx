@@ -167,43 +167,43 @@ export default function WarrantyPage() {
 
       {/* Process */}
       <section className="relative rounded-b-[40px] overflow-hidden">
-        <div className="absolute -z-10 bottom-[-278px] left-[-491px] lg:bottom-[-578px] lg:left-[-401px] w-[1131px] h-[954px]">
-          <Image
-            src="/images/garantiya/steps-shadows.svg"
-            alt="Steps shadows"
-            width="1131"
-            height="954"
-            className="object-cover"
-          />
-        </div>
-        <div className="absolute -z-30 bottom-[-40px] lg:top-[-10px] right-[-218px] lg:right-[100px] w-[469px] lg:w-[640px] h-[469px] lg:h-[640px]">
-          <Image
-            src="/images/garantiya/pc.webp"
-            alt="PC"
-            width="469"
-            height="469"
-            className="object-cover w-[460px] lg:w-[640px] h-auto"
-          />
-        </div>
-        <div className="hidden lg:block absolute -z-10 bottom-[-226px] right-[-305px] w-[735px] h-[735px]">
-          <Image
-            src="/images/garantiya/steps-right-shadow-desk.svg"
-            alt="Steps right shadow desk"
-            width="735"
-            height="735"
-            className="object-cover"
-          />
-        </div>
-        <div className="hidden lg:block absolute -z-20 bottom-[-129px] right-0 w-[632px] h-[632px]">
-          <Image
-            src="/images/garantiya/right-mask.webp"
-            alt="Steps right shadow desk"
-            width="632"
-            height="632"
-            className="object-cover"
-          />
-        </div>
-        <div className="container-site pt-16 pb-5 lg:pt-30 lg:pb-[163px]">
+        <div className="relative container-site pt-16 pb-5 lg:pt-30 lg:pb-[163px]">
+          <div className="absolute -z-30 bottom-[-40px] lg:top-[-10px] right-[-218px] lg:right-[-210px] w-[469px] lg:w-[640px] h-[469px] lg:h-[640px]">
+            <Image
+              src="/images/garantiya/pc.webp"
+              alt="PC"
+              width="469"
+              height="469"
+              className="object-cover w-[460px] lg:w-[640px] h-auto"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-20 bottom-[-182px] right-[-256px] w-[632px] h-[632px]">
+            <Image
+              src="/images/garantiya/right-mask.webp"
+              alt="Steps right shadow desk"
+              width="632"
+              height="632"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-10 bottom-[-276px] right-[-675px] w-[735px] h-[735px]">
+            <Image
+              src="/images/garantiya/steps-right-shadow-desk.svg"
+              alt="Steps right shadow desk"
+              width="735"
+              height="735"
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute -z-40 bottom-[-278px] left-[-541px] lg:bottom-[-578px] lg:left-[-771px] w-[1131px] h-[954px]">
+            <Image
+              src="/images/garantiya/steps-shadows.svg"
+              alt="Steps shadows"
+              width="1131"
+              height="954"
+              className="object-cover"
+            />
+          </div>
           <SectionHeader
             kicker="Як обслуговуємо"
             title="6 КРОКІВ ГАРАНТІЙНОГО ВИПАДКУ"
