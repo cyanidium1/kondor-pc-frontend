@@ -31,7 +31,7 @@ const STEPS = [
   "Заповнюєш заявку",
   "Ми зв'яжемося за 2 години",
   "Оплата та збірка (5–7 днів)",
-  "Безкоштовна доставка НП",
+  "Надійне пакування та страхування посилки НП",
 ];
 
 export default function SborkaPage() {
@@ -43,7 +43,7 @@ export default function SborkaPage() {
           title="ЗБІРКА ПІД ТВОЇ ЗАДАЧІ"
           subtitle="Не знайшов ідеальну конфігурацію в каталозі? Зберемо саме те, що тобі потрібно."
           titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
-          subtitleClassName="text-[16px] leading-[120%]"
+          subtitleClassName="text-[16px] leading-[120%] lg:max-w-[430px]"
           className="mb-12"
         />
       </Reveal>
@@ -68,17 +68,19 @@ export default function SborkaPage() {
         ))}
       </div>
 
-      <div className="mb-12 rounded-lg border border-border bg-surface/60 p-5">
-        <div className="mb-3 text-[11px] uppercase tracking-wider text-muted-foreground">
-          Як ми працюємо
-        </div>
-        <ol className="tabular flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
+      <div className="mb-12">
+        <ol className="tabular flex flex-col sm:flex-row sm:flex-wrap md:items-center gap-x-6 gap-y-3 text-sm">
           {STEPS.map((s, i) => (
-            <li key={i} className="flex items-center gap-2">
-              <span className="flex size-6 items-center justify-center rounded-full bg-background text-xs font-semibold text-muted-foreground">
+            <li
+              key={i}
+              className="flex items-center gap-4 rounded-[6px] bg-white px-4 py-3"
+            >
+              <span className="flex size-6 items-center justify-center rounded-full bg-background font-display text-xs font-semibold text-white">
                 {i + 1}
               </span>
-              <span>{s}</span>
+              <span className="font-heading text-[12px] lg:text-[14px] font-medium leading-[120%] text-black uppercase">
+                {s}
+              </span>
             </li>
           ))}
         </ol>
