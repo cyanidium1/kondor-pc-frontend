@@ -231,10 +231,13 @@ export default function WarrantyPage() {
             <p className="mt-4 mb-12 text-sm text-black">
               Робочі години: щодня 9:00–21:00
             </p>
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className="flex gap-3 justify-center">
               <a
                 href="tel:+380000000000"
-                className={cn(buttonVariants({ variant: "outline" }))}
+                className={cn(
+                  buttonVariants({ variant: "secondary" }),
+                  "w-fit px-9",
+                )}
               >
                 <Phone className="mr-1.5 size-4" />
                 +380 XX XXX XX XX
@@ -243,14 +246,20 @@ export default function WarrantyPage() {
                 href="https://t.me/kondor_pc"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={cn(buttonVariants({ variant: "outline" }))}
+                className={cn(
+                  buttonVariants({ variant: "secondary" }),
+                  "w-fit px-8",
+                )}
               >
                 <MessageSquare className="mr-1.5 size-4" />
                 Telegram
               </a>
               <a
                 href="mailto:support@kondor-pc.ua"
-                className={cn(buttonVariants({ variant: "outline" }))}
+                className={cn(
+                  buttonVariants({ variant: "secondary" }),
+                  "w-fit px-8",
+                )}
               >
                 <Mail className="mr-1.5 size-4" />
                 Email
