@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { CustomBuildForm } from "./CustomBuildForm";
-import { Gamepad2, Briefcase, Palette } from "lucide-react";
 import { Reveal } from "@/components/shared/Reveal";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 
@@ -12,18 +11,18 @@ export const metadata: Metadata = {
 
 const WHAT_WE_CAN = [
   {
-    icon: Gamepad2,
-    title: "Ігровий ПК з нуля",
+    n: "01",
+    title: "ІГРОВИЙ ПК З НУЛЯ",
     text: "Будь-яка конфігурація під твої ігри та бюджет.",
   },
   {
-    icon: Briefcase,
-    title: "Робоча станція",
+    n: "02",
+    title: "РОБОЧА СТАНЦІЯ",
     text: "Для монтажу відео, 3D, роботи з AI, програмування.",
   },
   {
-    icon: Palette,
-    title: "Унікальний дизайн",
+    n: "03",
+    title: "УНІКАЛЬНИЙ ДІЗАЙН",
     text: "Кастомний корпус, обтяжка, RGB-підсвітка під твій стиль.",
   },
 ];
@@ -49,19 +48,22 @@ export default function SborkaPage() {
         />
       </Reveal>
 
-      <div className="mb-12 grid gap-4 md:grid-cols-3">
+      <div className="mb-12 grid gap-4 sm:grid-cols-3">
         {WHAT_WE_CAN.map((c) => (
           <div
-            key={c.title}
-            className="rounded-lg border border-border bg-surface p-5"
+            key={c.n}
+            className="relative overflow-hidden clip-angular-12 bg-brand-primary p-6 min-h-[183px] sm:min-h-[230px] md:min-h-[210px] lg:min-h-[230px] xl:min-h-[183px]"
           >
-            <div className="mb-4 flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
-              <c.icon className="size-5" strokeWidth={1.5} />
-            </div>
-            <div className="font-display text-base font-semibold">
+            <div className="mb-4 flex items-center justify-between" />
+            <div className="font-display text-[24px] sm:text-[15px] md:text-[20px] lg:text-[24px] font-semibold leading-[120%] text-black">
               {c.title}
             </div>
-            <p className="mt-1 text-sm text-muted-foreground">{c.text}</p>
+            <p className="mt-3 max-w-[204px] text-[12px] leading-[120%] text-black">
+              {c.text}
+            </p>
+            <div className="absolute bottom-[0px] right-[0px] tabular font-heading text-[60px] font-bold text-black lg:bottom-[-27px] lg:right-[-27px] lg:text-[104px]">
+              {c.n}
+            </div>
           </div>
         ))}
       </div>
