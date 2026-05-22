@@ -4,7 +4,15 @@ import { FaqBlock } from "@/components/shared/FaqBlock";
 import { buttonVariants } from "@/components/ui/button";
 import { faqsByScope, FAQS } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
-import { Shield, Wrench, Truck, Phone, MessageSquare, Mail } from "lucide-react";
+import {
+  Shield,
+  Wrench,
+  Truck,
+  Phone,
+  MessageSquare,
+  Mail,
+} from "lucide-react";
+import { Reveal } from "@/components/shared/Reveal";
 
 export const metadata: Metadata = {
   title: "Гарантія на ігрові ПК до 3 років",
@@ -28,12 +36,36 @@ const NOT_COVERED = [
 ];
 
 const SERVICE_STEPS = [
-  { icon: MessageSquare, title: "Пиши нам", text: "Telegram @kondor_pc або телефон" },
-  { icon: Wrench, title: "Опис проблеми", text: "Надсилаєш фото чи відео поломки" },
-  { icon: Truck, title: "Безкоштовна доставка НП", text: "Наш сервіс — у Києві" },
-  { icon: Shield, title: "Діагностика 1–3 дні", text: "Наш інженер перевіряє систему" },
-  { icon: Wrench, title: "Ремонт 3–10 днів", text: "Ремонтуємо або замінюємо компонент" },
-  { icon: Truck, title: "Повернення", text: "Відправляємо ПК назад безкоштовно" },
+  {
+    icon: MessageSquare,
+    title: "Пиши нам",
+    text: "Telegram @kondor_pc або телефон",
+  },
+  {
+    icon: Wrench,
+    title: "Опис проблеми",
+    text: "Надсилаєш фото чи відео поломки",
+  },
+  {
+    icon: Truck,
+    title: "Безкоштовна доставка НП",
+    text: "Наш сервіс — у Києві",
+  },
+  {
+    icon: Shield,
+    title: "Діагностика 1–3 дні",
+    text: "Наш інженер перевіряє систему",
+  },
+  {
+    icon: Wrench,
+    title: "Ремонт 3–10 днів",
+    text: "Ремонтуємо або замінюємо компонент",
+  },
+  {
+    icon: Truck,
+    title: "Повернення",
+    text: "Відправляємо ПК назад безкоштовно",
+  },
 ];
 
 const PLANS = [
@@ -43,14 +75,15 @@ const PLANS = [
 ];
 
 export default function WarrantyPage() {
-  const faqs = faqsByScope("warranty").length > 0
-    ? faqsByScope("warranty")
-    : FAQS.slice(0, 5);
+  const faqs =
+    faqsByScope("warranty").length > 0
+      ? faqsByScope("warranty")
+      : FAQS.slice(0, 5);
 
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border">
+      <section className="relative overflow-hidden">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-30"
@@ -59,27 +92,22 @@ export default function WarrantyPage() {
               "radial-gradient(ellipse 60% 50% at 50% 0%, #14462380, transparent 70%)",
           }}
         />
-        <div className="container-site relative py-20 md:py-28 text-center">
-          <div className="mb-4 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-            Гарантія
-          </div>
-          <h1 className="font-display text-4xl font-bold md:text-5xl">
-            Гарантія до 3 років
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            12 місяців гарантії від Kondor PC + оригінальна гарантія виробника
-            на кожен компонент. Якщо щось зламається — забираємо ПК НП за наш
-            рахунок.
-          </p>
+        <div className="container-site relative pt-20 pb-[46px] lg:pt-[100px] lg:pb-15">
+          <Reveal>
+            <SectionHeader
+              kicker="Гарантія"
+              title="ГАРАНТІЯ ДО 3 РОКІВ"
+              subtitle="12 місяців гарантії від Kondor PC + оригінальна гарантія виробника на кожен компонент. Якщо щось зламається — забираємо ПК НП за наш рахунок."
+              titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
+              subtitleClassName="text-[14px] lg:text-[16px] leading-[120%] max-w-[328px] lg:max-w-[493px]"
+            />
+          </Reveal>
         </div>
       </section>
 
       {/* Covered / Not covered */}
-      <section className="container-site py-16 md:py-20">
-        <SectionHeader
-          kicker="Що входить"
-          title="Що покриває наша гарантія"
-        />
+      <section className="container-site pt-[46px] pb-16 lg:py-15">
+        <SectionHeader kicker="Що входить" title="Що покриває наша гарантія" />
         <div className="grid gap-4 md:grid-cols-2">
           <div className="rounded-lg border border-[color:var(--fps-green)]/30 bg-surface p-6">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[color:var(--fps-green)]/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[color:var(--fps-green)]">
@@ -134,7 +162,9 @@ export default function WarrantyPage() {
                   <div className="font-display text-base font-semibold">
                     {s.title}
                   </div>
-                  <p className="mt-0.5 text-sm text-muted-foreground">{s.text}</p>
+                  <p className="mt-0.5 text-sm text-muted-foreground">
+                    {s.text}
+                  </p>
                 </div>
               </li>
             ))}
@@ -161,13 +191,16 @@ export default function WarrantyPage() {
               )}
             >
               <div className="tabular font-display text-3xl font-bold">
-                {p.years} {p.years === 1 ? "рік" : p.years < 5 ? "роки" : "років"}
+                {p.years}{" "}
+                {p.years === 1 ? "рік" : p.years < 5 ? "роки" : "років"}
               </div>
               <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
                 {p.note}
               </div>
               <div className="tabular mt-4 font-display text-xl font-bold">
-                {p.price === 0 ? "Безкоштовно" : `+${p.price.toLocaleString("uk-UA")} ₴`}
+                {p.price === 0
+                  ? "Безкоштовно"
+                  : `+${p.price.toLocaleString("uk-UA")} ₴`}
               </div>
             </div>
           ))}
@@ -215,10 +248,7 @@ export default function WarrantyPage() {
 
       {/* FAQ */}
       <section className="container-prose py-16 md:py-20">
-        <SectionHeader
-          kicker="Часті питання"
-          title="Про гарантію"
-        />
+        <SectionHeader kicker="Часті питання" title="Про гарантію" />
         <FaqBlock items={faqs} />
       </section>
     </>
