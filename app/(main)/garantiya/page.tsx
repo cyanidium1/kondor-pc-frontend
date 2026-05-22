@@ -107,16 +107,20 @@ export default function WarrantyPage() {
 
       {/* Covered / Not covered */}
       <section className="container-site pt-[46px] pb-16 lg:py-15">
-        <SectionHeader kicker="Що входить" title="Що покриває наша гарантія" />
+        <SectionHeader
+          kicker="Що входить"
+          title="ЩО ПОКРИВАЄ НАША ГАРАНТІЯ"
+          titleClassName="mt-3 lg:mt-7"
+        />
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="rounded-lg border border-[color:var(--fps-green)]/30 bg-surface p-6">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[color:var(--fps-green)]/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[color:var(--fps-green)]">
+          <div className="rounded-lg border border-[#20DEFF66]/60 bg-surface p-6">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full  bg-[#20DEFF66]/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[#20DEFF]">
               Покриває
             </div>
             <ul className="space-y-2.5 text-sm">
               {COVERED.map((item, i) => (
                 <li key={i} className="flex gap-2">
-                  <span className="text-[color:var(--fps-green)]">✓</span>
+                  <span className="text-[#20DEFF]">✓</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -145,6 +149,8 @@ export default function WarrantyPage() {
             kicker="Як обслуговуємо"
             title="6 кроків гарантійного випадку"
             subtitle="Середній час обслуговування — 7 робочих днів від звернення до повернення ПК додому."
+            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
+            subtitleClassName="lg:max-w-[455px]"
           />
           <ol className="grid gap-3 md:grid-cols-2">
             {SERVICE_STEPS.map((s, i) => (
@@ -176,8 +182,10 @@ export default function WarrantyPage() {
       <section className="container-site py-16 md:py-20">
         <SectionHeader
           kicker="Розширена гарантія"
-          title="Продовж гарантію до 3 років"
+          title="ПРОДОВЖИ ГАРАНТІЮ ДО 3 РОКІВ"
           subtitle="Обирай при покупці — додатковий захист, пріоритетне обслуговування, безкоштовні чистки."
+          titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
+          subtitleClassName="lg:max-w-[483px]"
         />
         <div className="grid gap-4 md:grid-cols-3">
           {PLANS.map((p) => (
