@@ -143,7 +143,7 @@ export default function WarrantyPage() {
       </section>
 
       {/* Process */}
-      <section className="border-y border-border bg-surface/30">
+      <section className="bg-surface/30">
         <div className="container-site py-16 md:py-20">
           <SectionHeader
             kicker="Як обслуговуємо"
@@ -215,49 +215,54 @@ export default function WarrantyPage() {
         </div>
       </section>
 
-      {/* Contacts block */}
-      <section className="border-y border-border bg-surface/30">
-        <div className="container-prose py-16 md:py-20 text-center">
-          <SectionHeader
-            align="center"
-            kicker="Якщо щось зламалося"
-            title="Пиши нам одразу"
-          />
-          <div className="grid gap-3 sm:grid-cols-3">
-            <a
-              href="tel:+380000000000"
-              className={cn(buttonVariants({ variant: "outline" }))}
-            >
-              <Phone className="mr-1.5 size-4" />
-              +380 XX XXX XX XX
-            </a>
-            <a
-              href="https://t.me/kondor_pc"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(buttonVariants({ variant: "outline" }))}
-            >
-              <MessageSquare className="mr-1.5 size-4" />
-              Telegram
-            </a>
-            <a
-              href="mailto:support@kondor-pc.ua"
-              className={cn(buttonVariants({ variant: "outline" }))}
-            >
-              <Mail className="mr-1.5 size-4" />
-              Email
-            </a>
+      <div className="relative rounded-[40px] overflow-hidden">
+        <div className="absolute -z-30 top-0 left-0 w-full h-full bg-brand-primary" />
+        {/* Contacts block */}
+        <section className="">
+          <div className="container-prose py-16 md:py-20 text-center">
+            <SectionHeader
+              align="center"
+              kicker="Якщо щось зламалося"
+              title="Пиши нам одразу"
+              className="mb-6"
+              kickerClassName="text-black"
+              titleClassName="lg:max-w-[536px] mt-4 text-black"
+            />
+            <p className="mt-4 mb-12 text-sm text-black">
+              Робочі години: щодня 9:00–21:00
+            </p>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <a
+                href="tel:+380000000000"
+                className={cn(buttonVariants({ variant: "outline" }))}
+              >
+                <Phone className="mr-1.5 size-4" />
+                +380 XX XXX XX XX
+              </a>
+              <a
+                href="https://t.me/kondor_pc"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants({ variant: "outline" }))}
+              >
+                <MessageSquare className="mr-1.5 size-4" />
+                Telegram
+              </a>
+              <a
+                href="mailto:support@kondor-pc.ua"
+                className={cn(buttonVariants({ variant: "outline" }))}
+              >
+                <Mail className="mr-1.5 size-4" />
+                Email
+              </a>
+            </div>
           </div>
-          <p className="mt-4 text-sm text-muted-foreground">
-            Робочі години: щодня 9:00–21:00
-          </p>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="container-prose py-16 md:py-20">
-        <FaqBlock items={faqs} />
-      </section>
+        </section>
+        {/* FAQ */}
+        <section className="container-prose py-16 md:py-20">
+          <FaqBlock items={faqs} />
+        </section>
+      </div>
     </>
   );
 }
