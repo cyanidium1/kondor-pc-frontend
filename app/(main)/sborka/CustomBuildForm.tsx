@@ -69,7 +69,9 @@ export function CustomBuildForm() {
   async function onSubmit(values: CustomBuildValues) {
     const orderNumber = `UA-CB-${new Date().toISOString().slice(2, 10).replace(/-/g, "")}-${Math.floor(Math.random() * 9000 + 1000)}`;
     console.log("[custom-build:stub]", { orderNumber, ...values });
-    router.push(`/oformlennya/uspikh?order=${orderNumber}&payment=iban_individual`);
+    router.push(
+      `/oformlennya/uspikh?order=${orderNumber}&payment=iban_individual`,
+    );
   }
 
   return (
@@ -78,9 +80,13 @@ export function CustomBuildForm() {
       <div className="rounded-lg border border-border bg-surface p-6">
         <Label className="mb-2 block">Приблизний бюджет</Label>
         <div className="tabular mb-3 flex items-baseline justify-between text-sm">
-          <span className="font-semibold">{formatUah(budgetRange[0] * 1000)} ₴</span>
+          <span className="font-semibold">
+            {formatUah(budgetRange[0] * 1000)} ₴
+          </span>
           <span className="text-muted-foreground">—</span>
-          <span className="font-semibold">{formatUah(budgetRange[1] * 1000)} ₴</span>
+          <span className="font-semibold">
+            {formatUah(budgetRange[1] * 1000)} ₴
+          </span>
         </div>
         <Slider
           min={20}
@@ -163,7 +169,10 @@ export function CustomBuildForm() {
           </div>
           <div className="grid gap-1.5">
             <Label className="text-xs text-muted-foreground">Телефон</Label>
-            <Input placeholder="+380 95 000 00 00" {...register("customerPhone")} />
+            <Input
+              placeholder="+380 95 000 00 00"
+              {...register("customerPhone")}
+            />
             {errors.customerPhone && (
               <p className="text-xs text-destructive">
                 {errors.customerPhone.message}
@@ -243,15 +252,19 @@ export function CustomBuildForm() {
 
       <TechButton
         type="submit"
-        size="lg"
-        className="w-full"
+        size="sm"
+        variant="inverse"
+        className="w-full h-[52px] font-heading tracking-normal"
         disabled={isSubmitting}
       >
         {isSubmitting ? "Надсилаємо..." : "Надіслати заявку"}
       </TechButton>
       <p className="text-center text-[11px] uppercase tracking-wider text-muted-foreground">
         Натискаючи кнопку, ти погоджуєшся з{" "}
-        <Link href="/legal/politika-konfidentsiynosti" className="underline underline-offset-4">
+        <Link
+          href="/legal/politika-konfidentsiynosti"
+          className="underline underline-offset-4"
+        >
           політикою конфіденційності
         </Link>
       </p>
