@@ -48,8 +48,8 @@ const SERVICE_STEPS = [
   },
   {
     icon: Truck,
-    title: "Безкоштовна доставка НП",
-    text: "Наш сервіс — у Києві",
+    title: "доставка НП",
+    text: "Надійне пакуванння та страхування посилки",
   },
   {
     icon: Shield,
@@ -143,11 +143,11 @@ export default function WarrantyPage() {
       </section>
 
       {/* Process */}
-      <section className="bg-surface/30">
+      <section className="rounded-b-[40px] overflow-hidden">
         <div className="container-site py-16 md:py-20">
           <SectionHeader
             kicker="Як обслуговуємо"
-            title="6 кроків гарантійного випадку"
+            title="6 КРОКІВ ГАРАНТІЙНОГО ВИПАДКУ"
             subtitle="Середній час обслуговування — 7 робочих днів від звернення до повернення ПК додому."
             titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
             subtitleClassName="lg:max-w-[455px]"
@@ -162,13 +162,13 @@ export default function WarrantyPage() {
                   <s.icon className="size-5" strokeWidth={1.5} />
                 </div>
                 <div>
-                  <div className="tabular text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                  <div className="tabular text-[10px] font-medium uppercase tracking-wider text-muted-foreground leading-[120%]">
                     Крок {i + 1}
                   </div>
-                  <div className="font-display text-base font-semibold">
+                  <div className="font-heading text-base font-semibold uppercase leading-[120%]">
                     {s.title}
                   </div>
-                  <p className="mt-0.5 text-sm text-muted-foreground">
+                  <p className="mt-0.5 text-[12px] lg:text-[14px] text-muted-foreground leading-[120%]">
                     {s.text}
                   </p>
                 </div>
@@ -219,7 +219,7 @@ export default function WarrantyPage() {
         <div className="absolute -z-30 top-0 left-0 w-full h-full bg-brand-primary" />
         {/* Contacts block */}
         <section className="">
-          <div className="container-prose py-16 md:py-20 text-center">
+          <div className="container-prose pt-[233px] lg:pt-20 text-center">
             <SectionHeader
               align="center"
               kicker="Якщо щось зламалося"
@@ -231,12 +231,12 @@ export default function WarrantyPage() {
             <p className="mt-4 mb-12 text-sm text-black">
               Робочі години: щодня 9:00–21:00
             </p>
-            <div className="flex gap-3 justify-center">
+            <div className="flex flex-col lg:flex-row gap-3 justify-center">
               <a
                 href="tel:+380000000000"
                 className={cn(
                   buttonVariants({ variant: "secondary" }),
-                  "w-fit px-9",
+                  "w-full lg:w-fit px-9",
                 )}
               >
                 <Phone className="mr-1.5 size-4" />
@@ -248,7 +248,7 @@ export default function WarrantyPage() {
                 rel="noopener noreferrer"
                 className={cn(
                   buttonVariants({ variant: "secondary" }),
-                  "w-fit px-8",
+                  "w-full lg:w-fit px-8",
                 )}
               >
                 <MessageSquare className="mr-1.5 size-4" />
@@ -258,7 +258,7 @@ export default function WarrantyPage() {
                 href="mailto:support@kondor-pc.ua"
                 className={cn(
                   buttonVariants({ variant: "secondary" }),
-                  "w-fit px-8",
+                  "w-full lg:w-fit px-8",
                 )}
               >
                 <Mail className="mr-1.5 size-4" />
@@ -268,7 +268,7 @@ export default function WarrantyPage() {
           </div>
         </section>
         {/* FAQ */}
-        <section className="container-prose py-16 md:py-20">
+        <section className="container-prose pt-9 pb-6.5 lg:pt-12 lg:pb-[66px]">
           <FaqBlock items={faqs} />
         </section>
       </div>
