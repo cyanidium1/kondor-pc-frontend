@@ -119,7 +119,7 @@ export default function WarrantyPage() {
 
       {/* Covered / Not covered */}
       <section className="relative container-site pt-[46px] pb-[92px] lg:pt-15 lg:pb-[111px]">
-        <div className="absolute -z-10 bottom-[23px] lg:bottom-[114px] right-[-40px] lg:right-[-30px] w-[247px] h-[247px]">
+        <div className="absolute -z-10 bottom-[63px] lg:bottom-[164px] right-[-40px] lg:right-[-30px] w-[247px] h-[247px]">
           <Image
             src="/images/garantiya/square.svg"
             alt="Square background"
@@ -166,13 +166,49 @@ export default function WarrantyPage() {
       <MarqueeLine />
 
       {/* Process */}
-      <section className="rounded-b-[40px] overflow-hidden">
-        <div className="container-site py-16 md:py-20">
+      <section className="relative rounded-b-[40px] overflow-hidden">
+        <div className="absolute -z-10 bottom-[-278px] left-[-491px] lg:bottom-[-578px] lg:left-[-401px] w-[1131px] h-[954px]">
+          <Image
+            src="/images/garantiya/steps-shadows.svg"
+            alt="Steps shadows"
+            width="1131"
+            height="954"
+            className="object-cover"
+          />
+        </div>
+        <div className="absolute -z-30 bottom-[-40px] lg:top-[-10px] right-[-218px] lg:right-[100px] w-[469px] lg:w-[640px] h-[469px] lg:h-[640px]">
+          <Image
+            src="/images/garantiya/pc.webp"
+            alt="PC"
+            width="469"
+            height="469"
+            className="object-cover w-[460px] lg:w-[640px] h-auto"
+          />
+        </div>
+        <div className="hidden lg:block absolute -z-10 bottom-[-226px] right-[-305px] w-[735px] h-[735px]">
+          <Image
+            src="/images/garantiya/steps-right-shadow-desk.svg"
+            alt="Steps right shadow desk"
+            width="735"
+            height="735"
+            className="object-cover"
+          />
+        </div>
+        <div className="hidden lg:block absolute -z-20 bottom-[-129px] right-0 w-[632px] h-[632px]">
+          <Image
+            src="/images/garantiya/right-mask.webp"
+            alt="Steps right shadow desk"
+            width="632"
+            height="632"
+            className="object-cover"
+          />
+        </div>
+        <div className="container-site pt-16 pb-5 lg:pt-30 lg:pb-[163px]">
           <SectionHeader
             kicker="Як обслуговуємо"
             title="6 КРОКІВ ГАРАНТІЙНОГО ВИПАДКУ"
             subtitle="Середній час обслуговування — 7 робочих днів від звернення до повернення ПК додому."
-            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
+            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 lg:text-[32px]"
             subtitleClassName="lg:max-w-[455px]"
           />
           <ol className="grid gap-3 md:grid-cols-2">
