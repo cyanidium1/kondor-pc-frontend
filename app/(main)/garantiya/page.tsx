@@ -194,7 +194,7 @@ export default function WarrantyPage() {
               className={cn(
                 "rounded-lg border p-6",
                 p.years === 2
-                  ? "border-foreground bg-surface-elevated"
+                  ? "border-brand-primary bg-surface-elevated text-brand-primary"
                   : "border-border bg-surface",
               )}
             >
@@ -205,7 +205,7 @@ export default function WarrantyPage() {
               <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
                 {p.note}
               </div>
-              <div className="tabular mt-4 font-display text-xl font-bold">
+              <div className="tabular mt-4 font-heading text-xl font-bold">
                 {p.price === 0
                   ? "Безкоштовно"
                   : `+${p.price.toLocaleString("uk-UA")} ₴`}
@@ -256,7 +256,6 @@ export default function WarrantyPage() {
 
       {/* FAQ */}
       <section className="container-prose py-16 md:py-20">
-        <SectionHeader kicker="Часті питання" title="Про гарантію" />
         <FaqBlock items={faqs} />
       </section>
     </>
