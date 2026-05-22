@@ -238,41 +238,53 @@ export default function WarrantyPage() {
       </section>
 
       {/* Extended warranty */}
-      <section className="container-site py-16 md:py-20">
-        <SectionHeader
-          kicker="Розширена гарантія"
-          title="ПРОДОВЖИ ГАРАНТІЮ ДО 3 РОКІВ"
-          subtitle="Обирай при покупці — додатковий захист, пріоритетне обслуговування, безкоштовні чистки."
-          titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
-          subtitleClassName="lg:max-w-[483px]"
-        />
-        <div className="grid gap-4 md:grid-cols-3">
-          {PLANS.map((p) => (
-            <div
-              key={p.years}
-              className={cn(
-                "rounded-lg border p-6",
-                p.years === 2
-                  ? "border-brand-primary bg-surface-elevated text-brand-primary"
-                  : "border-border bg-surface",
-              )}
-            >
-              <div className="tabular font-display text-3xl font-bold">
-                {p.years}{" "}
-                {p.years === 1 ? "рік" : p.years < 5 ? "роки" : "років"}
+      <div className="overflow-hidden">
+        {" "}
+        <section className="relative container-site py-16 md:py-20">
+          <div className="absolute -z-30 top-[-812px] left-[-279px] lg:top-[-840px] lg:left-[-355px] w-[1698px] h-[1748px]">
+            <Image
+              src="/images/garantiya/extended-shadows.svg"
+              alt="Extended shadows"
+              width="1698"
+              height="1748"
+              className="object-cover"
+            />
+          </div>
+          <SectionHeader
+            kicker="Розширена гарантія"
+            title="ПРОДОВЖИ ГАРАНТІЮ ДО 3 РОКІВ"
+            subtitle="Обирай при покупці — додатковий захист, пріоритетне обслуговування, безкоштовні чистки."
+            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 lg:text-[36px]"
+            subtitleClassName="lg:max-w-[483px]"
+          />
+          <div className="grid gap-4 md:grid-cols-3">
+            {PLANS.map((p) => (
+              <div
+                key={p.years}
+                className={cn(
+                  "rounded-lg border p-6",
+                  p.years === 2
+                    ? "border-brand-primary bg-surface-elevated text-brand-primary"
+                    : "border-border bg-surface",
+                )}
+              >
+                <div className="tabular font-display text-3xl font-bold">
+                  {p.years}{" "}
+                  {p.years === 1 ? "рік" : p.years < 5 ? "роки" : "років"}
+                </div>
+                <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
+                  {p.note}
+                </div>
+                <div className="tabular mt-4 font-heading text-xl font-bold">
+                  {p.price === 0
+                    ? "Безкоштовно"
+                    : `+${p.price.toLocaleString("uk-UA")} ₴`}
+                </div>
               </div>
-              <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
-                {p.note}
-              </div>
-              <div className="tabular mt-4 font-heading text-xl font-bold">
-                {p.price === 0
-                  ? "Безкоштовно"
-                  : `+${p.price.toLocaleString("uk-UA")} ₴`}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      </div>
 
       <div className="relative rounded-[40px] overflow-hidden">
         <div className="absolute -z-30 top-0 left-0 w-full h-full bg-brand-primary" />
