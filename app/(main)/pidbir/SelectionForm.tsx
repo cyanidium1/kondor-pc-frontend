@@ -59,8 +59,8 @@ export function SelectionForm() {
     <div className="space-y-12">
       {/* GAMES */}
       <section>
-        <div className="mb-5 flex items-baseline justify-between">
-          <h2 className="font-display text-2xl font-bold">У що ти граєш?</h2>
+        <div className="mb-9 md:mb-5 flex flex-col md:flex-row items-baseline justify-between gap-6">
+          <h2 className="font-display text-2xl font-bold">У ЩО ТИ ГРАЄШ?</h2>
           <div className="text-xs text-muted-foreground">
             Обрано: {games.length}/3
           </div>
@@ -150,7 +150,9 @@ export function SelectionForm() {
                     : "border-border bg-surface hover:border-white/20",
                 )}
               >
-                <div className="font-display text-lg font-bold">{b.label}</div>
+                <div className="font-heading text-lg font-bold leading-[120%]">
+                  {b.label}
+                </div>
                 <div className="mt-0.5 text-[11px] uppercase tracking-wider text-muted-foreground">
                   {b.note}
                 </div>
@@ -175,7 +177,9 @@ export function SelectionForm() {
         {showRefine && (
           <div className="mt-5 space-y-5">
             <div>
-              <Label className="mb-2 block">Для якого монітора підбираєш?</Label>
+              <Label className="mb-2 block">
+                Для якого монітора підбираєш?
+              </Label>
               <div className="flex flex-wrap gap-2">
                 {RESOLUTIONS.map((r) => (
                   <button

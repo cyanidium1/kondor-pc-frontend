@@ -66,7 +66,9 @@ export function GameTile({
       style={
         withCover
           ? undefined
-          : { backgroundImage: `linear-gradient(135deg, ${style.from}, ${style.to})` }
+          : {
+              backgroundImage: `linear-gradient(135deg, ${style.from}, ${style.to})`,
+            }
       }
       aria-hidden
     >
@@ -107,7 +109,12 @@ export function GameTile({
             height="18"
             patternUnits="userSpaceOnUse"
           >
-            <path d="M 18 0 L 0 0 0 18" fill="none" stroke="white" strokeWidth="0.5" />
+            <path
+              d="M 18 0 L 0 0 0 18"
+              fill="none"
+              stroke="white"
+              strokeWidth="0.5"
+            />
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill={`url(#grid-${slug})`} />
@@ -138,7 +145,7 @@ export function GameTile({
         <div>
           <div
             className={cn(
-              "font-display font-semibold uppercase leading-tight tracking-wide",
+              "font-heading font-semibold uppercase leading-[120%] tracking-wide",
               withCover && "drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]",
               titleSize,
             )}
