@@ -12,7 +12,7 @@ export const GAMES: Game[] = [
   {
     slug: "cs2",
     name: "Counter-Strike 2",
-    ukrName: "Контр Страйк 2",
+    ukrName: "Counter-Strike 2",
     genre: "fps",
     isPopular: true,
     coverImageUrl: steamHeader(730),
@@ -38,7 +38,7 @@ export const GAMES: Game[] = [
   {
     slug: "fortnite",
     name: "Fortnite",
-    ukrName: "Фортнайт",
+    ukrName: "Fortnite",
     genre: "battle_royale",
     isPopular: true,
     // Epic-only; tile fallback
@@ -54,7 +54,7 @@ export const GAMES: Game[] = [
   {
     slug: "valorant",
     name: "Valorant",
-    ukrName: "Валорант",
+    ukrName: "Valorant",
     genre: "fps",
     isPopular: true,
     // Riot-only; tile fallback
@@ -62,7 +62,7 @@ export const GAMES: Game[] = [
   {
     slug: "minecraft",
     name: "Minecraft",
-    ukrName: "Майнкрафт",
+    ukrName: "Minecraft",
     genre: "sandbox",
     isPopular: true,
     // Mojang/Microsoft-only; tile fallback

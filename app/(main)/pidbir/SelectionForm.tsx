@@ -13,8 +13,8 @@ import { Check, ChevronDown, Plus } from "lucide-react";
 
 const BUDGET_BUCKETS = [
   { label: "До 25 000 ₴", value: "0-25", note: "~$600" },
-  { label: "25–50 000 ₴", value: "25-50", note: "$600–1200" },
-  { label: "50–80 000 ₴", value: "50-80", note: "$1200–1900" },
+  { label: "25–40 000 ₴", value: "25-40", note: "$600–1000" },
+  { label: "40–80 000 ₴", value: "40-80", note: "$1000–1900" },
   { label: "80 000 ₴+", value: "80-200", note: "$1900+" },
 ];
 
@@ -59,8 +59,8 @@ export function SelectionForm() {
     <div className="space-y-12">
       {/* GAMES */}
       <section>
-        <div className="mb-5 flex items-baseline justify-between">
-          <h2 className="font-display text-2xl font-bold">У що ти граєш?</h2>
+        <div className="mb-9 md:mb-5 flex flex-col md:flex-row items-baseline justify-between gap-6">
+          <h2 className="font-display text-2xl font-bold">У ЩО ТИ ГРАЄШ?</h2>
           <div className="text-xs text-muted-foreground">
             Обрано: {games.length}/3
           </div>
@@ -91,7 +91,7 @@ export function SelectionForm() {
                   ukrName={g.ukrName}
                   heavy={g.isSystemHeavy}
                   coverImageUrl={g.coverImageUrl}
-                  className="aspect-[4/3] w-full"
+                  className="aspect-[4/3] w-full lg:aspect-[295/126]"
                 />
                 <div className="absolute right-2 top-2">
                   {active ? (
@@ -109,7 +109,7 @@ export function SelectionForm() {
             type="button"
             onClick={() => setOtherOpen((v) => !v)}
             className={cn(
-              "relative flex aspect-[4/3] flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-4 text-center transition",
+              "relative col-span-2 flex aspect-[8/3] flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-4 text-center transition sm:col-span-1 sm:aspect-[4/3] lg:aspect-[295/126]",
               otherOpen
                 ? "border-foreground bg-surface-elevated"
                 : "border-border bg-surface hover:border-white/25",
@@ -150,7 +150,9 @@ export function SelectionForm() {
                     : "border-border bg-surface hover:border-white/20",
                 )}
               >
-                <div className="font-display text-lg font-bold">{b.label}</div>
+                <div className="font-heading text-lg font-bold leading-[120%]">
+                  {b.label}
+                </div>
                 <div className="mt-0.5 text-[11px] uppercase tracking-wider text-muted-foreground">
                   {b.note}
                 </div>
@@ -175,7 +177,9 @@ export function SelectionForm() {
         {showRefine && (
           <div className="mt-5 space-y-5">
             <div>
-              <Label className="mb-2 block">Для якого монітора підбираєш?</Label>
+              <Label className="mb-2 block">
+                Для якого монітора підбираєш?
+              </Label>
               <div className="flex flex-wrap gap-2">
                 {RESOLUTIONS.map((r) => (
                   <button
@@ -201,11 +205,11 @@ export function SelectionForm() {
       </section>
 
       {/* SUBMIT */}
-      <div className="sticky bottom-4 rounded-xl border border-border bg-surface/95 p-4 backdrop-blur md:static md:bg-transparent md:p-0">
+      <div className="sticky bottom-4 rounded-xl border border-border bg-surface/95 backdrop-blur md:static md:bg-transparent md:p-0">
         <TechButton
           type="button"
-          size="lg"
-          className="w-full"
+          size="sm"
+          className="w-full h-[49px] font-bold font-heading text-[14px] leading-[120%] uppercase tracking-normal"
           disabled={!canSubmit}
           onClick={submit}
         >

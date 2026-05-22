@@ -63,8 +63,6 @@ export function Header() {
           "sticky top-0 xl:top-4 z-30 isolate bg-black xl:bg-transparent",
         )}
       >
-        {/* Top shimmer hairline */}
-
         {/* Bottom sector line */}
         <div
           aria-hidden
