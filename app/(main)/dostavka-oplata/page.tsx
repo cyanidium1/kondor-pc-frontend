@@ -15,6 +15,7 @@ import {
   Shield,
 } from "lucide-react";
 import MarqueeLine from "@/components/shared/MarqueeLine";
+import Image from "next/image";
 import { Reveal } from "@/components/shared/Reveal";
 
 export const metadata: Metadata = {
@@ -112,55 +113,102 @@ export default function DeliveryPaymentPage() {
 
   return (
     <>
-      <section className="">
-        <div className="container-site py-[50px] lg:pt-[86px] lg:pb-25">
+      <div className="rounded-b-[28px] lg:rounded-b-[40px] overflow-hidden">
+        {" "}
+        <section>
+          <div className="relative container-site py-[50px] lg:pt-[86px] lg:pb-25">
+            <SectionHeader
+              kicker="Доставка та оплата"
+              title="ШВИДКА ДОСТАВКА ПО УКРАЇНІ, ЗРУЧНА ОПЛАТА"
+              subtitle="Надійно пакуємо та відправляємо ПК по всій Україні. Доступна розстрочка, безготівкова оплата та кілька способів отримання замовлення."
+              titleAs="h1"
+              className="mb-0"
+              titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 md:max-w-[1054px]"
+              subtitleClassName="text-[14px] lg:text-[16px] leading-[120%] lg:max-w-[644px]"
+            />
+          </div>
+        </section>
+        {/* DELIVERY */}
+        <section className="relative container-site pb-6 lg:pb-20">
+          <div className="hidden lg:block absolute -z-30 bottom-[-40px] lg:top-[-210px] right-[-218px] lg:right-[-160px] w-[503px] h-[522px]">
+            <Image
+              src="/images/delivery/pc.webp"
+              alt="PC"
+              width="503"
+              height="522"
+              className="object-cover w-[460px] lg:w-[640px] h-auto"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-20 bottom-[-182px] right-[-256px] w-[632px] h-[632px]">
+            <Image
+              src="/images/garantiya/right-mask.webp"
+              alt="Steps right shadow desk"
+              width="632"
+              height="632"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-10 bottom-[-276px] right-[-675px] w-[735px] h-[735px]">
+            <Image
+              src="/images/garantiya/steps-right-shadow-desk.svg"
+              alt="Steps right shadow desk"
+              width="735"
+              height="735"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-40 bottom-[-278px] left-[-541px] lg:bottom-[-578px] lg:left-[-771px] w-[1131px] h-[954px]">
+            <Image
+              src="/images/garantiya/steps-shadows.svg"
+              alt="Steps shadows"
+              width="1131"
+              height="954"
+              className="object-cover"
+            />
+          </div>
+          <div className="lg:hidden absolute -z-40 bottom-[-348px] left-[-221px] lg:bottom-[-658px] lg:left-[-771px] w-[836px] h-[811px]">
+            <Image
+              src="/images/delivery/hero-shadows-mob.svg"
+              alt="Hero shadows"
+              width="836"
+              height="811"
+              className="object-cover"
+            />
+          </div>
           <SectionHeader
-            kicker="Доставка та оплата"
-            title="ШВИДКА ДОСТАВКА ПО УКРАЇНІ, ЗРУЧНА ОПЛАТА"
-            subtitle="Надійно пакуємо та відправляємо ПК по всій Україні. Доступна розстрочка, безготівкова оплата та кілька способів отримання замовлення."
-            titleAs="h1"
-            className="mb-0"
-            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 md:max-w-[1054px]"
-            subtitleClassName="text-[14px] lg:text-[16px] leading-[120%] lg:max-w-[644px]"
+            kicker="01 · Доставка"
+            title="Способи доставки"
+            className="mb-7 lg:mb-10"
+            showKickerDot={false}
+            titleClassName="lg:text-[36px]"
           />
-        </div>
-      </section>
 
-      {/* DELIVERY */}
-      <section className="container-site pb-[134px] lg:pb-20 rounded-b-[28px] lg:rounded-b-[40px]">
-        <SectionHeader
-          kicker="01 · Доставка"
-          title="Способи доставки"
-          className="mb-7 lg:mb-10"
-          showKickerDot={false}
-          titleClassName="lg:text-[36px]"
-        />
-
-        <div className="grid gap-4 md:grid-cols-3">
-          {DELIVERY.map((d) => (
-            <div
-              key={d.title}
-              className="rounded-lg border border-border bg-surface p-6"
-            >
-              <div className="mb-4 flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
-                <d.icon className="size-5" strokeWidth={1.5} />
+          <div className="grid gap-4 md:grid-cols-3">
+            {DELIVERY.map((d) => (
+              <div
+                key={d.title}
+                className="rounded-lg border border-border bg-surface p-6"
+              >
+                <div className="mb-4 flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
+                  <d.icon className="size-5" strokeWidth={1.5} />
+                </div>
+                <div className="text-[16px] leading-[120%] font-semibold tracking-wide uppercase">
+                  {d.title}
+                </div>
+                <div className="tabular mt-3 flex items-baseline gap-3">
+                  <span className="font-display text-xl font-bold">
+                    {d.price}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    · {d.term}
+                  </span>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">{d.note}</p>
               </div>
-              <div className="text-[16px] leading-[120%] font-semibold tracking-wide uppercase">
-                {d.title}
-              </div>
-              <div className="tabular mt-3 flex items-baseline gap-3">
-                <span className="font-display text-xl font-bold">
-                  {d.price}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  · {d.term}
-                </span>
-              </div>
-              <p className="mt-2 text-sm text-muted-foreground">{d.note}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      </div>
 
       {/* PACKING */}
       <section className="">
