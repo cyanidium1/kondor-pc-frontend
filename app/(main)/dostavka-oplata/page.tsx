@@ -110,24 +110,26 @@ export default function DeliveryPaymentPage() {
   return (
     <>
       <section className="">
-        <div className="container-site py-20 md:py-28">
-          <div className="mb-4 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-            Доставка та оплата
-          </div>
-          <h1 className="font-display text-4xl font-bold md:text-5xl">
-            ШВИДКА ДОСТАВКА ПО УКРАЇНІ, ЗРУЧНА ОПЛАТА
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            Надійно пакуємо та відправляємо ПК по всій Україні. Доступна
-            розстрочка, безготівкова оплата та кілька способів отримання
-            замовлення.
-          </p>
+        <div className="container-site py-[50px] lg:pt-[86px] lg:pb-25">
+          <SectionHeader
+            kicker="Доставка та оплата"
+            title="ШВИДКА ДОСТАВКА ПО УКРАЇНІ, ЗРУЧНА ОПЛАТА"
+            subtitle="Надійно пакуємо та відправляємо ПК по всій Україні. Доступна розстрочка, безготівкова оплата та кілька способів отримання замовлення."
+            titleAs="h1"
+            className="mb-0"
+            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 max-w-[328px] md:max-w-[490px]"
+            subtitleClassName="text-[14px] lg:text-[16px] leading-[120%] lg:max-w-[644px]"
+          />
         </div>
       </section>
 
       {/* DELIVERY */}
-      <section className="container-site py-16 md:py-20">
-        <SectionHeader kicker="01 · Доставка" title="Способи доставки" />
+      <section className="container-site pb-16 lg:pb-20">
+        <SectionHeader
+          kicker="01 · Доставка"
+          title="Способи доставки"
+          className="mb-7"
+        />
         <div className="grid gap-4 md:grid-cols-3">
           {DELIVERY.map((d) => (
             <div
