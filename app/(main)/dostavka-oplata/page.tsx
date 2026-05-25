@@ -53,14 +53,46 @@ const PACKING = [
 ];
 
 const PAYMENT = [
-  { icon: CreditCard, title: "Карта онлайн (MonoPay)", text: "Миттєве підтвердження. Комісія 1.3% додається до суми." },
-  { icon: Package, title: "Оплата при отриманні на НП", text: "Для замовлень до 50 000 ₴. Комісія НП: 2% + 20 ₴." },
-  { icon: Wallet, title: "Monobank Частинами", text: "4 платежі без %. Оформлення онлайн 2 хв." },
-  { icon: Wallet, title: "ПриватБанк Оплата частинами", text: "До 9 платежів без переплати." },
-  { icon: Wallet, title: "ПУМБ Частинами", text: "До 12 місяців (% залежить від терміну)." },
-  { icon: Banknote, title: "Безготівковий IBAN", text: "Переказ на наш IBAN — для фізосіб." },
-  { icon: Building2, title: "ФОП / ЮО — рахунок", text: "Рахунок, договір, УПД, ПДВ за потреби." },
-  { icon: Bitcoin, title: "Криптовалюта", text: "USDT, BTC, ETH — за домовленістю з менеджером." },
+  {
+    icon: CreditCard,
+    title: "Карта онлайн (MonoPay)",
+    text: "Миттєве підтвердження. Комісія 1.3% додається до суми.",
+  },
+  {
+    icon: Package,
+    title: "Оплата при отриманні на НП",
+    text: "Для замовлень до 50 000 ₴. Комісія НП: 2% + 20 ₴.",
+  },
+  {
+    icon: Wallet,
+    title: "Monobank Частинами",
+    text: "4 платежі без %. Оформлення онлайн 2 хв.",
+  },
+  {
+    icon: Wallet,
+    title: "ПриватБанк Оплата частинами",
+    text: "До 9 платежів без переплати.",
+  },
+  {
+    icon: Wallet,
+    title: "ПУМБ Частинами",
+    text: "До 12 місяців (% залежить від терміну).",
+  },
+  {
+    icon: Banknote,
+    title: "Безготівковий IBAN",
+    text: "Переказ на наш IBAN — для фізосіб.",
+  },
+  {
+    icon: Building2,
+    title: "ФОП / ЮО — рахунок",
+    text: "Рахунок, договір, УПД, ПДВ за потреби.",
+  },
+  {
+    icon: Bitcoin,
+    title: "Криптовалюта",
+    text: "USDT, BTC, ETH — за домовленістю з менеджером.",
+  },
 ];
 
 const BUSINESS_DOCS = [
@@ -72,35 +104,30 @@ const BUSINESS_DOCS = [
 ];
 
 export default function DeliveryPaymentPage() {
-  const faqs = [
-    ...faqsByScope("delivery"),
-    ...faqsByScope("payment"),
-  ];
+  const faqs = [...faqsByScope("delivery"), ...faqsByScope("payment")];
   const items = faqs.length > 0 ? faqs : FAQS.slice(0, 6);
 
   return (
     <>
-      <section className="border-b border-border">
-        <div className="container-site py-20 md:py-28 text-center">
+      <section className="">
+        <div className="container-site py-20 md:py-28">
           <div className="mb-4 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
             Доставка та оплата
           </div>
           <h1 className="font-display text-4xl font-bold md:text-5xl">
-            Доставка безкоштовно, оплата — як зручно
+            ШВИДКА ДОСТАВКА ПО УКРАЇНІ, ЗРУЧНА ОПЛАТА
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            Новою Поштою по всій Україні без доплат. 8 способів оплати, у тому
-            числі розстрочка без % та безготівковий розрахунок для ФОП/ЮО.
+            Надійно пакуємо та відправляємо ПК по всій Україні. Доступна
+            розстрочка, безготівкова оплата та кілька способів отримання
+            замовлення.
           </p>
         </div>
       </section>
 
       {/* DELIVERY */}
       <section className="container-site py-16 md:py-20">
-        <SectionHeader
-          kicker="01 · Доставка"
-          title="Способи доставки"
-        />
+        <SectionHeader kicker="01 · Доставка" title="Способи доставки" />
         <div className="grid gap-4 md:grid-cols-3">
           {DELIVERY.map((d) => (
             <div
@@ -114,8 +141,12 @@ export default function DeliveryPaymentPage() {
                 {d.title}
               </div>
               <div className="tabular mt-3 flex items-baseline gap-3">
-                <span className="font-display text-xl font-bold">{d.price}</span>
-                <span className="text-xs text-muted-foreground">· {d.term}</span>
+                <span className="font-display text-xl font-bold">
+                  {d.price}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  · {d.term}
+                </span>
               </div>
               <p className="mt-2 text-sm text-muted-foreground">{d.note}</p>
             </div>
@@ -208,10 +239,7 @@ export default function DeliveryPaymentPage() {
 
       {/* FAQ */}
       <section className="container-prose py-16 md:py-20">
-        <SectionHeader
-          kicker="Часті питання"
-          title="Про доставку та оплату"
-        />
+        <SectionHeader kicker="Часті питання" title="Про доставку та оплату" />
         <FaqBlock items={items} />
       </section>
     </>
