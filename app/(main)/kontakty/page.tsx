@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import MarqueeLine from "@/components/shared/MarqueeLine";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Контакти",
@@ -26,16 +27,52 @@ export const metadata: Metadata = {
 export default function ContactsPage() {
   return (
     <>
-      <section className="">
-        <div className="container-site pt-[50px] pb-[67px] lg:pt-[86px] lg:pb-[62px]">
+      <section className="rounded-b-[40px] overflow-hidden">
+        <div className="relative container-site pt-[50px] pb-[67px] lg:pt-[86px] lg:pb-[62px]">
+          <div className="absolute -z-30 top-[170px] lg:top-[50px] right-[-64px] lg:right-[-190px] w-[322px] lg:w-[640px] h-[322px] lg:h-[640px]">
+            <Image
+              src="/images/garantiya/pc.webp"
+              alt="PC"
+              width="469"
+              height="469"
+              className="object-cover w-[322px] lg:w-[640px] h-auto"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-20 bottom-[-182px] right-[-256px] w-[632px] h-[632px]">
+            <Image
+              src="/images/garantiya/right-mask.webp"
+              alt="Steps right shadow desk"
+              width="632"
+              height="632"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-10 bottom-[-276px] right-[-675px] w-[735px] h-[735px]">
+            <Image
+              src="/images/garantiya/steps-right-shadow-desk.svg"
+              alt="Steps right shadow desk"
+              width="735"
+              height="735"
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute -z-40 bottom-[-278px] left-[-541px] lg:bottom-[-598px] lg:left-[-771px] w-[1131px] h-[954px]">
+            <Image
+              src="/images/garantiya/steps-shadows.svg"
+              alt="Steps shadows"
+              width="1131"
+              height="954"
+              className="object-cover"
+            />
+          </div>
           <SectionHeader
             kicker="Контакти"
             title="Контакти Kondor PC"
             subtitle="Щодня з 9:00 до 21:00 — відповідаємо у Telegram та по телефону."
             titleAs="h1"
             className="mb-[67px] lg:text-[62px]"
-            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
-            subtitleClassName="lg:max-w-[406px]"
+            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 max-w-[328px] lg:max-w-none"
+            subtitleClassName="lg:max-w-[406px] max-w-[328px] lg:max-w-none"
           />
 
           <div className="grid gap-6 md:grid-cols-2">
