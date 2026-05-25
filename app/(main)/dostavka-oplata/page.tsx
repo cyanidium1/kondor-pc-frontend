@@ -188,7 +188,7 @@ export default function DeliveryPaymentPage() {
       <MarqueeLine />
 
       {/* PAYMENT */}
-      <section className="container-site py-16 md:py-20">
+      <section className="container-site pt-16 pb-[92px] md:py-20">
         <SectionHeader
           kicker="02 · Оплата"
           title="8 способів оплати"
@@ -216,43 +216,43 @@ export default function DeliveryPaymentPage() {
       </section>
 
       {/* BUSINESS */}
-      <section className="border-y border-border bg-surface/30">
-        <div className="container-site py-16 md:py-20">
+      <section className="rounded-b-[40px]">
+        <div className="container-site pt-[233px] pb-16 md:py-20">
           <SectionHeader
             kicker="ФОП та ЮО"
             title="Для юридичних осіб"
             subtitle="Оформлюй замовлення як ФОП або ЮО — надамо всі необхідні документи."
+            className="mb-10"
+            kickerClassName="text-center"
+            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 text-center"
+            subtitleClassName="text-[14px] lg:text-[16px] leading-[120%] text-center"
           />
-          <div className="rounded-lg border border-border bg-surface p-6">
+          <div className="rounded-lg border border-border bg-surface p-6 mb-9">
             <div className="mb-4 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
               Працюємо з документами
             </div>
             <ul className="grid gap-2 sm:grid-cols-2">
               {BUSINESS_DOCS.map((d) => (
-                <li key={d} className="flex items-center gap-2 text-sm">
-                  <span className="text-[color:var(--fps-green)]">✓</span>
+                <li key={d} className="flex items-center gap-2 text-[12px]">
+                  <span className="text-brand-primary">✓</span>
                   {d}
                 </li>
               ))}
             </ul>
-            <p className="mt-5 text-sm text-muted-foreground">
+            <p className="mt-5 text-[12px] leading-[120%] text-muted-foreground">
               Для оформлення напиши на{" "}
               <a
-                href="mailto:legal@kondor-pc.ua"
-                className="text-foreground underline underline-offset-4"
+                href="mailto:info@kondor-pc.ua"
+                className="text-foreground underline underline-offset-1"
               >
-                legal@kondor-pc.ua
+                info@kondor-pc.ua
               </a>{" "}
               або обери «Для ФОП/ЮО» при оформленні замовлення.
             </p>
           </div>
-        </div>
-      </section>
 
-      {/* FAQ */}
-      <section className="container-prose py-16 md:py-20">
-        <SectionHeader kicker="Часті питання" title="Про доставку та оплату" />
-        <FaqBlock items={items} />
+          <FaqBlock items={items} />
+        </div>
       </section>
     </>
   );
