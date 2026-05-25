@@ -25,7 +25,7 @@ const DELIVERY = [
   {
     icon: Truck,
     title: "Нова Пошта — відділення",
-    price: "Безкоштовно",
+    price: "200–400 ₴",
     term: "1–3 дні",
     note: "Доставка по всій Україні",
   },
@@ -38,18 +38,17 @@ const DELIVERY = [
   },
   {
     icon: MapPin,
-    title: "Самовивіз із шоуруму",
+    title: "Самовивіз",
     price: "Безкоштовно",
     term: "за записом",
-    note: "Київ, щодня 10:00–20:00",
+    note: "Київ",
   },
 ];
 
 const PACKING = [
-  { icon: Box, text: "Подвійна коробка (зовнішня + оригінальна)" },
-  { icon: Shield, text: "Пінопластові вставки на всіх сторонах" },
+  { icon: Package, text: "Страхуємо кожне замовлення на повну вартість" },
   { icon: Package, text: "Додаткова фіксація компонентів всередині корпусу" },
-  { icon: Truck, text: "Фото упаковки перед відправкою — надсилаємо тобі" },
+  { icon: Shield, text: "Пінопластові вставки на всіх сторонах" },
 ];
 
 const PAYMENT = [
@@ -124,7 +123,7 @@ export default function DeliveryPaymentPage() {
       </section>
 
       {/* DELIVERY */}
-      <section className="container-site pb-16 lg:pb-20">
+      <section className="container-site pb-16 lg:pb-20 rounded-b-[28px] lg:rounded-b-[40px]">
         <SectionHeader
           kicker="01 · Доставка"
           title="Способи доставки"
@@ -139,7 +138,7 @@ export default function DeliveryPaymentPage() {
               <div className="mb-4 flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
                 <d.icon className="size-5" strokeWidth={1.5} />
               </div>
-              <div className="font-display text-base font-semibold">
+              <div className="text-[16px] leading-[120%] font-semibold tracking-wide uppercase">
                 {d.title}
               </div>
               <div className="tabular mt-3 flex items-baseline gap-3">
@@ -157,12 +156,14 @@ export default function DeliveryPaymentPage() {
       </section>
 
       {/* PACKING */}
-      <section className="border-y border-border bg-surface/30">
-        <div className="container-site py-16 md:py-20">
+      <section className="">
+        <div className="container-site py-14 md:py-20">
           <SectionHeader
             kicker="Як пакуємо"
-            title="Як ми упаковуємо ПК для доставки"
+            title="ЯК МИ УПАКОВУЄМО ПК ДЛЯ ДОСТАВКИ"
             subtitle="Жодної поломки за всі роки доставки. Якщо коробка прийшла пошкодженою — не приймай, ми вирішимо."
+            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
+            subtitleClassName="text-[16px] leading-[120%]"
           />
           <div className="grid gap-3 sm:grid-cols-2">
             {PACKING.map((p, i) => (
