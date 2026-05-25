@@ -7,6 +7,7 @@ export function SectionHeader({
   subtitle,
   align = "start",
   titleAs = "h2",
+  showKickerDot = true,
   className,
   kickerClassName,
   titleClassName,
@@ -17,6 +18,7 @@ export function SectionHeader({
   subtitle?: ReactNode;
   align?: "start" | "center";
   titleAs?: "h1" | "h2";
+  showKickerDot?: boolean;
   className?: string;
   kickerClassName?: string;
   titleClassName?: string;
@@ -38,7 +40,9 @@ export function SectionHeader({
           )}
         >
           {kicker}
-          <span className="inline-block ml-3 lg:ml-5.5 size-2 lg:size-3 rounded-full bg-brand-primary" />
+          {showKickerDot && (
+            <span className="inline-block ml-3 lg:ml-5.5 size-2 lg:size-3 rounded-full bg-brand-primary" />
+          )}
         </div>
       )}
       {titleAs === "h1" ? (

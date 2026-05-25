@@ -15,6 +15,7 @@ import {
   Shield,
 } from "lucide-react";
 import MarqueeLine from "@/components/shared/MarqueeLine";
+import { Reveal } from "@/components/shared/Reveal";
 
 export const metadata: Metadata = {
   title: "Доставка та оплата",
@@ -103,12 +104,11 @@ const BUSINESS_DOCS = [
   "Договір поставки",
   "УПД / видаткова накладна",
   "Акт приймання-передачі",
-  "ПДВ за потреби",
 ];
 
 export default function DeliveryPaymentPage() {
   const faqs = [...faqsByScope("delivery"), ...faqsByScope("payment")];
-  const items = faqs.length > 0 ? faqs : FAQS.slice(0, 6);
+  const items = faqs.length > 0 ? faqs : FAQS.slice(0, 5);
 
   return (
     <>
@@ -120,19 +120,22 @@ export default function DeliveryPaymentPage() {
             subtitle="Надійно пакуємо та відправляємо ПК по всій Україні. Доступна розстрочка, безготівкова оплата та кілька способів отримання замовлення."
             titleAs="h1"
             className="mb-0"
-            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 max-w-[328px] md:max-w-[490px]"
+            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 md:max-w-[1054px]"
             subtitleClassName="text-[14px] lg:text-[16px] leading-[120%] lg:max-w-[644px]"
           />
         </div>
       </section>
 
       {/* DELIVERY */}
-      <section className="container-site pb-16 lg:pb-20 rounded-b-[28px] lg:rounded-b-[40px]">
+      <section className="container-site pb-[134px] lg:pb-20 rounded-b-[28px] lg:rounded-b-[40px]">
         <SectionHeader
           kicker="01 · Доставка"
           title="Способи доставки"
-          className="mb-7"
+          className="mb-7 lg:mb-10"
+          showKickerDot={false}
+          titleClassName="lg:text-[36px]"
         />
+
         <div className="grid gap-4 md:grid-cols-3">
           {DELIVERY.map((d) => (
             <div
@@ -161,19 +164,20 @@ export default function DeliveryPaymentPage() {
 
       {/* PACKING */}
       <section className="">
-        <div className="container-site py-14 md:py-20">
+        <div className="container-site pt-14 pb-[195px] lg:pt-20 lg:pb-[170px]">
           <SectionHeader
             kicker="Як пакуємо"
             title="ЯК МИ УПАКОВУЄМО ПК ДЛЯ ДОСТАВКИ"
             subtitle="Жодної поломки за всі роки доставки. Якщо коробка прийшла пошкодженою — не приймай, ми вирішимо."
-            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
-            subtitleClassName="text-[16px] leading-[120%]"
+            className="mb-[70px]"
+            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 lg:text-[36px]"
+            subtitleClassName="text-[16px] leading-[120%] lg:max-w-[492px]"
           />
           <div className="grid gap-3 sm:grid-cols-2">
             {PACKING.map((p, i) => (
               <div
                 key={i}
-                className="flex items-start gap-3 rounded-md border border-border bg-surface p-4"
+                className="flex items-center gap-3 rounded-md border border-border bg-surface p-4"
               >
                 <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
                   <p.icon className="size-4.5" strokeWidth={1.5} />
@@ -188,7 +192,7 @@ export default function DeliveryPaymentPage() {
       <MarqueeLine />
 
       {/* PAYMENT */}
-      <section className="container-site pt-16 pb-[92px] md:py-20">
+      <section className="container-site py-[92px] lg:pt-[66px] lg:pb-[76px]">
         <SectionHeader
           kicker="02 · Оплата"
           title="8 способів оплати"
@@ -216,16 +220,17 @@ export default function DeliveryPaymentPage() {
       </section>
 
       {/* BUSINESS */}
-      <section className="rounded-b-[40px]">
-        <div className="container-site pt-[233px] pb-16 md:py-20">
+      <section className="rounded-[40px] bg-brand-primary">
+        <div className="container-site pt-[233px] pb-16 md:py-20 lg:max-w-[861px]">
           <SectionHeader
             kicker="ФОП та ЮО"
             title="Для юридичних осіб"
             subtitle="Оформлюй замовлення як ФОП або ЮО — надамо всі необхідні документи."
             className="mb-10"
-            kickerClassName="text-center"
-            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 text-center"
-            subtitleClassName="text-[14px] lg:text-[16px] leading-[120%] text-center"
+            kickerClassName="text-center text-black"
+            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 text-center text-black"
+            subtitleClassName="text-[14px] lg:text-[16px] leading-[120%] text-center lg:max-w-[424px] lg:mx-auto text-black"
+            showKickerDot={false}
           />
           <div className="rounded-lg border border-border bg-surface p-6 mb-9">
             <div className="mb-4 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
@@ -233,13 +238,16 @@ export default function DeliveryPaymentPage() {
             </div>
             <ul className="grid gap-2 sm:grid-cols-2">
               {BUSINESS_DOCS.map((d) => (
-                <li key={d} className="flex items-center gap-2 text-[12px]">
+                <li
+                  key={d}
+                  className="flex items-center gap-2 text-[12px] lg:text-[14px] leading-[120%]"
+                >
                   <span className="text-brand-primary">✓</span>
                   {d}
                 </li>
               ))}
             </ul>
-            <p className="mt-5 text-[12px] leading-[120%] text-muted-foreground">
+            <p className="mt-5 text-[12px] lg:text-[14px] leading-[120%] text-muted-foreground">
               Для оформлення напиши на{" "}
               <a
                 href="mailto:info@kondor-pc.ua"
