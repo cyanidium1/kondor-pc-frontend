@@ -110,6 +110,7 @@ export default function WarrantyPage() {
               kicker="Гарантія"
               title="ГАРАНТІЯ ДО 3 РОКІВ"
               subtitle="12 місяців гарантії від Kondor PC + оригінальна гарантія виробника на кожен компонент. Якщо щось зламається — забираємо ПК НП за наш рахунок."
+              titleAs="h1"
               titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
               subtitleClassName="text-[14px] lg:text-[16px] leading-[120%] max-w-[328px] lg:max-w-[493px]"
             />
@@ -208,6 +209,7 @@ export default function WarrantyPage() {
             kicker="Як обслуговуємо"
             title="6 КРОКІВ ГАРАНТІЙНОГО ВИПАДКУ"
             subtitle="Середній час обслуговування — 7 робочих днів від звернення до повернення ПК додому."
+            titleAs="h2"
             titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 lg:text-[32px]"
             subtitleClassName="lg:max-w-[455px]"
           />

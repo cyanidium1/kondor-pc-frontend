@@ -59,6 +59,7 @@ export default function PidbirPage() {
               titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
               subtitleClassName="lg:max-w-[398px]"
               className="mb-0 lg:max-w-[606px] lg:mx-auto"
+              titleAs="h1"
             />
           </Reveal>
         </div>

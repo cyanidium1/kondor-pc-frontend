@@ -64,6 +64,7 @@ export default function SborkaPage() {
           titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 max-w-[328px] md:max-w-[490px]"
           subtitleClassName="text-[16px] leading-[120%] max-w-[328px] lg:max-w-[430px]"
           className="mb-12"
+          titleAs="h1"
         />
       </Reveal>
 
