@@ -195,7 +195,7 @@ export default function DeliveryPaymentPage() {
                 <div className="text-[16px] leading-[120%] font-semibold tracking-wide uppercase">
                   {d.title}
                 </div>
-                <div className="tabular mt-3 flex items-baseline gap-3">
+                <div className="tabular mt-3 flex flex-wrap items-baseline gap-3">
                   <span className="font-display text-xl font-bold">
                     {d.price}
                   </span>
@@ -211,8 +211,35 @@ export default function DeliveryPaymentPage() {
       </div>
 
       {/* PACKING */}
-      <section className="">
-        <div className="container-site pt-14 pb-[195px] lg:pt-20 lg:pb-[170px]">
+      <section className="overflow-hidden">
+        <div className="relative container-site pt-14 pb-[195px] lg:pt-20 lg:pb-[170px]">
+          <div className="absolute -z-20 top-[-796px] lg:top-[-154px] right-[-1359px] lg:left-[-120px] w-[1929px] h-[2007px] rotate-180 lg:rotate-0">
+            <Image
+              src="/images/pk/shadows.svg"
+              alt="PK background"
+              width="1929"
+              height="2007"
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute -z-10 bottom-[158px] lg:bottom-[103px] left-[-30px] w-[247px] h-[247px]">
+            <Image
+              src="/images/home/trust/figure.svg"
+              alt="pc"
+              width="247"
+              height="247"
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute -z-10 bottom-0 right-[-7px] lg:right-[90px] w-[307px] lg:w-[501px] h-auto aspect-[501/367]">
+            <Image
+              src="/images/delivery/pc-packaging.webp"
+              alt="PC"
+              width="501"
+              height="367"
+              className="object-cover w-[307px] lg:w-[501px] h-auto"
+            />
+          </div>
           <SectionHeader
             kicker="Як пакуємо"
             title="ЯК МИ УПАКОВУЄМО ПК ДЛЯ ДОСТАВКИ"
