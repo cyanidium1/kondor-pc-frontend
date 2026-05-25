@@ -176,8 +176,22 @@ export default function ContactsPage() {
 
       {/* Legal */}
 
-      <section className="container-site py-[92px] lg:pt-30 lg:pb-7">
-        <SectionHeader kicker="Юридична інформація" title="Реквізити" />
+      <section className="relative container-site py-[92px] lg:py-30">
+        <div className="absolute -z-50 top-[-206px] lg:top-[-154px] right-[-510px] lg:left-[-120px] w-[1929px] h-[2007px] rotate-15">
+          <Image
+            src="/images/pk/shadows.svg"
+            alt="PK background"
+            width="1929"
+            height="2007"
+            className="object-cover"
+          />
+        </div>
+
+        <SectionHeader
+          kicker="Юридична інформація"
+          title="РЕКВІЗИТИ"
+          titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
+        />
         <div className="rounded-lg border border-border bg-surface p-6">
           <div className="flex items-start gap-3">
             <Building2
