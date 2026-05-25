@@ -267,13 +267,23 @@ export default function DeliveryPaymentPage() {
       <MarqueeLine />
 
       {/* PAYMENT */}
-      <section className="container-site py-[92px] lg:pt-[66px] lg:pb-[76px]">
+      <section className="relative container-site py-[92px] lg:pt-[66px] lg:pb-[76px]">
+        <div className="absolute -z-10 top-[301px] sm:top-[231px] lg:top-[81px] left-[52px] sm:left-[362px] lg:left-[787px] xl:left-[827px] w-[252px] h-[269px] sm:w-[252px] sm:h-[269px] lg:w-[354px] lg:h-[346px]">
+          <Image
+            src="/images/home/top-rated/figure.svg"
+            alt="figure"
+            width="354"
+            height="346"
+            className="object-cover"
+          />
+          <div className="absolute bottom-[-60px] left-[-10px] lg:bottom-[-348px] lg:left-[-138px] w-[302px] h-[291px] lg:w-[617px] lg:h-[582px] rounded-full bg-black blur-[35px]" />
+        </div>
         <SectionHeader
           kicker="02 · Оплата"
           title="8 способів оплати"
           subtitle="Вибирай при оформленні замовлення — умови відображаються прямо в чекауті."
           className="mb-[92px]"
-          titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
+          titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 lg:text-[36px]"
           subtitleClassName="text-[16px] leading-[120%]"
         />
         <div className="grid gap-3 sm:grid-cols-2">
