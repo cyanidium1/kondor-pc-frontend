@@ -305,8 +305,108 @@ export default function DeliveryPaymentPage() {
       </section>
 
       {/* BUSINESS */}
-      <section className="rounded-[40px] bg-brand-primary">
-        <div className="container-site pt-[233px] pb-16 md:py-20 lg:max-w-[861px]">
+      <section className="relative rounded-[40px] overflow-hidden">
+        <div className="absolute -z-40 inset-0 bg-brand-primary rounded-[40px]" />
+        <div className="relative container-site pt-[233px] pb-16 md:py-20 lg:max-w-[861px]">
+          <div className="lg:hidden absolute -z-20 top-[-125px] left-[calc(50%-460px)] w-[630px] h-[487px]">
+            <Image
+              src="/images/home/faq/top-decor-mob.webp"
+              alt="top-decor-mob"
+              width="630"
+              height="487"
+              className="object-cover"
+            />
+          </div>
+          <div className="lg:hidden absolute -z-10 top-[-520px] left-[calc(50%-710px)] w-[1175px] h-[1153px]">
+            <Image
+              src="/images/home/faq/top-shadows-mob.svg"
+              alt="top-shadows-mob"
+              width="1175"
+              height="1153"
+              className="object-cover"
+            />
+          </div>
+          <div className="lg:hidden absolute -z-10 bottom-[-345px] left-[calc(50%-340px)] w-[748px] h-[549px]">
+            <Image
+              src="/images/home/faq/bottom-decor-mob.webp"
+              alt="bottom-decor-mob"
+              width="748"
+              height="549"
+              className="object-cover"
+            />
+          </div>
+          <div className="lg:hidden absolute -z-20 bottom-[-265px] left-[calc(50%-467px)] w-[975px] h-[975px]">
+            <Image
+              src="/images/home/faq/bottom-shadows-mob.svg"
+              alt="bottom-shadows-mob"
+              width="975"
+              height="975"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-20 top-[22px] left-[calc(50%-1440px)] w-[1231px] h-[767px]">
+            <Image
+              src="/images/home/faq/left-decor-desk.webp"
+              alt="left-decor-desk"
+              width="1231"
+              height="767"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-30 top-[69px] right-[calc(50%-1510px)] w-[1889px] h-[1200px]">
+            <Image
+              src="/images/delivery/right-decor-desk.webp"
+              alt="right-decor-desk"
+              width="1889"
+              height="1200"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-20 bottom-0 left-[calc(50%-627px)] w-[1004px] h-[600px]">
+            <Image
+              src="/images/delivery/shadow-bottom-desk.svg"
+              alt="shadow-bottom-desk"
+              width="1004"
+              height="600"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-10 top-[0px] left-[calc(50%-502px)] w-[1004px] h-[695px]">
+            <Image
+              src="/images/home/faq/center-shadows-desk.svg"
+              alt="center-decor-desk"
+              width="1004"
+              height="695"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-10 top-[-453px] left-[calc(50%-1480px)] w-[1056px] h-[1021px]">
+            <Image
+              src="/images/home/faq/top-left-shadows-desk.svg"
+              alt="top-left-shadows-desk"
+              width="1056"
+              height="1021"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-10 bottom-[-462px] left-[calc(50%-1377px)] w-[975px] h-[975px]">
+            <Image
+              src="/images/home/faq/bottom-left-shadows-desk.svg"
+              alt="bottom-left-shadows-desk"
+              width="975"
+              height="975"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-10 bottom-[-404px] right-[calc(50%-1277px)] w-[735px] h-[735px]">
+            <Image
+              src="/images/home/faq/bottom-right-shadows-desk.svg"
+              alt="bottom-right-shadows-desk"
+              width="735"
+              height="735"
+              className="object-cover"
+            />
+          </div>
           <SectionHeader
             kicker="ФОП та ЮО"
             title="Для юридичних осіб"
