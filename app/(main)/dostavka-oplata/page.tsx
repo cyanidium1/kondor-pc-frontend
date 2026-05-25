@@ -14,6 +14,7 @@ import {
   Box,
   Shield,
 } from "lucide-react";
+import MarqueeLine from "@/components/shared/MarqueeLine";
 
 export const metadata: Metadata = {
   title: "Доставка та оплата",
@@ -57,6 +58,24 @@ const PAYMENT = [
     title: "Карта онлайн (MonoPay)",
     text: "Миттєве підтвердження. Комісія 1.3% додається до суми.",
   },
+
+  {
+    icon: Wallet,
+    title: "Monobank Частинами",
+    text: "3 платежі без %. Оформлення онлайн 2 хв.",
+  },
+
+  {
+    icon: Wallet,
+    title: "ПУМБ Частинами",
+    text: "До 24 місяців (% залежить від терміну).",
+  },
+
+  {
+    icon: Building2,
+    title: "ФОП / ЮО — рахунок",
+    text: "Рахунок, договір та закриваючі документи для ФОП/ЮО.",
+  },
   {
     icon: Package,
     title: "Оплата при отриманні на НП",
@@ -64,28 +83,13 @@ const PAYMENT = [
   },
   {
     icon: Wallet,
-    title: "Monobank Частинами",
-    text: "4 платежі без %. Оформлення онлайн 2 хв.",
-  },
-  {
-    icon: Wallet,
     title: "ПриватБанк Оплата частинами",
-    text: "До 9 платежів без переплати.",
-  },
-  {
-    icon: Wallet,
-    title: "ПУМБ Частинами",
-    text: "До 12 місяців (% залежить від терміну).",
+    text: "До 24 місяців (% залежить від терміну).",
   },
   {
     icon: Banknote,
     title: "Безготівковий IBAN",
     text: "Переказ на наш IBAN — для фізосіб.",
-  },
-  {
-    icon: Building2,
-    title: "ФОП / ЮО — рахунок",
-    text: "Рахунок, договір, УПД, ПДВ за потреби.",
   },
   {
     icon: Bitcoin,
@@ -181,12 +185,17 @@ export default function DeliveryPaymentPage() {
         </div>
       </section>
 
+      <MarqueeLine />
+
       {/* PAYMENT */}
       <section className="container-site py-16 md:py-20">
         <SectionHeader
           kicker="02 · Оплата"
           title="8 способів оплати"
           subtitle="Вибирай при оформленні замовлення — умови відображаються прямо в чекауті."
+          className="mb-[92px]"
+          titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
+          subtitleClassName="text-[16px] leading-[120%]"
         />
         <div className="grid gap-3 sm:grid-cols-2">
           {PAYMENT.map((p) => (
