@@ -240,27 +240,32 @@ export default function DeliveryPaymentPage() {
               className="object-cover w-[307px] lg:w-[501px] h-auto"
             />
           </div>
-          <SectionHeader
-            kicker="Як пакуємо"
-            title="ЯК МИ УПАКОВУЄМО ПК ДЛЯ ДОСТАВКИ"
-            subtitle="Жодної поломки за всі роки доставки. Якщо коробка прийшла пошкодженою — не приймай, ми вирішимо."
-            className="mb-[70px]"
-            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 lg:text-[36px]"
-            subtitleClassName="text-[16px] leading-[120%] lg:max-w-[492px]"
-          />
-          <div className="grid gap-3 sm:grid-cols-2">
-            {PACKING.map((p, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-3 rounded-md border border-border bg-surface p-4"
-              >
-                <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
-                  <p.icon className="size-4.5" strokeWidth={1.5} />
+          <Reveal>
+            <SectionHeader
+              kicker="Як пакуємо"
+              title="ЯК МИ УПАКОВУЄМО ПК ДЛЯ ДОСТАВКИ"
+              subtitle="Жодної поломки за всі роки доставки. Якщо коробка прийшла пошкодженою — не приймай, ми вирішимо."
+              className="mb-[70px]"
+              titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 lg:text-[36px]"
+              subtitleClassName="text-[16px] leading-[120%] lg:max-w-[492px]"
+            />
+          </Reveal>
+          <Reveal delay={80}>
+            {" "}
+            <div className="grid gap-3 sm:grid-cols-2">
+              {PACKING.map((p, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 rounded-md border border-border bg-surface p-4"
+                >
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
+                    <p.icon className="size-4.5" strokeWidth={1.5} />
+                  </div>
+                  <div className="text-sm">{p.text}</div>
                 </div>
-                <div className="text-sm">{p.text}</div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -278,30 +283,38 @@ export default function DeliveryPaymentPage() {
           />
           <div className="absolute bottom-[-60px] left-[-10px] lg:bottom-[-348px] lg:left-[-138px] w-[302px] h-[291px] lg:w-[617px] lg:h-[582px] rounded-full bg-black blur-[35px]" />
         </div>
-        <SectionHeader
-          kicker="02 · Оплата"
-          title="8 способів оплати"
-          subtitle="Вибирай при оформленні замовлення — умови відображаються прямо в чекауті."
-          className="mb-[92px]"
-          titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 lg:text-[36px]"
-          subtitleClassName="text-[16px] leading-[120%]"
-        />
-        <div className="grid gap-3 sm:grid-cols-2">
-          {PAYMENT.map((p) => (
-            <div
-              key={p.title}
-              className="flex items-start gap-3 rounded-lg border border-border bg-surface p-5"
-            >
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
-                <p.icon className="size-5" strokeWidth={1.5} />
+        <Reveal>
+          {" "}
+          <SectionHeader
+            kicker="02 · Оплата"
+            title="8 способів оплати"
+            subtitle="Вибирай при оформленні замовлення — умови відображаються прямо в чекауті."
+            className="mb-[92px]"
+            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 lg:text-[36px]"
+            subtitleClassName="text-[16px] leading-[120%]"
+          />
+        </Reveal>
+        <Reveal delay={80}>
+          {" "}
+          <div className="grid gap-3 sm:grid-cols-2">
+            {PAYMENT.map((p) => (
+              <div
+                key={p.title}
+                className="flex items-start gap-3 rounded-lg border border-border bg-surface p-5"
+              >
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
+                  <p.icon className="size-5" strokeWidth={1.5} />
+                </div>
+                <div>
+                  <div className="font-medium">{p.title}</div>
+                  <p className="mt-0.5 text-sm text-muted-foreground">
+                    {p.text}
+                  </p>
+                </div>
               </div>
-              <div>
-                <div className="font-medium">{p.title}</div>
-                <p className="mt-0.5 text-sm text-muted-foreground">{p.text}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Reveal>
       </section>
 
       {/* BUSINESS */}
@@ -407,44 +420,54 @@ export default function DeliveryPaymentPage() {
               className="object-cover"
             />
           </div>
-          <SectionHeader
-            kicker="ФОП та ЮО"
-            title="Для юридичних осіб"
-            subtitle="Оформлюй замовлення як ФОП або ЮО — надамо всі необхідні документи."
-            className="mb-10"
-            kickerClassName="text-center text-black"
-            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 text-center text-black"
-            subtitleClassName="text-[14px] lg:text-[16px] leading-[120%] text-center lg:max-w-[424px] lg:mx-auto text-black"
-            showKickerDot={false}
-          />
-          <div className="rounded-lg border border-border bg-surface p-6 mb-9">
-            <div className="mb-4 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-              Працюємо з документами
-            </div>
-            <ul className="grid gap-2 sm:grid-cols-2">
-              {BUSINESS_DOCS.map((d) => (
-                <li
-                  key={d}
-                  className="flex items-center gap-2 text-[12px] lg:text-[14px] leading-[120%]"
+          <Reveal>
+            {" "}
+            <SectionHeader
+              kicker="ФОП та ЮО"
+              title="Для юридичних осіб"
+              subtitle="Оформлюй замовлення як ФОП або ЮО — надамо всі необхідні документи."
+              className="mb-10"
+              kickerClassName="text-center text-black"
+              titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 text-center text-black"
+              subtitleClassName="text-[14px] lg:text-[16px] leading-[120%] text-center lg:max-w-[424px] lg:mx-auto text-black"
+              showKickerDot={false}
+            />
+          </Reveal>
+          <Reveal delay={80}>
+            {" "}
+            <div className="rounded-lg border border-border bg-surface p-6 mb-9">
+              <div className="mb-4 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                Працюємо з документами
+              </div>
+              <ul className="grid gap-2 sm:grid-cols-2">
+                {BUSINESS_DOCS.map((d) => (
+                  <li
+                    key={d}
+                    className="flex items-center gap-2 text-[12px] lg:text-[14px] leading-[120%]"
+                  >
+                    <span className="text-brand-primary">✓</span>
+                    {d}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-5 text-[12px] lg:text-[14px] leading-[120%] text-muted-foreground">
+                Для оформлення напиши на{" "}
+                <a
+                  href="mailto:info@kondor-pc.ua"
+                  className="text-foreground underline underline-offset-1"
                 >
-                  <span className="text-brand-primary">✓</span>
-                  {d}
-                </li>
-              ))}
-            </ul>
-            <p className="mt-5 text-[12px] lg:text-[14px] leading-[120%] text-muted-foreground">
-              Для оформлення напиши на{" "}
-              <a
-                href="mailto:info@kondor-pc.ua"
-                className="text-foreground underline underline-offset-1"
-              >
-                info@kondor-pc.ua
-              </a>{" "}
-              або обери «Для ФОП/ЮО» при оформленні замовлення.
-            </p>
-          </div>
+                  info@kondor-pc.ua
+                </a>{" "}
+                або обери «Для ФОП/ЮО» при оформленні замовлення.
+              </p>
+            </div>
+            /
+          </Reveal>
 
-          <FaqBlock items={items} />
+          <Reveal delay={160}>
+            {" "}
+            <FaqBlock items={items} />
+          </Reveal>
         </div>
       </section>
     </>
