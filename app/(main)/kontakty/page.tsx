@@ -14,6 +14,10 @@ import {
   AtSign,
   Send,
 } from "lucide-react";
+import ArrowIcon from "@/components/icons/ArrowIcon";
+import MarqueeLine from "@/components/shared/MarqueeLine";
+import Image from "next/image";
+import { Reveal } from "@/components/shared/Reveal";
 
 export const metadata: Metadata = {
   title: "Контакти",
@@ -24,216 +28,234 @@ export const metadata: Metadata = {
 export default function ContactsPage() {
   return (
     <>
-      <section className="border-b border-border">
-        <div className="container-site py-16 md:py-24 text-center">
-          <div className="mb-4 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-            Контакти
+      <section className="rounded-b-[40px] overflow-hidden">
+        <div className="relative container-site pt-[50px] pb-[67px] lg:pt-[86px] lg:pb-[62px]">
+          <div className="absolute -z-30 top-[170px] lg:top-[50px] right-[-64px] lg:right-[-190px] w-[322px] lg:w-[640px] h-[322px] lg:h-[640px]">
+            <Image
+              src="/images/garantiya/pc.webp"
+              alt="PC"
+              width="469"
+              height="469"
+              className="object-cover w-[322px] lg:w-[640px] h-auto"
+            />
           </div>
-          <h1 className="font-display text-4xl font-bold md:text-5xl">
-            Контакти Kondor PC
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Щодня з 9:00 до 21:00 — відповідаємо у Telegram, по телефону або в
-            шоурумі.
-          </p>
+          <div className="hidden lg:block absolute -z-20 bottom-[-182px] right-[-256px] w-[632px] h-[632px]">
+            <Image
+              src="/images/garantiya/right-mask.webp"
+              alt="Steps right shadow desk"
+              width="632"
+              height="632"
+              className="object-cover"
+            />
+          </div>
+          <div className="hidden lg:block absolute -z-10 bottom-[-276px] right-[-675px] w-[735px] h-[735px]">
+            <Image
+              src="/images/garantiya/steps-right-shadow-desk.svg"
+              alt="Steps right shadow desk"
+              width="735"
+              height="735"
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute -z-40 bottom-[-278px] left-[-541px] lg:bottom-[-598px] lg:left-[-771px] w-[1131px] h-[954px]">
+            <Image
+              src="/images/garantiya/steps-shadows.svg"
+              alt="Steps shadows"
+              width="1131"
+              height="954"
+              className="object-cover"
+            />
+          </div>
+          <Reveal>
+            {" "}
+            <SectionHeader
+              kicker="Контакти"
+              title="Контакти Kondor PC"
+              subtitle="Щодня з 9:00 до 21:00 — відповідаємо у Telegram та по телефону."
+              titleAs="h1"
+              className="mb-[67px] lg:text-[62px]"
+              titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 max-w-[328px] lg:max-w-none"
+              subtitleClassName="lg:max-w-[406px] max-w-[328px] lg:max-w-none"
+            />
+          </Reveal>
+
+          <Reveal>
+            {" "}
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="space-y-4">
+                {/* Primary contacts */}
+                <div className="space-y-4 h-auto">
+                  <div className="rounded-lg border border-border bg-surface pt-6 px-6 pb-[41px] h-auto">
+                    <div className="mb-4 text-[11px] uppercase tracking-wider text-muted-foreground">
+                      Контакти
+                    </div>
+                    <ul className="space-y-4">
+                      <ContactRow
+                        icon={Phone}
+                        label="Телефон"
+                        value="+380 63 363 10 66"
+                        href="tel:+380633631066"
+                        note="щодня 9:00–21:00"
+                      />
+                      <ContactRow
+                        icon={MessageSquare}
+                        label="Telegram · Продаж"
+                        value="@kondor_pc_admin"
+                        href="https://t.me/kondor_pc_admin"
+                        external
+                      />
+
+                      <ContactRow
+                        icon={Mail}
+                        label="Email · Продаж"
+                        value="sales@kondor-pc.ua"
+                        href="mailto:sales@kondor-pc.ua"
+                      />
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="rounded-lg border border-border bg-surface p-6 md:py-8.25 lg:py-6.25">
+                    <div className="mb-4 text-[11px] uppercase tracking-wider text-muted-foreground">
+                      Соцмережі
+                    </div>
+                    <div className="grid gap-2 sm:grid-cols-3">
+                      <ExternalLink
+                        icon={MessageSquare}
+                        label="Telegram"
+                        href="https://t.me/kondor_pc"
+                      />
+                      <ExternalLink
+                        icon={AtSign}
+                        label="Instagram"
+                        href="https://instagram.com/kondor_pc"
+                      />
+                      <ExternalLink
+                        icon={Send}
+                        label="YouTube"
+                        href="https://youtube.com/@kondor-pc"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* Contact form */}
+              <div className="">
+                <form className="space-y-3.5 rounded-lg border border-border bg-surface p-6">
+                  <div className="grid gap-1">
+                    <Label className="text-[14px]">Ім&apos;я</Label>
+                    <Input
+                      placeholder="Іван Петренко"
+                      className="text-[14px]"
+                    />
+                  </div>
+                  <div className="grid gap-1">
+                    <Label className="text-[14px]">Телефон</Label>
+                    <Input
+                      placeholder="+380 95 000 00 00"
+                      className="text-[14px]"
+                    />
+                  </div>
+                  <div className="grid gap-1">
+                    <Label className="text-[14px]">Повідомлення</Label>
+                    <textarea
+                      rows={4}
+                      placeholder="Опиши свій запит..."
+                      className="w-full h-[98px] rounded-md border border-border bg-background px-3 py-2 text-[14px] focus-visible:border-ring focus-visible:outline-none"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    size="lg"
+                    variant="default"
+                    className="h-12 w-full px-6 rounded-none normal-case font-body text-[14px] leading-[120%] font-medium tracking-normal"
+                  >
+                    Надіслати
+                  </Button>
+                  <p className="text-center text-[14px] leading-[120%] font-light text-muted-foreground">
+                    Залиш повідомлення — відповімо протягом робочої години.
+                  </p>
+                </form>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
-
-      <section className="container-site py-16 md:py-20">
-        <div className="grid gap-6 md:grid-cols-2">
-          {/* Primary contacts */}
-          <div className="space-y-4">
-            <div className="rounded-lg border border-border bg-surface p-6">
-              <div className="mb-4 text-[11px] uppercase tracking-wider text-muted-foreground">
-                Контакти
-              </div>
-              <ul className="space-y-4">
-                <ContactRow
-                  icon={Phone}
-                  label="Телефон"
-                  value="+380 XX XXX XX XX"
-                  href="tel:+380000000000"
-                  note="щодня 9:00–21:00"
-                />
-                <ContactRow
-                  icon={MessageSquare}
-                  label="Telegram · Продаж"
-                  value="@kondor_pc"
-                  href="https://t.me/kondor_pc"
-                  external
-                />
-                <ContactRow
-                  icon={MessageSquare}
-                  label="Telegram · Підтримка"
-                  value="@kondor_support"
-                  href="https://t.me/kondor_support"
-                  external
-                />
-                <ContactRow
-                  icon={Mail}
-                  label="Email · Продаж"
-                  value="sales@kondor-pc.ua"
-                  href="mailto:sales@kondor-pc.ua"
-                />
-                <ContactRow
-                  icon={Mail}
-                  label="Email · Гарантія"
-                  value="support@kondor-pc.ua"
-                  href="mailto:support@kondor-pc.ua"
-                />
-                <ContactRow
-                  icon={Mail}
-                  label="Email · ФОП / ЮО"
-                  value="legal@kondor-pc.ua"
-                  href="mailto:legal@kondor-pc.ua"
-                />
-              </ul>
-            </div>
-          </div>
-
-          {/* Showroom */}
-          <div className="space-y-4">
-            <div className="rounded-lg border border-border bg-surface p-6">
-              <div className="mb-4 flex items-center gap-2 text-[11px] uppercase tracking-wider text-muted-foreground">
-                <MapPin className="size-3.5" /> Шоурум у Києві
-              </div>
-              <div className="font-display text-base font-semibold">
-                [Адреса — буде заповнено]
-              </div>
-              <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                <Clock className="size-4" strokeWidth={1.5} />
-                Щодня 10:00–20:00
-              </div>
-              <div className="mt-1 text-sm text-muted-foreground">
-                Паркінг безкоштовний · Метро [станція, 5 хв]
-              </div>
-              <div
-                aria-hidden
-                className="mt-5 flex aspect-video items-center justify-center overflow-hidden rounded-md border border-border bg-background/60 text-[10px] uppercase tracking-[0.25em] text-muted-foreground/40"
-              >
-                Google Maps · буде вставлено
-              </div>
-              <p className="mt-4 text-sm text-muted-foreground">
-                Перед візитом бажано зателефонувати або написати в Telegram —
-                підготуємо для тебе демо потрібної збірки.
-              </p>
-            </div>
-
-            <div className="rounded-lg border border-border bg-surface p-6">
-              <div className="mb-4 text-[11px] uppercase tracking-wider text-muted-foreground">
-                Соцмережі
-              </div>
-              <div className="grid gap-2 sm:grid-cols-3">
-                <ExternalLink
-                  icon={MessageSquare}
-                  label="Telegram"
-                  href="https://t.me/kondor_pc"
-                />
-                <ExternalLink
-                  icon={AtSign}
-                  label="Instagram"
-                  href="https://instagram.com/kondor_pc"
-                />
-                <ExternalLink
-                  icon={Send}
-                  label="YouTube"
-                  href="https://youtube.com/@kondor-pc"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact form */}
-      <section className="border-y border-border bg-surface/30">
-        <div className="container-narrow py-16 md:py-20">
-          <SectionHeader
-            align="center"
-            kicker="Зв'язатися"
-            title="Напиши нам"
-            subtitle="Залиш повідомлення — відповімо протягом робочої години."
-          />
-          <form className="space-y-4 rounded-lg border border-border bg-surface p-6">
-            <div className="grid gap-1.5">
-              <Label>Ім&apos;я</Label>
-              <Input placeholder="Іван Петренко" />
-            </div>
-            <div className="grid gap-1.5">
-              <Label>Телефон</Label>
-              <Input placeholder="+380 95 000 00 00" />
-            </div>
-            <div className="grid gap-1.5">
-              <Label>Повідомлення</Label>
-              <textarea
-                rows={4}
-                placeholder="Опиши свій запит..."
-                className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus-visible:border-ring focus-visible:outline-none"
-              />
-            </div>
-            <Button type="button" size="lg" className="h-12 w-full px-6">
-              Надіслати
-            </Button>
-            <p className="text-center text-[11px] uppercase tracking-wider text-muted-foreground">
-              Форма у превью · реальна відправка підключається разом з
-              email/Telegram інтеграціями
-            </p>
-          </form>
-        </div>
-      </section>
+      <MarqueeLine />
 
       {/* Legal */}
-      <section className="container-site py-16 md:py-20">
-        <SectionHeader
-          kicker="Юридична інформація"
-          title="Реквізити"
-        />
-        <div className="rounded-lg border border-border bg-surface p-6">
-          <div className="flex items-start gap-3">
-            <Building2
-              className="mt-1 size-5 shrink-0 text-muted-foreground"
-              strokeWidth={1.5}
-            />
-            <div className="grid gap-1 text-sm">
-              <div>
-                <span className="text-muted-foreground">Продавець: </span>
-                <span className="font-medium">ФОП [ПІБ] / ТОВ [Назва]</span>
-              </div>
-              <div>
-                <span className="text-muted-foreground">ЄДРПОУ/РНОКПП: </span>
-                <span className="tabular font-medium">XXXXXXXX</span>
-              </div>
-              <div>
-                <span className="text-muted-foreground">Юридична адреса: </span>
-                <span>[Адреса]</span>
-              </div>
-              <div>
-                <span className="text-muted-foreground">IBAN: </span>
-                <span className="tabular">UA XX XXXXXX XXXXXXXXXXXXXXXXXXXXX</span>
+
+      <section className="relative container-site py-[92px] lg:py-30">
+        <div className="absolute -z-50 top-[-206px] lg:top-[-154px] right-[-510px] lg:left-[-120px] w-[1929px] h-[2007px] rotate-15">
+          <Image
+            src="/images/pk/shadows.svg"
+            alt="PK background"
+            width="1929"
+            height="2007"
+            className="object-cover"
+          />
+        </div>
+
+        <Reveal>
+          <SectionHeader
+            kicker="Юридична інформація"
+            title="РЕКВІЗИТИ"
+            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
+          />
+        </Reveal>
+        <Reveal>
+          <div className="rounded-lg border border-border bg-surface p-6">
+            <div className="flex items-start gap-3">
+              <Building2
+                className="mt-1 size-5 shrink-0 text-muted-foreground"
+                strokeWidth={1.5}
+              />
+              <div className="grid gap-1 text-sm">
+                <div>
+                  <span className="text-muted-foreground">Продавець: </span>
+                  <span className="font-medium">ФОП [ПІБ] / ТОВ [Назва]</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">ЄДРПОУ/РНОКПП: </span>
+                  <span className="tabular font-medium">XXXXXXXX</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">
+                    Юридична адреса:{" "}
+                  </span>
+                  <span>[Адреса]</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">IBAN: </span>
+                  <span className="tabular">
+                    UA XX XXXXXX XXXXXXXXXXXXXXXXXXXXX
+                  </span>
+                </div>
               </div>
             </div>
+            <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 border-t border-border pt-4 text-sm">
+              <Link
+                href="/legal/publichna-oferta"
+                className="text-muted-foreground underline underline-offset-4 transition hover:text-foreground"
+              >
+                Публічна оферта
+              </Link>
+              <Link
+                href="/legal/politika-konfidentsiynosti"
+                className="text-muted-foreground underline underline-offset-4 transition hover:text-foreground"
+              >
+                Політика конфіденційності
+              </Link>
+              <Link
+                href="/legal/pravova-informatsiya"
+                className="text-muted-foreground underline underline-offset-4 transition hover:text-foreground"
+              >
+                Правова інформація
+              </Link>
+            </div>
           </div>
-          <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 border-t border-border pt-4 text-sm">
-            <Link
-              href="/legal/publichna-oferta"
-              className="text-muted-foreground underline underline-offset-4 transition hover:text-foreground"
-            >
-              Публічна оферта
-            </Link>
-            <Link
-              href="/legal/politika-konfidentsiynosti"
-              className="text-muted-foreground underline underline-offset-4 transition hover:text-foreground"
-            >
-              Політика конфіденційності
-            </Link>
-            <Link
-              href="/legal/pravova-informatsiya"
-              className="text-muted-foreground underline underline-offset-4 transition hover:text-foreground"
-            >
-              Правова інформація
-            </Link>
-          </div>
-        </div>
+        </Reveal>
       </section>
     </>
   );
@@ -272,9 +294,7 @@ function ContactRow({
           {value}
           {external && " ↗"}
         </a>
-        {note && (
-          <div className="text-xs text-muted-foreground">{note}</div>
-        )}
+        {note && <div className="text-xs text-muted-foreground">{note}</div>}
       </div>
     </li>
   );
@@ -294,10 +314,16 @@ function ExternalLink({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-2 rounded-md border border-border bg-background/40 px-3 py-2 text-sm transition hover:border-white/20"
+      data-size="sm"
+      data-variant="white"
+      className="tech-btn font-heading uppercase text-center h-10 w-full px-3 text-[14px] md:text-[9px] lg:text-[14px] leading-[120%] font-normal tracking-normal"
     >
-      <Icon className="size-4" strokeWidth={1.5} />
-      {label} ↗
+      <span aria-hidden className="tech-btn__edge" />
+      <span aria-hidden className="tech-btn__fill" />
+      <span className="relative inline-flex items-center">
+        <span>{label}</span>
+        <ArrowIcon className="size-5 -rotate-45" />
+      </span>
     </a>
   );
 }
