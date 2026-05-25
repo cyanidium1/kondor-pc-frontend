@@ -116,17 +116,20 @@ export default function DeliveryPaymentPage() {
       <div className="rounded-b-[28px] lg:rounded-b-[40px] overflow-hidden">
         {" "}
         <section>
-          <div className="relative container-site py-[50px] lg:pt-[86px] lg:pb-25">
-            <SectionHeader
-              kicker="Доставка та оплата"
-              title="ШВИДКА ДОСТАВКА ПО УКРАЇНІ, ЗРУЧНА ОПЛАТА"
-              subtitle="Надійно пакуємо та відправляємо ПК по всій Україні. Доступна розстрочка, безготівкова оплата та кілька способів отримання замовлення."
-              titleAs="h1"
-              className="mb-0"
-              titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 md:max-w-[1054px]"
-              subtitleClassName="text-[14px] lg:text-[16px] leading-[120%] lg:max-w-[644px]"
-            />
-          </div>
+          <Reveal>
+            {" "}
+            <div className="relative container-site py-[50px] lg:pt-[86px] lg:pb-25">
+              <SectionHeader
+                kicker="Доставка та оплата"
+                title="ШВИДКА ДОСТАВКА ПО УКРАЇНІ, ЗРУЧНА ОПЛАТА"
+                subtitle="Надійно пакуємо та відправляємо ПК по всій Україні. Доступна розстрочка, безготівкова оплата та кілька способів отримання замовлення."
+                titleAs="h1"
+                className="mb-0"
+                titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 md:max-w-[1054px]"
+                subtitleClassName="text-[14px] lg:text-[16px] leading-[120%] lg:max-w-[644px]"
+              />
+            </div>
+          </Reveal>
         </section>
         {/* DELIVERY */}
         <section className="relative container-site pb-6 lg:pb-20">
@@ -183,30 +186,33 @@ export default function DeliveryPaymentPage() {
             titleClassName="lg:text-[36px]"
           />
 
-          <div className="grid gap-4 md:grid-cols-3">
-            {DELIVERY.map((d) => (
-              <div
-                key={d.title}
-                className="rounded-lg border border-border bg-surface p-6"
-              >
-                <div className="mb-4 flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
-                  <d.icon className="size-5" strokeWidth={1.5} />
+          <Reveal delay={80}>
+            {" "}
+            <div className="grid gap-4 md:grid-cols-3">
+              {DELIVERY.map((d) => (
+                <div
+                  key={d.title}
+                  className="rounded-lg border border-border bg-surface p-6"
+                >
+                  <div className="mb-4 flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
+                    <d.icon className="size-5" strokeWidth={1.5} />
+                  </div>
+                  <div className="text-[16px] leading-[120%] font-semibold tracking-wide uppercase">
+                    {d.title}
+                  </div>
+                  <div className="tabular mt-3 flex flex-wrap items-baseline gap-3">
+                    <span className="font-display text-xl font-bold">
+                      {d.price}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      · {d.term}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm text-muted-foreground">{d.note}</p>
                 </div>
-                <div className="text-[16px] leading-[120%] font-semibold tracking-wide uppercase">
-                  {d.title}
-                </div>
-                <div className="tabular mt-3 flex flex-wrap items-baseline gap-3">
-                  <span className="font-display text-xl font-bold">
-                    {d.price}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    · {d.term}
-                  </span>
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">{d.note}</p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </Reveal>
         </section>
       </div>
 
