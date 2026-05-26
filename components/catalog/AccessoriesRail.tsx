@@ -28,7 +28,7 @@ export async function AccessoriesRail({
   const groups = groupProducts(addons).slice(0, limit);
 
   return (
-    <section className="">
+    <section className="pb-12">
       <div className="container-site pb-12 md:py-16">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
           <SectionHeader

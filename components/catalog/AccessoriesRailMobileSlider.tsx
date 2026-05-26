@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { CatalogProductGroup } from "@/types/catalog";
-import ArrowIcon from "../icons/ArrowIcon";
 import { CatalogCard } from "./CatalogCard";
 import TriangleIcon from "../icons/TriangleIcon";
 
@@ -32,18 +31,23 @@ export function AccessoriesRailMobileSlider({
     return () => scroller.removeEventListener("scroll", handleScroll);
   }, [groups.length]);
 
+  function normalizeIndex(index: number) {
+    if (groups.length === 0) return 0;
+    return (index + groups.length) % groups.length;
+  }
+
   function scrollToIndex(index: number) {
     const scroller = scrollerRef.current;
     if (!scroller) return;
 
-    const clampedIndex = Math.max(0, Math.min(groups.length - 1, index));
+    const normalizedIndex = normalizeIndex(index);
     const slideWidth = scroller.clientWidth + SLIDE_GAP_PX;
 
     scroller.scrollTo({
-      left: slideWidth * clampedIndex,
+      left: slideWidth * normalizedIndex,
       behavior: "smooth",
     });
-    setCurrentIndex(clampedIndex);
+    setCurrentIndex(normalizedIndex);
   }
 
   return (
@@ -65,8 +69,7 @@ export function AccessoriesRailMobileSlider({
             type="button"
             aria-label="Попередній аксесуар"
             onClick={() => scrollToIndex(currentIndex - 1)}
-            disabled={currentIndex === 0}
-            className="clip-angular-12 flex size-14 items-center justify-center bg-brand-primary text-black transition hover:brightness-105 disabled:opacity-40"
+            className="clip-angular-12 flex size-14 items-center justify-center bg-brand-primary text-black transition hover:brightness-105"
           >
             <TriangleIcon className="mr-0.5" />
           </button>
@@ -74,8 +77,7 @@ export function AccessoriesRailMobileSlider({
             type="button"
             aria-label="Наступний аксесуар"
             onClick={() => scrollToIndex(currentIndex + 1)}
-            disabled={currentIndex === groups.length - 1}
-            className="clip-angular-12 flex size-14 items-center justify-center bg-white text-black transition hover:brightness-105 disabled:opacity-40"
+            className="clip-angular-12 flex size-14 items-center justify-center bg-white text-black transition hover:brightness-105"
           >
             <TriangleIcon className="rotate-180 ml-0.5" />
           </button>

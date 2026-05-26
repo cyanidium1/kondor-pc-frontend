@@ -296,28 +296,28 @@ export default async function BuildPage({
           <Section>
             <SectionHeader
               kicker="5 кроків"
-              title="Як проходить кожна збірка"
+              title="ЯК ПРОХОДИТЬ КОЖНА ЗБІРКА"
+              className="mb-8"
+              titleClassName="mt-3 lg:mt-7"
             />
             <div className="grid gap-4 md:grid-cols-5">
               {ASSEMBLY_STEPS.map((s) => (
                 <div
                   key={s.n}
-                  className="relative rounded-lg border border-border bg-surface p-5"
+                  className="relative bg-brand-primary p-5 text-black"
                 >
                   <div className="mb-3 flex items-center justify-between">
-                    <div className="flex size-9 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
+                    <div className="flex size-9 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5 text-white">
                       <s.icon className="size-4.5" strokeWidth={1.5} />
                     </div>
-                    <div className="tabular font-display text-xl font-bold text-muted-foreground/30">
+                    <div className="tabular font-heading text-[20px] font-bold">
                       {String(s.n).padStart(2, "0")}
                     </div>
                   </div>
-                  <div className="font-display text-sm font-semibold leading-tight">
+                  <div className="font-heading text-[16px] font-semibold leading-[120%] uppercase">
                     {s.title}
                   </div>
-                  <p className="mt-1.5 text-xs text-muted-foreground">
-                    {s.text}
-                  </p>
+                  <p className="mt-1.5 text-xs">{s.text}</p>
                 </div>
               ))}
             </div>
