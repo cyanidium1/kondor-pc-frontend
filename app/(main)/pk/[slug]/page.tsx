@@ -43,6 +43,7 @@ import { reviewsForBuild } from "@/lib/mock/reviews";
 import { FAQS } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
+import MarqueeLine from "@/components/shared/MarqueeLine";
 
 export async function generateStaticParams() {
   return BUILDS.map((b) => ({ slug: b.slug }));
@@ -357,16 +358,19 @@ export default async function BuildPage({
           </Section>
 
           {/* BLOCK 9 — REPEAT CTA */}
-          <Section>
+          <Section className="pb-12">
             <BuildRepeatCta />
           </Section>
 
+          <MarqueeLine className="mb-16" />
+
           {/* BLOCK 10 — REVIEWS FOR THIS BUILD */}
           {reviews.length > 0 && (
-            <Section className="border-t border-border">
+            <Section className="pb-11">
               <SectionHeader
                 kicker="Досвід клієнтів"
                 title={`Що кажуть власники ${build.name}`}
+                titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10"
               />
               <div className="grid gap-4 md:grid-cols-3">
                 {reviews.map((r, i) => (
@@ -377,8 +381,15 @@ export default async function BuildPage({
           )}
 
           {/* BLOCK 11 — FAQ */}
-          <Section className="border-t border-border">
-            <SectionHeader kicker="Часті питання" title={`Про ${build.name}`} />
+          <Section className="relative pt-[233px] pb-[122px] rounded-[40px]">
+            <div className="absolute -z-40 inset-0 bg-brand-primary rounded-[40px]" />
+            <SectionHeader
+              kicker="Часті питання"
+              title={`Про ${build.name}`}
+              kickerClassName="text-center text-black"
+              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 text-center text-black"
+              showKickerDot={false}
+            />
             <FaqBlock items={faqs} />
           </Section>
 
