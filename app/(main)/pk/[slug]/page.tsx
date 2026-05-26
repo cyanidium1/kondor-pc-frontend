@@ -132,7 +132,7 @@ function Section({
   className?: string;
 }) {
   return (
-    <section className={cn("py-14 md:py-20", className)}>
+    <section className={cn("", className)}>
       <div className="container-site">{children}</div>
     </section>
   );
@@ -217,7 +217,7 @@ export default async function BuildPage({
           </div> */}
 
           {/* BLOCK 2 — FPS TABLE */}
-          <Section className="pt-3 lg:pt-[128px]">
+          <Section className="pt-3 pb-15 lg:pt-[128px]">
             <SectionHeader
               kicker="Що ти отримаєш"
               title="СКІЛЬКИ FPS ТИ ОТРИМАЄШ У СВОЇХ ІГРАХ"
@@ -228,8 +228,13 @@ export default async function BuildPage({
           </Section>
 
           {/* BLOCK 4 — ASSEMBLY VIDEO */}
-          <Section className="border-y border-border bg-surface/30">
-            <SectionHeader kicker="Процес" title="Як ми збираємо твій ПК" />
+          <Section className="pb-22">
+            <SectionHeader
+              kicker="реальний геймплей"
+              title="РЕАЛЬНІ ТЕСТИ НАШИХ ПК"
+              className="mb-9"
+              titleClassName="mt-3 lg:mt-7"
+            />
             <div className="relative mx-auto max-w-4xl">
               <div className="sku-glow group relative flex aspect-video items-center justify-center overflow-hidden rounded-lg border border-border bg-background">
                 <div
@@ -251,9 +256,6 @@ export default async function BuildPage({
                   assembly video · 60–90s
                 </div>
               </div>
-              <p className="mt-4 text-center text-sm text-muted-foreground">
-                Для кожної моделі знімаємо окреме відео збірки
-              </p>
             </div>
           </Section>
 
