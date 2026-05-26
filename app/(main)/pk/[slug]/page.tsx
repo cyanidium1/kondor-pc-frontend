@@ -395,11 +395,12 @@ export default async function BuildPage({
 
           {/* BLOCK 12 — SIMILAR */}
           {similar.length > 0 && (
-            <Section className="border-t border-border bg-surface/30">
+            <Section className="pt-[92px]">
               <SectionHeader
                 kicker="Альтернативи"
-                title="Інші збірки цього класу"
+                title="ІНШІ ЗБІРКИ ЦЬОГО КЛАСУ"
                 subtitle="Якщо сумніваєшся — глянь сусідів по ціні."
+                titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10"
               />
               <div className="grid gap-4 md:grid-cols-3">
                 {similar.map((s) => (
@@ -420,8 +421,6 @@ export default async function BuildPage({
             slug={build.slug}
             priceUah={build.priceUah}
           />
-
-          <div className="h-20 md:h-0" />
         </div>
       </ProductConfiguratorProvider>
     </Suspense>
