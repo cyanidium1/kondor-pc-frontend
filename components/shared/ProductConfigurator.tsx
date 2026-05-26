@@ -56,8 +56,7 @@ const ProductConfiguratorContext = createContext<ConfiguratorValue | null>(
 function defaultSelections(build: Build): Record<string, string> {
   const map: Record<string, string> = {};
   for (const group of build.configurableOptions ?? []) {
-    const def =
-      group.options.find((o) => o.isDefault) ?? group.options[0];
+    const def = group.options.find((o) => o.isDefault) ?? group.options[0];
     if (def) map[group.id] = def.id;
   }
   return map;
@@ -176,7 +175,9 @@ export function ProductConfiguratorProvider({
         return { groupId: group.id, groupLabel: group.label, option };
       })
       .filter(
-        (x): x is { groupId: string; groupLabel: string; option: ConfigOption } =>
+        (
+          x,
+        ): x is { groupId: string; groupLabel: string; option: ConfigOption } =>
           x !== null,
       );
 
@@ -230,7 +231,8 @@ export function ProductConfiguratorProvider({
           const def = opts.find((o) => o.isDefault) ?? opts[0];
           expected = def.id;
         } else if (preset === "premium") {
-          expected = [...opts].sort((a, b) => b.priceDelta - a.priceDelta)[0].id;
+          expected = [...opts].sort((a, b) => b.priceDelta - a.priceDelta)[0]
+            .id;
         } else {
           const def = opts.find((o) => o.isDefault) ?? opts[0];
           const upgrades = opts.filter(
@@ -329,30 +331,16 @@ export function Configurator({ className }: { className?: string }) {
       {/* Kicker + live delta */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
-          <div
-            className="text-[10px] font-semibold uppercase tracking-[0.22em]"
-            style={{ color: "var(--sku, currentColor)" }}
-          >
-            Конфігуратор
-          </div>
-          <div className="mt-1 font-display text-lg font-bold leading-tight">
+          <div className="mt-1 text-[11px] font-medium uppercase text-muted-foreground">
             Налаштуй під себе
           </div>
         </div>
         <div className="min-w-0 text-right">
-          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
-            Поточна сума
-          </div>
-          <div className="tabular mt-0.5 whitespace-nowrap font-display text-xl font-bold">
-            {formatUah(resolvedPriceUah)}&nbsp;₴
-          </div>
           {deltaUah !== 0 && (
             <div
               className={cn(
                 "tabular text-[11px] font-semibold",
-                deltaUah > 0
-                  ? "text-[color:var(--sku,currentColor)]"
-                  : "text-[color:var(--fps-green)]",
+                deltaUah > 0 ? "text-brand-primary" : "text-brand-primary",
               )}
             >
               {deltaUah > 0 ? "+" : "−"}
@@ -361,41 +349,6 @@ export function Configurator({ className }: { className?: string }) {
           )}
         </div>
       </div>
-
-      {/* Preset tabs — one-click Базова/Оптимальна/Преміум */}
-      <div className="grid grid-cols-3 gap-1.5">
-        {PRESETS.map((p) => {
-          const active = currentPreset === p.key;
-          return (
-            <button
-              key={p.key}
-              type="button"
-              onClick={() => applyPreset(p.key)}
-              aria-pressed={active}
-              className={cn(
-                "group/preset relative min-w-0 flex flex-col items-start gap-0.5 rounded-md border px-3 py-2 text-left transition",
-                active
-                  ? "border-foreground bg-surface-elevated"
-                  : "border-border bg-background/40 hover:border-white/25",
-              )}
-            >
-              <span
-                className={cn(
-                  "text-[10px] font-semibold uppercase tracking-wider",
-                  active ? "text-foreground" : "text-muted-foreground",
-                )}
-              >
-                {p.label}
-              </span>
-              <span className="text-[10px] leading-tight text-muted-foreground">
-                {p.note}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="h-px w-full bg-border" />
 
       {groups.map((group) => {
         const activeId = selections[group.id];
@@ -406,7 +359,7 @@ export function Configurator({ className }: { className?: string }) {
                 {group.label}
               </div>
             </div>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-0.5">
               {group.options.map((opt) => {
                 const active = activeId === opt.id;
                 const isPositive = opt.priceDelta > 0;
@@ -418,7 +371,7 @@ export function Configurator({ className }: { className?: string }) {
                     onClick={() => select(group.id, opt.id)}
                     aria-pressed={active}
                     className={cn(
-                      "rounded-md border px-3 py-1.5 text-left text-sm transition",
+                      "rounded-md border px-2.5 py-1.5 text-left text-sm transition",
                       active
                         ? "border-foreground bg-surface-elevated"
                         : "border-border hover:border-white/25",
@@ -430,7 +383,7 @@ export function Configurator({ className }: { className?: string }) {
                         className={cn(
                           "ml-2 text-[11px]",
                           isPositive && "text-muted-foreground",
-                          isNegative && "text-[color:var(--fps-green)]",
+                          isNegative && "text-brand-primary",
                         )}
                       >
                         {isPositive && "+"}

@@ -2,15 +2,24 @@
 
 import { PriceBlock } from "@/components/shared/PriceBlock";
 import { PurchaseActions } from "@/components/shared/PurchaseActions";
-import { Configurator, useProductConfigurator } from "@/components/shared/ProductConfigurator";
+import {
+  Configurator,
+  useProductConfigurator,
+} from "@/components/shared/ProductConfigurator";
 import { ContactManager } from "@/components/shared/ContactManager";
 import { UpgradeSuggestion } from "@/components/shared/UpgradeSuggestion";
 import { formatInstallment } from "@/lib/format";
 import type { BuildStatus } from "@/types/build";
 
 const STATUS = {
-  in_stock: { label: "В наявності — відправимо завтра", dot: "var(--fps-green)" },
-  assemble_on_order: { label: "Збираємо під замовлення", dot: "var(--fps-yellow)" },
+  in_stock: {
+    label: "В наявності — відправимо завтра",
+    dot: "var(--fps-green)",
+  },
+  assemble_on_order: {
+    label: "Збираємо під замовлення",
+    dot: "var(--fps-yellow)",
+  },
   out_of_stock: { label: "Немає в наявності", dot: "var(--fps-red)" },
   archived: { label: "Архів", dot: "var(--muted-foreground)" },
 } as const;
@@ -26,10 +35,12 @@ export function BuildIdentityColumn() {
         <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
           Ігровий ПК · {build.tier}
         </div>
-        <h1 className="break-words font-display text-5xl font-bold uppercase leading-[1] tracking-tight md:text-6xl">
+        <h1 className="break-words font-display text-[40px] lg:text-[60px] font-bold uppercase leading-[1.4] tracking-tight">
           {build.name}
         </h1>
-        <p className="mt-3 text-lg text-muted-foreground">{build.shortTagline}</p>
+        <p className="mt-3 text-[16px] text-muted-foreground">
+          {build.shortTagline}
+        </p>
       </div>
 
       <div className="tabular grid grid-cols-2 gap-3 rounded-md border border-border bg-surface p-4 text-sm">
@@ -63,7 +74,9 @@ export function BuildIdentityColumn() {
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
             Накопичувач
           </div>
-          <div className="break-words font-semibold">{resolvedSpec.storage}</div>
+          <div className="break-words font-semibold">
+            {resolvedSpec.storage}
+          </div>
         </div>
       </div>
 
@@ -83,17 +96,12 @@ export function BuildIdentityColumn() {
         <div className="grid gap-1.5">
           <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
             <span>Monobank Частинами</span>
-            <span className="font-medium">
-              {formatInstallment(resolvedPriceUah, 4)}
-            </span>
           </div>
           <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
             <span>ПриватБанк</span>
-            <span className="font-medium">до 9 платежів</span>
           </div>
           <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
             <span>ПУМБ</span>
-            <span className="font-medium">до 12 місяців</span>
           </div>
         </div>
       </div>
@@ -111,8 +119,6 @@ export function BuildIdentityColumn() {
         )}
       </div>
 
-      <UpgradeSuggestion />
-
       <PurchaseActions
         slug={build.slug}
         name={build.name}
@@ -122,8 +128,6 @@ export function BuildIdentityColumn() {
       <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
         Доставка безкоштовно · Гарантія 12 міс · Повернення 14 днів
       </div>
-
-      <ContactManager buildName={build.name} priceUah={build.priceUah} />
     </div>
   );
 }

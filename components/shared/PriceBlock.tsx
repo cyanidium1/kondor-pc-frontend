@@ -17,7 +17,7 @@ export function PriceBlock({
   const sizes = {
     sm: "text-xl",
     md: "text-2xl md:text-3xl",
-    lg: "text-3xl md:text-5xl",
+    lg: "text-[36px] lg:text-[48px]",
   };
   const discount = oldPriceUah
     ? Math.round(((oldPriceUah - priceUah) / oldPriceUah) * 100)

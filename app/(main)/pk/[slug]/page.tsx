@@ -212,16 +212,17 @@ export default async function BuildPage({
           </section>
 
           {/* BLOCK 1.5 — "Для кого цей ПК" */}
-          <div className="container-site pb-2">
+          {/* <div className="container-site pb-2">
             <BuildAudience build={build} />
-          </div>
+          </div> */}
 
           {/* BLOCK 2 — FPS TABLE */}
-          <Section>
+          <Section className="pt-3 lg:pt-[128px]">
             <SectionHeader
               kicker="Що ти отримаєш"
-              title="Скільки FPS ти отримаєш у своїх іграх"
+              title="СКІЛЬКИ FPS ТИ ОТРИМАЄШ У СВОЇХ ІГРАХ"
               subtitle="Тестуємо кожну збірку в нашій лабораторії. Значення нижче — середні FPS на налаштуваннях «Високі»."
+              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10"
             />
             <FpsTable build={build} />
           </Section>

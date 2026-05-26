@@ -48,6 +48,8 @@ export function ProductGallery({
   priority?: boolean;
   className?: string;
 }) {
+  const galleryGlowStyle = { ["--sku" as string]: "var(--brand-primary)" };
+
   const slides = useMemo<InternalSlide[]>(() => {
     const imageSlides = images.map<InternalSlide>((src) => ({
       kind: "image",
@@ -120,7 +122,10 @@ export function ProductGallery({
   if (slides.length === 0) {
     return (
       <div className={className}>
-        <div className="sku-glow relative aspect-[4/3] w-full overflow-hidden rounded-lg">
+        <div
+          className="sku-glow relative aspect-[4/3] w-full overflow-hidden rounded-lg"
+          style={galleryGlowStyle}
+        >
           <ChassisArt className="absolute inset-0 size-full rounded-lg" />
         </div>
       </div>
@@ -133,6 +138,7 @@ export function ProductGallery({
       <div
         ref={stageRef}
         className="sku-glow relative aspect-[4/3] w-full overflow-hidden rounded-lg"
+        style={galleryGlowStyle}
       >
         <ChassisArt className="absolute inset-0 size-full rounded-lg" />
 
