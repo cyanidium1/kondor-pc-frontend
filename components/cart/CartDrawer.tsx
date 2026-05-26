@@ -119,11 +119,7 @@ export function CartDrawer() {
                   </p>
                 </div>
                 <div className="mt-2 flex flex-col gap-2">
-                  <TechButtonLink
-                    href="/pk"
-                    size="sm"
-                    onClick={closeDrawer}
-                  >
+                  <TechButtonLink href="/pk" size="sm" onClick={closeDrawer}>
                     Ігрові ПК
                   </TechButtonLink>
                   <Link
@@ -173,7 +169,7 @@ export function CartDrawer() {
                 <TechButtonLink
                   href="/oformlennya"
                   size="md"
-                  className="w-full"
+                  className="w-full h-12"
                   onClick={closeDrawer}
                 >
                   Оформити замовлення
