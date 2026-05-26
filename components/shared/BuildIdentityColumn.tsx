@@ -21,29 +21,29 @@ export function BuildIdentityColumn() {
   const status = STATUS[build.status as BuildStatus];
 
   return (
-    <div className="flex flex-col gap-5">
-      <div>
+    <div className="min-w-0 flex flex-col gap-5">
+      <div className="min-w-0">
         <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
           Ігровий ПК · {build.tier}
         </div>
-        <h1 className="font-display text-5xl font-bold uppercase leading-[1] tracking-tight md:text-6xl">
+        <h1 className="break-words font-display text-5xl font-bold uppercase leading-[1] tracking-tight md:text-6xl">
           {build.name}
         </h1>
         <p className="mt-3 text-lg text-muted-foreground">{build.shortTagline}</p>
       </div>
 
       <div className="tabular grid grid-cols-2 gap-3 rounded-md border border-border bg-surface p-4 text-sm">
-        <div>
+        <div className="min-w-0">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
             Процесор
           </div>
-          <div className="font-semibold">{resolvedSpec.cpu}</div>
+          <div className="break-words font-semibold">{resolvedSpec.cpu}</div>
         </div>
-        <div>
+        <div className="min-w-0">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
             Відеокарта
           </div>
-          <div className="font-semibold">
+          <div className="break-words font-semibold">
             {resolvedSpec.gpu}
             {resolvedSpec.gpuVram && (
               <span className="text-muted-foreground">
@@ -53,17 +53,17 @@ export function BuildIdentityColumn() {
             )}
           </div>
         </div>
-        <div>
+        <div className="min-w-0">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
             ОЗП
           </div>
-          <div className="font-semibold">{resolvedSpec.ram}</div>
+          <div className="break-words font-semibold">{resolvedSpec.ram}</div>
         </div>
-        <div>
+        <div className="min-w-0">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
             Накопичувач
           </div>
-          <div className="font-semibold">{resolvedSpec.storage}</div>
+          <div className="break-words font-semibold">{resolvedSpec.storage}</div>
         </div>
       </div>
 
@@ -81,17 +81,17 @@ export function BuildIdentityColumn() {
           Або в розстрочку без %
         </div>
         <div className="grid gap-1.5">
-          <div className="flex justify-between">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
             <span>Monobank Частинами</span>
             <span className="font-medium">
               {formatInstallment(resolvedPriceUah, 4)}
             </span>
           </div>
-          <div className="flex justify-between">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
             <span>ПриватБанк</span>
             <span className="font-medium">до 9 платежів</span>
           </div>
-          <div className="flex justify-between">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
             <span>ПУМБ</span>
             <span className="font-medium">до 12 місяців</span>
           </div>

@@ -327,8 +327,8 @@ export function Configurator({ className }: { className?: string }) {
       )}
     >
       {/* Kicker + live delta */}
-      <div className="flex items-start justify-between gap-3">
-        <div>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
           <div
             className="text-[10px] font-semibold uppercase tracking-[0.22em]"
             style={{ color: "var(--sku, currentColor)" }}
@@ -339,7 +339,7 @@ export function Configurator({ className }: { className?: string }) {
             Налаштуй під себе
           </div>
         </div>
-        <div className="text-right">
+        <div className="min-w-0 text-right">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
             Поточна сума
           </div>
@@ -373,7 +373,7 @@ export function Configurator({ className }: { className?: string }) {
               onClick={() => applyPreset(p.key)}
               aria-pressed={active}
               className={cn(
-                "group/preset relative flex flex-col items-start gap-0.5 rounded-md border px-3 py-2 text-left transition",
+                "group/preset relative min-w-0 flex flex-col items-start gap-0.5 rounded-md border px-3 py-2 text-left transition",
                 active
                   ? "border-foreground bg-surface-elevated"
                   : "border-border bg-background/40 hover:border-white/25",

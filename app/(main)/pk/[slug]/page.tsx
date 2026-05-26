@@ -193,7 +193,7 @@ export default async function BuildPage({
             {/* Matches `container-site` paddings (px-4 sm:px-6 lg:px-8) so every
             card under this column aligns edge-to-edge with BuildAudience and
             the later full-width sections on mobile. */}
-            <div className="container-site relative grid gap-10 pb-12 lg:grid-cols-[1.1fr_1fr]">
+            <div className="container-site relative grid gap-10 pb-12 lg:grid-cols-[1.1fr_1fr] [&>*]:min-w-0">
               {/* Gallery */}
               <ProductGallery
                 images={

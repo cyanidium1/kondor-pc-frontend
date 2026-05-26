@@ -23,8 +23,8 @@ export function PriceBlock({
     ? Math.round(((oldPriceUah - priceUah) / oldPriceUah) * 100)
     : 0;
   return (
-    <div className={cn("tabular space-y-1", className)}>
-      <div className="flex items-baseline gap-3">
+    <div className={cn("tabular min-w-0 space-y-1", className)}>
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <span className={cn("font-heading font-bold", sizes[size])}>
           {formatPrice(priceUah)}
         </span>
