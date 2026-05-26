@@ -236,7 +236,10 @@ export default async function BuildPage({
               titleClassName="mt-3 lg:mt-7"
             />
             <div className="relative mx-auto max-w-4xl">
-              <div className="sku-glow group relative flex aspect-video items-center justify-center overflow-hidden rounded-lg border border-border bg-background">
+              <div
+                className="sku-glow group relative flex aspect-video items-center justify-center overflow-hidden rounded-lg border border-border bg-background"
+                style={{ ["--sku" as string]: "var(--brand-primary)" }}
+              >
                 <div
                   aria-hidden
                   className="pointer-events-none absolute inset-0 opacity-25"
@@ -260,21 +263,24 @@ export default async function BuildPage({
           </Section>
 
           {/* BLOCK 5 — COMPONENTS */}
-          <Section>
+          <Section className="pb-[348px]">
             <SectionHeader
               kicker="Що всередині"
               title={`Компоненти ${build.name}`}
               subtitle="Бренд, модель, пояснення новачку, гарантія виробника."
+              className="mb-[168px]"
+              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10"
             />
             <ComponentList build={build} />
           </Section>
 
           {/* BLOCK 6 — INCLUDED FEATURES */}
-          <Section className="border-y border-border bg-surface/30">
+          <Section className="">
             <SectionHeader
               kicker="Без доплат"
-              title="Вже включено в ціну"
-              subtitle="Ми продаємо готове рішення, а не набір деталей. Нічого не доведеться доплачувати після покупки."
+              title="ВЖЕ ВКЛЮЧЕНО В ЦІНУ"
+              subtitle="Ми продаємо готове рішення, а не набір деталей. У багатох інших магазинах це продають як додаткові функції, або взагалі про це не згадують, у нас це безкоштовно"
+              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10"
             />
             <IncludedFeaturesBlock featureKeys={build.includedFeatureKeys} />
           </Section>
