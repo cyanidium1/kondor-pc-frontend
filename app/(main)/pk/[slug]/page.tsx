@@ -44,6 +44,7 @@ import { FAQS } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
 import MarqueeLine from "@/components/shared/MarqueeLine";
+import Image from "next/image";
 
 export async function generateStaticParams() {
   return BUILDS.map((b) => ({ slug: b.slug }));
@@ -136,7 +137,7 @@ function Section({
 }) {
   return (
     <section className={cn("", className)}>
-      <div className="container-site">{children}</div>
+      <div className="relative container-site">{children}</div>
     </section>
   );
 }
@@ -185,14 +186,16 @@ export default async function BuildPage({
 
           {/* BLOCK 1 — ID + PRICE + CTA */}
           <section className="relative">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 opacity-30"
-              style={{
-                background:
-                  "radial-gradient(ellipse 60% 50% at 30% 20%, color-mix(in srgb, var(--sku) 50%, transparent), transparent 70%)",
-              }}
-            />
+            <div className="absolute -z-10 left-[-662px] lg:left-[-305px] top-[-1063px] lg:top-[-735px] w-[1860px] h-[1992px]">
+              <Image
+                src="/images/pk/product/shadows-hero.svg"
+                alt="shadows-hero"
+                width="1860"
+                height="1992"
+                className="object-cover"
+              />
+            </div>
+
             {/* Matches `container-site` paddings (px-4 sm:px-6 lg:px-8) so every
             card under this column aligns edge-to-edge with BuildAudience and
             the later full-width sections on mobile. */}
@@ -267,13 +270,23 @@ export default async function BuildPage({
           </Section>
 
           {/* BLOCK 5 — COMPONENTS */}
-          <Section className="pb-[348px] lg:pb-30 lg:pt-[178px]">
+          <Section className="relative pb-[348px] lg:pb-30 lg:pt-[178px]">
+            <div className="absolute -z-10 right-[-85px] lg:right-[-115px] xl:right-[-55px] top-[197px] sm:top-[167px] lg:top-[0px] w-[547px] lg:w-[763px] h-auto aspect-[763/738]">
+              <Image
+                src="/images/pk/product/figure-components.svg"
+                alt="figure-components"
+                width="763"
+                height="738"
+                className="object-cover w-[547px] lg:w-[763px] h-auto"
+              />
+            </div>
             <SectionHeader
               kicker="Що всередині"
               title={`Компоненти ${build.name}`}
               subtitle="Бренд, модель, пояснення новачку, гарантія виробника."
-              className="mb-[168px] lg:mb-10"
-              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
+              className="mb-[168px] md:mb-[128px] lg:mb-10"
+              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px] max-w-[328px] lg:max-w-none"
+              subtitleClassName="max-w-[328px] lg:max-w-none"
             />
             <ComponentList build={build} />
           </Section>
