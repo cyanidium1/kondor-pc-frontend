@@ -399,12 +399,12 @@ export default async function BuildPage({
 
           {/* BLOCK 12 — SIMILAR */}
           {similar.length > 0 && (
-            <Section className="pt-[92px]">
+            <Section className="pt-[92px] lg:pt-30 lg:pb-[77px]">
               <SectionHeader
                 kicker="Альтернативи"
                 title="ІНШІ ЗБІРКИ ЦЬОГО КЛАСУ"
                 subtitle="Якщо сумніваєшся — глянь сусідів по ціні."
-                titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10"
+                titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
               />
               <div className="grid gap-4 md:grid-cols-3">
                 {similar.map((s) => (
