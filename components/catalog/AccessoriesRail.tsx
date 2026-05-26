@@ -1,8 +1,7 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { getAddonItems } from "@/lib/sanity/fetchers";
 import { groupProducts } from "@/lib/catalog/group";
 import { CatalogCard } from "./CatalogCard";
+import { AccessoriesRailMobileSlider } from "./AccessoriesRailMobileSlider";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { TechButtonLink } from "../shared/TechButton";
 import ArrowIcon from "../icons/ArrowIcon";
@@ -51,7 +50,9 @@ export async function AccessoriesRail({
           </TechButtonLink>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <AccessoriesRailMobileSlider groups={groups} />
+
+        <div className="hidden gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-4">
           {groups.map((group) => (
             <CatalogCard key={group.key} group={group} />
           ))}
