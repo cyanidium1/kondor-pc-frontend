@@ -196,7 +196,7 @@ export default async function BuildPage({
             {/* Matches `container-site` paddings (px-4 sm:px-6 lg:px-8) so every
             card under this column aligns edge-to-edge with BuildAudience and
             the later full-width sections on mobile. */}
-            <div className="container-site relative grid gap-10 pb-12 lg:grid-cols-[1.1fr_1fr] [&>*]:min-w-0">
+            <div className="container-site relative grid gap-10 pb-12 lg:pb-0 lg:grid-cols-[1.1fr_1fr] [&>*]:min-w-0">
               {/* Gallery */}
               <ProductGallery
                 images={
@@ -220,23 +220,24 @@ export default async function BuildPage({
           </div> */}
 
           {/* BLOCK 2 — FPS TABLE */}
-          <Section className="pt-3 pb-15 lg:pt-[128px]">
+          <Section className="pt-3 pb-15 lg:pb-0 lg:pt-[128px]">
             <SectionHeader
               kicker="Що ти отримаєш"
               title="СКІЛЬКИ FPS ТИ ОТРИМАЄШ У СВОЇХ ІГРАХ"
               subtitle="Тестуємо кожну збірку в нашій лабораторії. Значення нижче — середні FPS на налаштуваннях «Високі»."
-              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10"
+              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
+              subtitleClassName="lg:max-w-[466px]"
             />
             <FpsTable build={build} />
           </Section>
 
           {/* BLOCK 4 — ASSEMBLY VIDEO */}
-          <Section className="pb-22">
+          <Section className="pb-22 lg:pb-0 lg:pt-30">
             <SectionHeader
               kicker="реальний геймплей"
               title="РЕАЛЬНІ ТЕСТИ НАШИХ ПК"
               className="mb-9"
-              titleClassName="mt-3 lg:mt-7"
+              titleClassName="mt-3 lg:mt-7 lg:text-[36px]"
             />
             <div className="relative mx-auto max-w-4xl">
               <div
@@ -266,13 +267,13 @@ export default async function BuildPage({
           </Section>
 
           {/* BLOCK 5 — COMPONENTS */}
-          <Section className="pb-[348px]">
+          <Section className="pb-[348px] lg:pt-[178px]">
             <SectionHeader
               kicker="Що всередині"
               title={`Компоненти ${build.name}`}
               subtitle="Бренд, модель, пояснення новачку, гарантія виробника."
-              className="mb-[168px]"
-              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10"
+              className="mb-[168px] lg:mb-10"
+              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
             />
             <ComponentList build={build} />
           </Section>

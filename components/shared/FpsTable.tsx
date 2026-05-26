@@ -50,7 +50,7 @@ export function FpsTable({
               >
                 {/* Game name cell — clamp to 2 lines so every row keeps the
                     same vertical rhythm regardless of title length. */}
-                <div className="flex min-h-11 items-center bg-surface px-4 py-2 text-[8px] font-medium">
+                <div className="flex min-h-11 items-center bg-surface px-4 py-2 text-[8px] lg:text-[14px] font-medium">
                   <span className="line-clamp-2 leading-tight">
                     {gameShortLabel(slug)}
                   </span>
@@ -83,11 +83,11 @@ export function FpsTable({
                         />
                         {/* Number on top, "FPS" stacked underneath so the cell
                             reads as a clean two-line metric. */}
-                        <div className="flex gap-1 items-center leading-none">
-                          <span className="text-[12px] font-semibold">
+                        <div className="flex gap-1 lg:gap-2 items-center leading-none">
+                          <span className="text-[12px] lg:text-[14px] font-semibold">
                             {entry.fpsAvg}
                           </span>
-                          <span className="mt-0.5 text-[8px] uppercase tracking-[0.15em] text-muted-foreground">
+                          <span className="mt-0.5 text-[8px] lg:text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
                             fps
                           </span>
                         </div>
