@@ -397,17 +397,20 @@ export default async function BuildPage({
           )}
 
           {/* BLOCK 11 — FAQ */}
-          <Section className="relative pt-[233px] lg:py-[66px] pb-[122px] rounded-[40px]">
+          <Section className="rounded-[40px]">
             <div className="absolute -z-40 inset-0 bg-brand-primary rounded-[40px]" />
-            <SectionHeader
-              kicker="Часті питання"
-              title={`Про ${build.name}`}
-              kickerClassName="text-center text-black"
-              titleClassName="mt-3 lg:mt-7 text-center text-black"
-              showKickerDot={false}
-              className="lg:max-w-[706px] lg:mx-auto"
-            />
-            <FaqBlock items={faqs} className="lg:max-w-[706px] lg:mx-auto" />
+            <div className="pt-[233px] lg:py-[66px] pb-[122px]">
+              {" "}
+              <SectionHeader
+                kicker="Часті питання"
+                title={`Про ${build.name}`}
+                kickerClassName="text-center text-black"
+                titleClassName="mt-3 lg:mt-7 text-center text-black"
+                showKickerDot={false}
+                className="lg:max-w-[706px] lg:mx-auto"
+              />
+              <FaqBlock items={faqs} className="lg:max-w-[706px] lg:mx-auto" />
+            </div>
           </Section>
 
           {/* BLOCK 12 — SIMILAR */}
