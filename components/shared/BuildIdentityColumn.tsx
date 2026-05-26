@@ -35,10 +35,10 @@ export function BuildIdentityColumn() {
         <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
           Ігровий ПК · {build.tier}
         </div>
-        <h1 className="break-words font-display text-[40px] lg:text-[60px] font-bold uppercase leading-[1.4] tracking-tight">
+        <h1 className="break-words font-display text-[40px] lg:text-[60px] font-bold uppercase leading-none tracking-tight">
           {build.name}
         </h1>
-        <p className="mt-3 text-[16px] text-muted-foreground">
+        <p className="mt-3 lg:mt-2 text-[16px] lg:text-[18px] text-muted-foreground">
           {build.shortTagline}
         </p>
       </div>
@@ -96,12 +96,17 @@ export function BuildIdentityColumn() {
         <div className="grid gap-1.5">
           <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
             <span>Monobank Частинами</span>
+            <span className="font-medium">
+              {formatInstallment(resolvedPriceUah, 4)}
+            </span>
           </div>
           <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
             <span>ПриватБанк</span>
+            <span className="font-medium">до 9 платежів</span>
           </div>
           <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
             <span>ПУМБ</span>
+            <span className="font-medium">до 12 місяців</span>
           </div>
         </div>
       </div>

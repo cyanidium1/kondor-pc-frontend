@@ -171,7 +171,7 @@ export default async function BuildPage({
             ]}
           />
           {/* BREADCRUMBS */}
-          <div className="container-site py-7 text-xs text-muted-foreground">
+          <div className="container-site py-7 lg:pt-9 text-xs text-muted-foreground">
             <Link href="/" className="hover:text-foreground">
               Головна
             </Link>
@@ -184,7 +184,7 @@ export default async function BuildPage({
           </div>
 
           {/* BLOCK 1 — ID + PRICE + CTA */}
-          <section className="relative overflow-hidden">
+          <section className="relative">
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 opacity-30"
