@@ -293,7 +293,7 @@ export default async function BuildPage({
           />
 
           {/* BLOCK 7 — HOW WE BUILD */}
-          <Section>
+          <Section className="pb-[92px]">
             <SectionHeader
               kicker="5 кроків"
               title="ЯК ПРОХОДИТЬ КОЖНА ЗБІРКА"
@@ -304,7 +304,7 @@ export default async function BuildPage({
               {ASSEMBLY_STEPS.map((s) => (
                 <div
                   key={s.n}
-                  className="relative bg-brand-primary p-5 text-black"
+                  className="relative overflow-hidden clip-angular-12 bg-brand-primary p-5 text-black"
                 >
                   <div className="mb-3 flex items-center justify-between">
                     <div className="flex size-9 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5 text-white">
