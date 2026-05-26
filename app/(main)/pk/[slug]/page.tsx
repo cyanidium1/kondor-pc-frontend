@@ -73,7 +73,7 @@ const ASSEMBLY_STEPS = [
     n: 2,
     icon: Wrench,
     title: "Ручна збірка",
-    text: "Досвідчений інженер збирає твій ПК за 3–5 днів.",
+    text: "Налаштовуємо BIOS, драйвери та систему для стабільної роботи й максимальної продуктивності.",
   },
   {
     n: 3,
@@ -98,25 +98,27 @@ const ASSEMBLY_STEPS = [
 const AFTER_STEPS = [
   { icon: Bell, title: "Відразу", text: "SMS + email з номером замовлення" },
   {
-    icon: Camera,
-    title: "Через 3–5 днів",
-    text: "Відео готового ПК перед відправкою",
-  },
-  {
     icon: Truck,
     title: "Доставка",
     text: "1–3 дні Новою Поштою, трек-номер у email",
-  },
-  {
-    icon: Package,
-    title: "Отримання",
-    text: "Перевір коробку при отриманні. Пошкодження? Не приймай — ми вирішимо.",
   },
   {
     icon: Shield,
     title: "Гарантія",
     text: "Якщо щось зламається — забираємо НП. Ремонт за 3–10 днів.",
   },
+  {
+    icon: Camera,
+    title: "Через 3–5 днів",
+    text: "Відео готового ПК перед відправкою",
+  },
+
+  {
+    icon: Package,
+    title: "Отримання",
+    text: "Перевір коробку при отриманні. Пошкодження? Не приймай — ми вирішимо.",
+  },
+
   {
     icon: RotateCcw,
     title: "Повернення",
@@ -324,11 +326,13 @@ export default async function BuildPage({
           </Section>
 
           {/* BLOCK 8 — AFTER PURCHASE (CRITICAL) */}
-          <Section className="border-y border-border bg-surface/30">
+          <Section className="pb-15">
             <SectionHeader
               kicker="Без сюрпризів"
-              title="Що відбувається після оплати"
+              title="ЩО ВІДБУВАЄТЬСЯ ПІСЛЯ ОПЛАТИ"
               subtitle="Точний сценарій від кнопки «Купити» до того, як ти вмикаєш ПК удома."
+              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10"
+              className="mb-12"
             />
             <ol className="grid gap-3 md:grid-cols-2">
               {AFTER_STEPS.map((s, i) => (
@@ -343,7 +347,9 @@ export default async function BuildPage({
                     <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                       {s.title}
                     </div>
-                    <div className="mt-0.5 text-sm">{s.text}</div>
+                    <div className="mt-0.5 text-[12px] leading-[120%]">
+                      {s.text}
+                    </div>
                   </div>
                 </li>
               ))}
