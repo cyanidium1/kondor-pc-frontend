@@ -404,7 +404,7 @@ export function CatalogCard({
             <TechButton
               size="sm"
               variant="inverse"
-              className="w-full h-9"
+              className="w-full h-9 font-heading tracking-normal"
               onClick={handleAdd}
               disabled={justAdded}
             >

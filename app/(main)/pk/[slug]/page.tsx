@@ -275,7 +275,7 @@ export default async function BuildPage({
           </Section>
 
           {/* BLOCK 6 — INCLUDED FEATURES */}
-          <Section className="">
+          <Section className="pb-[92px]">
             <SectionHeader
               kicker="Без доплат"
               title="ВЖЕ ВКЛЮЧЕНО В ЦІНУ"
