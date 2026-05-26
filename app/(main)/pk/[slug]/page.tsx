@@ -267,7 +267,7 @@ export default async function BuildPage({
           </Section>
 
           {/* BLOCK 5 — COMPONENTS */}
-          <Section className="pb-[348px] lg:pt-[178px]">
+          <Section className="pb-[348px] lg:pb-30 lg:pt-[178px]">
             <SectionHeader
               kicker="Що всередині"
               title={`Компоненти ${build.name}`}
@@ -279,12 +279,13 @@ export default async function BuildPage({
           </Section>
 
           {/* BLOCK 6 — INCLUDED FEATURES */}
-          <Section className="pb-[92px]">
+          <Section className="pb-[92px] lg:pb-[111px]">
             <SectionHeader
               kicker="Без доплат"
               title="ВЖЕ ВКЛЮЧЕНО В ЦІНУ"
               subtitle="Ми продаємо готове рішення, а не набір деталей. У багатох інших магазинах це продають як додаткові функції, або взагалі про це не згадують, у нас це безкоштовно"
-              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10"
+              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
+              subtitleClassName="lg:max-w-[672px]"
             />
             <IncludedFeaturesBlock featureKeys={build.includedFeatureKeys} />
           </Section>
@@ -297,12 +298,12 @@ export default async function BuildPage({
           />
 
           {/* BLOCK 7 — HOW WE BUILD */}
-          <Section className="pb-[92px]">
+          <Section className="pb-[92px] lg:pb-30">
             <SectionHeader
               kicker="5 кроків"
               title="ЯК ПРОХОДИТЬ КОЖНА ЗБІРКА"
               className="mb-8"
-              titleClassName="mt-3 lg:mt-7"
+              titleClassName="mt-3 lg:mt-7 lg:text-[36px]"
             />
             <div className="grid gap-4 md:grid-cols-5">
               {ASSEMBLY_STEPS.map((s) => (
@@ -328,13 +329,14 @@ export default async function BuildPage({
           </Section>
 
           {/* BLOCK 8 — AFTER PURCHASE (CRITICAL) */}
-          <Section className="pb-15">
+          <Section className="pb-15 lg:pb-30">
             <SectionHeader
               kicker="Без сюрпризів"
               title="ЩО ВІДБУВАЄТЬСЯ ПІСЛЯ ОПЛАТИ"
               subtitle="Точний сценарій від кнопки «Купити» до того, як ти вмикаєш ПК удома."
-              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10"
+              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
               className="mb-12"
+              subtitleClassName="lg:max-w-[422px]"
             />
             <ol className="grid gap-3 md:grid-cols-2">
               {AFTER_STEPS.map((s, i) => (
@@ -359,19 +361,19 @@ export default async function BuildPage({
           </Section>
 
           {/* BLOCK 9 — REPEAT CTA */}
-          <Section className="pb-12">
+          <Section className="pb-12 lg:pb-23">
             <BuildRepeatCta />
           </Section>
 
-          <MarqueeLine className="mb-16" />
+          <MarqueeLine className="mb-16 lg:mb-[107px]" />
 
           {/* BLOCK 10 — REVIEWS FOR THIS BUILD */}
           {reviews.length > 0 && (
-            <Section className="pb-11">
+            <Section className="pb-11 lg:pb-[69px]">
               <SectionHeader
                 kicker="Досвід клієнтів"
                 title={`Що кажуть власники ${build.name}`}
-                titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10"
+                titleClassName="mt-3 lg:mt-7 lg:text-[36px]"
               />
               <div className="grid gap-4 md:grid-cols-3">
                 {reviews.map((r, i) => (
@@ -382,16 +384,17 @@ export default async function BuildPage({
           )}
 
           {/* BLOCK 11 — FAQ */}
-          <Section className="relative pt-[233px] pb-[122px] rounded-[40px]">
+          <Section className="relative pt-[233px] lg:py-[66px] pb-[122px] rounded-[40px]">
             <div className="absolute -z-40 inset-0 bg-brand-primary rounded-[40px]" />
             <SectionHeader
               kicker="Часті питання"
               title={`Про ${build.name}`}
               kickerClassName="text-center text-black"
-              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 text-center text-black"
+              titleClassName="mt-3 lg:mt-7 text-center text-black"
               showKickerDot={false}
+              className="lg:max-w-[706px] lg:mx-auto"
             />
-            <FaqBlock items={faqs} />
+            <FaqBlock items={faqs} className="lg:max-w-[706px] lg:mx-auto" />
           </Section>
 
           {/* BLOCK 12 — SIMILAR */}

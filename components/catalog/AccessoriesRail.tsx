@@ -28,20 +28,21 @@ export async function AccessoriesRail({
   const groups = groupProducts(addons).slice(0, limit);
 
   return (
-    <section className="pb-12">
-      <div className="container-site pb-12 md:py-16">
+    <section className="pb-24 lg:pb-30">
+      <div className="container-site">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
           <SectionHeader
             kicker="Аксесуари"
             title={title}
             subtitle={subtitle}
             className="mb-8"
-            titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10"
+            titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
+            subtitleClassName="lg:max-w-[556px]"
           />
           <TechButtonLink
             href="/catalog"
             variant="white"
-            className="w-full h-[30px]"
+            className="w-full md:w-fit md:ml-auto h-[30px]"
           >
             <span className="inline-flex items-center gap-2 whitespace-nowrap font-heading">
               Весь каталог

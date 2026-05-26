@@ -53,7 +53,7 @@ export function ComponentList({ build }: { build: Build }) {
         return (
           <div
             key={`${c.category}-${i}`}
-            className="grid gap-3 rounded-lg border border-border bg-surface p-5 md:grid-cols-[auto_1fr_auto] md:items-start md:gap-6"
+            className="grid gap-3 rounded-lg border border-border bg-surface p-5 md:grid-cols-[160px_1fr_auto] md:items-center md:gap-6"
           >
             <div className="flex gap-3 flex-col items-start md:gap-1.5 mb-3">
               <div className="flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
@@ -74,7 +74,7 @@ export function ComponentList({ build }: { build: Build }) {
                 {c.humanDescription}
               </p>
             </div>
-            <div className="flex shrink-0 w-fit items-center gap-1.5 self-start rounded-md border border-border bg-background/50 px-2.5 py-1 text-xs text-muted-foreground">
+            <div className="flex shrink-0 w-fit items-center gap-1.5 self-start rounded-md border border-border bg-background/50 px-2.5 py-1 text-xs text-muted-foreground md:self-center">
               <Shield className="size-3.5" strokeWidth={2} />
               <span className=" font-medium text-foreground">
                 {warrantyLabel(c.warrantyMonths)}
