@@ -17,7 +17,7 @@ export default function BlogList({ blogPosts }: BlogListProps) {
     return (
       <section className="container-site py-16 md:py-24">
         <p className="text-center text-muted-foreground">
-          Скоро тут з'являться нові статті.
+          Скоро тут з&apos;являться нові статті.
         </p>
       </section>
     );
