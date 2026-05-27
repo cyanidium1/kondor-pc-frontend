@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { HeroWithBuild } from "./HeroWithBuild";
+import { HeroSimple } from "./HeroSimple";
 import { AnchorNav } from "./AnchorNav";
 import { SpecsSystemRequirements } from "./SpecsSystemRequirements";
 import { FpsTablePerGame } from "./FpsTablePerGame";
@@ -8,6 +9,7 @@ import { ProductRecommendedForGame } from "./ProductRecommendedForGame";
 import { SpecsGraphicsSettings } from "./SpecsGraphicsSettings";
 import { SocialTestimonialForGame } from "./SocialTestimonialForGame";
 import { CtaWizardPrefilled } from "./CtaWizardPrefilled";
+import { CtaPromoBanner } from "./CtaPromoBanner";
 import { FaqAccordion } from "./FaqAccordion";
 import { BuildCardSingle } from "./BuildCardSingle";
 import { StatsStrip } from "./StatsStrip";
@@ -21,6 +23,7 @@ import { BuildsRow } from "./BuildsRow";
 export const BLOCKS: Record<string, ComponentType<any>> = {
   breadcrumbs: Breadcrumbs,
   heroWithBuild: HeroWithBuild,
+  heroSimple: HeroSimple,
   anchorNav: AnchorNav,
   specsSystemRequirements: SpecsSystemRequirements,
   fpsTablePerGame: FpsTablePerGame,
@@ -28,6 +31,7 @@ export const BLOCKS: Record<string, ComponentType<any>> = {
   specsGraphicsSettings: SpecsGraphicsSettings,
   socialTestimonialForGame: SocialTestimonialForGame,
   ctaWizardPrefilled: CtaWizardPrefilled,
+  ctaPromoBanner: CtaPromoBanner,
   faqAccordion: FaqAccordion,
   buildCardSingle: BuildCardSingle,
   statsStrip: StatsStrip,
@@ -42,6 +46,7 @@ export const BLOCKS: Record<string, ComponentType<any>> = {
 export {
   Breadcrumbs,
   HeroWithBuild,
+  HeroSimple,
   AnchorNav,
   SpecsSystemRequirements,
   FpsTablePerGame,
@@ -49,6 +54,7 @@ export {
   SpecsGraphicsSettings,
   SocialTestimonialForGame,
   CtaWizardPrefilled,
+  CtaPromoBanner,
   FaqAccordion,
   BuildCardSingle,
   StatsStrip,

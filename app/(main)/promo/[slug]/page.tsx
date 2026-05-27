@@ -4,16 +4,16 @@ import {
   buildSanityPageContext,
   getAllLandingPageSlugs,
   getLandingPageBySlug,
-  resolvePageContext,
 } from "@/lib/data/adapter";
 import {LandingPageBody} from "@/components/landings/LandingPageBody";
 
-// ISR. Sanity webhook will revalidate by tag later (Sprint 3).
+// ISR. Promo pages can have `expiresAt` set in Sanity; expired ones drop
+// out of `generateStaticParams` automatically (handled in fetchLandingSlugs).
 export const revalidate = 60;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const slugs = await getAllLandingPageSlugs("dlya");
+  const slugs = await getAllLandingPageSlugs("promo");
   return slugs.map((slug) => ({slug}));
 }
 
@@ -23,7 +23,7 @@ export async function generateMetadata({
   params: Promise<{slug: string}>;
 }): Promise<Metadata> {
   const {slug} = await params;
-  const page = await getLandingPageBySlug(slug, "dlya");
+  const page = await getLandingPageBySlug(slug, "promo");
   if (!page) return {title: "Не знайдено"};
   return {
     title: page.seo.title,
@@ -38,20 +38,14 @@ export async function generateMetadata({
   };
 }
 
-export default async function DlyaLandingPage({
+export default async function PromoLandingPage({
   params,
 }: {
   params: Promise<{slug: string}>;
 }) {
   const {slug} = await params;
-  const page = await getLandingPageBySlug(slug, "dlya");
+  const page = await getLandingPageBySlug(slug, "promo");
   if (!page) notFound();
-
-  // Mock-driven pages keep their original (game/use_case) context.
-  // Sanity-driven pages get a minimal context derived from the slug.
-  const pageContext = page.context
-    ? await resolvePageContext(page.context)
-    : buildSanityPageContext("dlya", slug);
-
+  const pageContext = buildSanityPageContext("promo", slug);
   return <LandingPageBody page={page} pageContext={pageContext} />;
 }

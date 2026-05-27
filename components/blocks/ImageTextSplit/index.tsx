@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { RichContent } from "@/components/blocks/RichContent";
 import { TechButtonLink } from "@/components/shared/TechButton";
 import type { ContentNode, ImageAsset } from "@/lib/data/types/content";
@@ -10,7 +11,7 @@ export function ImageTextSplit({
   content,
   cta,
 }: {
-  image: ImageAsset;
+  image?: ImageAsset;
   imagePosition?: "left" | "right";
   heading?: string;
   content: ContentNode[];
@@ -25,7 +26,7 @@ export function ImageTextSplit({
             imagePosition === "right" && "lg:order-2",
           )}
         >
-          <ImagePlaceholder image={image} />
+          <ImagePane image={image} />
         </div>
 
         <div
@@ -58,30 +59,42 @@ export function ImageTextSplit({
   );
 }
 
-function ImagePlaceholder({ image }: { image: ImageAsset }) {
+function ImagePane({ image }: { image?: ImageAsset }) {
   return (
     <figure className="relative">
       <div className="relative aspect-video w-full overflow-hidden clip-angular-12 border border-brand-primary/30 bg-surface">
-        <div
-          aria-hidden
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, #ffffff10 1px, transparent 1px), linear-gradient(to bottom, #ffffff10 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-        <div
-          aria-hidden
-          className="absolute -bottom-10 -right-10 size-48 rounded-full bg-brand-primary/30 blur-3xl"
-        />
-        <div className="absolute inset-0 grid place-items-center">
-          <div className="px-6 text-center text-[11px] uppercase tracking-widest text-muted-foreground">
-            {image.alt}
-          </div>
-        </div>
+        {image?.src ? (
+          <Image
+            src={image.src}
+            alt={image.alt}
+            fill
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="object-cover"
+          />
+        ) : (
+          <>
+            <div
+              aria-hidden
+              className="absolute inset-0 opacity-30"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, #ffffff10 1px, transparent 1px), linear-gradient(to bottom, #ffffff10 1px, transparent 1px)",
+                backgroundSize: "32px 32px",
+              }}
+            />
+            <div
+              aria-hidden
+              className="absolute -bottom-10 -right-10 size-48 rounded-full bg-brand-primary/30 blur-3xl"
+            />
+            <div className="absolute inset-0 grid place-items-center">
+              <div className="px-6 text-center text-[11px] uppercase tracking-widest text-muted-foreground">
+                {image?.alt || "Зображення"}
+              </div>
+            </div>
+          </>
+        )}
       </div>
-      {image.caption ? (
+      {image?.caption ? (
         <figcaption className="mt-2 text-center text-sm italic text-muted-foreground/80">
           {image.caption}
         </figcaption>
