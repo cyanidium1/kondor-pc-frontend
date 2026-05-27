@@ -360,9 +360,8 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
               </TechButton>
               <TechButton
                 size="lg"
-                className="flex-1 text-[#ffffff59]"
-                variant="inverse"
-                style={{ ["--tech-accent" as string]: "#ffffff59" }}
+                variant="muted"
+                className="flex-1"
                 onClick={addToCart}
               >
                 {justAdded ? (

@@ -106,9 +106,8 @@ export function PurchaseActions({
         </TechButton>
         <TechButton
           size={size}
-          variant="inverse"
-          className="flex-1 font-heading text-muted-foreground h-[49px] tracking-normal"
-          accent="#8b939d"
+          className="flex-1 font-heading h-[49px] tracking-normal"
+          variant="muted"
           onClick={addAndStay}
         >
           {justAdded ? (
