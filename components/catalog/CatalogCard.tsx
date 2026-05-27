@@ -248,7 +248,7 @@ export function CatalogCard({
               fill
               sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, 90vw"
               quality={85}
-              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              className="object-cover transition-transform duration-500 ease-out"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-surface text-[10px] uppercase tracking-wider text-muted-foreground">
