@@ -419,6 +419,15 @@ export default async function BuildPage({
           {/* BLOCK 10 — REVIEWS FOR THIS BUILD */}
           {reviews.length > 0 && (
             <Section className="pb-11 lg:pb-[69px]">
+              <div className="absolute -z-50 right-[-429px] lg:right-[-645px] top-[391px] lg:top-[215px] w-[735px] h-[735px]">
+                <Image
+                  src="/images/pk/product/shadows-reviews.svg"
+                  alt="shadows-reviews"
+                  width="735"
+                  height="735"
+                  className="object-cover"
+                />
+              </div>
               <SectionHeader
                 kicker="Досвід клієнтів"
                 title={`Що кажуть власники ${build.name}`}
