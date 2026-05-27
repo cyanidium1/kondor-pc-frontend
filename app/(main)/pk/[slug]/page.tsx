@@ -302,7 +302,7 @@ export default async function BuildPage({
                 className="object-cover w-[409px] lg:w-[547px] h-auto"
               />
             </div>
-            <div className="lg:hidden absolute -z-10 left-[-932px] lg:left-auto lg:right-[-100px] top-[-434px] lg:top-[-50px] w-[1483px] h-[1400px]">
+            <div className="lg:hidden absolute -z-10 left-[-932px] top-[-434px] w-[1483px] h-[1400px]">
               <Image
                 src="/images/pk/product/shadows-included-mob.svg"
                 alt="shadows-included-mob"
@@ -370,6 +370,15 @@ export default async function BuildPage({
 
           {/* BLOCK 8 — AFTER PURCHASE (CRITICAL) */}
           <Section className="pb-15 lg:pb-30">
+            <div className="absolute -z-10 left-[-405px] lg:left-[-675px] top-[-878px] lg:top-[-888px] w-[2067px] h-[2086px]">
+              <Image
+                src="/images/pk/product/shadows-after-payment.svg"
+                alt="shadows-after-payment"
+                width="2067"
+                height="2086"
+                className="object-cover"
+              />
+            </div>
             <SectionHeader
               kicker="Без сюрпризів"
               title="ЩО ВІДБУВАЄТЬСЯ ПІСЛЯ ОПЛАТИ"
