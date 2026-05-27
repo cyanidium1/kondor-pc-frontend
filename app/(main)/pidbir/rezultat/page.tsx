@@ -6,6 +6,8 @@ import { parseBudget, parseGames, pickBuilds, BADGE_META } from "@/lib/pidbir";
 import { gameLabel } from "@/lib/mock/games";
 import type { Resolution } from "@/types/build";
 import { cn } from "@/lib/utils";
+import { TechButtonLink } from "@/components/shared/TechButton";
+import ArrowIcon from "@/components/icons/ArrowIcon";
 
 export const metadata: Metadata = {
   title: "Результат підбору",
@@ -36,7 +38,7 @@ export default async function ResultPage({
   const gamesLabel =
     games.length > 0
       ? games.map(gameLabel).join(" + ")
-      : "усіх популярних ігор";
+      : "УСІХ ПОПУЛЯРНИХ ІГОР";
 
   return (
     <div className="container-site py-12 md:py-16">
@@ -45,9 +47,9 @@ export default async function ResultPage({
           Результат підбору
         </div>
         <h1 className="font-display text-3xl font-bold md:text-5xl">
-          Для {gamesLabel}
+          ДЛЯ {gamesLabel}
           <br />
-          <span className="text-muted-foreground">у бюджеті {budgetLabel}</span>
+          <span className="text-muted-foreground">У БЮДЖЕТІ {budgetLabel}</span>
         </h1>
         <p className="mt-4 text-muted-foreground">
           {fallback
@@ -84,9 +86,7 @@ export default async function ResultPage({
                   build={r.build}
                   variant="full"
                   highlightGames={
-                    games.length > 0
-                      ? games
-                      : ["cs2", "warzone", "cyberpunk"]
+                    games.length > 0 ? games : ["cs2", "warzone", "cyberpunk"]
                   }
                 />
               </div>
@@ -100,18 +100,22 @@ export default async function ResultPage({
           Не знайшов оптимальне?
         </div>
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <Link
+          <TechButtonLink
             href="/sborka"
-            className={cn(buttonVariants({ variant: "default", size: "lg" }), "h-12 px-6")}
+            variant="white"
+            className="h-12 px-3 sm:px-6 font-heading tracking-normal whitespace-nowrap"
           >
-            Кастомна збірка під твої вимоги →
-          </Link>
-          <Link
+            <span className="inline-flex items-center gap-2 whitespace-nowrap text-[11px] sm:text-[12px]">
+              Кастомна збірка під твої вимоги <ArrowIcon className="mb-0.5" />
+            </span>
+          </TechButtonLink>
+          <TechButtonLink
             href="/pidbir"
-            className={cn(buttonVariants({ variant: "outline" }))}
+            variant="muted"
+            className="h-12 px-3 sm:px-6 font-heading tracking-normal text-[11px] sm:text-[12px]"
           >
             Змінити критерії
-          </Link>
+          </TechButtonLink>
         </div>
       </div>
     </div>
@@ -134,8 +138,12 @@ function ExplanationBlock({
         У бюджет {budgetLabel}
         {games.length > 0 ? (
           <>
-            {" "}входять збірки, які дають стабільний FPS у{" "}
-            <span className="text-foreground">{games.map(gameLabel).join(", ")}</span>.
+            {" "}
+            входять збірки, які дають стабільний FPS у{" "}
+            <span className="text-foreground">
+              {games.map(gameLabel).join(", ")}
+            </span>
+            .
           </>
         ) : (
           <> входять збірки різних рівнів потужності.</>

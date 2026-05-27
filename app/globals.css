@@ -730,6 +730,27 @@
     outline-color: var(--white);
   }
 
+  /* muted — #ffffff59 outline on black → hover solid white */
+  .tech-btn[data-variant="muted"] {
+    color: #ffffff59;
+  }
+  .tech-btn[data-variant="muted"] .tech-btn__edge {
+    background-color: #ffffff59;
+  }
+  .tech-btn[data-variant="muted"] .tech-btn__fill {
+    background-color: var(--black);
+  }
+  .tech-btn[data-variant="muted"]:not(:disabled):hover {
+    color: var(--black);
+  }
+  .tech-btn[data-variant="muted"]:not(:disabled):hover .tech-btn__edge,
+  .tech-btn[data-variant="muted"]:not(:disabled):hover .tech-btn__fill {
+    background-color: var(--white);
+  }
+  .tech-btn[data-variant="muted"]:focus-visible {
+    outline-color: #ffffff59;
+  }
+
   .tech-btn:not(:disabled):active {
     transform: scale(0.985);
     transition: transform 80ms ease-out;
