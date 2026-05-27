@@ -3,22 +3,29 @@ import { Wordmark } from "@/components/brand/Wordmark";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import Image from "next/image";
 import TagIcon from "../icons/TagIcon";
+import { NAV } from "@/components/layout/nav";
 
 const CODE_SITE_URL = "https://www.code-site.art";
 
-const COLUMNS = [
-  {
-    title: "Розділи",
-    links: [
-      { href: "/pk", label: "Ігрові ПК" },
-      { href: "/catalog", label: "Аксесуари" },
-      { href: "/pidbir", label: "Підбір" },
-      { href: "/sborka", label: "Кастомна збірка" },
-      { href: "/garantiya", label: "Гарантія" },
-      { href: "/dostavka-oplata", label: "Доставка та оплата" },
-      { href: "/kontakty", label: "Контакти" },
-    ],
-  },
+// Derive footer columns from the same NAV that powers the header + burger menu.
+// Flat top-level links → "Розділи". Grouped dropdowns → their own columns.
+type FooterLink = { href: string; label: string; external?: boolean };
+type Column = { title: string; links: FooterLink[] };
+
+const NAV_COLUMNS: Column[] = (() => {
+  const flat: FooterLink[] = [];
+  const groups: Column[] = [];
+  for (const item of NAV) {
+    if ("children" in item) {
+      groups.push({ title: item.label, links: item.children });
+    } else {
+      flat.push(item);
+    }
+  }
+  return [{ title: "Розділи", links: flat }, ...groups];
+})();
+
+const STATIC_COLUMNS: Column[] = [
   {
     title: "Юридична",
     links: [
@@ -48,11 +55,13 @@ const COLUMNS = [
   },
 ];
 
+const COLUMNS: Column[] = [...NAV_COLUMNS, ...STATIC_COLUMNS];
+
 export function Footer() {
   return (
     <footer className="relative bg-background pt-[92px] pb-10 md:pb-5">
-      <div className="container-site grid gap-10 md:grid-cols-[1.2fr_repeat(3,minmax(0,1fr))]">
-        <div className="space-y-4">
+      <div className="container-site grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-[1.2fr_repeat(5,minmax(0,1fr))]">
+        <div className="space-y-4 sm:col-span-2 md:col-span-3 lg:col-span-1">
           <Wordmark size="md" />
           <p className="max-w-sm text-[12px] leading-[120%] text-muted-foreground">
             Ігрові ПК під замовлення. Зібрано в Києві з гарантією 12 місяців від
@@ -90,7 +99,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               {col.links.map((l) => (
                 <li key={l.href}>
-                  {"external" in l ? (
+                  {l.external ? (
                     <a
                       href={l.href}
                       target="_blank"

@@ -6,9 +6,11 @@ import { useEffect, useState } from "react";
 import { Phone, MessageSquare, Mail, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TechButtonLink } from "@/components/shared/TechButton";
-import type { NavEntry, NavGroup } from "@/components/layout/Header";
-
-const isGroup = (n: NavEntry): n is NavGroup => "children" in n;
+import {
+  isNavGroup,
+  type NavEntry,
+  type NavGroup,
+} from "@/components/layout/nav";
 
 export function MobileMenu({
   isOpen,
@@ -85,7 +87,7 @@ export function MobileMenu({
 
         <nav className="container-site flex flex-col gap-1 pt-4 pb-2">
           {navItems.map((item) =>
-            isGroup(item) ? (
+            isNavGroup(item) ? (
               <MobileGroup
                 key={item.label}
                 group={item}

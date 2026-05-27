@@ -11,35 +11,7 @@ import { CartButton } from "@/components/layout/CartButton";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { cn } from "@/lib/utils";
 import MenuIcon from "@/components/icons/MenuIcon";
-
-export type NavLink = { href: string; label: string };
-export type NavGroup = { label: string; children: NavLink[] };
-export type NavEntry = NavLink | NavGroup;
-
-const isGroup = (n: NavEntry): n is NavGroup => "children" in n;
-
-export const NAV: NavEntry[] = [
-  { href: "/pk", label: "Ігрові ПК" },
-  { href: "/catalog", label: "Аксесуари" },
-  { href: "/pidbir", label: "Підбір" },
-  { href: "/sborka", label: "Кастомна збірка" },
-  {
-    label: "Підбірки",
-    children: [
-      { href: "/dlya/cs2", label: "ПК для CS2" },
-      { href: "/dlya/montazh-4k", label: "ПК для монтажу 4К" },
-    ],
-  },
-  { href: "/blog", label: "Блог" },
-  {
-    label: "Сервіс",
-    children: [
-      { href: "/garantiya", label: "Гарантія" },
-      { href: "/dostavka-oplata", label: "Доставка та оплата" },
-      { href: "/kontakty", label: "Контакти" },
-    ],
-  },
-];
+import { NAV, isNavGroup, type NavGroup } from "@/components/layout/nav";
 
 function NavDropdown({ group }: { group: NavGroup }) {
   const [open, setOpen] = useState(false);
@@ -230,7 +202,7 @@ export function Header() {
               {/* DESKTOP NAV */}
               <nav className="hidden items-center gap-0.5 lg:flex">
                 {NAV.map((n) =>
-                  isGroup(n) ? (
+                  isNavGroup(n) ? (
                     <NavDropdown key={n.label} group={n} />
                   ) : (
                     <Link
