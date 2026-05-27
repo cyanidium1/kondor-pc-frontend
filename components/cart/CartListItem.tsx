@@ -5,10 +5,7 @@ import Link from "next/link";
 import { Minus, Plus, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { ChassisArt } from "@/components/brand/ChassisArt";
-import {
-  SKU_ACCENTS,
-  type SkuSlug,
-} from "@/lib/sku-accents";
+import { SKU_ACCENTS, type SkuSlug } from "@/lib/sku-accents";
 import { formatPrice } from "@/lib/format";
 import { useCartStore, type CartItem } from "@/lib/cartStore";
 import { buildBySlug } from "@/lib/mock/builds";
@@ -43,21 +40,12 @@ export function CartListItem({
   });
 
   const isBuild = item.itemType === "build";
-  const build = isBuild
-    ? buildBySlug(item.slug as SkuSlug)
-    : undefined;
-  const accent = isBuild
-    ? SKU_ACCENTS[item.slug as SkuSlug]
-    : undefined;
+  const build = isBuild ? buildBySlug(item.slug as SkuSlug) : undefined;
+  const accent = isBuild ? SKU_ACCENTS[item.slug as SkuSlug] : undefined;
 
-  const imageSrc =
-    item.image ??
-    build?.heroImageUrl ??
-    undefined;
+  const imageSrc = item.image ?? build?.heroImageUrl ?? undefined;
 
-  const href = isBuild
-    ? `/pk/${item.slug}`
-    : `/catalog/${item.slug}`;
+  const href = isBuild ? `/pk/${item.slug}` : `/catalog/${item.slug}`;
 
   return (
     <motion.li
@@ -83,7 +71,9 @@ export function CartListItem({
           className="relative block size-18 shrink-0 overflow-hidden rounded-md"
           style={{ width: 72, height: 72 }}
         >
-          {isBuild && <ChassisArt compact className="absolute inset-0 size-full" />}
+          {isBuild && (
+            <ChassisArt compact className="absolute inset-0 size-full" />
+          )}
           {imageSrc && (
             <Image
               src={imageSrc}
@@ -157,7 +147,7 @@ export function CartListItem({
                 <Plus className="size-3" strokeWidth={2.5} />
               </button>
             </div>
-            <div className="font-display text-sm font-bold">
+            <div className="font-heading text-sm font-bold">
               {formatPrice(item.unitPriceUah * item.quantity)}
             </div>
           </div>

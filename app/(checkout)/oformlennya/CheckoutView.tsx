@@ -41,9 +41,24 @@ const DELIVERY_OPTIONS: {
   title: string;
   note: string;
 }[] = [
-  { value: "np_branch", icon: Package, title: "Нова Пошта — відділення", note: "Безкоштовно · 1–3 дні" },
-  { value: "np_courier", icon: Truck, title: "Нова Пошта — кур'єр", note: "200–400 ₴ · 1–2 дні" },
-  { value: "self_pickup", icon: MapPin, title: "Самовивіз з шоуруму", note: "Безкоштовно · за попереднім записом" },
+  {
+    value: "np_branch",
+    icon: Package,
+    title: "Нова Пошта — відділення",
+    note: "Безкоштовно · 1–3 дні",
+  },
+  {
+    value: "np_courier",
+    icon: Truck,
+    title: "Нова Пошта — кур'єр",
+    note: "200–400 ₴ · 1–2 дні",
+  },
+  {
+    value: "self_pickup",
+    icon: MapPin,
+    title: "Самовивіз з шоуруму",
+    note: "Безкоштовно · за попереднім записом",
+  },
 ];
 
 const PAYMENT_OPTIONS: {
@@ -53,14 +68,62 @@ const PAYMENT_OPTIONS: {
   note?: string;
   group?: "main" | "other";
 }[] = [
-  { value: "cod", icon: Package, title: "Оплата при отриманні на НП", note: "Комісія НП: 2% + 20 ₴", group: "main" },
-  { value: "monopay", icon: CreditCard, title: "Карта (MonoPay)", note: "Комісія сервісу 1.3%", group: "main" },
-  { value: "monobank_parts", icon: Wallet, title: "Частинами Monobank", note: "4 платежі без %", group: "main" },
-  { value: "privat_parts", icon: Wallet, title: "Частинами ПриватБанк", note: "до 9 платежів", group: "main" },
-  { value: "pumb_parts", icon: Wallet, title: "Частинами ПУМБ", note: "до 12 місяців", group: "main" },
-  { value: "iban_individual", icon: Banknote, title: "Безготівковий (IBAN)", note: "Менеджер надішле рахунок", group: "other" },
-  { value: "iban_business", icon: Building2, title: "Для ФОП / ЮО", note: "Рахунок, договір, УПД", group: "other" },
-  { value: "crypto", icon: Bitcoin, title: "Криптовалюта", note: "USDT / BTC / ETH", group: "other" },
+  {
+    value: "cod",
+    icon: Package,
+    title: "Оплата при отриманні на НП",
+    note: "Комісія НП: 2% + 20 ₴",
+    group: "main",
+  },
+  {
+    value: "monopay",
+    icon: CreditCard,
+    title: "Карта (MonoPay)",
+    note: "Комісія сервісу 1.3%",
+    group: "main",
+  },
+  {
+    value: "monobank_parts",
+    icon: Wallet,
+    title: "Частинами Monobank",
+    note: "4 платежі без %",
+    group: "main",
+  },
+  {
+    value: "privat_parts",
+    icon: Wallet,
+    title: "Частинами ПриватБанк",
+    note: "до 9 платежів",
+    group: "main",
+  },
+  {
+    value: "pumb_parts",
+    icon: Wallet,
+    title: "Частинами ПУМБ",
+    note: "до 12 місяців",
+    group: "main",
+  },
+  {
+    value: "iban_individual",
+    icon: Banknote,
+    title: "Безготівковий (IBAN)",
+    note: "Менеджер надішле рахунок",
+    group: "other",
+  },
+  {
+    value: "iban_business",
+    icon: Building2,
+    title: "Для ФОП / ЮО",
+    note: "Рахунок, договір, УПД",
+    group: "other",
+  },
+  {
+    value: "crypto",
+    icon: Bitcoin,
+    title: "Криптовалюта",
+    note: "USDT / BTC / ETH",
+    group: "other",
+  },
 ];
 
 const COD_LIMIT = 50000;
@@ -105,8 +168,7 @@ export function CheckoutView() {
     [cityRef],
   );
 
-  const codDisabled =
-    cartTotal > COD_LIMIT || deliveryMethod === "self_pickup";
+  const codDisabled = cartTotal > COD_LIMIT || deliveryMethod === "self_pickup";
 
   useEffect(() => {
     if (paymentMethod === "cod" && codDisabled) {
@@ -160,21 +222,31 @@ export function CheckoutView() {
               label="Ім'я та прізвище"
               error={errors.customerName?.message}
             >
-              <Input placeholder="Іван Петренко" {...register("customerName")} />
+              <Input
+                placeholder="Іван Петренко"
+                {...register("customerName")}
+              />
             </Field>
             <Field
               label="Телефон"
               hint="Менеджер зателефонує для підтвердження"
               error={errors.customerPhone?.message}
             >
-              <Input placeholder="+380 95 000 00 00" {...register("customerPhone")} />
+              <Input
+                placeholder="+380 95 000 00 00"
+                {...register("customerPhone")}
+              />
             </Field>
             <Field
               label="Email"
               hint="Надішлемо номер замовлення та трек-номер"
               error={errors.customerEmail?.message}
             >
-              <Input type="email" placeholder="you@example.com" {...register("customerEmail")} />
+              <Input
+                type="email"
+                placeholder="you@example.com"
+                {...register("customerEmail")}
+              />
             </Field>
           </div>
         </section>
@@ -228,10 +300,7 @@ export function CheckoutView() {
           {/* Cascading fields */}
           {deliveryMethod !== "self_pickup" && (
             <div className="mt-5 space-y-4">
-              <Field
-                label="Місто"
-                error={errors.deliveryCity?.message}
-              >
+              <Field label="Місто" error={errors.deliveryCity?.message}>
                 <div className="relative">
                   <Input
                     placeholder="Почни вводити — з'явиться підказка"
@@ -288,9 +357,7 @@ export function CheckoutView() {
                     className="h-9 w-full rounded-md border border-border bg-background px-3 text-sm focus-visible:border-ring focus-visible:outline-none disabled:opacity-50"
                   >
                     <option value="">
-                      {cityRef
-                        ? "Оберіть відділення"
-                        : "Спершу оберіть місто"}
+                      {cityRef ? "Оберіть відділення" : "Спершу оберіть місто"}
                     </option>
                     {branches.map((br) => (
                       <option key={br.ref} value={br.number}>
@@ -436,10 +503,7 @@ export function CheckoutView() {
         <section className="rounded-lg border border-border bg-surface p-6">
           <SectionNumber n="4" title="Готовий?" />
           <div className="mt-5 space-y-4">
-            <Field
-              label="Коментар до замовлення"
-              hint="Не обов'язково"
-            >
+            <Field label="Коментар до замовлення" hint="Не обов'язково">
               <textarea
                 {...register("customerComment")}
                 rows={3}
@@ -508,56 +572,64 @@ export function CheckoutView() {
             });
             const imageSrc = item.image ?? build?.heroImageUrl;
             return (
-            <li
-              key={key}
-              className="flex items-start gap-3"
-              style={
-                isBuild
-                  ? { ["--sku" as string]: SKU_ACCENTS[item.slug as keyof typeof SKU_ACCENTS] }
-                  : undefined
-              }
-            >
-              <div className="relative size-12 shrink-0 overflow-hidden rounded-md">
-                {isBuild && <ChassisArt compact className="absolute inset-0 size-full" />}
-                {imageSrc && (
-                  <Image
-                    src={imageSrc}
-                    alt=""
-                    fill
-                    sizes="48px"
-                    className="relative z-10 object-cover"
-                    unoptimized={!isBuild}
-                  />
-                )}
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="font-display text-sm font-bold uppercase">
-                  {item.name}
+              <li
+                key={key}
+                className="flex items-start gap-3"
+                style={
+                  isBuild
+                    ? {
+                        ["--sku" as string]:
+                          SKU_ACCENTS[item.slug as keyof typeof SKU_ACCENTS],
+                      }
+                    : undefined
+                }
+              >
+                <div className="relative size-12 shrink-0 overflow-hidden rounded-md">
+                  {isBuild && (
+                    <ChassisArt
+                      compact
+                      className="absolute inset-0 size-full"
+                    />
+                  )}
+                  {imageSrc && (
+                    <Image
+                      src={imageSrc}
+                      alt=""
+                      fill
+                      sizes="48px"
+                      className="relative z-10 object-cover"
+                      unoptimized={!isBuild}
+                    />
+                  )}
                 </div>
-                {item.colorName && (
-                  <div className="mt-0.5 text-[10px] text-muted-foreground">
-                    Колір: {item.colorName}
+                <div className="min-w-0 flex-1">
+                  <div className="font-display text-sm font-bold uppercase">
+                    {item.name}
                   </div>
-                )}
-                {item.options && item.options.length > 0 && (
-                  <ul className="mt-0.5 text-[10px] text-muted-foreground">
-                    {item.options.map((o) => (
-                      <li key={o.groupId}>
-                        {o.groupLabel}: {o.optionLabel}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {item.quantity > 1 && (
-                  <div className="text-xs text-muted-foreground">
-                    × {item.quantity}
-                  </div>
-                )}
-              </div>
-              <div className="tabular shrink-0 text-sm font-semibold">
-                {formatPrice(item.unitPriceUah * item.quantity)}
-              </div>
-            </li>
+                  {item.colorName && (
+                    <div className="mt-0.5 text-[10px] text-muted-foreground">
+                      Колір: {item.colorName}
+                    </div>
+                  )}
+                  {item.options && item.options.length > 0 && (
+                    <ul className="mt-0.5 text-[10px] text-muted-foreground">
+                      {item.options.map((o) => (
+                        <li key={o.groupId}>
+                          {o.groupLabel}: {o.optionLabel}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {item.quantity > 1 && (
+                    <div className="text-xs text-muted-foreground">
+                      × {item.quantity}
+                    </div>
+                  )}
+                </div>
+                <div className="tabular shrink-0 text-sm font-semibold">
+                  {formatPrice(item.unitPriceUah * item.quantity)}
+                </div>
+              </li>
             );
           })}
         </ul>
@@ -575,7 +647,7 @@ export function CheckoutView() {
           <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
             До сплати
           </div>
-          <div className="tabular font-display text-3xl font-bold">
+          <div className="tabular font-heading text-3xl font-bold">
             {paymentMethod === "monopay"
               ? formatPrice(Math.round(cartTotal * 1.013))
               : formatPrice(cartTotal)}
@@ -591,13 +663,7 @@ export function CheckoutView() {
   );
 }
 
-function SectionNumber({
-  n,
-  title,
-}: {
-  n: string;
-  title: string;
-}) {
+function SectionNumber({ n, title }: { n: string; title: string }) {
   return (
     <div className="flex items-center gap-3">
       <div className="tabular flex size-8 items-center justify-center rounded-md border border-border bg-background font-display text-sm font-bold">
