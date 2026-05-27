@@ -159,7 +159,7 @@ export function CartDrawer() {
                   <span className="text-xs uppercase tracking-wider text-muted-foreground">
                     До сплати
                   </span>
-                  <span className="tabular font-display text-2xl font-bold">
+                  <span className="tabular font-heading text-2xl font-bold">
                     {formatPrice(total)}
                   </span>
                 </div>
