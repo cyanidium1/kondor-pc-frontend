@@ -4,14 +4,7 @@ import { useState, useMemo } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  Check,
-  FileText,
-  Download,
-  Info,
-  Play,
-  Expand,
-} from "lucide-react";
+import { Check, FileText, Download, Info, Play, Expand } from "lucide-react";
 import { TechButton } from "@/components/shared/TechButton";
 import {
   AddToCartAnimation,
@@ -64,10 +57,7 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const activeVariant: ColorVariant | undefined = variants[variantIdx];
-  const photos = useMemo(
-    () => activeVariant?.photos ?? [],
-    [activeVariant],
-  );
+  const photos = useMemo(() => activeVariant?.photos ?? [], [activeVariant]);
 
   const hasDiscount =
     typeof item.priceDiscount === "number" && item.priceDiscount < item.price;
@@ -83,8 +73,18 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
       photos.map((p) =>
         p?.asset
           ? {
-              main: urlFor(p).width(1600).height(1600).fit("crop").quality(90).url(),
-              thumb: urlFor(p).width(300).height(300).fit("crop").quality(85).url(),
+              main: urlFor(p)
+                .width(1600)
+                .height(1600)
+                .fit("crop")
+                .quality(90)
+                .url(),
+              thumb: urlFor(p)
+                .width(300)
+                .height(300)
+                .fit("crop")
+                .quality(85)
+                .url(),
               full: urlFor(p).width(2400).fit("max").quality(92).url(),
               alt: p.alt || "",
             }
@@ -96,9 +96,10 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
   const thumbUrl = photoUrls[photoIdx]?.thumb;
 
   const [animationKey, setAnimationKey] = useState<number | null>(null);
-  const [startPos, setStartPos] = useState<{ top: number; left: number } | null>(
-    null,
-  );
+  const [startPos, setStartPos] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
   const [justAdded, setJustAdded] = useState(false);
 
   const ytEmbed = item.video?.url ? youtubeEmbed(item.video.url) : null;
@@ -188,7 +189,9 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
                         className={cn(
                           "absolute inset-0 object-cover",
                           "transition-opacity duration-300 ease-out",
-                          visible ? "opacity-100" : "opacity-0 pointer-events-none",
+                          visible
+                            ? "opacity-100"
+                            : "opacity-0 pointer-events-none",
                         )}
                       />
                     );
@@ -276,7 +279,7 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
             </h1>
 
             {item.description && (
-              <p className="text-sm leading-relaxed text-muted-foreground">
+              <p className="text-sm leading-[120%] text-muted-foreground">
                 {item.description}
               </p>
             )}
@@ -322,7 +325,7 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
 
             {/* Price */}
             <div className="flex items-baseline gap-3">
-              <div className="font-display tabular text-4xl font-bold">
+              <div className="font-heading tabular text-4xl font-bold">
                 {formatPrice(finalPrice)}
               </div>
               {hasDiscount && (
@@ -347,12 +350,18 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
 
             {/* CTAs — single add, no qty; qty is managed inside the cart drawer. */}
             <div className="flex flex-col gap-3 sm:flex-row">
-              <TechButton size="lg" className="flex-1" onClick={buyNow}>
+              <TechButton
+                size="lg"
+                className="flex-1"
+                onClick={buyNow}
+                variant="inverse"
+              >
                 Купити зараз
               </TechButton>
               <TechButton
                 size="lg"
-                className="flex-1"
+                className="flex-1 text-[#ffffff59]"
+                variant="inverse"
                 style={{ ["--tech-accent" as string]: "#ffffff59" }}
                 onClick={addToCart}
               >
@@ -409,7 +418,7 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
                     Характеристики
                   </div>
                   <h2 className="mb-6 font-display text-2xl font-bold">
-                    Технічні деталі
+                    ТЕХНІЧНІ ДЕТАЛІ
                   </h2>
                   <dl className="divide-y divide-border overflow-hidden rounded-md border border-border bg-surface">
                     {item.chars.map((c, i) => (
@@ -433,7 +442,7 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
                     Що в коробці
                   </div>
                   <h2 className="mb-6 font-display text-2xl font-bold">
-                    Комплектація
+                    КОМПЛЕКТАЦІЯ
                   </h2>
                   <ul className="space-y-2">
                     {item.complect.map((c, i) => {
@@ -485,7 +494,7 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
               Відео
             </div>
             <h2 className="mb-6 font-display text-2xl font-bold">
-              Як це виглядає
+              ЯК ЦЕ ВИГЛЯДАЄ
             </h2>
             <div className="aspect-video overflow-hidden rounded-md border border-border bg-surface">
               <iframe

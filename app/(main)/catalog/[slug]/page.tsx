@@ -102,13 +102,15 @@ export default async function CatalogDetailPage({
               Схожі товари
             </div>
             <h2 className="font-display text-2xl font-bold md:text-3xl">
-              З цієї ж категорії
+              З ЦІЄЇ Ж КАТЕГОРІЇ
             </h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {groupProducts(similar).slice(0, 4).map((g) => (
-              <CatalogCard key={g.key} group={g} />
-            ))}
+            {groupProducts(similar)
+              .slice(0, 4)
+              .map((g) => (
+                <CatalogCard key={g.key} group={g} />
+              ))}
           </div>
         </section>
       )}
