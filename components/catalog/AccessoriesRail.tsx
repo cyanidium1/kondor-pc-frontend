@@ -1,9 +1,10 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { getAddonItems } from "@/lib/sanity/fetchers";
 import { groupProducts } from "@/lib/catalog/group";
 import { CatalogCard } from "./CatalogCard";
+import { AccessoriesRailMobileSlider } from "./AccessoriesRailMobileSlider";
 import { SectionHeader } from "@/components/shared/SectionHeader";
+import { TechButtonLink } from "../shared/TechButton";
+import ArrowIcon from "../icons/ArrowIcon";
 
 /**
  * Server component — fetches the global `showonaddons` pool from Sanity
@@ -27,20 +28,32 @@ export async function AccessoriesRail({
   const groups = groupProducts(addons).slice(0, limit);
 
   return (
-    <section className="border-y border-border bg-surface/30">
-      <div className="container-site py-12 md:py-16">
+    <section className="pb-24 lg:pb-30">
+      <div className="container-site">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-          <SectionHeader kicker="Аксесуари" title={title} subtitle={subtitle} />
-          <Link
+          <SectionHeader
+            kicker="Аксесуари"
+            title={title}
+            subtitle={subtitle}
+            className="mb-8"
+            titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
+            subtitleClassName="lg:max-w-[556px]"
+          />
+          <TechButtonLink
             href="/catalog"
-            className="group/link inline-flex items-center gap-1 text-sm uppercase tracking-wider text-muted-foreground transition hover:text-foreground"
+            variant="white"
+            className="w-full md:w-fit md:ml-auto h-[30px]"
           >
-            Весь каталог
-            <ArrowRight className="size-3.5 transition group-hover/link:translate-x-0.5" />
-          </Link>
+            <span className="inline-flex items-center gap-2 whitespace-nowrap font-heading">
+              Весь каталог
+              <ArrowIcon className="mb-0.5" />
+            </span>
+          </TechButtonLink>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <AccessoriesRailMobileSlider groups={groups} />
+
+        <div className="hidden gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-4">
           {groups.map((group) => (
             <CatalogCard key={group.key} group={group} />
           ))}

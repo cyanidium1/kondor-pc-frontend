@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { TechButtonLink } from "@/components/shared/TechButton";
 import { Check } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Замовлення оформлено",
 };
 
-const COPY: Record<
-  string,
-  { title: string; steps: string[] }
-> = {
+const COPY: Record<string, { title: string; steps: string[] }> = {
   monopay: {
     title: "Замовлення оформлено",
     steps: [
@@ -93,11 +88,8 @@ export default async function SuccessPage({
   return (
     <div className="container-narrow py-16 md:py-24">
       <div className="mb-8 flex flex-col items-center text-center">
-        <div className="mb-5 flex size-16 items-center justify-center rounded-full bg-[color:var(--fps-green)]/15">
-          <Check
-            className="size-8 text-[color:var(--fps-green)]"
-            strokeWidth={3}
-          />
+        <div className="mb-5 flex size-16 items-center justify-center rounded-full bg-brand-primary/15">
+          <Check className="size-8 text-brand-primary" strokeWidth={3} />
         </div>
         <h1 className="font-display text-3xl font-bold md:text-4xl">
           {copy.title}
@@ -127,15 +119,12 @@ export default async function SuccessPage({
       </div>
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <Link href="/" className={cn(buttonVariants({ variant: "default" }))}>
+        <TechButtonLink href="/" variant="white" className="h-12">
           На головну
-        </Link>
-        <Link
-          href="/pk"
-          className={cn(buttonVariants({ variant: "outline" }))}
-        >
+        </TechButtonLink>
+        <TechButtonLink href="/pk" variant="primary" className="h-12">
           Переглянути каталог
-        </Link>
+        </TechButtonLink>
       </div>
     </div>
   );

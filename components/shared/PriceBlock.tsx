@@ -17,14 +17,14 @@ export function PriceBlock({
   const sizes = {
     sm: "text-xl",
     md: "text-2xl md:text-3xl",
-    lg: "text-3xl md:text-5xl",
+    lg: "text-[36px] lg:text-[48px]",
   };
   const discount = oldPriceUah
     ? Math.round(((oldPriceUah - priceUah) / oldPriceUah) * 100)
     : 0;
   return (
-    <div className={cn("tabular space-y-1", className)}>
-      <div className="flex items-baseline gap-3">
+    <div className={cn("tabular min-w-0 space-y-1", className)}>
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <span className={cn("font-heading font-bold", sizes[size])}>
           {formatPrice(priceUah)}
         </span>

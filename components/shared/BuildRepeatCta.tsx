@@ -8,20 +8,18 @@ export function BuildRepeatCta() {
   const { build, resolvedPriceUah, resolvedOldPriceUah, selectedOptions } =
     useProductConfigurator();
 
-  const nonDefaultPicks = selectedOptions.filter(
-    ({ groupId, option }) => {
-      const group = build.configurableOptions?.find((g) => g.id === groupId);
-      const def = group?.options.find((o) => o.isDefault);
-      return option.priceDelta !== 0 || option.id !== def?.id;
-    },
-  );
+  const nonDefaultPicks = selectedOptions.filter(({ groupId, option }) => {
+    const group = build.configurableOptions?.find((g) => g.id === groupId);
+    const def = group?.options.find((o) => o.isDefault);
+    return option.priceDelta !== 0 || option.id !== def?.id;
+  });
 
   return (
     <div className="card-frame-lg relative mx-auto overflow-hidden p-8 md:p-12">
       <div
         aria-hidden
         className="pointer-events-none absolute -right-20 -top-20 size-80 rounded-full opacity-30 blur-3xl"
-        style={{ background: "var(--sku)" }}
+        style={{ background: "var(--brand-primary)" }}
       />
       {/* SKU-tinted ember from the bottom — adds warmth to the conversion block */}
       <div
@@ -29,7 +27,7 @@ export function BuildRepeatCta() {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2"
         style={{
           background:
-            "radial-gradient(ellipse 70% 100% at 50% 100%, color-mix(in srgb, var(--sku) 18%, transparent), transparent 70%)",
+            "radial-gradient(ellipse 70% 100% at 50% 100%, color-mix(in srgb, var(--brand-primary) 18%, transparent), transparent 70%)",
         }}
       />
       <div className="relative grid gap-8 md:grid-cols-[1.2fr_1fr] md:items-end">
@@ -40,7 +38,7 @@ export function BuildRepeatCta() {
           <h2 className="font-display text-3xl font-bold md:text-4xl">
             Забирай {build.name}
           </h2>
-          <p className="mt-3 text-muted-foreground">
+          <p className="mt-3 text-muted-foreground text-[16px] leading-[120%]">
             {build.shortTagline}.{" "}
             {build.status === "in_stock"
               ? "В наявності — відправимо завтра."

@@ -3,7 +3,9 @@ import { Check } from "lucide-react";
 import { INCLUDED_FEATURES } from "@/lib/mock/included-features";
 import type { IncludedFeature } from "@/types/build";
 
-function iconFor(name: string): React.ComponentType<{ className?: string; strokeWidth?: number }> {
+function iconFor(
+  name: string,
+): React.ComponentType<{ className?: string; strokeWidth?: number }> {
   const pascal = name
     .split("-")
     .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
@@ -37,8 +39,12 @@ export function IncludedFeaturesBlock({
               <Icon className="size-4" strokeWidth={1.75} />
             </div>
             <div>
-              <div className="font-medium">{f.title}</div>
-              <div className="text-sm text-muted-foreground">{f.description}</div>
+              <div className="font-heading text-[14px] leading-[120%] font-medium uppercase">
+                {f.title}
+              </div>
+              <div className="mt-1.5 text-[12px] leading-[120%] text-muted-foreground">
+                {f.description}
+              </div>
             </div>
           </li>
         );

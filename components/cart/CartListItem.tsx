@@ -73,7 +73,7 @@ export function CartListItem({
         <div
           aria-hidden
           className="pointer-events-none absolute -right-12 -top-12 size-32 rounded-full opacity-20 blur-2xl"
-          style={{ background: "var(--sku)" }}
+          style={{ background: "var(--brand-primary)" }}
         />
       )}
       <div className="relative flex gap-3">

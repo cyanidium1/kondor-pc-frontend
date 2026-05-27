@@ -12,8 +12,7 @@ import { useCartStore } from "@/lib/cartStore";
 import { useProductConfiguratorOptional } from "@/components/shared/ProductConfigurator";
 import { buildBySlug } from "@/lib/mock/builds";
 
-const TELEGRAM_HANDLE =
-  process.env.NEXT_PUBLIC_TELEGRAM_HANDLE || "kondor_pc";
+const TELEGRAM_HANDLE = process.env.NEXT_PUBLIC_TELEGRAM_HANDLE || "kondor_pc";
 
 /**
  * Sticky bottom bar on mobile, sticky top-offset bar on desktop.
@@ -75,7 +74,7 @@ export function StickyMobileBuyBar({
         <div className="flex min-w-0 items-center gap-3">
           <div
             className="size-2 shrink-0 rounded-full"
-            style={{ background: "var(--sku)" }}
+            style={{ background: "var(--brand-primary)" }}
           />
           <div className="min-w-0">
             <div className="flex items-baseline gap-2">
@@ -109,7 +108,7 @@ export function StickyMobileBuyBar({
             aria-label="Написати в Telegram"
             className={cn(
               "hidden size-9 items-center justify-center rounded-md border border-border bg-background",
-              "text-[#229ED9] transition hover:border-white/25 md:flex",
+              "text-brand-primary transition hover:border-white/25 md:flex",
             )}
           >
             <Send className="size-4" strokeWidth={2} />
@@ -120,7 +119,11 @@ export function StickyMobileBuyBar({
             reliably; horizontal padding stays whatever the tech-btn variant
             ships, so we don't touch sibling spacing.
           */}
-          <TechButton size="lg" className="min-w-[128px]" onClick={buy}>
+          <TechButton
+            size="lg"
+            className="min-w-[128px] font-heading tracking-normal"
+            onClick={buy}
+          >
             Купити
           </TechButton>
         </div>

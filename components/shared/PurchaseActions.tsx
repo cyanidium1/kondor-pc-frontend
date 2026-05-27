@@ -33,9 +33,10 @@ export function PurchaseActions({
   const [justAdded, setJustAdded] = useState(false);
 
   const [animationKey, setAnimationKey] = useState<number | null>(null);
-  const [startPos, setStartPos] = useState<{ top: number; left: number } | null>(
-    null,
-  );
+  const [startPos, setStartPos] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
 
   const build = buildBySlug(slug);
   const image = build?.heroImageUrl;
@@ -97,8 +98,8 @@ export function PurchaseActions({
       <div className={cn("flex flex-col gap-3 sm:flex-row", className)}>
         <TechButton
           size={size}
-          variant="primary"
-          className="flex-1"
+          variant="inverse"
+          className="flex-1 font-heading  h-[49px] tracking-normal"
           onClick={buyNow}
         >
           Купити зараз
@@ -106,8 +107,8 @@ export function PurchaseActions({
         <TechButton
           size={size}
           variant="inverse"
-          className="flex-1"
-          accent="#ffffff59"
+          className="flex-1 font-heading text-muted-foreground h-[49px] tracking-normal"
+          accent="#8b939d"
           onClick={addAndStay}
         >
           {justAdded ? (

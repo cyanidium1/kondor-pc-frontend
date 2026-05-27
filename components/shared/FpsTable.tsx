@@ -20,13 +20,18 @@ export function FpsTable({
   const gameSlugs = Array.from(new Set(build.fps.map((f) => f.gameSlug)));
 
   return (
-    <div className={cn("overflow-hidden rounded-lg border border-border", className)}>
+    <div
+      className={cn(
+        "overflow-hidden rounded-lg border border-border",
+        className,
+      )}
+    >
       <div className="tabular">
         {/* header */}
-        <div className="grid grid-cols-[1.2fr_repeat(3,minmax(0,1fr))] gap-px bg-border/50 text-xs uppercase tracking-wider text-muted-foreground">
-          <div className="bg-surface px-4 py-3">Гра</div>
+        <div className="grid grid-cols-[1fr_repeat(3,minmax(0,1fr))] gap-px bg-border/50 text-xs uppercase  text-muted-foreground">
+          <div className="bg-surface px-2 py-3">Гра</div>
           {RESOLUTIONS.map((r) => (
-            <div key={r} className="bg-surface px-3 py-3 text-center">
+            <div key={r} className="bg-surface px-2 py-3 text-center">
               {RESOLUTION_LABEL[r]}
             </div>
           ))}
@@ -41,11 +46,11 @@ export function FpsTable({
             return (
               <div
                 key={slug}
-                className="grid grid-cols-[1.2fr_repeat(3,minmax(0,1fr))] gap-px bg-border/50"
+                className="grid grid-cols-[1fr_repeat(3,minmax(0,1fr))] gap-px bg-border/50"
               >
                 {/* Game name cell — clamp to 2 lines so every row keeps the
                     same vertical rhythm regardless of title length. */}
-                <div className="flex min-h-14 items-center bg-surface px-4 py-2 text-sm font-medium">
+                <div className="flex min-h-11 items-center bg-surface px-4 py-2 text-[8px] lg:text-[14px] font-medium">
                   <span className="line-clamp-2 leading-tight">
                     {gameShortLabel(slug)}
                   </span>
@@ -55,7 +60,7 @@ export function FpsTable({
                     return (
                       <div
                         key={i}
-                        className="flex min-h-14 items-center justify-center bg-surface px-2 py-2 text-xs text-muted-foreground/40"
+                        className="flex min-h-11 items-center justify-center bg-surface px-2 py-2 text-xs text-muted-foreground/40"
                       >
                         —
                       </div>
@@ -65,7 +70,7 @@ export function FpsTable({
                   return (
                     <div
                       key={i}
-                      className="flex min-h-14 items-center justify-center bg-surface px-2 py-2"
+                      className="flex min-h-11 items-center justify-center bg-surface px-2 py-2"
                       title={FPS_TIER_META[tier].note}
                     >
                       <div className="flex items-center gap-1.5">
@@ -78,11 +83,11 @@ export function FpsTable({
                         />
                         {/* Number on top, "FPS" stacked underneath so the cell
                             reads as a clean two-line metric. */}
-                        <div className="flex flex-col items-center leading-none">
-                          <span className="text-sm font-semibold">
+                        <div className="flex gap-1 lg:gap-2 items-center leading-none">
+                          <span className="text-[12px] lg:text-[14px] font-semibold">
                             {entry.fpsAvg}
                           </span>
-                          <span className="mt-0.5 text-[9px] uppercase tracking-[0.15em] text-muted-foreground">
+                          <span className="mt-0.5 text-[8px] lg:text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
                             fps
                           </span>
                         </div>
