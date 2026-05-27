@@ -2,15 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
-import { Phone, MessageSquare, Mail } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Phone, MessageSquare, Mail, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TechButtonLink } from "@/components/shared/TechButton";
+import type { NavEntry, NavGroup } from "@/components/layout/Header";
 
-interface NavItem {
-  href: string;
-  label: string;
-}
+const isGroup = (n: NavEntry): n is NavGroup => "children" in n;
 
 export function MobileMenu({
   isOpen,
@@ -19,7 +17,7 @@ export function MobileMenu({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  navItems: NavItem[];
+  navItems: NavEntry[];
 }) {
   const pathname = usePathname();
 
@@ -86,39 +84,24 @@ export function MobileMenu({
         />
 
         <nav className="container-site flex flex-col gap-1 pt-4 pb-2">
-          {navItems.map((item) => {
-            const active = pathname === item.href;
-            return (
-              <Link
+          {navItems.map((item) =>
+            isGroup(item) ? (
+              <MobileGroup
+                key={item.label}
+                group={item}
+                pathname={pathname}
+                onClose={onClose}
+              />
+            ) : (
+              <MobileLink
                 key={item.href}
                 href={item.href}
-                onClick={onClose}
-                data-active={active}
-                className={cn(
-                  "group/mitem relative flex items-center justify-between py-3.5",
-                  "text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground",
-                  "transition-colors duration-200 ease-out",
-                  "hover:text-foreground data-[active=true]:text-foreground",
-                )}
-              >
-                <span>{item.label}</span>
-                <span
-                  aria-hidden
-                  className="tabular text-[10px] text-muted-foreground/40 transition-transform duration-300 ease-out group-hover/mitem:translate-x-0.5"
-                >
-                  →
-                </span>
-                <span
-                  aria-hidden
-                  className={cn(
-                    "pointer-events-none absolute inset-x-0 bottom-0 h-px origin-left bg-foreground/20",
-                    "transition-transform duration-300 ease-out",
-                    "scale-x-0 group-hover/mitem:scale-x-100 data-[active=true]:scale-x-100",
-                  )}
-                />
-              </Link>
-            );
-          })}
+                label={item.label}
+                active={pathname === item.href}
+                onClose={onClose}
+              />
+            ),
+          )}
         </nav>
 
         <div className="container-site pb-6 pt-4">
@@ -159,6 +142,120 @@ export function MobileMenu({
               Email
             </a>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MobileLink({
+  href,
+  label,
+  active,
+  onClose,
+}: {
+  href: string;
+  label: string;
+  active: boolean;
+  onClose: () => void;
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onClose}
+      data-active={active}
+      className={cn(
+        "group/mitem relative flex items-center justify-between py-3.5",
+        "text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground",
+        "transition-colors duration-200 ease-out",
+        "hover:text-foreground data-[active=true]:text-foreground",
+      )}
+    >
+      <span>{label}</span>
+      <span
+        aria-hidden
+        className="tabular text-[10px] text-muted-foreground/40 transition-transform duration-300 ease-out group-hover/mitem:translate-x-0.5"
+      >
+        →
+      </span>
+      <span
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-x-0 bottom-0 h-px origin-left bg-foreground/20",
+          "transition-transform duration-300 ease-out",
+          "scale-x-0 group-hover/mitem:scale-x-100 data-[active=true]:scale-x-100",
+        )}
+      />
+    </Link>
+  );
+}
+
+function MobileGroup({
+  group,
+  pathname,
+  onClose,
+}: {
+  group: NavGroup;
+  pathname: string;
+  onClose: () => void;
+}) {
+  // Auto-open if current route is inside this group.
+  const childActive = group.children.some((c) => pathname === c.href);
+  const [open, setOpen] = useState(childActive);
+
+  return (
+    <div className="border-b border-foreground/5 last:border-b-0">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className={cn(
+          "group/mitem relative flex w-full items-center justify-between py-3.5",
+          "text-xs font-medium uppercase tracking-[0.22em]",
+          "transition-colors duration-200 ease-out",
+          open ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+        )}
+      >
+        <span>{group.label}</span>
+        <ChevronDown
+          className={cn(
+            "size-4 transition-transform duration-200 ease-out",
+            open && "rotate-180",
+          )}
+          strokeWidth={2}
+        />
+      </button>
+      <div
+        className={cn(
+          "grid transition-all duration-300 ease-out",
+          open
+            ? "grid-rows-[1fr] opacity-100"
+            : "grid-rows-[0fr] opacity-0",
+        )}
+      >
+        <div className="overflow-hidden">
+          <ul className="flex flex-col gap-0.5 pb-2 pl-4">
+            {group.children.map((c) => {
+              const active = pathname === c.href;
+              return (
+                <li key={c.href}>
+                  <Link
+                    href={c.href}
+                    onClick={onClose}
+                    data-active={active}
+                    className={cn(
+                      "block py-2 text-[11px] font-medium uppercase tracking-[0.2em]",
+                      "transition-colors duration-150 ease-out",
+                      "text-muted-foreground/80 hover:text-foreground",
+                      "data-[active=true]:text-foreground",
+                    )}
+                  >
+                    {c.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
     </div>
