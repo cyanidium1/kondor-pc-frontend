@@ -1,0 +1,68 @@
+import { SectionHeader } from "@/components/shared/SectionHeader";
+import { TechButtonLink } from "@/components/shared/TechButton";
+import { BudgetChipLink } from "@/components/shared/BudgetChipLink";
+import type { ResolvedPageContext } from "@/lib/data/types";
+
+const BUDGET_BUCKETS = [
+  { label: "До 40 000 ₴", href: "/pidbir/rezultat?budget=0-40" },
+  { label: "40–80 000 ₴", href: "/pidbir/rezultat?budget=40-80" },
+  { label: "80 000 ₴+", href: "/pidbir/rezultat?budget=80-200" },
+];
+
+export function CtaWizardPrefilled({
+  heading,
+  buttonText,
+  pageContext,
+}: {
+  heading?: string;
+  buttonText?: string;
+  pageContext: ResolvedPageContext;
+}) {
+  const name = pageContext.displayName;
+  const title = heading ?? "НЕ ЗНАЄШ ЯКУ ОБРАТИ?";
+  const cta = buttonText ?? `Підібрати ПК для ${name}`;
+
+  return (
+    <div className="container-site py-16 md:py-20">
+      <section className="relative overflow-hidden rounded-[40px] bg-brand-primary py-14 md:py-20">
+        {/* dark blob accents — match home CTA section idiom */}
+        <div className="absolute -top-[120px] -left-[120px] size-[420px] rounded-full bg-black/15 blur-3xl" />
+        <div className="absolute -bottom-[160px] -right-[140px] size-[460px] rounded-full bg-black/20 blur-3xl" />
+
+        <div className="relative container-prose">
+          <SectionHeader
+            align="center"
+            kicker="Готовий?"
+            title={title}
+            subtitle={`Відповідай на 4 простих питання — покажемо 3 ідеальні варіанти під твій бюджет і ${name}. Підбір за 30 секунд.`}
+            kickerClassName="text-black"
+            titleClassName="text-black py-4"
+            subtitleClassName="text-black/80 lg:max-w-[460px]"
+          />
+
+          <div className="flex flex-col items-center justify-center gap-5 lg:flex-row">
+            <TechButtonLink
+              href={`/pidbir?ref=${pageContext.refSlug}`}
+              size="lg"
+              variant="swap"
+              className="h-[51px] w-full max-w-[360px]"
+            >
+              {cta}
+            </TechButtonLink>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {BUDGET_BUCKETS.map((b) => (
+                <BudgetChipLink
+                  key={b.href}
+                  href={b.href}
+                  className="tabular text-[12px]"
+                >
+                  {b.label}
+                </BudgetChipLink>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
