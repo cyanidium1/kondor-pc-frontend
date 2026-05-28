@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { RouteBreadcrumbs } from "@/components/shared/RouteBreadcrumbs";
 
 export default function MainLayout({
   children,
@@ -9,7 +10,10 @@ export default function MainLayout({
   return (
     <>
       <Header />
-      <main className="overflow-hidden">{children}</main>
+      <main className="overflow-hidden">
+        <RouteBreadcrumbs />
+        {children}
+      </main>
       <Footer />
     </>
   );

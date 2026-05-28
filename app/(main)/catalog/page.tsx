@@ -19,7 +19,7 @@ export default async function CatalogPage() {
   ]);
 
   return (
-    <div className="relative container-site py-12 md:py-16">
+    <div className="relative container-site pt-8 lg:pt-12 pb-12 lg:pb-16">
       <div className="absolute -z-10 top-[-223px] lg:top-[-154px] left-[-860px] lg:left-[-160px] w-[1929px] h-[2007px]">
         <Image
           src="/images/pk/shadows.svg"

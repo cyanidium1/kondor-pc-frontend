@@ -1,9 +1,9 @@
 import Image from "next/image";
-import {TechButtonLink} from "@/components/shared/TechButton";
-import {cn} from "@/lib/utils";
+import { TechButtonLink } from "@/components/shared/TechButton";
+import { cn } from "@/lib/utils";
 
-type SimpleImage = {src: string; alt: string; caption?: string};
-type Cta = {text?: string; href?: string};
+type SimpleImage = { src: string; alt: string; caption?: string };
+type Cta = { text?: string; href?: string };
 
 /**
  * HeroSimple — універсальний верхній блок без прив'язки до продукту.
@@ -56,12 +56,7 @@ export function HeroSimple({
         </>
       )}
 
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
-      />
-
-      <div className="container-site relative py-16 md:py-24 lg:py-28">
+      <div className="container-site relative pt-8 pb-16 pt-12 lg:pb-28">
         <div className="max-w-3xl">
           <div className="mb-3 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
             Готові ігрові ПК

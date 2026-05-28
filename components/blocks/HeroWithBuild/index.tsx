@@ -21,12 +21,7 @@ export async function HeroWithBuild({
       <div className="absolute -bottom-[260px] right-[-200px] size-[460px] rounded-full bg-[#0097FF] blur-[110px] opacity-60" />
       <div className="hidden md:block absolute -bottom-[300px] right-[-400px] size-[680px] rounded-full bg-[#005996] blur-[220px] opacity-70" />
 
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
-      />
-
-      <div className="container-site relative grid gap-10 py-10 md:py-16 sm:grid-cols-[1.3fr_1fr] md:items-center lg:gap-12">
+      <div className="container-site relative grid gap-10 pt-8 pb-10 lg:pt-12 lg:pb-16 sm:grid-cols-[1.3fr_1fr] md:items-center lg:gap-12">
         <div>
           <div className="mb-3 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
             Готові ігрові ПК
