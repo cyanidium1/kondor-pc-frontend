@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SelectionForm } from "./SelectionForm";
 import { Reveal } from "@/components/shared/Reveal";
 import { SectionHeader } from "@/components/shared/SectionHeader";
+import { getAllGames } from "@/lib/sanity-pc/games";
 import Image from "next/image";
 
 export const metadata: Metadata = {
@@ -10,7 +11,8 @@ export const metadata: Metadata = {
     "Обери свої ігри та бюджет — покажемо 3–5 підходящих збірок з реальними FPS.",
 };
 
-export default function PidbirPage() {
+export default async function PidbirPage() {
+  const gamesCatalog = await getAllGames();
   return (
     <div className="">
       <section className="relative py-[150px] lg:pb-30 mb-15 lg:mb-25 rounded-b-[40px] overflow-hidden">
@@ -65,7 +67,7 @@ export default function PidbirPage() {
         </div>
       </section>
       <div className="container-site">
-        <SelectionForm />
+        <SelectionForm gamesCatalog={gamesCatalog} />
       </div>
     </div>
   );

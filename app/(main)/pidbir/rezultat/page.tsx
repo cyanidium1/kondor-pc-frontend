@@ -3,7 +3,8 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { BuildCard } from "@/components/shared/BuildCard";
 import { parseBudget, parseGames, pickBuilds, BADGE_META } from "@/lib/pidbir";
-import { gameLabel } from "@/lib/mock/games";
+import { getAllBuilds } from "@/lib/sanity-pc/builds";
+import { getAllGames, makeGameLabelMap } from "@/lib/sanity-pc/games";
 import type { Resolution } from "@/types/build";
 import { cn } from "@/lib/utils";
 import { TechButtonLink } from "@/components/shared/TechButton";
@@ -22,13 +23,18 @@ export default async function ResultPage({
   const games = parseGames(sp.games);
   const { min, max } = parseBudget(sp.budget);
   const resolution = (sp.resolution ?? undefined) as Resolution | undefined;
+  const [builds, gamesCatalog] = await Promise.all([getAllBuilds(), getAllGames()]);
+  const gameLabels = makeGameLabelMap(gamesCatalog);
 
-  const { results, fallback } = pickBuilds({
-    games,
-    budgetMin: min,
-    budgetMax: max,
-    resolution,
-  });
+  const { results, fallback } = pickBuilds(
+    {
+      games,
+      budgetMin: min,
+      budgetMax: max,
+      resolution,
+    },
+    builds,
+  );
 
   const budgetLabel =
     min === 0
@@ -37,7 +43,7 @@ export default async function ResultPage({
 
   const gamesLabel =
     games.length > 0
-      ? games.map(gameLabel).join(" + ")
+      ? games.map((slug) => gameLabels[slug] ?? slug).join(" + ")
       : "УСІХ ПОПУЛЯРНИХ ІГОР";
 
   return (
@@ -62,7 +68,7 @@ export default async function ResultPage({
         <FallbackEmpty />
       ) : (
         <>
-          <ExplanationBlock games={games} budgetLabel={budgetLabel} />
+          <ExplanationBlock games={games} budgetLabel={budgetLabel} gameLabels={gameLabels} />
 
           <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {results.map((r) => (
@@ -85,6 +91,7 @@ export default async function ResultPage({
                 <BuildCard
                   build={r.build}
                   variant="full"
+                  gameLabels={gameLabels}
                   highlightGames={
                     games.length > 0 ? games : ["cs2", "warzone", "cyberpunk"]
                   }
@@ -125,9 +132,11 @@ export default async function ResultPage({
 function ExplanationBlock({
   games,
   budgetLabel,
+  gameLabels,
 }: {
   games: string[];
   budgetLabel: string;
+  gameLabels: Record<string, string>;
 }) {
   return (
     <aside className="rounded-lg border border-border bg-surface/60 p-5 text-sm">
@@ -141,7 +150,7 @@ function ExplanationBlock({
             {" "}
             входять збірки, які дають стабільний FPS у{" "}
             <span className="text-foreground">
-              {games.map(gameLabel).join(", ")}
+              {games.map((slug) => gameLabels[slug] ?? slug).join(", ")}
             </span>
             .
           </>
@@ -165,15 +174,19 @@ function FallbackEmpty() {
         Спробуй розширити бюджет або обрати інші ігри.
       </p>
       <div className="mt-6 flex justify-center gap-3">
-        <Link
+        <TechButtonLink
           href="/pidbir"
-          className={cn(buttonVariants({ variant: "default" }))}
+          variant="muted"
+          className="h-12 px-3 sm:px-6 font-heading tracking-normal text-[11px] sm:text-[12px]"
         >
           Змінити критерії
-        </Link>
-        <Link href="/pk" className={cn(buttonVariants({ variant: "outline" }))}>
+        </TechButtonLink>
+        <TechButtonLink
+          href="/pk"
+          className="h-12 px-3 sm:px-6 font-heading tracking-normal text-[11px] sm:text-[12px]"
+        >
           Переглянути весь каталог
-        </Link>
+        </TechButtonLink>
       </div>
     </div>
   );

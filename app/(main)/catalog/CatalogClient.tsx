@@ -383,7 +383,11 @@ export function CatalogClient({
                 Спробуй скинути фільтри або розширити діапазон цін.
               </p>
               <div className="mt-4 flex justify-center">
-                <TechButton onClick={resetAll} size="sm">
+                <TechButton
+                  onClick={resetAll}
+                  size="sm"
+                  className="font-heading tracking-normal h-9"
+                >
                   Скинути фільтри
                 </TechButton>
               </div>

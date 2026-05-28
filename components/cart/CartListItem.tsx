@@ -8,7 +8,6 @@ import { ChassisArt } from "@/components/brand/ChassisArt";
 import { SKU_ACCENTS, type SkuSlug } from "@/lib/sku-accents";
 import { formatPrice } from "@/lib/format";
 import { useCartStore, type CartItem } from "@/lib/cartStore";
-import { buildBySlug } from "@/lib/mock/builds";
 import { cn } from "@/lib/utils";
 
 const cartItemVariants = {
@@ -40,10 +39,9 @@ export function CartListItem({
   });
 
   const isBuild = item.itemType === "build";
-  const build = isBuild ? buildBySlug(item.slug as SkuSlug) : undefined;
   const accent = isBuild ? SKU_ACCENTS[item.slug as SkuSlug] : undefined;
 
-  const imageSrc = item.image ?? build?.heroImageUrl ?? undefined;
+  const imageSrc = item.image ?? undefined;
 
   const href = isBuild ? `/pk/${item.slug}` : `/catalog/${item.slug}`;
 

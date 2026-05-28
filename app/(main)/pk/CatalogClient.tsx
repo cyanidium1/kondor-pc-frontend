@@ -13,9 +13,8 @@ import {
 import { BuildCard } from "@/components/shared/BuildCard";
 import { TechButton, TechButtonLink } from "@/components/shared/TechButton";
 import { buttonVariants } from "@/components/ui/button";
-import { GAMES } from "@/lib/mock/games";
 import { formatUah } from "@/lib/format";
-import type { Build, Resolution } from "@/types/build";
+import type { Build, Game, Resolution } from "@/types/build";
 import { cn } from "@/lib/utils";
 import ArrowInCircleIcon from "@/components/icons/ArrowInCircleIcon";
 
@@ -32,9 +31,15 @@ const SORTS = [
   { value: "price_desc", label: "Від дорогих" },
 ] as const;
 
-const POPULAR_GAMES = GAMES.filter((g) => g.isPopular);
-
-export function CatalogClient({ builds }: { builds: Build[] }) {
+export function CatalogClient({
+  builds,
+  games,
+}: {
+  builds: Build[];
+  games: Game[];
+}) {
+  const popularGames = games.filter((g) => g.isPopular);
+  const gameLabels = Object.fromEntries(games.map((g) => [g.slug, g.ukrName || g.name]));
   const [budget, setBudget] = useState<[number, number]>([20, 200]);
   const [gameSlug, setGameSlug] = useState<string | "all">("all");
   const [resolution, setResolution] = useState<"all" | Resolution>("all");
@@ -148,15 +153,15 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
                   <SelectValue>
                     {gameSlug === "all"
                       ? "Усі ігри"
-                      : POPULAR_GAMES.find((g) => g.slug === gameSlug)
+                      : popularGames.find((g) => g.slug === gameSlug)
                           ?.ukrName ||
-                        POPULAR_GAMES.find((g) => g.slug === gameSlug)?.name ||
+                        popularGames.find((g) => g.slug === gameSlug)?.name ||
                         gameSlug}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Усі ігри</SelectItem>
-                  {POPULAR_GAMES.map((g) => (
+                  {popularGames.map((g) => (
                     <SelectItem key={g.slug} value={g.slug}>
                       {g.ukrName || g.name}
                     </SelectItem>
@@ -241,10 +246,17 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
                   setGameSlug("all");
                   setResolution("all");
                 }}
+                variant="white"
+                className="font-heading tracking-normal h-9"
               >
                 Скинути фільтри
               </TechButton>
-              <TechButtonLink href="/pidbir">Пройти підбір</TechButtonLink>
+              <TechButtonLink
+                href="/pidbir"
+                className="font-heading tracking-normal h-9"
+              >
+                Пройти підбір
+              </TechButtonLink>
             </div>
           </div>
         ) : (
@@ -254,6 +266,7 @@ export function CatalogClient({ builds }: { builds: Build[] }) {
                 key={b.slug}
                 build={b}
                 variant="full"
+                gameLabels={gameLabels}
                 highlightGames={
                   gameSlug !== "all"
                     ? [gameSlug]

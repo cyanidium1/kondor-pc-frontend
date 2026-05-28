@@ -6,7 +6,6 @@ import { Check } from "lucide-react";
 import { TechButton } from "@/components/shared/TechButton";
 import { useCartStore } from "@/lib/cartStore";
 import { useProductConfiguratorOptional } from "@/components/shared/ProductConfigurator";
-import { buildBySlug } from "@/lib/mock/builds";
 import {
   AddToCartAnimation,
   FLY_DURATION_MS,
@@ -38,8 +37,7 @@ export function PurchaseActions({
     left: number;
   } | null>(null);
 
-  const build = buildBySlug(slug);
-  const image = build?.heroImageUrl;
+  const image = config?.build.heroImageUrl;
 
   const unitPriceUah = config?.resolvedPriceUah ?? priceUah;
   const options = config?.cartOptions;

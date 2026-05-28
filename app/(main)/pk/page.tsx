@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { BUILDS } from "@/lib/mock/builds";
+import { getAllBuilds } from "@/lib/sanity-pc/builds";
+import { getAllGames } from "@/lib/sanity-pc/games";
 import { CatalogClient } from "./CatalogClient";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import { TechButtonLink } from "@/components/shared/TechButton";
@@ -11,7 +12,9 @@ export const metadata: Metadata = {
     "Каталог ігрових ПК у Києві: 8 перевірених збірок від 20 000 до 200 000 ₴.",
 };
 
-export default function CatalogPage() {
+export default async function CatalogPage() {
+  const [builds, games] = await Promise.all([getAllBuilds(), getAllGames()]);
+
   return (
     <section className="relative container-site py-12 md:py-16">
       <div className="absolute -z-10 top-[-223px] lg:top-[-154px] left-[-860px] lg:left-[-160px] w-[1929px] h-[2007px]">
@@ -29,24 +32,24 @@ export default function CatalogPage() {
             Каталог
           </div>
           <h1 className="py-2 font-display text-[24px] font-bold md:text-5xl">
-            Ігрові ПК
+            ІГРОВІ ПК
           </h1>
           <p className="mt-2 text-[14px] leading-[120%] text-muted-foreground">
-            {BUILDS.length} перевірених збірок у всіх цінових категоріях
+            {builds.length} перевірених збірок у всіх цінових категоріях
           </p>
         </div>
         <TechButtonLink
           href="/pidbir"
           variant="white"
           size="sm"
-          className="w-full md:max-w-[411px] h-[30px] px-2 font-heading text-[10px] lg:text-[13px] font-medium leading-none tracking-normal"
+          className="w-full md:max-w-[411px] h-7.5 px-2 font-heading text-[10px] lg:text-[13px] font-medium leading-none tracking-normal"
         >
           <span>Не знаєш, що обрати? Пройди підбір</span>
           <ArrowIcon className="inline-block size-4 mb-0.5 ml-1" />
         </TechButtonLink>
       </div>
 
-      <CatalogClient builds={BUILDS} />
+      <CatalogClient builds={builds} games={games} />
     </section>
   );
 }

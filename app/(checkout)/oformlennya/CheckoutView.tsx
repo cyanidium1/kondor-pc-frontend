@@ -13,7 +13,6 @@ import { TechButton } from "@/components/shared/TechButton";
 import Image from "next/image";
 import { ChassisArt } from "@/components/brand/ChassisArt";
 import { SKU_ACCENTS } from "@/lib/sku-accents";
-import { buildBySlug } from "@/lib/mock/builds";
 import { useCartStore, lineKey as cartLineKey } from "@/lib/cartStore";
 import {
   orderSchema,
@@ -564,13 +563,12 @@ export function CheckoutView() {
         <ul className="space-y-3">
           {cartItems.map((item) => {
             const isBuild = item.itemType === "build";
-            const build = isBuild ? buildBySlug(item.slug) : undefined;
             const key = cartLineKey({
               slug: item.slug,
               options: item.options,
               colorCode: item.colorCode,
             });
-            const imageSrc = item.image ?? build?.heroImageUrl;
+            const imageSrc = item.image;
             return (
               <li
                 key={key}
