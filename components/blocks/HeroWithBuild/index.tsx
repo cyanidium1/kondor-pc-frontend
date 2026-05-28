@@ -26,7 +26,7 @@ export async function HeroWithBuild({
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
       />
 
-      <div className="container-site relative grid gap-10 py-10 md:py-16 lg:grid-cols-[1.3fr_1fr] lg:items-center lg:gap-12">
+      <div className="container-site relative grid gap-10 py-10 md:py-16 sm:grid-cols-[1.3fr_1fr] md:items-center lg:gap-12">
         <div>
           <div className="mb-3 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
             Готові ігрові ПК
@@ -45,7 +45,7 @@ export async function HeroWithBuild({
             <TechButtonLink
               href={`/pidbir?ref=${pageContext.refSlug}`}
               size="lg"
-              className="w-full max-w-[320px] lg:max-w-[420px] h-[48px]"
+              className="w-full sm:max-w-[360px] lg:max-w-[420px] h-[48px] text-[12px] md:text-[14px]"
             >
               ПІДІБРАТИ ПК ЗА 30 СЕКУНД
             </TechButtonLink>
