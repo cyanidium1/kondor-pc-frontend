@@ -25,10 +25,6 @@ export function CtaWizardPrefilled({
   return (
     <div className="container-site py-16 md:py-20">
       <section className="relative overflow-hidden rounded-[40px] bg-brand-primary py-14 md:py-20">
-        {/* dark blob accents — match home CTA section idiom */}
-        <div className="absolute -top-[120px] -left-[120px] size-[420px] rounded-full bg-black/15 blur-3xl" />
-        <div className="absolute -bottom-[160px] -right-[140px] size-[460px] rounded-full bg-black/20 blur-3xl" />
-
         <div className="relative container-prose">
           <SectionHeader
             align="center"
@@ -38,6 +34,7 @@ export function CtaWizardPrefilled({
             kickerClassName="text-black"
             titleClassName="text-black py-4"
             subtitleClassName="text-black/80 lg:max-w-[460px]"
+            showKickerDot={false}
           />
 
           <div className="flex flex-col items-center justify-center gap-5 lg:flex-row">
