@@ -38,7 +38,11 @@ import {
   breadcrumbJsonLd,
   faqPageJsonLd,
 } from "@/lib/seo";
-import { BUILDS, buildBySlug, similarBuilds } from "@/lib/mock/builds";
+import {
+  getBuildBySlug,
+  getBuildSlugs,
+  getSimilarBuilds,
+} from "@/lib/sanity-pc/builds";
 import { reviewsForBuild } from "@/lib/mock/reviews";
 import { FAQS } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
@@ -47,7 +51,7 @@ import MarqueeLine from "@/components/shared/MarqueeLine";
 import Image from "next/image";
 
 export async function generateStaticParams() {
-  return BUILDS.map((b) => ({ slug: b.slug }));
+  return getBuildSlugs();
 }
 
 export async function generateMetadata({
@@ -56,7 +60,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const b = buildBySlug(slug);
+  const b = await getBuildBySlug(slug);
   if (!b) return { title: "Не знайдено" };
   return {
     title: `${b.name} — ${b.spec.cpu} + ${b.spec.gpu}`,
@@ -148,13 +152,17 @@ export default async function BuildPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const build = buildBySlug(slug);
+  const build = await getBuildBySlug(slug);
   if (!build) notFound();
 
-  const accent = SKU_ACCENTS[build.slug];
-  const reviews = reviewsForBuild(build.slug, 3);
+  const accent =
+    SKU_ACCENTS[build.slug as keyof typeof SKU_ACCENTS] ?? "var(--brand-primary)";
+  const reviews =
+    build.reviews && build.reviews.length > 0
+      ? build.reviews.slice(0, 3)
+      : reviewsForBuild(build.slug, 3);
   const faqs = FAQS.filter((f) => build.faqKeys.includes(f.key));
-  const similar = similarBuilds(build.slug, 3);
+  const similar = await getSimilarBuilds(build.slug, 3);
 
   return (
     <Suspense fallback={null}>
@@ -574,6 +582,7 @@ export default async function BuildPage({
             name={build.name}
             slug={build.slug}
             priceUah={build.priceUah}
+            image={build.heroImageUrl}
           />
         </div>
       </ProductConfiguratorProvider>

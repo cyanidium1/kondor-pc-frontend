@@ -104,6 +104,8 @@ export interface Build {
   assemblyVideoPosterUrl?: string;
   /** Optional upgrade/option groups shown on the PC page configurator. When absent — configurator is hidden. */
   configurableOptions?: ConfigGroup[];
+  /** Відгуки з Sanity (масив на документі збірки). */
+  reviews?: Review[];
 }
 
 export interface Game {

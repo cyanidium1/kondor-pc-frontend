@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 import { SKU_ACCENTS, type SkuSlug } from "@/lib/sku-accents";
 import { useCartStore } from "@/lib/cartStore";
 import { useProductConfiguratorOptional } from "@/components/shared/ProductConfigurator";
-import { buildBySlug } from "@/lib/mock/builds";
 
 const TELEGRAM_HANDLE = process.env.NEXT_PUBLIC_TELEGRAM_HANDLE || "kondor_pc";
 
@@ -24,11 +23,13 @@ export function StickyMobileBuyBar({
   name,
   slug,
   priceUah,
+  image,
   triggerPx = 520,
 }: {
   name: string;
   slug: SkuSlug;
   priceUah: number;
+  image?: string;
   triggerPx?: number;
 }) {
   const [visible, setVisible] = useState(false);
@@ -37,7 +38,7 @@ export function StickyMobileBuyBar({
   const config = useProductConfiguratorOptional();
 
   const displayPrice = config?.resolvedPriceUah ?? priceUah;
-  const image = buildBySlug(slug)?.heroImageUrl;
+  const imageSrc = image ?? config?.build.heroImageUrl;
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > triggerPx);
@@ -54,7 +55,7 @@ export function StickyMobileBuyBar({
       priceUah,
       unitPriceUah: displayPrice,
       options: config?.cartOptions,
-      image,
+      image: imageSrc,
     });
     router.push("/oformlennya");
   }

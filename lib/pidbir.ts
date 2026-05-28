@@ -1,5 +1,4 @@
 import type { Build, Resolution } from "@/types/build";
-import { BUILDS } from "@/lib/mock/builds";
 
 export interface PidbirCriteria {
   games: string[];
@@ -52,9 +51,10 @@ function scoreBuild(build: Build, c: PidbirCriteria): number {
 
 export function pickBuilds(
   c: PidbirCriteria,
+  builds: Build[],
   limit = 5,
 ): { results: PidbirResult[]; fallback: boolean } {
-  const inBudget = BUILDS.filter(
+  const inBudget = builds.filter(
     (b) => b.priceUah >= c.budgetMin && b.priceUah <= c.budgetMax,
   );
 
@@ -62,7 +62,7 @@ export function pickBuilds(
   let fallback = false;
   if (pool.length === 0) {
     // Widen: +40% of max, -20% of min
-    pool = BUILDS.filter(
+    pool = builds.filter(
       (b) =>
         b.priceUah >= Math.max(0, c.budgetMin * 0.8) &&
         b.priceUah <= c.budgetMax * 1.4,

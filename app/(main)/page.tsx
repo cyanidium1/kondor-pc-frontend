@@ -1,3 +1,4 @@
+import type { Build } from "@/types/build";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { SectionHeader } from "@/components/shared/SectionHeader";
@@ -6,7 +7,7 @@ import { BuildCard } from "@/components/shared/BuildCard";
 import { BuildHeroCard } from "@/components/shared/BuildHeroCard";
 import { ReviewCard } from "@/components/shared/ReviewCard";
 import { FaqBlock } from "@/components/shared/FaqBlock";
-import { popularBuilds } from "@/lib/mock/builds";
+import { collectHomepageReviews, getAllBuilds } from "@/lib/sanity-pc/builds";
 import { REVIEWS } from "@/lib/mock/reviews";
 import { faqsByScope } from "@/lib/mock/faqs";
 import {
@@ -124,9 +125,15 @@ const STEPS = [
   },
 ];
 
-export default function HomePage() {
-  const top3 = popularBuilds(["vega", "nebula", "orbitra"]);
-  const homeReviews = REVIEWS.slice(0, 3);
+export default async function HomePage() {
+  const builds = await getAllBuilds();
+  const top3 = ["vega", "nebula", "orbitra"]
+    .map((slug) => builds.find((b) => b.slug === slug))
+    .filter((b): b is Build => Boolean(b));
+  const topBuilds = top3.length > 0 ? top3 : builds.slice(0, 3);
+  const heroBuild = topBuilds[2] ?? topBuilds[0];
+  const fromCms = collectHomepageReviews(builds, 3);
+  const homeReviews = fromCms.length > 0 ? fromCms : REVIEWS.slice(0, 3);
   const homeFaqs = faqsByScope("global");
 
   return (
@@ -209,11 +216,13 @@ export default function HomePage() {
 
           {/* Right hero — showcase SKU card */}
           <div className="relative">
-            <BuildHeroCard
-              build={top3[2]}
-              variant="full"
-              highlightGames={["cs2", "warzone", "cyberpunk"]}
-            />
+            {heroBuild && (
+              <BuildHeroCard
+                build={heroBuild}
+                variant="full"
+                highlightGames={["cs2", "warzone", "cyberpunk"]}
+              />
+            )}
           </div>
         </div>
       </section>
@@ -260,7 +269,7 @@ export default function HomePage() {
         </Reveal>
         <Reveal delay={80}>
           <div className="grid gap-4 md:grid-cols-3">
-            {top3.map((build, i) => (
+            {topBuilds.map((build, i) => (
               <BuildCard
                 key={build.slug}
                 build={build}

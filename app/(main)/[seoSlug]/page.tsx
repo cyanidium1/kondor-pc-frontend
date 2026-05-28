@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { BuildCard } from "@/components/shared/BuildCard";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { FaqBlock } from "@/components/shared/FaqBlock";
-import { BUILDS } from "@/lib/mock/builds";
+import { getAllBuilds } from "@/lib/sanity-pc/builds";
 import {
   SEO_LANDINGS,
   seoLandingBySlug,
@@ -40,9 +40,10 @@ export async function generateMetadata({
   };
 }
 
-function filterBuilds(landing: SeoLanding) {
+async function filterBuilds(landing: SeoLanding) {
+  const allBuilds = await getAllBuilds();
   const { filter } = landing;
-  let pool = BUILDS;
+  let pool = allBuilds;
   if (filter.onlySlugs) {
     pool = pool.filter((b) => filter.onlySlugs!.includes(b.slug));
   }
@@ -76,7 +77,7 @@ export default async function SeoLandingPage({
   const landing = seoLandingBySlug(seoSlug);
   if (!landing) notFound();
 
-  const builds = filterBuilds(landing);
+  const builds = await filterBuilds(landing);
   const highlightGames = landing.filter.gameSlug
     ? [landing.filter.gameSlug]
     : ["cs2", "warzone", "cyberpunk"];

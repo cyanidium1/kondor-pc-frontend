@@ -1,13 +1,14 @@
 import type { MetadataRoute } from "next";
-import { BUILDS } from "@/lib/mock/builds";
+import { getAllBuilds } from "@/lib/sanity-pc/builds";
 import { SEO_LANDINGS } from "@/lib/mock/seo-landings";
 import { LEGAL_PAGES } from "@/lib/mock/legal-pages";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://kondor-pc.ua";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const builds = await getAllBuilds();
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${BASE_URL}/`, priority: 1.0, changeFrequency: "daily", lastModified: now },
@@ -19,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/kontakty`, priority: 0.5, changeFrequency: "monthly", lastModified: now },
   ];
 
-  const buildPages: MetadataRoute.Sitemap = BUILDS.map((b) => ({
+  const buildPages: MetadataRoute.Sitemap = builds.map((b) => ({
     url: `${BASE_URL}/pk/${b.slug}`,
     priority: 0.8,
     changeFrequency: "weekly",

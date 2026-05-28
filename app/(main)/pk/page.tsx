@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { BUILDS } from "@/lib/mock/builds";
+import { getAllBuilds } from "@/lib/sanity-pc/builds";
 import { CatalogClient } from "./CatalogClient";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import { TechButtonLink } from "@/components/shared/TechButton";
@@ -11,7 +11,9 @@ export const metadata: Metadata = {
     "Каталог ігрових ПК у Києві: 8 перевірених збірок від 20 000 до 200 000 ₴.",
 };
 
-export default function CatalogPage() {
+export default async function CatalogPage() {
+  const builds = await getAllBuilds();
+
   return (
     <section className="relative container-site py-12 md:py-16">
       <div className="absolute -z-10 top-[-223px] lg:top-[-154px] left-[-860px] lg:left-[-160px] w-[1929px] h-[2007px]">
@@ -32,7 +34,7 @@ export default function CatalogPage() {
             Ігрові ПК
           </h1>
           <p className="mt-2 text-[14px] leading-[120%] text-muted-foreground">
-            {BUILDS.length} перевірених збірок у всіх цінових категоріях
+            {builds.length} перевірених збірок у всіх цінових категоріях
           </p>
         </div>
         <TechButtonLink
@@ -46,7 +48,7 @@ export default function CatalogPage() {
         </TechButtonLink>
       </div>
 
-      <CatalogClient builds={BUILDS} />
+      <CatalogClient builds={builds} />
     </section>
   );
 }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { BuildCard } from "@/components/shared/BuildCard";
 import { parseBudget, parseGames, pickBuilds, BADGE_META } from "@/lib/pidbir";
+import { getAllBuilds } from "@/lib/sanity-pc/builds";
 import { gameLabel } from "@/lib/mock/games";
 import type { Resolution } from "@/types/build";
 import { cn } from "@/lib/utils";
@@ -22,13 +23,14 @@ export default async function ResultPage({
   const games = parseGames(sp.games);
   const { min, max } = parseBudget(sp.budget);
   const resolution = (sp.resolution ?? undefined) as Resolution | undefined;
+  const builds = await getAllBuilds();
 
   const { results, fallback } = pickBuilds({
     games,
     budgetMin: min,
     budgetMax: max,
     resolution,
-  });
+  }, builds);
 
   const budgetLabel =
     min === 0
