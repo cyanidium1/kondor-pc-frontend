@@ -55,11 +55,11 @@ export function SpecPill({
               {LABELS[s.key]}
             </div>
             <div className="flex items-baseline gap-1.5 leading-tight">
-              <span className="text-sm font-semibold text-foreground">
+              <span className="text-[12px] font-semibold text-foreground">
                 {s.value}
               </span>
               {s.note && (
-                <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                <span className="text-[8px] font-medium uppercase tracking-wider text-muted-foreground shrink-0">
                   {s.note}
                 </span>
               )}

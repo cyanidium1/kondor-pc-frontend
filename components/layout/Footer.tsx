@@ -64,8 +64,8 @@ export function Footer() {
         <div className="space-y-4 sm:col-span-2 md:col-span-3 lg:col-span-1">
           <Wordmark size="md" />
           <p className="max-w-sm text-[12px] leading-[120%] text-muted-foreground">
-            Ігрові ПК під замовлення. Зібрано в Києві з гарантією 12 місяців від
-            Kondor PC та оригінальною гарантією виробника.
+            Ігрові ПК під замовлення. Зібрано з гарантією 12 місяців від Kondor
+            PC та оригінальною гарантією виробника.
           </p>
           <div className="text-xs text-muted-foreground">
             <div>
