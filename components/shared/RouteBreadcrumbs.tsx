@@ -6,7 +6,7 @@ import { ChevronRight } from "lucide-react";
 
 const LABELS: Record<string, string> = {
   pk: "Ігрові ПК",
-  catalog: "Каталог",
+  catalog: "Аксесуари",
   pidbir: "Підбір",
   rezultat: "Результат",
   sborka: "Кастомна збірка",
@@ -38,7 +38,8 @@ function segmentLabel(segment: string): string {
 export function RouteBreadcrumbs() {
   const pathname = usePathname();
   if (!pathname || pathname === "/") return null;
-  if (pathname.startsWith("/dlya/") || pathname.startsWith("/promo/")) return null;
+  if (pathname.startsWith("/dlya/") || pathname.startsWith("/promo/"))
+    return null;
   if (pathname.startsWith("/blog")) return null;
 
   const segments = pathname.split("/").filter(Boolean);
@@ -50,7 +51,10 @@ export function RouteBreadcrumbs() {
   }));
 
   return (
-    <nav aria-label="Хлібні крихти" className="container-site py-7 lg:pt-9 text-xs text-muted-foreground">
+    <nav
+      aria-label="Хлібні крихти"
+      className="container-site py-7 lg:pt-9 text-xs text-muted-foreground"
+    >
       <ol className="flex flex-wrap items-center">
         <li>
           <Link href="/" className="hover:text-foreground">

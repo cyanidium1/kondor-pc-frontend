@@ -37,7 +37,7 @@ const STEPS = [
 
 export default function SborkaPage() {
   return (
-    <div className="relative container-site py-16 md:py-24">
+    <div className="relative container-site pt-8 lg:pt-12 pb-16 lg:py-24">
       <div className="absolute -z-20 top-[-97px] sm:top-[-197px] lg:top-[-167px] right-[-615px] lg:right-[-420px] w-[1876px] h-[1990px]">
         <Image
           src="/images/sborka/shadows.svg"
