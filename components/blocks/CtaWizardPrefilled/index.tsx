@@ -40,9 +40,9 @@ export function CtaWizardPrefilled({
           <div className="flex flex-col items-center justify-center gap-5 lg:flex-row">
             <TechButtonLink
               href={`/pidbir?ref=${pageContext.refSlug}`}
-              size="lg"
+              size="md"
               variant="swap"
-              className="h-[51px] w-full max-w-[360px]"
+              className="h-[51px] w-full max-w-[360px] text-center"
             >
               {cta}
             </TechButtonLink>
