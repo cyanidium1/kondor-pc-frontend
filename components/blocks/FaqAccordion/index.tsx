@@ -1,5 +1,6 @@
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { FaqBlock } from "@/components/shared/FaqBlock";
+import Image from "next/image";
 
 type FaqItem = { question: string; answer: string };
 
@@ -29,7 +30,25 @@ export function FaqAccordion({
   };
 
   return (
-    <div className="container-site py-16 md:py-20">
+    <div className="relative container-site py-16 md:py-20">
+      <div className="hidden xl:block absolute top-[250px] left-[-10px] -z-10 w-[347px] h-auto aspect-[547/568]">
+        <Image
+          src="/images/blocks/faq-left.webp"
+          alt="FAQ"
+          width={547}
+          height={568}
+          className="object-cover"
+        />
+      </div>
+      <div className="hidden xl:block absolute top-[240px] right-[20px] -z-10 w-[347px] h-auto aspect-[669/892]">
+        <Image
+          src="/images/blocks/faq-right.webp"
+          alt="FAQ"
+          width={669}
+          height={892}
+          className="object-cover"
+        />
+      </div>
       <SectionHeader
         kicker="FAQ"
         title={heading ?? "ЧАСТІ ПИТАННЯ"}
