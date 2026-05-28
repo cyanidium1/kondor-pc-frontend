@@ -9,7 +9,6 @@ import { PriceBlock } from "@/components/shared/PriceBlock";
 import { TechButtonDisplay } from "@/components/shared/TechButton";
 import { ChassisArt } from "@/components/brand/ChassisArt";
 import type { Build } from "@/types/build";
-import { gameLabel } from "@/lib/mock/games";
 import { fpsTier, FPS_TIER_META } from "@/lib/fps-thresholds";
 import { formatPrice } from "@/lib/format";
 
@@ -25,12 +24,14 @@ export function BuildHeroCard({
   build,
   variant = "full",
   highlightGames,
+  gameLabels,
   badge,
   className,
 }: {
   build: Build;
   variant?: Variant;
   highlightGames?: string[];
+  gameLabels?: Record<string, string>;
   badge?: string;
   className?: string;
 }) {
@@ -160,7 +161,7 @@ export function BuildHeroCard({
                   className="flex items-center justify-between text-sm"
                 >
                   <span className="text-muted-foreground">
-                    {gameLabel(slug)}
+                    {gameLabels?.[slug] ?? slug}
                   </span>
                   <span className="flex items-center gap-2">
                     <span

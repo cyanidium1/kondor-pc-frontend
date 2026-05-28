@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TechButton } from "@/components/shared/TechButton";
 import { GameTile } from "@/components/brand/GameTile";
-import { GAMES } from "@/lib/mock/games";
+import type { Game } from "@/types/build";
 import { cn } from "@/lib/utils";
 import { Check, ChevronDown, Plus } from "lucide-react";
 
@@ -24,9 +24,8 @@ const RESOLUTIONS = [
   { value: "4k", label: "4K" },
 ];
 
-const POPULAR_GAMES = GAMES.filter((g) => g.isPopular).slice(0, 8);
-
-export function SelectionForm() {
+export function SelectionForm({ gamesCatalog }: { gamesCatalog: Game[] }) {
+  const popularGames = gamesCatalog.filter((g) => g.isPopular).slice(0, 8);
   const router = useRouter();
   const [games, setGames] = useState<string[]>([]);
   const [otherOpen, setOtherOpen] = useState(false);
@@ -67,7 +66,7 @@ export function SelectionForm() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-          {POPULAR_GAMES.map((g) => {
+          {popularGames.map((g) => {
             const active = games.includes(g.slug);
             const disabled = !active && games.length >= 3;
             return (

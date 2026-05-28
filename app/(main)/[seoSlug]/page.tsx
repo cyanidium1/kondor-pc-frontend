@@ -6,6 +6,7 @@ import { BuildCard } from "@/components/shared/BuildCard";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { FaqBlock } from "@/components/shared/FaqBlock";
 import { getAllBuilds } from "@/lib/sanity-pc/builds";
+import { getAllGames, makeGameLabelMap } from "@/lib/sanity-pc/games";
 import {
   SEO_LANDINGS,
   seoLandingBySlug,
@@ -77,7 +78,8 @@ export default async function SeoLandingPage({
   const landing = seoLandingBySlug(seoSlug);
   if (!landing) notFound();
 
-  const builds = await filterBuilds(landing);
+  const [builds, gamesCatalog] = await Promise.all([filterBuilds(landing), getAllGames()]);
+  const gameLabels = makeGameLabelMap(gamesCatalog);
   const highlightGames = landing.filter.gameSlug
     ? [landing.filter.gameSlug]
     : ["cs2", "warzone", "cyberpunk"];
@@ -157,6 +159,7 @@ export default async function SeoLandingPage({
                 key={b.slug}
                 build={b}
                 variant="full"
+                gameLabels={gameLabels}
                 highlightGames={highlightGames}
               />
             ))}

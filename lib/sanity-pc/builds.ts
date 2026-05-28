@@ -35,6 +35,11 @@ type RawReviewRow = {
   isVerified?: boolean;
 };
 
+type RawCustomFaqRow = {
+  question?: string;
+  answer?: string;
+};
+
 type RawBuild = {
   slug: string;
   name: string;
@@ -55,6 +60,8 @@ type RawBuild = {
   upgradePathNotes?: string;
   includedFeatureKeys?: string[];
   faqKeys?: string[];
+  useDefaultFaq?: boolean;
+  customFaq?: RawCustomFaqRow[];
   components?: Build["components"];
   heroImage?: unknown;
   gallery?: unknown[];
@@ -94,6 +101,11 @@ const BUILDS_QUERY = `
   upgradePathNotes,
   "includedFeatureKeys": coalesce(includedFeatureKeys, []),
   "faqKeys": coalesce(faqKeys, []),
+  useDefaultFaq,
+  "customFaq": coalesce(customFaq[]{
+    "question": item.question,
+    "answer": item.answer
+  }, []),
   "components": coalesce(components, []),
   heroImage,
   "gallery": coalesce(gallery, []),
@@ -104,7 +116,18 @@ const BUILDS_QUERY = `
     brand,
     model,
     vram,
-    "fps": coalesce(fps, [])
+    "fps": coalesce(
+      fps[]{
+        "gameSlug": coalesce(game->slug, gameSlug),
+        resolution,
+        settings,
+        fpsAvg,
+        fpsMin,
+        verified,
+        notes
+      },
+      []
+    )
   },
   "ramOptions": coalesce(ramOptions, []),
   "ssdOptions": coalesce(ssdOptions, []),
@@ -265,6 +288,17 @@ function mapReviews(
   return list.length > 0 ? list : undefined;
 }
 
+function mapCustomFaq(rows?: RawCustomFaqRow[]): Build["customFaqItems"] {
+  if (!rows?.length) return undefined;
+  const list = rows
+    .map((row) => ({
+      question: row.question?.trim() || "",
+      answer: row.answer?.trim() || "",
+    }))
+    .filter((row) => row.question.length > 0 && row.answer.length > 0);
+  return list.length > 0 ? list : undefined;
+}
+
 /** Перші `limit` відгуків у порядку документів збірок (як у списку getAllBuilds). */
 export function collectHomepageReviews(builds: Build[], limit = 3): Review[] {
   const out: Review[] = [];
@@ -312,6 +346,8 @@ function mapBuild(raw: RawBuild): Build {
     upgradePathNotes: raw.upgradePathNotes,
     includedFeatureKeys: raw.includedFeatureKeys ?? [],
     faqKeys: raw.faqKeys ?? [],
+    useDefaultFaq: raw.useDefaultFaq,
+    customFaqItems: mapCustomFaq(raw.customFaq),
     reviews: mapReviews(raw.reviews, raw.slug as Build["slug"]),
     heroImageUrl,
     galleryImageUrls: galleryImageUrls.length > 0 ? galleryImageUrls : undefined,

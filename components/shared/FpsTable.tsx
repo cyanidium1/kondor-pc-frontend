@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { Build, Resolution } from "@/types/build";
 import { fpsTier, FPS_TIER_META } from "@/lib/fps-thresholds";
-import { gameShortLabel } from "@/lib/mock/games";
 
 const RESOLUTIONS: Resolution[] = ["fullhd", "2k", "4k"];
 const RESOLUTION_LABEL: Record<Resolution, string> = {
@@ -12,9 +11,11 @@ const RESOLUTION_LABEL: Record<Resolution, string> = {
 
 export function FpsTable({
   build,
+  gameShortLabels,
   className,
 }: {
   build: Build;
+  gameShortLabels?: Record<string, string>;
   className?: string;
 }) {
   const gameSlugs = Array.from(new Set(build.fps.map((f) => f.gameSlug)));
@@ -52,7 +53,7 @@ export function FpsTable({
                     same vertical rhythm regardless of title length. */}
                 <div className="flex min-h-11 items-center bg-surface px-4 py-2 text-[8px] lg:text-[14px] font-medium">
                   <span className="line-clamp-2 leading-tight">
-                    {gameShortLabel(slug)}
+                    {gameShortLabels?.[slug] ?? slug}
                   </span>
                 </div>
                 {row.map((entry, i) => {

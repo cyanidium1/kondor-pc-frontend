@@ -43,7 +43,7 @@ import {
   getBuildSlugs,
   getSimilarBuilds,
 } from "@/lib/sanity-pc/builds";
-import { reviewsForBuild } from "@/lib/mock/reviews";
+import { getAllGames, makeGameLabelMap, makeGameShortLabelMap } from "@/lib/sanity-pc/games";
 import { FAQS } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
@@ -157,12 +157,28 @@ export default async function BuildPage({
 
   const accent =
     SKU_ACCENTS[build.slug as keyof typeof SKU_ACCENTS] ?? "var(--brand-primary)";
-  const reviews =
-    build.reviews && build.reviews.length > 0
-      ? build.reviews.slice(0, 3)
-      : reviewsForBuild(build.slug, 3);
-  const faqs = FAQS.filter((f) => build.faqKeys.includes(f.key));
+  const reviews = build.reviews?.slice(0, 3) ?? [];
+  const customFaqs =
+    build.customFaqItems?.map((item, index) => ({
+      key: `custom-${build.slug}-${index}`,
+      scope: "build" as const,
+      question: item.question,
+      answer: item.answer,
+      relatedBuildSlug: build.slug,
+    })) ?? [];
+  const defaultFaqsByKeys = FAQS.filter((f) => build.faqKeys.includes(f.key));
+  const defaultBuildFaqs =
+    defaultFaqsByKeys.length > 0
+      ? defaultFaqsByKeys
+      : FAQS.filter((f) => f.scope === "build");
+  const faqs =
+    build.useDefaultFaq === false && customFaqs.length > 0
+      ? customFaqs
+      : defaultBuildFaqs;
   const similar = await getSimilarBuilds(build.slug, 3);
+  const gamesCatalog = await getAllGames();
+  const gameLabels = makeGameLabelMap(gamesCatalog);
+  const gameShortLabels = makeGameShortLabelMap(gamesCatalog);
 
   return (
     <Suspense fallback={null}>
@@ -239,7 +255,7 @@ export default async function BuildPage({
               titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
               subtitleClassName="lg:max-w-[466px]"
             />
-            <FpsTable build={build} />
+            <FpsTable build={build} gameShortLabels={gameShortLabels} />
           </Section>
 
           {/* BLOCK 4 — ASSEMBLY VIDEO */}
@@ -570,6 +586,7 @@ export default async function BuildPage({
                     key={s.slug}
                     build={s}
                     variant="compact"
+                    gameLabels={gameLabels}
                     highlightGames={["cs2", "warzone", "cyberpunk"]}
                   />
                 ))}

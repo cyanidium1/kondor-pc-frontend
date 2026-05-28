@@ -8,6 +8,7 @@ import { BuildHeroCard } from "@/components/shared/BuildHeroCard";
 import { ReviewCard } from "@/components/shared/ReviewCard";
 import { FaqBlock } from "@/components/shared/FaqBlock";
 import { collectHomepageReviews, getAllBuilds } from "@/lib/sanity-pc/builds";
+import { getAllGames, makeGameLabelMap } from "@/lib/sanity-pc/games";
 import { REVIEWS } from "@/lib/mock/reviews";
 import { faqsByScope } from "@/lib/mock/faqs";
 import {
@@ -126,7 +127,8 @@ const STEPS = [
 ];
 
 export default async function HomePage() {
-  const builds = await getAllBuilds();
+  const [builds, gamesCatalog] = await Promise.all([getAllBuilds(), getAllGames()]);
+  const gameLabels = makeGameLabelMap(gamesCatalog);
   const top3 = ["vega", "nebula", "orbitra"]
     .map((slug) => builds.find((b) => b.slug === slug))
     .filter((b): b is Build => Boolean(b));
@@ -220,6 +222,7 @@ export default async function HomePage() {
               <BuildHeroCard
                 build={heroBuild}
                 variant="full"
+                gameLabels={gameLabels}
                 highlightGames={["cs2", "warzone", "cyberpunk"]}
               />
             )}
@@ -229,7 +232,7 @@ export default async function HomePage() {
 
       {/* 2 · TOP-3 BUILDS */}
       <section className="relative container-site py-[92px] lg:pt-[154px] lg:pb-[90px]">
-        <div className="hidden lg:block absolute -z-10 top-[-96px] left-[-43px] w-[2245px] h-[2316px]">
+        <div className="hidden lg:block absolute -z-40 top-[-96px] left-[-43px] w-[2245px] h-[2316px]">
           <Image
             src="/images/home/top-rated/shadow-desk.svg"
             alt="shadow-desk"
@@ -238,7 +241,7 @@ export default async function HomePage() {
             className="object-cover"
           />
         </div>
-        <div className="block lg:hidden absolute -z-10 top-[-20px] left-[-43px] w-[878px] h-[906px]">
+        <div className="block lg:hidden absolute -z-40 top-[-20px] left-[-43px] w-[878px] h-[906px]">
           <Image
             src="/images/home/top-rated/shadow-mob.svg"
             alt="shadow-mob"
@@ -247,7 +250,7 @@ export default async function HomePage() {
             className="object-cover"
           />
         </div>
-        <div className="hidden lg:block absolute top-[281px] lg:left-[787px] xl:left-[897px] w-[354px] h-[346px]">
+        <div className="hidden lg:block -z-30 absolute top-[281px] lg:left-[787px] xl:left-[897px] w-[354px] h-[346px]">
           <Image
             src="/images/home/top-rated/figure.svg"
             alt="figure"
@@ -260,7 +263,7 @@ export default async function HomePage() {
         <Reveal>
           <SectionHeader
             kicker="Найчастіше обирають цього місяця"
-            title="Три перевірені збірки в різних бюджетах"
+            title="ТРИ ПЕРЕВІРЕНІ ЗБІРКИ В РІЗНИХ БЮДЖЕТАХ"
             subtitle="По одній оптимальній моделі на кожен ціновий діапазон — з реальними FPS у популярних іграх."
             className="lg:mb-[130px]"
             titleClassName="lg:max-w-[891px] lg:mt-7 lg:mb-10"
@@ -274,6 +277,7 @@ export default async function HomePage() {
                 key={build.slug}
                 build={build}
                 variant="full"
+                gameLabels={gameLabels}
                 highlightGames={["cs2", "warzone", "gta5"]}
                 badge={i === 1 ? "Хіт" : undefined}
               />

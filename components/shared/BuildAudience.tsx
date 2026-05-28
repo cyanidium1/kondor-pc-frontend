@@ -2,7 +2,6 @@
 
 import { Target, Monitor, Gamepad2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { gameLabel } from "@/lib/mock/games";
 import { fpsTier } from "@/lib/fps-thresholds";
 import type { Build } from "@/types/build";
 
@@ -31,9 +30,11 @@ function resolutionAudience(r: Build["targetResolution"]): string {
  */
 export function BuildAudience({
   build,
+  gameLabels,
   className,
 }: {
   build: Build;
+  gameLabels?: Record<string, string>;
   className?: string;
 }) {
   // Top games this build runs in the green tier at its target resolution.
@@ -43,7 +44,7 @@ export function BuildAudience({
     )
     .sort((a, b) => b.fpsAvg - a.fpsAvg)
     .slice(0, 3)
-    .map((f) => gameLabel(f.gameSlug));
+    .map((f) => gameLabels?.[f.gameSlug] ?? f.gameSlug);
 
   const bullets: Array<{ icon: React.ComponentType<{ className?: string }>; kicker: string; text: string }> = [
     {
