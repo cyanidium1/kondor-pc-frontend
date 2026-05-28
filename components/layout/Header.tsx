@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { X } from "lucide-react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { X, ChevronDown } from "lucide-react";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { Button } from "@/components/ui/button";
 import { TechButtonLink } from "@/components/shared/TechButton";
@@ -10,16 +11,128 @@ import { CartButton } from "@/components/layout/CartButton";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { cn } from "@/lib/utils";
 import MenuIcon from "@/components/icons/MenuIcon";
+import { NAV, isNavGroup, type NavGroup } from "@/components/layout/nav";
 
-const NAV = [
-  { href: "/pk", label: "Ігрові ПК" },
-  { href: "/catalog", label: "Аксесуари" },
-  { href: "/pidbir", label: "Підбір" },
-  { href: "/sborka", label: "Кастомна збірка" },
-  { href: "/garantiya", label: "Гарантія" },
-  { href: "/dostavka-oplata", label: "Доставка" },
-  { href: "/kontakty", label: "Контакти" },
-];
+function NavDropdown({ group }: { group: NavGroup }) {
+  const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [coords, setCoords] = useState<{ left: number; top: number }>({
+    left: 0,
+    top: 0,
+  });
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => setMounted(true), []);
+
+  // Position the portal panel under the button. Recompute on scroll/resize.
+  useLayoutEffect(() => {
+    if (!open || !buttonRef.current) return;
+    const updateCoords = () => {
+      const rect = buttonRef.current!.getBoundingClientRect();
+      setCoords({ left: rect.left, top: rect.bottom + 4 });
+    };
+    updateCoords();
+    window.addEventListener("scroll", updateCoords, true);
+    window.addEventListener("resize", updateCoords);
+    return () => {
+      window.removeEventListener("scroll", updateCoords, true);
+      window.removeEventListener("resize", updateCoords);
+    };
+  }, [open]);
+
+  // Close on click outside (button + panel) and on Escape.
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (e: MouseEvent) => {
+      const t = e.target as Node;
+      if (
+        !buttonRef.current?.contains(t) &&
+        !panelRef.current?.contains(t)
+      ) {
+        setOpen(false);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const panel = (
+    <div
+      ref={panelRef}
+      role="menu"
+      aria-hidden={!open}
+      style={{ left: coords.left, top: coords.top }}
+      className={cn(
+        "fixed z-50 min-w-[220px]",
+        "rounded-sm border border-white/15 bg-[#0a0d12] backdrop-blur-xl",
+        "shadow-[0_18px_36px_-12px_rgba(0,0,0,0.9)]",
+        "transition-all duration-200 ease-out",
+        open
+          ? "pointer-events-auto translate-y-0 opacity-100"
+          : "pointer-events-none -translate-y-1 opacity-0",
+      )}
+    >
+      <ul className="flex flex-col py-1.5">
+        {group.children.map((c) => (
+          <li key={c.href}>
+            <Link
+              href={c.href}
+              onClick={() => setOpen(false)}
+              role="menuitem"
+              className={cn(
+                "block px-4 py-2 text-[10px] xl:text-[11px] font-medium uppercase tracking-[0.18em]",
+                "text-muted-foreground transition-colors duration-150 ease-out",
+                "hover:bg-white/5 hover:text-foreground",
+              )}
+            >
+              {c.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+
+  return (
+    <>
+      <button
+        ref={buttonRef}
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        className={cn(
+          "group/nav relative inline-flex items-center gap-1 rounded-sm px-2.5 xl:px-3 py-1.5",
+          "text-[8px] xl:text-[10px] font-medium uppercase tracking-[0.18em]",
+          "transition-colors duration-200 ease-out hover:text-foreground",
+          open && "text-foreground",
+        )}
+      >
+        {group.label}
+        <ChevronDown
+          className={cn(
+            "size-3 transition-transform duration-200 ease-out",
+            open && "rotate-180",
+          )}
+          strokeWidth={2}
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-3 bottom-0.5 h-px origin-left scale-x-0 bg-foreground/40 transition-transform duration-300 ease-out group-hover/nav:scale-x-100"
+        />
+      </button>
+      {mounted && createPortal(panel, document.body)}
+    </>
+  );
+}
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -88,23 +201,27 @@ export function Header() {
               </Link>
               {/* DESKTOP NAV */}
               <nav className="hidden items-center gap-0.5 lg:flex">
-                {NAV.map((n) => (
-                  <Link
-                    key={n.href}
-                    href={n.href}
-                    className={cn(
-                      "group/nav relative rounded-sm px-2.5 xl:px-3 py-1.5",
-                      "text-[8px] xl:text-[10px] font-medium uppercase tracking-[0.18em]",
-                      "transition-colors duration-200 ease-out hover:text-foreground",
-                    )}
-                  >
-                    {n.label}
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute inset-x-3 bottom-0.5 h-px origin-left scale-x-0 bg-foreground/40 transition-transform duration-300 ease-out group-hover/nav:scale-x-100"
-                    />
-                  </Link>
-                ))}
+                {NAV.map((n) =>
+                  isNavGroup(n) ? (
+                    <NavDropdown key={n.label} group={n} />
+                  ) : (
+                    <Link
+                      key={n.href}
+                      href={n.href}
+                      className={cn(
+                        "group/nav relative rounded-sm px-2.5 xl:px-3 py-1.5",
+                        "text-[8px] xl:text-[10px] font-medium uppercase tracking-[0.18em]",
+                        "transition-colors duration-200 ease-out hover:text-foreground",
+                      )}
+                    >
+                      {n.label}
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute inset-x-3 bottom-0.5 h-px origin-left scale-x-0 bg-foreground/40 transition-transform duration-300 ease-out group-hover/nav:scale-x-100"
+                      />
+                    </Link>
+                  ),
+                )}
               </nav>
               {/* ACTIONS */}
               <div className="flex items-center gap-3.5 lg:gap-6">
@@ -130,12 +247,6 @@ export function Header() {
                   className="lg:hidden transition-transform duration-200 ease-out active:scale-95"
                 >
                   <span className="relative block w-6 h-4">
-                    {/* <Menu
-                  className={cn(
-                    "absolute inset-0 w-6 h-4 transition-all duration-200",
-                    menuOpen ? "scale-75 opacity-0" : "scale-100 opacity-100",
-                  )}
-                /> */}
                     <MenuIcon
                       className={cn(
                         "absolute inset-0 !w-6 !h-4 transition duration-300 ease-out",
