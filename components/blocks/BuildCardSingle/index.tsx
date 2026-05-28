@@ -37,13 +37,6 @@ const BADGE_STYLE: Record<string, string> = {
   акція: "bg-fps-yellow text-black",
 };
 
-// per-tier SKU accent (consumed by .sku-glow / .card-spotlight in globals.css)
-const TIER_SKU: Record<string, string> = {
-  budget: "var(--sku-pulsar)",
-  mid: "var(--sku-nebula)",
-  high: "var(--sku-orbitra)",
-};
-
 export async function BuildCardSingle({
   buildSlug,
   variant = "full",
@@ -59,7 +52,7 @@ export async function BuildCardSingle({
   if (!build) return null;
 
   const fps = pickFpsForGame(build.fpsData, pageContext?.refSlug);
-  const sku = TIER_SKU[build.tier] ?? TIER_SKU.mid;
+  const sku = "var(--brand-primary)";
 
   return (
     <Link

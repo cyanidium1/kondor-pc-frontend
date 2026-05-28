@@ -16,10 +16,9 @@ import { NAV, isNavGroup, type NavGroup } from "@/components/layout/nav";
 function NavDropdown({ group }: { group: NavGroup }) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [coords, setCoords] = useState<{ left: number; top: number }>({
-    left: 0,
-    top: 0,
-  });
+  const [coords, setCoords] = useState<{ left: number; top: number } | null>(
+    null,
+  );
   const buttonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -69,13 +68,17 @@ function NavDropdown({ group }: { group: NavGroup }) {
       ref={panelRef}
       role="menu"
       aria-hidden={!open}
-      style={{ left: coords.left, top: coords.top }}
+      style={
+        coords
+          ? { left: coords.left, top: coords.top }
+          : { left: -9999, top: -9999 }
+      }
       className={cn(
         "fixed z-50 min-w-[220px]",
         "rounded-sm border border-white/15 bg-[#0a0d12] backdrop-blur-xl",
         "shadow-[0_18px_36px_-12px_rgba(0,0,0,0.9)]",
-        "transition-all duration-200 ease-out",
-        open
+        "transition-[opacity,transform] duration-200 ease-out",
+        open && coords
           ? "pointer-events-auto translate-y-0 opacity-100"
           : "pointer-events-none -translate-y-1 opacity-0",
       )}

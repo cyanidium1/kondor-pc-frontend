@@ -4,7 +4,7 @@ export function AnchorNav({ items }: { items: AnchorItem[] }) {
   return (
     <nav
       aria-label="Розділи сторінки"
-      className="sticky top-0 z-30 border-y border-border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      className="sticky top-0 z-30 py-8 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60"
     >
       <div className="container-site overflow-x-auto">
         <ul className="flex min-w-max items-center gap-1 py-2 text-[12px] uppercase tracking-wider">
