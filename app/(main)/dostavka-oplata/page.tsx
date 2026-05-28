@@ -118,7 +118,7 @@ export default function DeliveryPaymentPage() {
         <section>
           <Reveal>
             {" "}
-            <div className="relative container-site py-[50px] lg:pt-[86px] lg:pb-25">
+            <div className="relative container-site pt-8 lg:pt-12 pb-[50px] lg:pb-25">
               <SectionHeader
                 kicker="Доставка та оплата"
                 title="ШВИДКА ДОСТАВКА ПО УКРАЇНІ, ЗРУЧНА ОПЛАТА"

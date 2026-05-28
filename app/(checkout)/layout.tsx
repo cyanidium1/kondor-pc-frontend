@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { ShieldCheck, Truck, RotateCcw } from "lucide-react";
+import { RouteBreadcrumbs } from "@/components/shared/RouteBreadcrumbs";
 
 export default function CheckoutLayout({
   children,
@@ -30,7 +31,10 @@ export default function CheckoutLayout({
           </div>
         </div>
       </header>
-      <main>{children}</main>
+      <main>
+        <RouteBreadcrumbs />
+        {children}
+      </main>
       <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground">
         © {new Date().getFullYear()} Kondor PC ·{" "}
         <Link href="/legal/publichna-oferta" className="underline underline-offset-4">Оферта</Link>

@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { Suspense } from "react";
 import {
   Play,
-  ChevronRight,
   Bell,
   Camera,
   Truck,
@@ -195,19 +193,6 @@ export default async function BuildPage({
               faqPageJsonLd(faqs),
             ]}
           />
-          {/* BREADCRUMBS */}
-          <div className="container-site py-7 lg:pt-9 text-xs text-muted-foreground">
-            <Link href="/" className="hover:text-foreground">
-              Головна
-            </Link>
-            <ChevronRight className="mx-1 inline size-3" />
-            <Link href="/pk" className="hover:text-foreground">
-              Ігрові ПК
-            </Link>
-            <ChevronRight className="mx-1 inline size-3" />
-            <span className="text-foreground">{build.name}</span>
-          </div>
-
           {/* BLOCK 1 — ID + PRICE + CTA */}
           <section className="relative">
             <div className="absolute -z-10 left-[-662px] lg:left-[-305px] top-[-1063px] lg:top-[-735px] w-[1860px] h-[1992px]">

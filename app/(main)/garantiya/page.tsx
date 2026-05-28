@@ -104,7 +104,7 @@ export default function WarrantyPage() {
               "radial-gradient(ellipse 60% 50% at 50% 0%, #14462380, transparent 70%)",
           }}
         />
-        <div className="container-site relative pt-20 pb-[46px] lg:pt-[100px] lg:pb-15">
+        <div className="container-site relative pt-8 lg:pt-12 pb-[46px] lg:pb-15">
           <Reveal>
             <SectionHeader
               kicker="Гарантія"

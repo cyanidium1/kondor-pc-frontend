@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { Suspense } from "react";
-import { ChevronRight } from "lucide-react";
 
 import {
   getItemBySlug,
@@ -65,30 +63,6 @@ export default async function CatalogDetailPage({
 
   return (
     <>
-      {/* Breadcrumbs */}
-      <div className="container-site pb-4 pt-6 text-xs text-muted-foreground">
-        <Link href="/" className="hover:text-foreground">
-          Головна
-        </Link>
-        <ChevronRight className="mx-1 inline size-3" />
-        <Link href="/catalog" className="hover:text-foreground">
-          Аксесуари
-        </Link>
-        {item.category && (
-          <>
-            <ChevronRight className="mx-1 inline size-3" />
-            <Link
-              href={`/catalog?cat=${item.category.slug}`}
-              className="hover:text-foreground"
-            >
-              {item.category.name}
-            </Link>
-          </>
-        )}
-        <ChevronRight className="mx-1 inline size-3" />
-        <span className="text-foreground">{item.name}</span>
-      </div>
-
       {/* Suspense boundary required because CatalogDetailView calls
           useSearchParams() — Next's prerender needs this to bail out safely. */}
       <Suspense fallback={null}>

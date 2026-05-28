@@ -80,8 +80,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         />
       )}
       <Suspense fallback={null}>
-        <ArticleHero article={currentArticle} />
         <BlogBreadcrumbs crumbs={crumbs} />
+        <ArticleHero article={currentArticle} />
         <div className="container-site lg:flex lg:gap-12">
           <div className="min-w-0 flex-1">
             {currentArticle.content && currentArticle.content.length > 0 && (

@@ -27,8 +27,8 @@ export default async function BlogPage() {
       <JsonLd
         data={breadcrumbJsonLd(crumbs.map((c) => ({ name: c.label, url: c.href })))}
       />
-      <BlogHero />
       <BlogBreadcrumbs crumbs={crumbs} />
+      <BlogHero />
       <Suspense fallback={null}>
         <BlogList blogPosts={blogPosts} />
       </Suspense>

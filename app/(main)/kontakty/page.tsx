@@ -29,7 +29,7 @@ export default function ContactsPage() {
   return (
     <>
       <section className="rounded-b-[40px] overflow-hidden">
-        <div className="relative container-site pt-[50px] pb-[67px] lg:pt-[86px] lg:pb-[62px]">
+        <div className="relative container-site pt-8 pb-[67px] lg:pt-12 lg:pb-[62px]">
           <div className="absolute -z-30 top-[170px] lg:top-[50px] right-[-64px] lg:right-[-190px] w-[322px] lg:w-[640px] h-[322px] lg:h-[640px]">
             <Image
               src="/images/garantiya/pc.webp"
