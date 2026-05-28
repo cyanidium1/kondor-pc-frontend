@@ -32,9 +32,9 @@ function pickFpsForGame(
 }
 
 const BADGE_STYLE: Record<string, string> = {
-  "хіт": "bg-brand-primary text-black",
-  "нова": "bg-fps-orange text-black",
-  "акція": "bg-fps-yellow text-black",
+  хіт: "bg-brand-primary text-black",
+  нова: "bg-fps-orange text-black",
+  акція: "bg-fps-yellow text-black",
 };
 
 // per-tier SKU accent (consumed by .sku-glow / .card-spotlight in globals.css)
@@ -136,7 +136,10 @@ export async function BuildCardSingle({
           <Row label="CPU" value={build.cpu.name} />
           <Row label="GPU" value={`${build.gpu.name} · ${build.gpu.vram}`} />
           <Row label="RAM" value={`${build.ram.size} ${build.ram.type}`} />
-          <Row label="SSD" value={`${build.storage.size} ${build.storage.type}`} />
+          <Row
+            label="SSD"
+            value={`${build.storage.size} ${build.storage.type}`}
+          />
         </dl>
 
         {variant === "full" && fps ? (
@@ -145,7 +148,7 @@ export async function BuildCardSingle({
               {pageContext?.game?.nameUk ?? "У грі"} · {fps.resolution} ·{" "}
               {fps.preset}
             </div>
-            <div className="mt-1 font-display text-2xl font-bold leading-none">
+            <div className="mt-1 font-heading text-2xl font-bold leading-none">
               {fps.fps}{" "}
               <span className="text-base font-semibold text-muted-foreground">
                 FPS
@@ -156,7 +159,7 @@ export async function BuildCardSingle({
 
         <div className="mt-auto space-y-3 pt-1">
           <div className="flex items-baseline gap-3">
-            <div className="font-display text-2xl font-bold tabular">
+            <div className="font-heading text-2xl font-bold tabular">
               {formatUah(build.priceUah)}{" "}
               <span className="text-base text-muted-foreground">₴</span>
             </div>
@@ -175,7 +178,11 @@ export async function BuildCardSingle({
               × {build.monobankInstallments.months} міс. Monobank
             </div>
           ) : null}
-          <TechButtonDisplay size="sm" variant="inverse" className="w-full h-9">
+          <TechButtonDisplay
+            size="sm"
+            variant="inverse"
+            className="w-full h-9 font-heading tracking-normal"
+          >
             Купити за {formatUah(build.priceUah)} ₴
           </TechButtonDisplay>
         </div>
@@ -190,7 +197,7 @@ export async function BuildCardSingle({
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-baseline justify-between gap-3 border-b border-border/60 py-1.5 last:border-b-0">
+    <div className="flex items-baseline justify-between gap-3 border-b border-border/60 py-1 last:border-b-0">
       <dt className="text-[10px] uppercase tracking-widest text-muted-foreground">
         {label}
       </dt>
