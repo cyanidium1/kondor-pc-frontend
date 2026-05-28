@@ -9,7 +9,6 @@ import { ReviewCard } from "@/components/shared/ReviewCard";
 import { FaqBlock } from "@/components/shared/FaqBlock";
 import { collectHomepageReviews, getAllBuilds } from "@/lib/sanity-pc/builds";
 import { getAllGames, makeGameLabelMap } from "@/lib/sanity-pc/games";
-import { REVIEWS } from "@/lib/mock/reviews";
 import { faqsByScope } from "@/lib/mock/faqs";
 import {
   JsonLd,
@@ -126,6 +125,8 @@ const STEPS = [
   },
 ];
 
+const HOME_REVIEWS_LIMIT = 3;
+
 export default async function HomePage() {
   const [builds, gamesCatalog] = await Promise.all([getAllBuilds(), getAllGames()]);
   const gameLabels = makeGameLabelMap(gamesCatalog);
@@ -134,8 +135,8 @@ export default async function HomePage() {
     .filter((b): b is Build => Boolean(b));
   const topBuilds = top3.length > 0 ? top3 : builds.slice(0, 3);
   const heroBuild = topBuilds[2] ?? topBuilds[0];
-  const fromCms = collectHomepageReviews(builds, 3);
-  const homeReviews = fromCms.length > 0 ? fromCms : REVIEWS.slice(0, 3);
+  const homeReviews = collectHomepageReviews(builds, HOME_REVIEWS_LIMIT);
+  const hasHomeReviewsSection = homeReviews.length > 0;
   const homeFaqs = faqsByScope("global");
 
   return (
@@ -508,48 +509,50 @@ export default async function HomePage() {
       </section>
 
       {/* 6 · REVIEWS */}
-      <section className="relative container-site pt-[92px] pb-10 lg:pt-30 lg:pb-[86px]">
-        <div className="absolute -z-30 bottom-[-123px] lg:bottom-[-431px] right-[-685px] w-[735px] h-[735px] bg-[#005996] rounded-full blur-[220px]" />
-        <Reveal>
-          <SectionHeader
-            kicker="Відгуки клієнтів"
-            title="РЕАЛЬНІ ВІДГУКИ НАШИХ КЛІЄНТІВ"
-            subtitle="500+ відгуків та відміток у Instagram. Клієнти самі показують результати після покупки та діляться враженнями від ПК."
-            titleClassName="mt-3 mb-5"
-          />
-        </Reveal>
-        <Reveal delay={80}>
-          <div className="grid gap-4 md:grid-cols-3">
-            {homeReviews.map((r, i) => (
-              <ReviewCard key={i} review={r} />
-            ))}
-          </div>
-          <div className="mt-8 flex flex-col md:flex-row items-center gap-3">
-            <a
-              href="https://instagram.com/kondor_pc"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                buttonVariants({ variant: "default" }),
-                "w-full md:max-w-[176px]",
-              )}
-            >
-              Instagram <ArrowIcon className="-rotate-45 size-5" />
-            </a>
-            <a
-              href="https://g.page/kondor-pc"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                buttonVariants({ variant: "default" }),
-                "w-full md:max-w-[276px]",
-              )}
-            >
-              Всі відгуки в Google <ArrowIcon className="-rotate-45 size-5" />
-            </a>
-          </div>
-        </Reveal>
-      </section>
+      {hasHomeReviewsSection && (
+        <section className="relative container-site pt-[92px] pb-10 lg:pt-30 lg:pb-[86px]">
+          <div className="absolute -z-30 bottom-[-123px] lg:bottom-[-431px] right-[-685px] w-[735px] h-[735px] bg-[#005996] rounded-full blur-[220px]" />
+          <Reveal>
+            <SectionHeader
+              kicker="Відгуки клієнтів"
+              title="РЕАЛЬНІ ВІДГУКИ НАШИХ КЛІЄНТІВ"
+              subtitle="500+ відгуків та відміток у Instagram. Клієнти самі показують результати після покупки та діляться враженнями від ПК."
+              titleClassName="mt-3 mb-5"
+            />
+          </Reveal>
+          <Reveal delay={80}>
+            <div className="grid gap-4 md:grid-cols-3">
+              {homeReviews.map((r, i) => (
+                <ReviewCard key={i} review={r} />
+              ))}
+            </div>
+            <div className="mt-8 flex flex-col md:flex-row items-center gap-3">
+              <a
+                href="https://instagram.com/kondor_pc"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  buttonVariants({ variant: "default" }),
+                  "w-full md:max-w-[176px]",
+                )}
+              >
+                Instagram <ArrowIcon className="-rotate-45 size-5" />
+              </a>
+              <a
+                href="https://g.page/kondor-pc"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  buttonVariants({ variant: "default" }),
+                  "w-full md:max-w-[276px]",
+                )}
+              >
+                Всі відгуки в Google <ArrowIcon className="-rotate-45 size-5" />
+              </a>
+            </div>
+          </Reveal>
+        </section>
+      )}
 
       {/* 7 · BOTTOM CTA + FAQ */}
       <section className="relative rounded-[40px] overflow-hidden">
