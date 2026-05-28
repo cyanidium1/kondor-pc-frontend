@@ -1,4 +1,5 @@
 import type { FaqSection } from "@/types/blogPost";
+import { FaqBlock } from "@/components/shared/FaqBlock";
 
 interface BlogFaqProps {
   faq: FaqSection;
@@ -8,6 +9,12 @@ interface BlogFaqProps {
 export default function BlogFaq({ faq, uniqueKey }: BlogFaqProps) {
   const items = (faq.items ?? []).filter((it) => it?.question && it?.answer);
   if (items.length === 0) return null;
+  const faqItems = items.map((it, i) => ({
+    key: `${uniqueKey}-${it._key ?? i}`,
+    scope: "seo" as const,
+    question: it.question,
+    answer: it.answer,
+  }));
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -30,39 +37,7 @@ export default function BlogFaq({ faq, uniqueKey }: BlogFaqProps) {
         </p>
       ) : null}
 
-      <div className="flex flex-col gap-2">
-        {items.map((it, i) => (
-          <details
-            key={`${uniqueKey}-${it._key ?? i}`}
-            className="group rounded-lg border border-border bg-card [&_summary::-webkit-details-marker]:hidden"
-          >
-            <summary className="flex cursor-pointer list-none items-start justify-between gap-4 p-5">
-              <span className="text-[13px] font-medium leading-[130%] text-foreground lg:text-[15px]">
-                {it.question}
-              </span>
-              <span
-                aria-hidden
-                className="mt-0.5 shrink-0 text-brand-primary transition-transform group-open:rotate-45"
-              >
-                <svg
-                  className="size-5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                >
-                  <line x1="12" y1="5" x2="12" y2="19" />
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                </svg>
-              </span>
-            </summary>
-            <div className="px-5 pb-5 text-[13px] leading-[150%] whitespace-pre-line text-muted-foreground lg:text-[15px]">
-              {it.answer}
-            </div>
-          </details>
-        ))}
-      </div>
+      <FaqBlock items={faqItems} />
 
       <script
         type="application/ld+json"
