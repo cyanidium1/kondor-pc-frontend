@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { getAllCategories, getCatalogItems } from "@/lib/sanity/fetchers";
 import { CatalogClient } from "./CatalogClient";
 import Image from "next/image";
@@ -42,7 +43,9 @@ export default async function CatalogPage() {
         </p>
       </div>
 
-      <CatalogClient categories={categories} items={items} />
+      <Suspense fallback={null}>
+        <CatalogClient categories={categories} items={items} />
+      </Suspense>
     </div>
   );
 }

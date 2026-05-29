@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import {
   Select,
@@ -56,6 +57,126 @@ const SORTS: { value: SortKey; label: string }[] = [
   { value: "name_desc", label: "Назва Я → А" },
 ];
 
+const SORT_KEYS = new Set(SORTS.map((s) => s.value));
+
+const DEFAULT_AVAILABILITY: Availability[] = ["in-stock", "pre-order"];
+
+type PriceBounds = { min: number; max: number };
+
+/** Усі типи — без фільтра по категорії; custom — обрані slug-и в URL. */
+type CategoryFilterMode = "all" | "custom";
+
+type CatalogFilters = {
+  categoryFilterMode: CategoryFilterMode;
+  selectedCategories: string[];
+  priceRange: [number, number];
+  availability: Availability[];
+  sort: SortKey;
+};
+
+function clampPrice(value: number, bounds: PriceBounds): number {
+  return Math.min(bounds.max, Math.max(bounds.min, value));
+}
+
+function parsePriceParam(
+  raw: string | null,
+  fallback: number,
+  bounds: PriceBounds,
+): number {
+  if (!raw) return fallback;
+  const n = Number.parseInt(raw, 10);
+  if (!Number.isFinite(n)) return fallback;
+  return clampPrice(n, bounds);
+}
+
+function parseAvailabilityParam(raw: string | null): Availability[] {
+  if (raw === "none") return [];
+  if (!raw?.trim()) return [...DEFAULT_AVAILABILITY];
+  const parts = raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s): s is Availability => s === "in-stock" || s === "pre-order");
+  return parts.length > 0 ? parts : [...DEFAULT_AVAILABILITY];
+}
+
+function availabilityEqual(a: Availability[], b: Availability[]): boolean {
+  return (
+    a.length === b.length && a.every((value) => b.includes(value))
+  );
+}
+
+function parseFiltersFromSearchParams(
+  searchParams: URLSearchParams | null,
+  validCategorySlugs: Set<string>,
+  bounds: PriceBounds,
+): CatalogFilters {
+  const catRaw = searchParams?.get("cat")?.trim();
+  const selectedCategories = catRaw
+    ? catRaw
+        .split(",")
+        .map((s) => s.trim())
+        .filter((slug) => slug && validCategorySlugs.has(slug))
+    : [];
+  const categoryFilterMode: CategoryFilterMode =
+    selectedCategories.length > 0 ? "custom" : "all";
+
+  const priceRange: [number, number] = [
+    parsePriceParam(searchParams?.get("min") ?? null, bounds.min, bounds),
+    parsePriceParam(searchParams?.get("max") ?? null, bounds.max, bounds),
+  ];
+  if (priceRange[0] > priceRange[1]) {
+    priceRange[0] = bounds.min;
+    priceRange[1] = bounds.max;
+  }
+
+  const availability = parseAvailabilityParam(
+    searchParams?.get("avail") ?? null,
+  );
+
+  const sortRaw = searchParams?.get("sort");
+  const sort: SortKey = SORT_KEYS.has(sortRaw as SortKey)
+    ? (sortRaw as SortKey)
+    : "default";
+
+  return {
+    categoryFilterMode,
+    selectedCategories,
+    priceRange,
+    availability,
+    sort,
+  };
+}
+
+function filtersToQueryString(
+  filters: CatalogFilters,
+  bounds: PriceBounds,
+): string {
+  const sp = new URLSearchParams();
+
+  if (
+    filters.categoryFilterMode === "custom" &&
+    filters.selectedCategories.length > 0
+  ) {
+    sp.set("cat", filters.selectedCategories.join(","));
+  }
+  if (filters.priceRange[0] !== bounds.min) {
+    sp.set("min", String(filters.priceRange[0]));
+  }
+  if (filters.priceRange[1] !== bounds.max) {
+    sp.set("max", String(filters.priceRange[1]));
+  }
+  if (filters.availability.length === 0) {
+    sp.set("avail", "none");
+  } else if (!availabilityEqual(filters.availability, DEFAULT_AVAILABILITY)) {
+    sp.set("avail", filters.availability.join(","));
+  }
+  if (filters.sort !== "default") {
+    sp.set("sort", filters.sort);
+  }
+
+  return sp.toString();
+}
+
 export function CatalogClient({
   categories,
   items,
@@ -78,27 +199,128 @@ export function CatalogClient({
     ];
   }, [groups]);
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([
-    priceMin,
-    priceMax,
-  ]);
-  const [availability, setAvailability] = useState<Availability[]>([
-    "in-stock",
-    "pre-order",
-  ]);
-  const [sort, setSort] = useState<SortKey>("default");
+  const priceBounds = useMemo<PriceBounds>(
+    () => ({ min: priceMin, max: priceMax }),
+    [priceMin, priceMax],
+  );
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const validCategorySlugs = useMemo(
+    () => new Set(categories.map((c) => c.slug)),
+    [categories],
+  );
+  const categorySlugs = useMemo(
+    () => categories.map((c) => c.slug),
+    [categories],
+  );
+
+  const initialFilters = useMemo(
+    () =>
+      parseFiltersFromSearchParams(
+        searchParams,
+        validCategorySlugs,
+        priceBounds,
+      ),
+    [searchParams, validCategorySlugs, priceBounds],
+  );
+
+  const [categoryFilterMode, setCategoryFilterMode] =
+    useState<CategoryFilterMode>(() => initialFilters.categoryFilterMode);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    () => initialFilters.selectedCategories,
+  );
+  const [priceRange, setPriceRange] = useState<[number, number]>(
+    () => initialFilters.priceRange,
+  );
+  const [availability, setAvailability] = useState<Availability[]>(
+    () => initialFilters.availability,
+  );
+  const [sort, setSort] = useState<SortKey>(() => initialFilters.sort);
   // Number of cards currently revealed across both primary + secondary lists.
   // Grows by REVEAL_BATCH each time the bottom sentinel enters the viewport.
   const [visibleCount, setVisibleCount] = useState(REVEAL_BATCH);
   const [filtersExpanded, setFiltersExpanded] = useState(true);
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const hasHydratedFromUrl = useRef(false);
+  const hasSyncedToUrl = useRef(false);
 
-  function toggleCategory(slug: string) {
-    setSelectedCategories((prev) =>
-      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug],
+  useEffect(() => {
+    const fromUrl = parseFiltersFromSearchParams(
+      searchParams,
+      validCategorySlugs,
+      priceBounds,
     );
-  }
+    setCategoryFilterMode(fromUrl.categoryFilterMode);
+    setSelectedCategories(fromUrl.selectedCategories);
+    setPriceRange(fromUrl.priceRange);
+    setAvailability(fromUrl.availability);
+    setSort(fromUrl.sort);
+    hasHydratedFromUrl.current = true;
+  }, [searchParams, validCategorySlugs, priceBounds]);
+
+  useEffect(() => {
+    if (!hasHydratedFromUrl.current) return;
+    if (!hasSyncedToUrl.current) {
+      hasSyncedToUrl.current = true;
+      return;
+    }
+    if (typeof window === "undefined") return;
+
+    const query = filtersToQueryString(
+      {
+        categoryFilterMode,
+        selectedCategories,
+        priceRange,
+        availability,
+        sort,
+      },
+      priceBounds,
+    );
+    const next = `${window.location.pathname}${query ? `?${query}` : ""}`;
+    const current = `${window.location.pathname}${window.location.search}`;
+    if (next === current) return;
+    router.replace(next, { scroll: false });
+  }, [
+    categoryFilterMode,
+    selectedCategories,
+    priceRange,
+    availability,
+    sort,
+    priceBounds,
+    router,
+  ]);
+
+  const allCategoriesSelected = categoryFilterMode === "all";
+
+  const toggleCategory = useCallback(
+    (slug: string) => {
+      if (categoryFilterMode === "all") {
+        setCategoryFilterMode("custom");
+        setSelectedCategories(categorySlugs.filter((s) => s !== slug));
+        return;
+      }
+
+      setSelectedCategories((prev) => {
+        const next = prev.includes(slug)
+          ? prev.filter((s) => s !== slug)
+          : [...prev, slug];
+        if (next.length === 0) {
+          setCategoryFilterMode("all");
+          return [];
+        }
+        if (
+          categorySlugs.length > 0 &&
+          categorySlugs.every((s) => next.includes(s))
+        ) {
+          setCategoryFilterMode("all");
+          return [];
+        }
+        return next;
+      });
+    },
+    [categoryFilterMode, categorySlugs],
+  );
 
   function toggleAvailability(v: Availability) {
     setAvailability((prev) =>
@@ -109,7 +331,7 @@ export function CatalogClient({
   const filtered: CatalogProductGroup[] = useMemo(() => {
     let res = groups.slice();
 
-    if (selectedCategories.length > 0) {
+    if (categoryFilterMode === "custom" && selectedCategories.length > 0) {
       res = res.filter((g) => {
         const slug = groupCategorySlug(g);
         return slug ? selectedCategories.includes(slug) : false;
@@ -147,10 +369,10 @@ export function CatalogClient({
     }
 
     return res;
-  }, [groups, selectedCategories, priceRange, availability, sort]);
+  }, [groups, categoryFilterMode, selectedCategories, priceRange, availability, sort]);
 
   const activeFilters =
-    selectedCategories.length +
+    (categoryFilterMode === "custom" && selectedCategories.length > 0 ? 1 : 0) +
     (priceRange[0] > priceMin || priceRange[1] < priceMax ? 1 : 0) +
     (availability.length !== 2 ? 1 : 0);
   const hasFilters = activeFilters > 0;
@@ -203,7 +425,7 @@ export function CatalogClient({
   // previous filter leak into the new view.
   useEffect(() => {
     setVisibleCount(REVEAL_BATCH);
-  }, [selectedCategories, priceRange, availability, sort]);
+  }, [categoryFilterMode, selectedCategories, priceRange, availability, sort]);
 
   // Infinite scroll: bump the window when the sentinel enters the viewport.
   useEffect(() => {
@@ -222,11 +444,12 @@ export function CatalogClient({
     return () => io.disconnect();
   }, [hasMore, totalAvailable]);
 
-  function resetAll() {
+  const resetAll = useCallback(() => {
+    setCategoryFilterMode("all");
     setSelectedCategories([]);
     setPriceRange([priceMin, priceMax]);
-    setAvailability(["in-stock", "pre-order"]);
-  }
+    setAvailability([...DEFAULT_AVAILABILITY]);
+  }, [priceMin, priceMax]);
 
   return (
     <div className="grid gap-8 md:grid-cols-[260px_1fr]">
@@ -260,7 +483,8 @@ export function CatalogClient({
           </Label>
           <ul className="space-y-1.5">
             {categories.map((cat) => {
-              const active = selectedCategories.includes(cat.slug);
+              const active =
+                allCategoriesSelected || selectedCategories.includes(cat.slug);
               return (
                 <li key={cat.id}>
                   <label className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1 text-sm transition hover:bg-accent/50">
