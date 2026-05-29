@@ -25,7 +25,6 @@ const RESOLUTIONS = [
 ];
 
 export function SelectionForm({ gamesCatalog }: { gamesCatalog: Game[] }) {
-  const popularGames = gamesCatalog.filter((g) => g.isPopular).slice(0, 8);
   const router = useRouter();
   const [games, setGames] = useState<string[]>([]);
   const [otherOpen, setOtherOpen] = useState(false);
@@ -66,7 +65,7 @@ export function SelectionForm({ gamesCatalog }: { gamesCatalog: Game[] }) {
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-          {popularGames.map((g) => {
+          {gamesCatalog.map((g) => {
             const active = games.includes(g.slug);
             const disabled = !active && games.length >= 3;
             return (
