@@ -36,9 +36,9 @@ import Image from "next/image";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 
 const BUDGET_BUCKETS = [
-  { label: "До 40 000 ₴", href: "/pidbir/rezultat?budget=0-40" },
-  { label: "40–80 000 ₴", href: "/pidbir/rezultat?budget=40-80" },
-  { label: "80 000 ₴+", href: "/pidbir/rezultat?budget=80-200" },
+  { label: "До 40 000 ₴", href: "/pk?max=40" },
+  { label: "40–80 000 ₴", href: "/pk?min=40&max=80" },
+  { label: "80 000 ₴+", href: "/pk?min=80" },
 ];
 
 const TRUST_PILLARS = [
