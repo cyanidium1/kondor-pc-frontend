@@ -1,8 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -18,6 +20,11 @@ import type { Build, Game, Resolution } from "@/types/build";
 import { cn } from "@/lib/utils";
 import ArrowInCircleIcon from "@/components/icons/ArrowInCircleIcon";
 
+const BUDGET_MIN = 20;
+const BUDGET_MAX = 200;
+const BUDGET_STEP = 5;
+const DEFAULT_BUDGET: [number, number] = [BUDGET_MIN, BUDGET_MAX];
+
 const RESOLUTIONS: { value: "all" | Resolution; label: string }[] = [
   { value: "all", label: "Усі" },
   { value: "fullhd", label: "Full HD" },
@@ -31,6 +38,96 @@ const SORTS = [
   { value: "price_desc", label: "Від дорогих" },
 ] as const;
 
+type SortValue = (typeof SORTS)[number]["value"];
+
+/** Усі ігри та задачі — без фільтра по FPS; custom — обрані slug-и в URL. */
+type GameFilterMode = "all" | "custom";
+
+type CatalogFilters = {
+  budget: [number, number];
+  gameFilterMode: GameFilterMode;
+  gameSlugs: string[];
+  resolution: "all" | Resolution;
+  sort: SortValue;
+};
+
+function clampBudget(value: number): number {
+  const stepped =
+    Math.round(value / BUDGET_STEP) * BUDGET_STEP;
+  return Math.min(BUDGET_MAX, Math.max(BUDGET_MIN, stepped));
+}
+
+function parseBudgetParam(
+  raw: string | null,
+  fallback: number,
+): number {
+  if (!raw) return fallback;
+  const n = Number.parseInt(raw, 10);
+  if (!Number.isFinite(n)) return fallback;
+  return clampBudget(n);
+}
+
+function parseFiltersFromSearchParams(
+  searchParams: URLSearchParams | null,
+  validGameSlugs: Set<string>,
+): CatalogFilters {
+  const budget: [number, number] = [
+    parseBudgetParam(searchParams?.get("min") ?? null, DEFAULT_BUDGET[0]),
+    parseBudgetParam(searchParams?.get("max") ?? null, DEFAULT_BUDGET[1]),
+  ];
+  if (budget[0] > budget[1]) {
+    budget[0] = DEFAULT_BUDGET[0];
+    budget[1] = DEFAULT_BUDGET[1];
+  }
+
+  const gamesRaw = searchParams?.get("games")?.trim();
+  const gameSlugs = gamesRaw
+    ? gamesRaw
+        .split(",")
+        .map((s) => s.trim())
+        .filter((slug) => slug && validGameSlugs.has(slug))
+    : [];
+  const gameFilterMode: GameFilterMode =
+    gameSlugs.length > 0 ? "custom" : "all";
+
+  const resRaw = searchParams?.get("res");
+  const resolution: "all" | Resolution =
+    resRaw === "fullhd" || resRaw === "2k" || resRaw === "4k" ? resRaw : "all";
+
+  const sortRaw = searchParams?.get("sort");
+  const sort: SortValue =
+    sortRaw === "price_asc" || sortRaw === "price_desc" ? sortRaw : "popular";
+
+  return { budget, gameFilterMode, gameSlugs, resolution, sort };
+}
+
+function filtersToQueryString(filters: CatalogFilters): string {
+  const sp = new URLSearchParams();
+
+  if (filters.budget[0] !== DEFAULT_BUDGET[0]) {
+    sp.set("min", String(filters.budget[0]));
+  }
+  if (filters.budget[1] !== DEFAULT_BUDGET[1]) {
+    sp.set("max", String(filters.budget[1]));
+  }
+  if (
+    filters.gameFilterMode === "custom" &&
+    filters.gameSlugs.length > 0
+  ) {
+    sp.set("games", filters.gameSlugs.join(","));
+  }
+  if (filters.resolution !== "all") {
+    sp.set("res", filters.resolution);
+  }
+  if (filters.sort !== "popular") {
+    sp.set("sort", filters.sort);
+  }
+
+  return sp.toString();
+}
+
+const DEFAULT_HIGHLIGHT_GAMES = ["cs2", "warzone", "cyberpunk"] as const;
+
 export function CatalogClient({
   builds,
   games,
@@ -38,13 +135,97 @@ export function CatalogClient({
   builds: Build[];
   games: Game[];
 }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const popularGames = games.filter((g) => g.isPopular);
-  const gameLabels = Object.fromEntries(games.map((g) => [g.slug, g.ukrName || g.name]));
-  const [budget, setBudget] = useState<[number, number]>([20, 200]);
-  const [gameSlug, setGameSlug] = useState<string | "all">("all");
-  const [resolution, setResolution] = useState<"all" | Resolution>("all");
-  const [sort, setSort] = useState<(typeof SORTS)[number]["value"]>("popular");
+  const gameLabels = Object.fromEntries(
+    games.map((g) => [g.slug, g.ukrName || g.name]),
+  );
+  const validGameSlugs = useMemo(
+    () => new Set(games.map((g) => g.slug)),
+    [games],
+  );
+
+  const initialFilters = useMemo(
+    () => parseFiltersFromSearchParams(searchParams, validGameSlugs),
+    [searchParams, validGameSlugs],
+  );
+
+  const [budget, setBudget] = useState<[number, number]>(
+    () => initialFilters.budget,
+  );
+  const [gameFilterMode, setGameFilterMode] = useState<GameFilterMode>(
+    () => initialFilters.gameFilterMode,
+  );
+  const [gameSlugs, setGameSlugs] = useState<string[]>(
+    () => initialFilters.gameSlugs,
+  );
+  const [resolution, setResolution] = useState<"all" | Resolution>(
+    () => initialFilters.resolution,
+  );
+  const [sort, setSort] = useState<SortValue>(() => initialFilters.sort);
   const [filtersExpanded, setFiltersExpanded] = useState(true);
+
+  const hasHydratedFromUrl = useRef(false);
+  const hasSyncedToUrl = useRef(false);
+
+  useEffect(() => {
+    const fromUrl = parseFiltersFromSearchParams(searchParams, validGameSlugs);
+    setBudget(fromUrl.budget);
+    setGameFilterMode(fromUrl.gameFilterMode);
+    setGameSlugs(fromUrl.gameSlugs);
+    setResolution(fromUrl.resolution);
+    setSort(fromUrl.sort);
+    hasHydratedFromUrl.current = true;
+  }, [searchParams, validGameSlugs]);
+
+  useEffect(() => {
+    if (!hasHydratedFromUrl.current) return;
+    if (!hasSyncedToUrl.current) {
+      hasSyncedToUrl.current = true;
+      return;
+    }
+    if (typeof window === "undefined") return;
+
+    const query = filtersToQueryString({
+      budget,
+      gameFilterMode,
+      gameSlugs,
+      resolution,
+      sort,
+    });
+    const next = `${window.location.pathname}${query ? `?${query}` : ""}`;
+    const current = `${window.location.pathname}${window.location.search}`;
+    if (next === current) return;
+    router.replace(next, { scroll: false });
+  }, [budget, gameFilterMode, gameSlugs, resolution, sort, router]);
+
+  const resetFilters = useCallback(() => {
+    setBudget(DEFAULT_BUDGET);
+    setGameFilterMode("all");
+    setGameSlugs([]);
+    setResolution("all");
+    setSort("popular");
+  }, []);
+
+  const allGamesSelected = gameFilterMode === "all";
+
+  const toggleGame = useCallback((slug: string) => {
+    setGameFilterMode("custom");
+    setGameSlugs((prev) =>
+      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug],
+    );
+  }, []);
+
+  const toggleAllGames = useCallback((checked: boolean) => {
+    if (checked) {
+      setGameFilterMode("all");
+      setGameSlugs([]);
+      return;
+    }
+    setGameFilterMode("custom");
+    setGameSlugs([]);
+  }, []);
 
   const filtered = useMemo(() => {
     const min = budget[0] * 1000;
@@ -53,26 +234,33 @@ export function CatalogClient({
     if (resolution !== "all") {
       res = res.filter((b) => b.fps.some((f) => f.resolution === resolution));
     }
-    if (gameSlug !== "all") {
+    if (gameFilterMode === "custom" && gameSlugs.length > 0) {
       const wantRes = resolution === "all" ? undefined : resolution;
       res = res.filter((b) =>
-        b.fps.some(
-          (f) =>
-            f.gameSlug === gameSlug &&
-            (!wantRes || f.resolution === wantRes) &&
-            f.fpsAvg >= 60,
+        gameSlugs.every((slug) =>
+          b.fps.some(
+            (f) =>
+              f.gameSlug === slug &&
+              (!wantRes || f.resolution === wantRes) &&
+              f.fpsAvg >= 60,
+          ),
         ),
       );
     }
     if (sort === "price_asc") res.sort((a, b) => a.priceUah - b.priceUah);
     if (sort === "price_desc") res.sort((a, b) => b.priceUah - a.priceUah);
     return res;
-  }, [builds, budget, gameSlug, resolution, sort]);
+  }, [builds, budget, gameFilterMode, gameSlugs, resolution, sort]);
 
   const activeFilters =
-    (budget[0] > 20 || budget[1] < 200 ? 1 : 0) +
-    (gameSlug !== "all" ? 1 : 0) +
+    (budget[0] > BUDGET_MIN || budget[1] < BUDGET_MAX ? 1 : 0) +
+    (gameFilterMode === "custom" && gameSlugs.length > 0 ? 1 : 0) +
     (resolution !== "all" ? 1 : 0);
+
+  const highlightGames =
+    gameFilterMode === "custom" && gameSlugs.length > 0
+      ? gameSlugs
+      : [...DEFAULT_HIGHLIGHT_GAMES];
 
   return (
     <div className="grid gap-8 md:grid-cols-[260px_1fr]">
@@ -108,11 +296,7 @@ export function CatalogClient({
                 {activeFilters > 0 && (
                   <button
                     type="button"
-                    onClick={() => {
-                      setBudget([20, 200]);
-                      setGameSlug("all");
-                      setResolution("all");
-                    }}
+                    onClick={resetFilters}
                     className="text-xs text-muted-foreground transition hover:text-foreground"
                   >
                     Скинути
@@ -130,9 +314,9 @@ export function CatalogClient({
               </div>
               <Slider
                 className="mt-3"
-                min={20}
-                max={200}
-                step={5}
+                min={BUDGET_MIN}
+                max={BUDGET_MAX}
+                step={BUDGET_STEP}
                 value={budget}
                 onValueChange={(v) => {
                   if (Array.isArray(v))
@@ -143,31 +327,39 @@ export function CatalogClient({
 
             <div>
               <Label className="mb-2 block text-[11px] uppercase tracking-wider text-muted-foreground">
-                Під гру
+                Під гру або задачу
+                {gameFilterMode === "custom" && gameSlugs.length > 0 && (
+                  <span className="ml-1.5 normal-case tracking-normal text-foreground">
+                    ({gameSlugs.length})
+                  </span>
+                )}
               </Label>
-              <Select
-                value={gameSlug}
-                onValueChange={(v) => setGameSlug(v ?? "all")}
-              >
-                <SelectTrigger className="h-9 w-full">
-                  <SelectValue>
-                    {gameSlug === "all"
-                      ? "Усі ігри"
-                      : popularGames.find((g) => g.slug === gameSlug)
-                          ?.ukrName ||
-                        popularGames.find((g) => g.slug === gameSlug)?.name ||
-                        gameSlug}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Усі ігри</SelectItem>
-                  {popularGames.map((g) => (
-                    <SelectItem key={g.slug} value={g.slug}>
-                      {g.ukrName || g.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <ul className="scrollbar-thin-sidebar max-h-48 space-y-1 overflow-y-auto pr-0.5">
+                <li>
+                  <label className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1 text-sm font-medium transition hover:bg-accent/50">
+                    <Checkbox
+                      checked={allGamesSelected}
+                      onCheckedChange={toggleAllGames}
+                    />
+                    <span className="flex-1">Усі ігри та задачі</span>
+                  </label>
+                </li>
+                {popularGames.map((g) => {
+                  const active =
+                    allGamesSelected || gameSlugs.includes(g.slug);
+                  return (
+                    <li key={g.slug}>
+                      <label className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1 text-sm transition hover:bg-accent/50">
+                        <Checkbox
+                          checked={active}
+                          onCheckedChange={() => toggleGame(g.slug)}
+                        />
+                        <span className="flex-1">{g.ukrName || g.name}</span>
+                      </label>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
 
             <div>
@@ -182,7 +374,8 @@ export function CatalogClient({
                     onClick={() => setResolution(r.value)}
                     className={cn(
                       buttonVariants({
-                        variant: resolution === r.value ? "default" : "outline",
+                        variant:
+                          resolution === r.value ? "default" : "outline",
                         size: "xs",
                       }),
                     )}
@@ -200,7 +393,7 @@ export function CatalogClient({
               <Select
                 value={sort}
                 onValueChange={(v) => {
-                  if (v) setSort(v as typeof sort);
+                  if (v) setSort(v as SortValue);
                 }}
               >
                 <SelectTrigger className="h-9 w-full">
@@ -237,15 +430,11 @@ export function CatalogClient({
             </div>
             <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
               Спробуй: збільшити бюджет, прибрати обмеження по роздільній або
-              обрати іншу гру.
+              обрати менше ігор.
             </p>
             <div className="mt-5 flex flex-wrap justify-center gap-3">
               <TechButton
-                onClick={() => {
-                  setBudget([20, 200]);
-                  setGameSlug("all");
-                  setResolution("all");
-                }}
+                onClick={resetFilters}
                 variant="white"
                 className="font-heading tracking-normal h-9"
               >
@@ -267,11 +456,7 @@ export function CatalogClient({
                 build={b}
                 variant="full"
                 gameLabels={gameLabels}
-                highlightGames={
-                  gameSlug !== "all"
-                    ? [gameSlug]
-                    : ["cs2", "warzone", "cyberpunk"]
-                }
+                highlightGames={highlightGames}
               />
             ))}
           </div>

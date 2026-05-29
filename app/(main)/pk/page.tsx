@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { getAllBuilds } from "@/lib/sanity-pc/builds";
 import { getAllGames } from "@/lib/sanity-pc/games";
 import { CatalogClient } from "./CatalogClient";
@@ -49,7 +50,9 @@ export default async function CatalogPage() {
         </TechButtonLink>
       </div>
 
-      <CatalogClient builds={builds} games={games} />
+      <Suspense fallback={null}>
+        <CatalogClient builds={builds} games={games} />
+      </Suspense>
     </section>
   );
 }
