@@ -146,7 +146,7 @@ export function Footer() {
           alt="Footer background"
           width="416"
           height="184"
-          className="hidden md:block md:right-[10px] lg:right-[160px] absolute bottom-[-20px]"
+          className="hidden md:block md:right-[10px] lg:right-[160px] absolute bottom-[-20px] pointer-events-none"
         />
       </div>
       <Image
@@ -154,7 +154,7 @@ export function Footer() {
         alt="Footer background"
         width="226"
         height="92"
-        className="md:hidden left-0 absolute bottom-0"
+        className="md:hidden left-0 absolute bottom-0 pointer-events-none"
       />
     </footer>
   );

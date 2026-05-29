@@ -3,13 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TechButton } from "@/components/shared/TechButton";
 import { GameTile } from "@/components/brand/GameTile";
 import type { Game } from "@/types/build";
 import { cn } from "@/lib/utils";
-import { Check, ChevronDown, Plus } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 
 const BUDGET_BUCKETS = [
   { label: "До 25 000 ₴", value: "0-25", note: "~$600" },
@@ -25,11 +24,8 @@ const RESOLUTIONS = [
 ];
 
 export function SelectionForm({ gamesCatalog }: { gamesCatalog: Game[] }) {
-  const popularGames = gamesCatalog.filter((g) => g.isPopular).slice(0, 8);
   const router = useRouter();
   const [games, setGames] = useState<string[]>([]);
-  const [otherOpen, setOtherOpen] = useState(false);
-  const [other, setOther] = useState("");
   const [budget, setBudget] = useState<string | null>(null);
   const [showRefine, setShowRefine] = useState(false);
   const [resolution, setResolution] = useState<string | null>(null);
@@ -50,7 +46,6 @@ export function SelectionForm({ gamesCatalog }: { gamesCatalog: Game[] }) {
     params.set("games", games.join(","));
     if (budget) params.set("budget", budget);
     if (resolution) params.set("resolution", resolution);
-    if (other.trim()) params.set("other", other.trim());
     router.push(`/pidbir/rezultat?${params.toString()}`);
   }
 
@@ -66,7 +61,7 @@ export function SelectionForm({ gamesCatalog }: { gamesCatalog: Game[] }) {
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-          {popularGames.map((g) => {
+          {gamesCatalog.map((g) => {
             const active = games.includes(g.slug);
             const disabled = !active && games.length >= 3;
             return (
@@ -104,29 +99,7 @@ export function SelectionForm({ gamesCatalog }: { gamesCatalog: Game[] }) {
               </button>
             );
           })}
-          <button
-            type="button"
-            onClick={() => setOtherOpen((v) => !v)}
-            className={cn(
-              "relative col-span-2 flex aspect-[8/3] flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-4 text-center transition sm:col-span-1 sm:aspect-[4/3] lg:aspect-[295/126]",
-              otherOpen
-                ? "border-foreground bg-surface-elevated"
-                : "border-border bg-surface hover:border-white/25",
-            )}
-          >
-            <Plus className="size-5 text-muted-foreground" strokeWidth={1.5} />
-            <span className="font-medium">Інша гра</span>
-          </button>
         </div>
-        {otherOpen && (
-          <div className="mt-4 max-w-md">
-            <Input
-              placeholder="Напиши назву гри — передамо менеджеру"
-              value={other}
-              onChange={(e) => setOther(e.target.value)}
-            />
-          </div>
-        )}
       </section>
 
       {/* BUDGET */}

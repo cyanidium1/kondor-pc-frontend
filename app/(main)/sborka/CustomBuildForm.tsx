@@ -179,16 +179,16 @@ export function CustomBuildForm() {
               </p>
             )}
           </div>
-          <div className="grid gap-1.5 md:col-span-2">
-            <Label className="text-xs text-muted-foreground">Email</Label>
+          <div className="grid gap-1.5">
+            <Label className="text-xs text-muted-foreground">Telegram</Label>
             <Input
-              type="email"
-              placeholder="you@example.com"
-              {...register("customerEmail")}
+              placeholder="Нік або номер"
+              autoComplete="username"
+              {...register("customerTelegram")}
             />
-            {errors.customerEmail && (
+            {errors.customerTelegram && (
               <p className="text-xs text-destructive">
-                {errors.customerEmail.message}
+                {errors.customerTelegram.message}
               </p>
             )}
           </div>
