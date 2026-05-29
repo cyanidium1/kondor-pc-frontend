@@ -68,7 +68,7 @@ const USE_CASES = [
   {
     icon: Target,
     label: "Для CS2 та Valorant",
-    href: "/pk-dlya-cs2",
+    href: "/pk?games=cs2%2Cvalorant",
     sku: "nebula" as const,
   },
   {
@@ -80,7 +80,7 @@ const USE_CASES = [
   {
     icon: Gamepad2,
     label: "Для Warzone та CoD",
-    href: "/pk-dlya-warzone",
+    href: "/pk?games=warzone",
     sku: "hyper" as const,
   },
   {
@@ -128,7 +128,10 @@ const STEPS = [
 const HOME_REVIEWS_LIMIT = 3;
 
 export default async function HomePage() {
-  const [builds, gamesCatalog] = await Promise.all([getAllBuilds(), getAllGames()]);
+  const [builds, gamesCatalog] = await Promise.all([
+    getAllBuilds(),
+    getAllGames(),
+  ]);
   const gameLabels = makeGameLabelMap(gamesCatalog);
   const top3 = ["vega", "nebula", "orbitra"]
     .map((slug) => builds.find((b) => b.slug === slug))

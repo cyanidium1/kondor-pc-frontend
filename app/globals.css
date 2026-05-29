@@ -286,6 +286,18 @@
     letter-spacing: 0.06em;
   }
 
+  /* Narrower scrollbar for compact filter lists (e.g. PK catalog games). */
+  .scrollbar-thin-sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: #383b40 transparent;
+  }
+  .scrollbar-thin-sidebar::-webkit-scrollbar {
+    width: 3px;
+  }
+  .scrollbar-thin-sidebar::-webkit-scrollbar-thumb {
+    border-width: 0;
+  }
+
   /*
    * Subtle accent glow used on SKU cards.
    * Uses `filter: drop-shadow(...)` rather than `box-shadow` so it follows
