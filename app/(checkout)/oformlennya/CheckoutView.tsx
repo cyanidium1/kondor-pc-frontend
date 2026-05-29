@@ -21,7 +21,7 @@ import {
   type PaymentMethod,
 } from "@/lib/validations/order";
 import { formatPrice, formatInstallment } from "@/lib/format";
-import { branchesFor, searchCities } from "@/lib/mock/np-cities";
+import type { NpBranch, NpCity } from "@/lib/nova-poshta/types";
 import { cn } from "@/lib/utils";
 import {
   Truck,
@@ -128,15 +128,19 @@ const PAYMENT_OPTIONS: {
 const COD_LIMIT = 50000;
 
 export function CheckoutView() {
+  const cartHydrated = useCartStore((s) => s.hydrated);
   const { items: cartItems, totalUah, clear } = useCartStore();
   const router = useRouter();
   const cartTotal = totalUah();
 
   const [cityQuery, setCityQuery] = useState("");
   const [cityOpen, setCityOpen] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => setHydrated(true), []);
+  const [cityOptions, setCityOptions] = useState<NpCity[]>([]);
+  const [cityLoading, setCityLoading] = useState(false);
+  const [branches, setBranches] = useState<NpBranch[]>([]);
+  const [branchesLoading, setBranchesLoading] = useState(false);
+  const [branchQuery, setBranchQuery] = useState("");
+  const [branchOpen, setBranchOpen] = useState(false);
 
   const {
     register,
@@ -158,14 +162,85 @@ export function CheckoutView() {
   const paymentMethod = watch("paymentMethod");
   const cityRef = watch("deliveryCityRef");
 
-  const cityOptions = useMemo(
-    () => searchCities(cityQuery || "", 10),
-    [cityQuery],
-  );
-  const branches = useMemo(
-    () => (cityRef ? branchesFor(cityRef) : []),
-    [cityRef],
-  );
+  useEffect(() => {
+    const q = cityQuery.trim();
+    if (q.length < 1) {
+      setCityOptions([]);
+      setCityLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setCityLoading(true);
+      try {
+        const res = await fetch(
+          `/api/nova-poshta/settlements?q=${encodeURIComponent(q)}&limit=10`,
+          { signal: controller.signal },
+        );
+        if (!res.ok) throw new Error("settlements failed");
+        const data = (await res.json()) as NpCity[];
+        setCityOptions(Array.isArray(data) ? data : []);
+      } catch {
+        if (!controller.signal.aborted) setCityOptions([]);
+      } finally {
+        if (!controller.signal.aborted) setCityLoading(false);
+      }
+    }, 300);
+
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [cityQuery]);
+
+  useEffect(() => {
+    if (!cityRef) {
+      setBranches([]);
+      setBranchesLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    (async () => {
+      setBranchesLoading(true);
+      try {
+        const res = await fetch(
+          `/api/nova-poshta/warehouses?cityRef=${encodeURIComponent(cityRef)}`,
+          { signal: controller.signal },
+        );
+        if (!res.ok) throw new Error("warehouses failed");
+        const data = (await res.json()) as NpBranch[];
+        setBranches(Array.isArray(data) ? data : []);
+      } catch {
+        if (!controller.signal.aborted) setBranches([]);
+      } finally {
+        if (!controller.signal.aborted) setBranchesLoading(false);
+      }
+    })();
+
+    return () => controller.abort();
+  }, [cityRef]);
+
+  useEffect(() => {
+    setBranchQuery("");
+    setBranchOpen(false);
+  }, [cityRef]);
+
+  const filteredBranches = useMemo(() => {
+    const q = branchQuery.trim().toLowerCase();
+    if (!cityRef || branchesLoading || q.length < 1) return [];
+
+    const digits = q.replace(/\D/g, "");
+    return branches
+      .filter((br) => {
+        if (digits && br.number === digits) return true;
+        if (br.number.toLowerCase().includes(q)) return true;
+        if (br.address.toLowerCase().includes(q)) return true;
+        return false;
+      })
+      .slice(0, 15);
+  }, [branchQuery, branches, branchesLoading, cityRef]);
 
   const codDisabled = cartTotal > COD_LIMIT || deliveryMethod === "self_pickup";
 
@@ -190,7 +265,24 @@ export function CheckoutView() {
     );
   }
 
-  if (hydrated && cartItems.length === 0) {
+  if (!cartHydrated) {
+    return (
+      <div
+        className="grid gap-8 md:grid-cols-[1fr_340px]"
+        aria-busy="true"
+        aria-label="Завантаження оформлення"
+      >
+        <div className="space-y-10">
+          <div className="h-48 animate-pulse rounded-lg bg-muted/20" />
+          <div className="h-64 animate-pulse rounded-lg bg-muted/20" />
+          <div className="h-72 animate-pulse rounded-lg bg-muted/20" />
+        </div>
+        <div className="h-80 animate-pulse rounded-lg bg-muted/20" />
+      </div>
+    );
+  }
+
+  if (cartItems.length === 0) {
     return (
       <div className="rounded-lg border border-border bg-surface p-10 text-center">
         <div className="font-display text-xl font-bold">Кошик порожній</div>
@@ -310,12 +402,23 @@ export function CheckoutView() {
                       setValue("deliveryCity", e.target.value);
                       setValue("deliveryCityRef", "");
                       setValue("deliveryBranchNumber", "");
+                      setBranchQuery("");
                     }}
                     onFocus={() => setCityOpen(true)}
                     onBlur={() => setTimeout(() => setCityOpen(false), 150)}
                     autoComplete="off"
                   />
-                  {cityOpen && cityOptions.length > 0 && (
+                  {cityOpen && cityLoading && (
+                    <p className="absolute left-0 right-0 top-full z-10 mt-1 rounded-md border border-border bg-popover px-3 py-2 text-xs text-muted-foreground shadow-lg">
+                      Шукаємо міста…
+                    </p>
+                  )}
+                  {cityOpen && !cityLoading && cityQuery.trim().length > 0 && cityOptions.length === 0 && (
+                    <p className="absolute left-0 right-0 top-full z-10 mt-1 rounded-md border border-border bg-popover px-3 py-2 text-xs text-muted-foreground shadow-lg">
+                      Нічого не знайдено
+                    </p>
+                  )}
+                  {cityOpen && !cityLoading && cityOptions.length > 0 && (
                     <ul className="absolute left-0 right-0 top-full z-10 mt-1 max-h-64 overflow-y-auto rounded-md border border-border bg-popover shadow-lg">
                       {cityOptions.map((c) => (
                         <li key={c.ref}>
@@ -331,6 +434,7 @@ export function CheckoutView() {
                               });
                               setValue("deliveryCityRef", c.ref);
                               setValue("deliveryBranchNumber", "");
+                              setBranchQuery("");
                             }}
                           >
                             <span className="font-medium">{c.name}</span>
@@ -350,20 +454,68 @@ export function CheckoutView() {
                   label="Відділення Нової Пошти"
                   error={errors.deliveryBranchNumber?.message}
                 >
-                  <select
-                    {...register("deliveryBranchNumber")}
-                    disabled={!cityRef}
-                    className="h-9 w-full rounded-md border border-border bg-background px-3 text-sm focus-visible:border-ring focus-visible:outline-none disabled:opacity-50"
-                  >
-                    <option value="">
-                      {cityRef ? "Оберіть відділення" : "Спершу оберіть місто"}
-                    </option>
-                    {branches.map((br) => (
-                      <option key={br.ref} value={br.number}>
-                        {br.address}
-                      </option>
-                    ))}
-                  </select>
+                  <input type="hidden" {...register("deliveryBranchNumber")} />
+                  <div className="relative">
+                    <Input
+                      placeholder={
+                        cityRef
+                          ? "Номер відділення, поштомату або адреса"
+                          : "Спершу оберіть місто"
+                      }
+                      value={branchQuery}
+                      disabled={!cityRef || branchesLoading}
+                      onChange={(e) => {
+                        setBranchQuery(e.target.value);
+                        setBranchOpen(true);
+                        setValue("deliveryBranchNumber", "");
+                      }}
+                      onFocus={() => {
+                        if (cityRef && !branchesLoading) setBranchOpen(true);
+                      }}
+                      onBlur={() =>
+                        setTimeout(() => setBranchOpen(false), 150)
+                      }
+                      autoComplete="off"
+                    />
+                    {branchOpen && branchesLoading && (
+                      <p className="absolute left-0 right-0 top-full z-10 mt-1 rounded-md border border-border bg-popover px-3 py-2 text-xs text-muted-foreground shadow-lg">
+                        Завантажуємо відділення…
+                      </p>
+                    )}
+                    {branchOpen &&
+                      !branchesLoading &&
+                      cityRef &&
+                      branchQuery.trim().length > 0 &&
+                      filteredBranches.length === 0 && (
+                        <p className="absolute left-0 right-0 top-full z-10 mt-1 rounded-md border border-border bg-popover px-3 py-2 text-xs text-muted-foreground shadow-lg">
+                          Нічого не знайдено
+                        </p>
+                      )}
+                    {branchOpen &&
+                      !branchesLoading &&
+                      filteredBranches.length > 0 && (
+                        <ul className="absolute left-0 right-0 top-full z-10 mt-1 max-h-64 overflow-y-auto rounded-md border border-border bg-popover shadow-lg">
+                          {filteredBranches.map((br) => (
+                            <li key={br.ref}>
+                              <button
+                                type="button"
+                                className="block w-full px-3 py-2 text-left text-sm hover:bg-accent"
+                                onMouseDown={(e) => e.preventDefault()}
+                                onClick={() => {
+                                  setBranchQuery(br.address);
+                                  setBranchOpen(false);
+                                  setValue("deliveryBranchNumber", br.number, {
+                                    shouldValidate: true,
+                                  });
+                                }}
+                              >
+                                {br.address}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                  </div>
                 </Field>
               )}
 
