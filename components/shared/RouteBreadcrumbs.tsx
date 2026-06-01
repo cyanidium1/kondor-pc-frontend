@@ -14,6 +14,9 @@ const LABELS: Record<string, string> = {
   "dostavka-oplata": "Доставка та оплата",
   kontakty: "Контакти",
   legal: "Юридична інформація",
+  "publichna-oferta": "Публічна оферта",
+  "politika-konfidentsiynosti": "Політика конфіденційності",
+  "pravova-informatsiya": "Правова інформація · Реквізити",
   blog: "Блог",
   dlya: "Для",
   promo: "Промо",
@@ -42,12 +45,18 @@ export function RouteBreadcrumbs() {
     return null;
   if (pathname.startsWith("/blog")) return null;
 
-  const segments = pathname.split("/").filter(Boolean);
-  if (segments.length === 0) return null;
+  const rawSegments = pathname.split("/").filter(Boolean);
+  if (rawSegments.length === 0) return null;
+
+  // /legal/* has no index page — skip the "legal" crumb, link only the document slug.
+  const isLegalChild =
+    rawSegments[0] === "legal" && rawSegments.length > 1;
+  const segments = isLegalChild ? rawSegments.slice(1) : rawSegments;
+  const basePath = isLegalChild ? "/legal" : "";
 
   const crumbs = segments.map((segment, index) => ({
     label: segmentLabel(segment),
-    href: `/${segments.slice(0, index + 1).join("/")}`,
+    href: `${basePath}/${segments.slice(0, index + 1).join("/")}`,
   }));
 
   return (

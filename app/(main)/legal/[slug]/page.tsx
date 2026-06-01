@@ -1,6 +1,18 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LEGAL_PAGES, legalBySlug } from "@/lib/mock/legal-pages";
+import { SiteContactsBlock } from "@/components/shared/SiteContactsBlock";
+import {
+  formatIbanDisplay,
+  getPaymentRequisites,
+  getPaymentRequisitesSeller,
+} from "@/lib/sanity/paymentRequisites";
+import { LegalParagraph } from "@/components/legal/LegalParagraph";
+import {
+  getSiteContactEmail,
+  getSiteContactEmailAndTelegram,
+  getSiteContacts,
+} from "@/lib/sanity/siteContacts";
 
 export async function generateStaticParams() {
   return LEGAL_PAGES.map((p) => ({ slug: p.slug }));
@@ -29,8 +41,21 @@ export default async function LegalPage({
   const page = legalBySlug(slug);
   if (!page) notFound();
 
+  const isRequisitesPage = slug === "pravova-informatsiya";
+  const isPrivacyPage = slug === "politika-konfidentsiynosti";
+  const isOfferPage = slug === "publichna-oferta";
+
+  const [paymentRequisites, siteContacts, contactEmail, offerSeller, offerContacts] =
+    await Promise.all([
+      isRequisitesPage ? getPaymentRequisites() : null,
+      isRequisitesPage ? getSiteContacts() : null,
+      isPrivacyPage ? getSiteContactEmail() : null,
+      isOfferPage ? getPaymentRequisitesSeller() : null,
+      isOfferPage ? getSiteContactEmailAndTelegram() : null,
+    ]);
+
   return (
-    <div className="container-prose py-16 md:py-24">
+    <div className="container-site py-16 md:py-24">
       <div className="mb-10">
         <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
           Правова інформація
@@ -38,12 +63,36 @@ export default async function LegalPage({
         <h1 className="font-display text-3xl font-bold md:text-4xl">
           {page.title}
         </h1>
-        <div className="mt-3 text-xs text-muted-foreground">
-          Оновлено: {page.updatedAt}
-        </div>
       </div>
 
       <article className="space-y-8 text-sm leading-relaxed md:text-base">
+        {paymentRequisites && (
+          <>
+            <section>
+              <h2 className="font-display mb-3 text-lg font-semibold md:text-xl">
+                ПРОДАВЕЦЬ
+              </h2>
+              <p className="mb-3 text-muted-foreground">
+                {paymentRequisites.seller}
+              </p>
+              <p className="mb-3 text-muted-foreground">
+                ЄДРПОУ / РНОКПП: {paymentRequisites.edrpouOrRnokpp}
+              </p>
+            </section>
+            <section>
+              <h2 className="font-display mb-3 text-lg font-semibold md:text-xl">
+                БАНКІВСЬКІ РЕКВІЗИТИ
+              </h2>
+              <p className="mb-3 text-muted-foreground">
+                IBAN:{" "}
+                <span className="tabular font-medium text-foreground">
+                  {formatIbanDisplay(paymentRequisites.iban)}
+                </span>
+              </p>
+            </section>
+          </>
+        )}
+        {siteContacts && <SiteContactsBlock contacts={siteContacts} />}
         {page.body.map((section, i) => (
           <section key={i}>
             {section.heading && (
@@ -52,9 +101,13 @@ export default async function LegalPage({
               </h2>
             )}
             {section.paragraphs.map((p, j) => (
-              <p key={j} className="mb-3 text-muted-foreground">
-                {p}
-              </p>
+              <LegalParagraph
+                key={j}
+                text={p}
+                contactEmail={contactEmail ?? offerContacts?.email}
+                paymentSeller={offerSeller}
+                siteContacts={offerContacts}
+              />
             ))}
             {section.list && (
               <ul className="mt-2 space-y-1.5">

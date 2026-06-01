@@ -18,6 +18,10 @@ import ArrowIcon from "@/components/icons/ArrowIcon";
 import MarqueeLine from "@/components/shared/MarqueeLine";
 import Image from "next/image";
 import { Reveal } from "@/components/shared/Reveal";
+import {
+  formatIbanDisplay,
+  getPaymentRequisites,
+} from "@/lib/sanity/paymentRequisites";
 
 export const metadata: Metadata = {
   title: "Контакти",
@@ -25,7 +29,9 @@ export const metadata: Metadata = {
     "Шоурум у Києві, Telegram, email, телефон. Щодня з 9:00 до 21:00. Ігрові ПК з гарантією до 3 років.",
 };
 
-export default function ContactsPage() {
+export default async function ContactsPage() {
+  const paymentRequisites = await getPaymentRequisites();
+
   return (
     <>
       <section className="rounded-b-[40px] overflow-hidden">
@@ -206,34 +212,41 @@ export default function ContactsPage() {
         </Reveal>
         <Reveal>
           <div className="rounded-lg border border-border bg-surface p-6">
-            <div className="flex items-start gap-3">
-              <Building2
-                className="mt-1 size-5 shrink-0 text-muted-foreground"
-                strokeWidth={1.5}
-              />
-              <div className="grid gap-1 text-sm">
-                <div>
-                  <span className="text-muted-foreground">Продавець: </span>
-                  <span className="font-medium">ФОП [ПІБ] / ТОВ [Назва]</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">ЄДРПОУ/РНОКПП: </span>
-                  <span className="tabular font-medium">XXXXXXXX</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">
-                    Юридична адреса:{" "}
-                  </span>
-                  <span>[Адреса]</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">IBAN: </span>
-                  <span className="tabular">
-                    UA XX XXXXXX XXXXXXXXXXXXXXXXXXXXX
-                  </span>
+            {paymentRequisites ? (
+              <div className="flex items-start gap-3">
+                <Building2
+                  className="mt-1 size-5 shrink-0 text-muted-foreground"
+                  strokeWidth={1.5}
+                />
+                <div className="grid gap-1 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Продавець: </span>
+                    <span className="font-medium">
+                      {paymentRequisites.seller}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">
+                      ЄДРПОУ/РНОКПП:{" "}
+                    </span>
+                    <span className="tabular font-medium">
+                      {paymentRequisites.edrpouOrRnokpp}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">IBAN: </span>
+                    <span className="tabular">
+                      {formatIbanDisplay(paymentRequisites.iban)}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Реквізити тимчасово недоступні. Напишіть нам у Telegram — надішлемо
+                дані для оплати.
+              </p>
+            )}
             <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 border-t border-border pt-4 text-sm">
               <Link
                 href="/legal/publichna-oferta"
