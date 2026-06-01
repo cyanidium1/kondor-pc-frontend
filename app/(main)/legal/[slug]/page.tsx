@@ -38,9 +38,6 @@ export default async function LegalPage({
         <h1 className="font-display text-3xl font-bold md:text-4xl">
           {page.title}
         </h1>
-        <div className="mt-3 text-xs text-muted-foreground">
-          Оновлено: {page.updatedAt}
-        </div>
       </div>
 
       <article className="space-y-8 text-sm leading-relaxed md:text-base">
