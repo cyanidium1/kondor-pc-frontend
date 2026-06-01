@@ -15,6 +15,13 @@ import {
 import { Reveal } from "@/components/shared/Reveal";
 import Image from "next/image";
 import MarqueeLine from "@/components/shared/MarqueeLine";
+import { WarrantyContactInline } from "@/components/garantiya/WarrantyContactLinks";
+import {
+  formatPhoneDisplay,
+  getSiteContacts,
+  phoneHref,
+  telegramHref,
+} from "@/lib/sanity/siteContacts";
 
 export const metadata: Metadata = {
   title: "Гарантія на ігрові ПК до 3 років",
@@ -41,7 +48,7 @@ const SERVICE_STEPS = [
   {
     icon: MessageSquare,
     title: "Пиши нам",
-    text: "Telegram @kondor_pc або телефон",
+    text: "",
   },
   {
     icon: Wrench,
@@ -76,7 +83,9 @@ const PLANS = [
   { years: 3, price: 6500, note: "пріоритет + чистки" },
 ];
 
-export default function WarrantyPage() {
+export default async function WarrantyPage() {
+  const siteContacts = await getSiteContacts();
+
   const faqs =
     faqsByScope("warranty").length > 0
       ? faqsByScope("warranty")
@@ -241,7 +250,11 @@ export default function WarrantyPage() {
                       {s.title}
                     </div>
                     <p className="mt-0.5 text-[12px] lg:text-[14px] text-muted-foreground leading-[120%]">
-                      {s.text}
+                      {i === 0 ? (
+                        <WarrantyContactInline contacts={siteContacts} />
+                      ) : (
+                        s.text
+                      )}
                     </p>
                   </div>
                 </li>
@@ -410,46 +423,49 @@ export default function WarrantyPage() {
                 className="mb-6"
                 kickerClassName="text-black"
                 titleClassName="lg:max-w-[536px] mt-4 text-black"
+                showKickerDot={false}
               />
             </Reveal>
             <Reveal delay={80}>
               <p className="mt-4 mb-12 text-sm text-black">
                 Робочі години: щодня 9:00–21:00
               </p>
-              <div className="flex flex-col lg:flex-row gap-3 justify-center">
-                <a
-                  href="tel:+380000000000"
-                  className={cn(
-                    buttonVariants({ variant: "secondary" }),
-                    "w-full lg:w-fit px-9",
-                  )}
-                >
-                  <Phone className="mr-1.5 size-4" />
-                  +380 XX XXX XX XX
-                </a>
-                <a
-                  href="https://t.me/kondor_pc"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    buttonVariants({ variant: "secondary" }),
-                    "w-full lg:w-fit px-8",
-                  )}
-                >
-                  <MessageSquare className="mr-1.5 size-4" />
-                  Telegram
-                </a>
-                <a
-                  href="mailto:support@kondor-pc.ua"
-                  className={cn(
-                    buttonVariants({ variant: "secondary" }),
-                    "w-full lg:w-fit px-8",
-                  )}
-                >
-                  <Mail className="mr-1.5 size-4" />
-                  Email
-                </a>
-              </div>
+              {siteContacts && (
+                <div className="flex flex-col lg:flex-row gap-3 justify-center">
+                  <a
+                    href={phoneHref(siteContacts.phone)}
+                    className={cn(
+                      buttonVariants({ variant: "secondary" }),
+                      "w-full lg:w-fit px-9",
+                    )}
+                  >
+                    <Phone className="mr-1.5 size-4" />
+                    {formatPhoneDisplay(siteContacts.phone)}
+                  </a>
+                  <a
+                    href={telegramHref(siteContacts.telegram)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(
+                      buttonVariants({ variant: "secondary" }),
+                      "w-full lg:w-fit px-8",
+                    )}
+                  >
+                    <MessageSquare className="mr-1.5 size-4" />
+                    Telegram
+                  </a>
+                  <a
+                    href={`mailto:${siteContacts.email}`}
+                    className={cn(
+                      buttonVariants({ variant: "secondary" }),
+                      "w-full lg:w-fit px-8",
+                    )}
+                  >
+                    <Mail className="mr-1.5 size-4" />
+                    Email
+                  </a>
+                </div>
+              )}
             </Reveal>
           </div>
         </section>
