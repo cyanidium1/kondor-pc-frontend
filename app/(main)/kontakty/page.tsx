@@ -22,6 +22,13 @@ import {
   formatIbanDisplay,
   getPaymentRequisites,
 } from "@/lib/sanity/paymentRequisites";
+import {
+  formatPhoneDisplay,
+  getSiteContacts,
+  phoneHref,
+  telegramHref,
+  telegramLabel,
+} from "@/lib/sanity/siteContacts";
 
 export const metadata: Metadata = {
   title: "Контакти",
@@ -30,7 +37,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactsPage() {
-  const paymentRequisites = await getPaymentRequisites();
+  const [paymentRequisites, siteContacts] = await Promise.all([
+    getPaymentRequisites(),
+    getSiteContacts(),
+  ]);
 
   return (
     <>
@@ -96,27 +106,34 @@ export default async function ContactsPage() {
                       Контакти
                     </div>
                     <ul className="space-y-4">
-                      <ContactRow
-                        icon={Phone}
-                        label="Телефон"
-                        value="+380 63 363 10 66"
-                        href="tel:+380633631066"
-                        note="щодня 9:00–21:00"
-                      />
-                      <ContactRow
-                        icon={MessageSquare}
-                        label="Telegram · Продаж"
-                        value="@kondor_pc_admin"
-                        href="https://t.me/kondor_pc_admin"
-                        external
-                      />
-
-                      <ContactRow
-                        icon={Mail}
-                        label="Email · Продаж"
-                        value="sales@kondor-pc.ua"
-                        href="mailto:sales@kondor-pc.ua"
-                      />
+                      {siteContacts ? (
+                        <>
+                          <ContactRow
+                            icon={Phone}
+                            label="Телефон"
+                            value={formatPhoneDisplay(siteContacts.phone)}
+                            href={phoneHref(siteContacts.phone)}
+                            note="щодня 9:00–21:00"
+                          />
+                          <ContactRow
+                            icon={MessageSquare}
+                            label="Telegram"
+                            value={telegramLabel(siteContacts.telegram)}
+                            href={telegramHref(siteContacts.telegram)}
+                            external
+                          />
+                          <ContactRow
+                            icon={Mail}
+                            label="Email"
+                            value={siteContacts.email}
+                            href={`mailto:${siteContacts.email}`}
+                          />
+                        </>
+                      ) : (
+                        <li className="text-sm text-muted-foreground">
+                          Контакти тимчасово недоступні.
+                        </li>
+                      )}
                     </ul>
                   </div>
                 </div>
@@ -127,11 +144,13 @@ export default async function ContactsPage() {
                       Соцмережі
                     </div>
                     <div className="grid gap-2 sm:grid-cols-3">
-                      <ExternalLink
-                        icon={MessageSquare}
-                        label="Telegram"
-                        href="https://t.me/kondor_pc"
-                      />
+                      {siteContacts && (
+                        <ExternalLink
+                          icon={MessageSquare}
+                          label="Telegram"
+                          href={telegramHref(siteContacts.telegram)}
+                        />
+                      )}
                       <ExternalLink
                         icon={AtSign}
                         label="Instagram"
