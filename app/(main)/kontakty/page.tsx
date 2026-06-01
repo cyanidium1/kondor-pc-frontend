@@ -30,6 +30,8 @@ import {
   telegramLabel,
 } from "@/lib/sanity/siteContacts";
 
+export const revalidate = 300;
+
 export const metadata: Metadata = {
   title: "Контакти",
   description:

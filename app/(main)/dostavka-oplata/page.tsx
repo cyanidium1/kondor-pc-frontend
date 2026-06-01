@@ -19,6 +19,8 @@ import Image from "next/image";
 import { Reveal } from "@/components/shared/Reveal";
 import { getSiteContactEmail } from "@/lib/sanity/siteContacts";
 
+export const revalidate = 300;
+
 export const metadata: Metadata = {
   title: "Доставка та оплата",
   description:

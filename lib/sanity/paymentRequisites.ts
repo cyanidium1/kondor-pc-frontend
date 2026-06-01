@@ -1,5 +1,7 @@
 import { contentClient } from "./contentClient";
 
+const REVALIDATE = 300;
+
 export interface PaymentRequisites {
   seller: string;
   edrpouOrRnokpp: string;
@@ -26,7 +28,7 @@ export async function getPaymentRequisitesSeller(): Promise<Pick<
     {},
     {
       next: {
-        revalidate: 3600,
+        revalidate: REVALIDATE,
         tags: ["sanity:paymentRequisites"],
       },
     },
@@ -48,7 +50,7 @@ export async function getPaymentRequisites(): Promise<PaymentRequisites | null> 
     {},
     {
       next: {
-        revalidate: 3600,
+        revalidate: REVALIDATE,
         tags: ["sanity:paymentRequisites"],
       },
     },

@@ -14,6 +14,8 @@ import {
   getSiteContacts,
 } from "@/lib/sanity/siteContacts";
 
+export const revalidate = 300;
+
 export async function generateStaticParams() {
   return LEGAL_PAGES.map((p) => ({ slug: p.slug }));
 }

@@ -23,6 +23,8 @@ import {
   telegramHref,
 } from "@/lib/sanity/siteContacts";
 
+export const revalidate = 300;
+
 export const metadata: Metadata = {
   title: "Гарантія на ігрові ПК до 3 років",
   description:

@@ -1,5 +1,7 @@
 import { contentClient } from "./contentClient";
 
+const REVALIDATE = 300;
+
 export interface SiteContacts {
   email: string;
   telegram: string;
@@ -29,7 +31,7 @@ export async function getSiteContactEmailAndTelegram(): Promise<{
     `*[_type == "siteContacts" && _id == "siteContacts"][0]{ email, telegram }`,
     {},
     {
-      next: { revalidate: 3600, tags: ["sanity:siteContacts"] },
+      next: { revalidate: REVALIDATE, tags: ["sanity:siteContacts"] },
     },
   );
 
@@ -48,7 +50,7 @@ export async function getSiteContactEmail(): Promise<string | null> {
     SITE_CONTACT_EMAIL_QUERY,
     {},
     {
-      next: { revalidate: 3600, tags: ["sanity:siteContacts"] },
+      next: { revalidate: REVALIDATE, tags: ["sanity:siteContacts"] },
     },
   );
 
@@ -61,7 +63,7 @@ export async function getSiteContacts(): Promise<SiteContacts | null> {
     SITE_CONTACTS_QUERY,
     {},
     {
-      next: { revalidate: 3600, tags: ["sanity:siteContacts"] },
+      next: { revalidate: REVALIDATE, tags: ["sanity:siteContacts"] },
     },
   );
 
