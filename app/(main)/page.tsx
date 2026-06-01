@@ -9,6 +9,7 @@ import { ReviewCard } from "@/components/shared/ReviewCard";
 import { FaqBlock } from "@/components/shared/FaqBlock";
 import { collectHomepageReviews, getAllBuilds } from "@/lib/sanity-pc/builds";
 import { getAllGames, makeGameLabelMap } from "@/lib/sanity-pc/games";
+import { getHomePcTasks } from "@/lib/sanity/homePcTasksSection";
 import { faqsByScope } from "@/lib/mock/faqs";
 import {
   JsonLd,
@@ -27,13 +28,11 @@ import {
   RotateCcw,
   Gamepad2,
   Target,
-  Car,
-  Radio,
-  Baby,
-  Swords,
 } from "lucide-react";
 import Image from "next/image";
 import ArrowIcon from "@/components/icons/ArrowIcon";
+
+export const revalidate = 300;
 
 const BUDGET_BUCKETS = [
   { label: "До 40 000 ₴", href: "/pk?max=40" },
@@ -64,46 +63,6 @@ const TRUST_PILLARS = [
   },
 ];
 
-const USE_CASES = [
-  {
-    icon: Target,
-    label: "Для CS2 та Valorant",
-    href: "/pk?games=cs2%2Cvalorant",
-    sku: "nebula" as const,
-  },
-  {
-    icon: Radio,
-    label: "Для стрімінгу та монтажу",
-    href: "/pk-dlya-strimu",
-    sku: "pulsar" as const,
-  },
-  {
-    icon: Gamepad2,
-    label: "Для Warzone та CoD",
-    href: "/pk?games=warzone",
-    sku: "hyper" as const,
-  },
-  {
-    icon: Baby,
-    label: "Для дитини-початківця",
-    href: "/pk-dlya-pochatkivtsya",
-    sku: "comet" as const,
-  },
-  {
-    icon: Car,
-    label: "Для GTA V та GTA VI",
-    href: "/pk-dlya-gta5",
-    sku: "vega" as const,
-  },
-
-  {
-    icon: Swords,
-    label: "Для Dota 2 та ліги",
-    href: "/pk-dlya-dota2",
-    sku: "orbitra" as const,
-  },
-];
-
 const STEPS = [
   {
     n: "01",
@@ -128,9 +87,10 @@ const STEPS = [
 const HOME_REVIEWS_LIMIT = 3;
 
 export default async function HomePage() {
-  const [builds, gamesCatalog] = await Promise.all([
+  const [builds, gamesCatalog, pcTasks] = await Promise.all([
     getAllBuilds(),
     getAllGames(),
+    getHomePcTasks(),
   ]);
   const gameLabels = makeGameLabelMap(gamesCatalog);
   const top3 = ["vega", "nebula", "orbitra"]
@@ -480,34 +440,44 @@ export default async function HomePage() {
           </div>
           <div className="hidden lg:block absolute -z-20 top-[0px] right-[calc(50%-310px)] w-[733px] h-[1133px] rounded-full bg-black blur-[105px]" />
 
-          <Reveal>
-            <SectionHeader
-              kicker="Під задачу"
-              title="ДЛЯ ЯКИХ ЗАДАЧ ЗБИРАЄМО ПК"
-              titleClassName="mt-2.5"
-            />
-          </Reveal>
-          <Reveal delay={80}>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-2">
-              {USE_CASES.map((u) => (
-                <Link
-                  key={u.href}
-                  href={u.href}
-                  className="group relative flex items-center gap-4 overflow-hidden rounded-lg border border-border bg-surface p-5 hover:-translate-y-0.5 hover:border-white/15 transition-all duration-300 ease-out"
-                >
-                  <div className="relative flex size-10 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
-                    <u.icon className="size-5" strokeWidth={1.5} />
-                  </div>
-                  <div className="relative flex-1 font-heading uppercase text-[14px] leading-[120%]">
-                    {u.label}
-                  </div>
-                  <div className="relative rounded-full size-9 bg-white flex items-center justify-center text-black transition duration-300 ease-out group-hover:translate-x-0.5">
-                    <ArrowIcon />
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </Reveal>
+          {pcTasks.length > 0 && (
+            <>
+              <Reveal>
+                <SectionHeader
+                  kicker="Під задачу"
+                  title="ДЛЯ ЯКИХ ЗАДАЧ ЗБИРАЄМО ПК"
+                  titleClassName="mt-2.5"
+                />
+              </Reveal>
+              <Reveal delay={80}>
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-2">
+                  {pcTasks.map((task) => (
+                    <Link
+                      key={task.href}
+                      href={task.href}
+                      className="group relative flex items-center gap-4 overflow-hidden rounded-lg border border-border bg-surface p-5 hover:-translate-y-0.5 hover:border-white/15 transition-all duration-300 ease-out"
+                    >
+                      <div className="relative flex size-10 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
+                        <Image
+                          src={task.iconUrl}
+                          alt=""
+                          width={20}
+                          height={20}
+                          className="size-5 object-contain"
+                        />
+                      </div>
+                      <div className="relative flex-1 font-heading uppercase text-[14px] leading-[120%]">
+                        {task.name}
+                      </div>
+                      <div className="relative rounded-full size-9 bg-white flex items-center justify-center text-black transition duration-300 ease-out group-hover:translate-x-0.5">
+                        <ArrowIcon />
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </Reveal>
+            </>
+          )}
         </div>
       </section>
 
