@@ -413,11 +413,14 @@ export function CheckoutView() {
                       Шукаємо міста…
                     </p>
                   )}
-                  {cityOpen && !cityLoading && cityQuery.trim().length > 0 && cityOptions.length === 0 && (
-                    <p className="absolute left-0 right-0 top-full z-10 mt-1 rounded-md border border-border bg-popover px-3 py-2 text-xs text-muted-foreground shadow-lg">
-                      Нічого не знайдено
-                    </p>
-                  )}
+                  {cityOpen &&
+                    !cityLoading &&
+                    cityQuery.trim().length > 0 &&
+                    cityOptions.length === 0 && (
+                      <p className="absolute left-0 right-0 top-full z-10 mt-1 rounded-md border border-border bg-popover px-3 py-2 text-xs text-muted-foreground shadow-lg">
+                        Нічого не знайдено
+                      </p>
+                    )}
                   {cityOpen && !cityLoading && cityOptions.length > 0 && (
                     <ul className="absolute left-0 right-0 top-full z-10 mt-1 max-h-64 overflow-y-auto rounded-md border border-border bg-popover shadow-lg">
                       {cityOptions.map((c) => (
@@ -472,9 +475,7 @@ export function CheckoutView() {
                       onFocus={() => {
                         if (cityRef && !branchesLoading) setBranchOpen(true);
                       }}
-                      onBlur={() =>
-                        setTimeout(() => setBranchOpen(false), 150)
-                      }
+                      onBlur={() => setTimeout(() => setBranchOpen(false), 150)}
                       autoComplete="off"
                     />
                     {branchOpen && branchesLoading && (
@@ -530,15 +531,6 @@ export function CheckoutView() {
                   />
                 </Field>
               )}
-            </div>
-          )}
-
-          {deliveryMethod === "self_pickup" && (
-            <div className="mt-5 rounded-md border border-border bg-background/50 p-4 text-sm">
-              <div className="font-medium">Наш шоурум у Києві</div>
-              <div className="mt-1 text-muted-foreground">
-                [адреса] · щодня 10:00–20:00 · паркінг безкоштовний
-              </div>
             </div>
           )}
         </section>
