@@ -110,36 +110,7 @@ export const LEGAL_PAGES: LegalPage[] = [
     slug: "pravova-informatsiya",
     title: "ПРАВОВА ІНФОРМАЦІЯ · РЕКВІЗИТИ",
     updatedAt: "2026-04-18",
-    body: [
-      {
-        heading: "ПРОДАВЕЦЬ",
-        paragraphs: [
-          "ФОП [ПІБ клієнта — буде заповнено]",
-          "ЄДРПОУ / РНОКПП: [XXXXXXXX]",
-          "Платник єдиного податку [X група]",
-        ],
-      },
-      {
-        heading: "ЮРИДИЧНА АДРЕСА",
-        paragraphs: ["[Юридична адреса — буде заповнено]"],
-      },
-      {
-        heading: "БАНКІВСЬКІ РЕКВІЗИТИ",
-        paragraphs: [
-          "Банк: [Monobank / ПриватБанк]",
-          "IBAN: UA XX XXXXXX XXXXXXXXXXXXXXXXXXXXX",
-          "МФО: XXXXXX",
-        ],
-      },
-      {
-        heading: "КОНТАКТИ",
-        paragraphs: [
-          "Email: info@kondor-pc.ua",
-          "Telegram: @kondor_pc",
-          "Телефон: +380 XX XXX XX XX",
-        ],
-      },
-    ],
+    body: [],
   },
 ];
 

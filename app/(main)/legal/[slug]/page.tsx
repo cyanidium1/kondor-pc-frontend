@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LEGAL_PAGES, legalBySlug } from "@/lib/mock/legal-pages";
+import { SiteContactsBlock } from "@/components/shared/SiteContactsBlock";
+import {
+  formatIbanDisplay,
+  getPaymentRequisites,
+} from "@/lib/sanity/paymentRequisites";
+import { getSiteContacts } from "@/lib/sanity/siteContacts";
 
 export async function generateStaticParams() {
   return LEGAL_PAGES.map((p) => ({ slug: p.slug }));
@@ -29,6 +35,11 @@ export default async function LegalPage({
   const page = legalBySlug(slug);
   if (!page) notFound();
 
+  const isRequisitesPage = slug === "pravova-informatsiya";
+  const [paymentRequisites, siteContacts] = isRequisitesPage
+    ? await Promise.all([getPaymentRequisites(), getSiteContacts()])
+    : [null, null];
+
   return (
     <div className="container-prose py-16 md:py-24">
       <div className="mb-10">
@@ -41,6 +52,36 @@ export default async function LegalPage({
       </div>
 
       <article className="space-y-8 text-sm leading-relaxed md:text-base">
+        {paymentRequisites && (
+          <>
+            <section>
+              <h2 className="font-display mb-3 text-lg font-semibold md:text-xl">
+                ПРОДАВЕЦЬ
+              </h2>
+              <p className="mb-3 text-muted-foreground">
+                {paymentRequisites.seller}
+              </p>
+              <p className="mb-3 text-muted-foreground">
+                ЄДРПОУ / РНОКПП:{" "}
+                <span className="tabular font-medium text-foreground">
+                  {paymentRequisites.edrpouOrRnokpp}
+                </span>
+              </p>
+            </section>
+            <section>
+              <h2 className="font-display mb-3 text-lg font-semibold md:text-xl">
+                БАНКІВСЬКІ РЕКВІЗИТИ
+              </h2>
+              <p className="mb-3 text-muted-foreground">
+                IBAN:{" "}
+                <span className="tabular font-medium text-foreground">
+                  {formatIbanDisplay(paymentRequisites.iban)}
+                </span>
+              </p>
+            </section>
+          </>
+        )}
+        {siteContacts && <SiteContactsBlock contacts={siteContacts} />}
         {page.body.map((section, i) => (
           <section key={i}>
             {section.heading && (
