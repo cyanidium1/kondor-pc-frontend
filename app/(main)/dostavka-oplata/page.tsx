@@ -17,6 +17,7 @@ import {
 import MarqueeLine from "@/components/shared/MarqueeLine";
 import Image from "next/image";
 import { Reveal } from "@/components/shared/Reveal";
+import { getSiteContactEmail } from "@/lib/sanity/siteContacts";
 
 export const metadata: Metadata = {
   title: "Доставка та оплата",
@@ -107,7 +108,8 @@ const BUSINESS_DOCS = [
   "Акт приймання-передачі",
 ];
 
-export default function DeliveryPaymentPage() {
+export default async function DeliveryPaymentPage() {
+  const contactEmail = await getSiteContactEmail();
   const faqs = [...faqsByScope("delivery"), ...faqsByScope("payment")];
   const items = faqs.length > 0 ? faqs : FAQS.slice(0, 5);
 
@@ -457,17 +459,25 @@ export default function DeliveryPaymentPage() {
                 ))}
               </ul>
               <p className="mt-5 text-[12px] lg:text-[14px] leading-[120%] text-muted-foreground">
-                Для оформлення напиши на{" "}
-                <a
-                  href="mailto:info@kondor-pc.ua"
-                  className="text-foreground underline underline-offset-1"
-                >
-                  info@kondor-pc.ua
-                </a>{" "}
-                або обери «Для ФОП/ЮО» при оформленні замовлення.
+                {contactEmail ? (
+                  <>
+                    Для оформлення напиши на{" "}
+                    <a
+                      href={`mailto:${contactEmail}`}
+                      className="text-foreground underline underline-offset-1"
+                    >
+                      {contactEmail}
+                    </a>{" "}
+                    або обери «Для ФОП/ЮО» при оформленні замовлення.
+                  </>
+                ) : (
+                  <>
+                    Для оформлення обери «Для ФОП/ЮО» при оформленні замовлення
+                    або зв&apos;яжись з нами через сторінку контактів.
+                  </>
+                )}
               </p>
             </div>
-            /
           </Reveal>
 
           <Reveal delay={160}>
