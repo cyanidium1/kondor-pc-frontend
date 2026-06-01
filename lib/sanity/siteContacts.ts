@@ -4,15 +4,28 @@ export interface SiteContacts {
   email: string;
   telegram: string;
   phone: string;
+  telegramChatUrl?: string;
+  youtubeUrl?: string;
+  instagramUrl?: string;
 }
+
+const REVALIDATE = 300;
 
 const SITE_CONTACTS_QUERY = `
 *[_type == "siteContacts" && _id == "siteContacts"][0]{
   email,
   telegram,
-  phone
+  phone,
+  telegramChatUrl,
+  youtubeUrl,
+  instagramUrl
 }
 `;
+
+export function ensureHttps(url: string): string {
+  const value = url.trim();
+  return /^https?:\/\//i.test(value) ? value : `https://${value}`;
+}
 
 const SITE_CONTACT_EMAIL_QUERY = `
 *[_type == "siteContacts" && _id == "siteContacts"][0].email
@@ -29,7 +42,7 @@ export async function getSiteContactEmailAndTelegram(): Promise<{
     `*[_type == "siteContacts" && _id == "siteContacts"][0]{ email, telegram }`,
     {},
     {
-      next: { revalidate: 3600, tags: ["sanity:siteContacts"] },
+      next: { revalidate: REVALIDATE, tags: ["sanity:siteContacts"] },
     },
   );
 
@@ -48,7 +61,7 @@ export async function getSiteContactEmail(): Promise<string | null> {
     SITE_CONTACT_EMAIL_QUERY,
     {},
     {
-      next: { revalidate: 3600, tags: ["sanity:siteContacts"] },
+      next: { revalidate: REVALIDATE, tags: ["sanity:siteContacts"] },
     },
   );
 
@@ -61,7 +74,7 @@ export async function getSiteContacts(): Promise<SiteContacts | null> {
     SITE_CONTACTS_QUERY,
     {},
     {
-      next: { revalidate: 3600, tags: ["sanity:siteContacts"] },
+      next: { revalidate: REVALIDATE, tags: ["sanity:siteContacts"] },
     },
   );
 
@@ -69,11 +82,23 @@ export async function getSiteContacts(): Promise<SiteContacts | null> {
     return null;
   }
 
-  return {
+  const contacts: SiteContacts = {
     email: row.email.trim(),
     telegram: row.telegram.trim(),
     phone: row.phone.trim(),
   };
+
+  if (row.telegramChatUrl?.trim()) {
+    contacts.telegramChatUrl = row.telegramChatUrl.trim();
+  }
+  if (row.youtubeUrl?.trim()) {
+    contacts.youtubeUrl = row.youtubeUrl.trim();
+  }
+  if (row.instagramUrl?.trim()) {
+    contacts.instagramUrl = row.instagramUrl.trim();
+  }
+
+  return contacts;
 }
 
 export function telegramHref(raw: string): string {
