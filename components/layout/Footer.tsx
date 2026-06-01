@@ -4,11 +4,15 @@ import ArrowIcon from "@/components/icons/ArrowIcon";
 import Image from "next/image";
 import TagIcon from "../icons/TagIcon";
 import { NAV } from "@/components/layout/nav";
+import {
+  ensureHttps,
+  formatPhoneDisplay,
+  getSiteContacts,
+  phoneHref,
+} from "@/lib/sanity/siteContacts";
 
 const CODE_SITE_URL = "https://www.code-site.art";
 
-// Derive footer columns from the same NAV that powers the header + burger menu.
-// Flat top-level links → "Розділи". Grouped dropdowns → their own columns.
 type FooterLink = { href: string; label: string; external?: boolean };
 type Column = { title: string; links: FooterLink[] };
 
@@ -25,39 +29,60 @@ const NAV_COLUMNS: Column[] = (() => {
   return [{ title: "Розділи", links: flat }, ...groups];
 })();
 
-const STATIC_COLUMNS: Column[] = [
-  {
-    title: "Юридична",
-    links: [
-      { href: "/legal/publichna-oferta", label: "Публічна оферта" },
-      {
-        href: "/legal/politika-konfidentsiynosti",
-        label: "Політика конфіденційності",
-      },
-      { href: "/legal/pravova-informatsiya", label: "Реквізити" },
-    ],
-  },
-  {
-    title: "Соцмережі",
-    links: [
-      { href: "https://t.me/kondor_pc", label: "Telegram", external: true },
-      {
-        href: "https://instagram.com/kondor_pc",
-        label: "Instagram",
-        external: true,
-      },
-      {
-        href: "https://youtube.com/@kondor-pc",
-        label: "YouTube",
-        external: true,
-      },
-    ],
-  },
-];
+const LEGAL_COLUMN: Column = {
+  title: "Юридична",
+  links: [
+    { href: "/legal/publichna-oferta", label: "Публічна оферта" },
+    {
+      href: "/legal/politika-konfidentsiynosti",
+      label: "Політика конфіденційності",
+    },
+    { href: "/legal/pravova-informatsiya", label: "Реквізити" },
+  ],
+};
 
-const COLUMNS: Column[] = [...NAV_COLUMNS, ...STATIC_COLUMNS];
+function buildSocialColumn(contacts: {
+  telegramChatUrl?: string;
+  instagramUrl?: string;
+  youtubeUrl?: string;
+}): Column | null {
+  const links: FooterLink[] = [];
 
-export function Footer() {
+  if (contacts.telegramChatUrl) {
+    links.push({
+      href: ensureHttps(contacts.telegramChatUrl),
+      label: "Telegram",
+      external: true,
+    });
+  }
+  if (contacts.instagramUrl) {
+    links.push({
+      href: ensureHttps(contacts.instagramUrl),
+      label: "Instagram",
+      external: true,
+    });
+  }
+  if (contacts.youtubeUrl) {
+    links.push({
+      href: ensureHttps(contacts.youtubeUrl),
+      label: "YouTube",
+      external: true,
+    });
+  }
+
+  if (links.length === 0) return null;
+  return { title: "Соцмережі", links };
+}
+
+export async function Footer() {
+  const contacts = await getSiteContacts();
+  const socialColumn = contacts ? buildSocialColumn(contacts) : null;
+  const columns = [
+    ...NAV_COLUMNS,
+    LEGAL_COLUMN,
+    ...(socialColumn ? [socialColumn] : []),
+  ];
+
   return (
     <footer className="relative bg-background pt-[92px] pb-10 md:pb-5">
       <div className="container-site grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-[1.2fr_repeat(5,minmax(0,1fr))]">
@@ -67,31 +92,33 @@ export function Footer() {
             Ігрові ПК під замовлення. Зібрано з гарантією 12 місяців від Kondor
             PC та оригінальною гарантією виробника.
           </p>
-          <div className="text-xs text-muted-foreground">
-            <div>
+          {contacts && (
+            <div className="text-xs text-muted-foreground">
+              <div>
+                <p className="mb-3 text-[14px] font-light leading-[120%] text-white">
+                  Номер телефону
+                </p>
+                <a
+                  href={phoneHref(contacts.phone)}
+                  className="inline-block mb-5.5 transition hover:text-foreground text-[16px] leading-[120%]"
+                >
+                  {formatPhoneDisplay(contacts.phone)}
+                </a>
+              </div>
               <p className="mb-3 text-[14px] font-light leading-[120%] text-white">
-                Номер телефону
+                Email
               </p>
               <a
-                href="tel:+380633631066"
-                className="inline-block mb-5.5 transition hover:text-foreground text-[16px] leading-[120%]"
+                href={`mailto:${contacts.email}`}
+                className="inline-block mb-3.5 transition hover:text-foreground text-[16px] leading-[120%]"
               >
-                +380 63 363 10 66
+                {contacts.email}
               </a>
             </div>
-            <p className="mb-3 text-[14px] font-light leading-[120%] text-white">
-              Email
-            </p>
-            <a
-              href="mailto:info@kondor-pc.ua"
-              className="inline-block mb-3.5 transition hover:text-foreground text-[16px] leading-[120%]"
-            >
-              info@kondor-pc.ua
-            </a>
-          </div>
+          )}
         </div>
 
-        {COLUMNS.map((col) => (
+        {columns.map((col) => (
           <div key={col.title}>
             <div className="mb-3 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
               {col.title}
