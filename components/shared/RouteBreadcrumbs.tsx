@@ -22,7 +22,7 @@ const LABELS: Record<string, string> = {
   promo: "Промо",
   styleguide: "Styleguide",
   oformlennya: "Оформлення",
-  uspikh: "Успіх",
+  uspikh: "Підтвердження замовлення",
 };
 
 function humanizeSlug(segment: string): string {
