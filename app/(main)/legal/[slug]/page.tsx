@@ -5,8 +5,14 @@ import { SiteContactsBlock } from "@/components/shared/SiteContactsBlock";
 import {
   formatIbanDisplay,
   getPaymentRequisites,
+  getPaymentRequisitesSeller,
 } from "@/lib/sanity/paymentRequisites";
-import { getSiteContacts } from "@/lib/sanity/siteContacts";
+import { LegalParagraph } from "@/components/legal/LegalParagraph";
+import {
+  getSiteContactEmail,
+  getSiteContactEmailAndTelegram,
+  getSiteContacts,
+} from "@/lib/sanity/siteContacts";
 
 export async function generateStaticParams() {
   return LEGAL_PAGES.map((p) => ({ slug: p.slug }));
@@ -36,12 +42,20 @@ export default async function LegalPage({
   if (!page) notFound();
 
   const isRequisitesPage = slug === "pravova-informatsiya";
-  const [paymentRequisites, siteContacts] = isRequisitesPage
-    ? await Promise.all([getPaymentRequisites(), getSiteContacts()])
-    : [null, null];
+  const isPrivacyPage = slug === "politika-konfidentsiynosti";
+  const isOfferPage = slug === "publichna-oferta";
+
+  const [paymentRequisites, siteContacts, contactEmail, offerSeller, offerContacts] =
+    await Promise.all([
+      isRequisitesPage ? getPaymentRequisites() : null,
+      isRequisitesPage ? getSiteContacts() : null,
+      isPrivacyPage ? getSiteContactEmail() : null,
+      isOfferPage ? getPaymentRequisitesSeller() : null,
+      isOfferPage ? getSiteContactEmailAndTelegram() : null,
+    ]);
 
   return (
-    <div className="container-prose py-16 md:py-24">
+    <div className="container-site py-16 md:py-24">
       <div className="mb-10">
         <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
           Правова інформація
@@ -62,10 +76,7 @@ export default async function LegalPage({
                 {paymentRequisites.seller}
               </p>
               <p className="mb-3 text-muted-foreground">
-                ЄДРПОУ / РНОКПП:{" "}
-                <span className="tabular font-medium text-foreground">
-                  {paymentRequisites.edrpouOrRnokpp}
-                </span>
+                ЄДРПОУ / РНОКПП: {paymentRequisites.edrpouOrRnokpp}
               </p>
             </section>
             <section>
@@ -90,9 +101,13 @@ export default async function LegalPage({
               </h2>
             )}
             {section.paragraphs.map((p, j) => (
-              <p key={j} className="mb-3 text-muted-foreground">
-                {p}
-              </p>
+              <LegalParagraph
+                key={j}
+                text={p}
+                contactEmail={contactEmail ?? offerContacts?.email}
+                paymentSeller={offerSeller}
+                siteContacts={offerContacts}
+              />
             ))}
             {section.list && (
               <ul className="mt-2 space-y-1.5">

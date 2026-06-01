@@ -14,6 +14,34 @@ const PAYMENT_REQUISITES_QUERY = `
 }
 `;
 
+export async function getPaymentRequisitesSeller(): Promise<Pick<
+  PaymentRequisites,
+  "seller" | "edrpouOrRnokpp"
+> | null> {
+  const row = await contentClient.fetch<Pick<
+    PaymentRequisites,
+    "seller" | "edrpouOrRnokpp"
+  > | null>(
+    `*[_type == "paymentRequisites" && _id == "paymentRequisites"][0]{ seller, edrpouOrRnokpp }`,
+    {},
+    {
+      next: {
+        revalidate: 3600,
+        tags: ["sanity:paymentRequisites"],
+      },
+    },
+  );
+
+  if (!row?.seller?.trim() || !row.edrpouOrRnokpp?.trim()) {
+    return null;
+  }
+
+  return {
+    seller: row.seller.trim(),
+    edrpouOrRnokpp: row.edrpouOrRnokpp.trim(),
+  };
+}
+
 export async function getPaymentRequisites(): Promise<PaymentRequisites | null> {
   const row = await contentClient.fetch<PaymentRequisites | null>(
     PAYMENT_REQUISITES_QUERY,

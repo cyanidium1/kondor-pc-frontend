@@ -14,6 +14,48 @@ const SITE_CONTACTS_QUERY = `
 }
 `;
 
+const SITE_CONTACT_EMAIL_QUERY = `
+*[_type == "siteContacts" && _id == "siteContacts"][0].email
+`;
+
+export async function getSiteContactEmailAndTelegram(): Promise<{
+  email: string;
+  telegram: string;
+} | null> {
+  const row = await contentClient.fetch<{
+    email?: string;
+    telegram?: string;
+  } | null>(
+    `*[_type == "siteContacts" && _id == "siteContacts"][0]{ email, telegram }`,
+    {},
+    {
+      next: { revalidate: 3600, tags: ["sanity:siteContacts"] },
+    },
+  );
+
+  if (!row?.email?.trim() || !row.telegram?.trim()) {
+    return null;
+  }
+
+  return {
+    email: row.email.trim(),
+    telegram: row.telegram.trim(),
+  };
+}
+
+export async function getSiteContactEmail(): Promise<string | null> {
+  const email = await contentClient.fetch<string | null>(
+    SITE_CONTACT_EMAIL_QUERY,
+    {},
+    {
+      next: { revalidate: 3600, tags: ["sanity:siteContacts"] },
+    },
+  );
+
+  const trimmed = email?.trim();
+  return trimmed || null;
+}
+
 export async function getSiteContacts(): Promise<SiteContacts | null> {
   const row = await contentClient.fetch<SiteContacts | null>(
     SITE_CONTACTS_QUERY,
