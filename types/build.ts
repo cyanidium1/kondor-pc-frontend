@@ -82,6 +82,8 @@ export interface Build {
   priceUah: number;
   oldPriceUah?: number;
   status: BuildStatus;
+  /** Показувати в блоці топ-3 на головній (Sanity `showInHomeTop3`). */
+  showInHomeTop3?: boolean;
   assemblyDays: number;
   spec: BuildSpecShort;
   components: BuildComponent[];
