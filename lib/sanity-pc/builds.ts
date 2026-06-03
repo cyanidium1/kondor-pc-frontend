@@ -45,6 +45,7 @@ type RawBuild = {
   name: string;
   tier: Build["tier"];
   status: Build["status"];
+  showInHomeTop3?: boolean;
   shortTagline: string;
   priceUah: number;
   oldPriceUah?: number;
@@ -86,6 +87,7 @@ const BUILDS_QUERY = `
   name,
   tier,
   status,
+  showInHomeTop3,
   shortTagline,
   priceUah,
   oldPriceUah,
@@ -300,6 +302,35 @@ function mapCustomFaq(rows?: RawCustomFaqRow[]): Build["customFaqItems"] {
 }
 
 /** Перші `limit` відгуків у порядку документів збірок (як у списку getAllBuilds). */
+const HOME_TOP_BUILDS_COUNT = 3;
+
+/** Топ-3 на головній: спочатку з `showInHomeTop3` (до 3), решту — з каталогу. */
+export function selectHomeTopBuilds(
+  builds: Build[],
+  count = HOME_TOP_BUILDS_COUNT,
+): Build[] {
+  const picked: Build[] = [];
+  const used = new Set<string>();
+
+  for (const b of builds) {
+    if (!b.showInHomeTop3) continue;
+    if (picked.length >= count) break;
+    picked.push(b);
+    used.add(b.slug);
+  }
+
+  if (picked.length < count) {
+    for (const b of builds) {
+      if (used.has(b.slug)) continue;
+      picked.push(b);
+      used.add(b.slug);
+      if (picked.length >= count) break;
+    }
+  }
+
+  return picked;
+}
+
 export function collectHomepageReviews(builds: Build[], limit = 3): Review[] {
   const out: Review[] = [];
   for (const b of builds) {
@@ -330,6 +361,7 @@ function mapBuild(raw: RawBuild): Build {
     priceUah: raw.priceUah,
     oldPriceUah: raw.oldPriceUah,
     status: raw.status,
+    showInHomeTop3: Boolean(raw.showInHomeTop3),
     assemblyDays: raw.assemblyDays,
     spec: {
       cpu: raw.cpu,

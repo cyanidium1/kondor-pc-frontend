@@ -1,4 +1,3 @@
-import type { Build } from "@/types/build";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { SectionHeader } from "@/components/shared/SectionHeader";
@@ -7,7 +6,11 @@ import { BuildCard } from "@/components/shared/BuildCard";
 import { BuildHeroCard } from "@/components/shared/BuildHeroCard";
 import { ReviewCard } from "@/components/shared/ReviewCard";
 import { FaqBlock } from "@/components/shared/FaqBlock";
-import { collectHomepageReviews, getAllBuilds } from "@/lib/sanity-pc/builds";
+import {
+  collectHomepageReviews,
+  getAllBuilds,
+  selectHomeTopBuilds,
+} from "@/lib/sanity-pc/builds";
 import { getAllGames, makeGameLabelMap } from "@/lib/sanity-pc/games";
 import { getHomePcTasks } from "@/lib/sanity/homePcTasksSection";
 import { faqsByScope } from "@/lib/mock/faqs";
@@ -93,10 +96,7 @@ export default async function HomePage() {
     getHomePcTasks(),
   ]);
   const gameLabels = makeGameLabelMap(gamesCatalog);
-  const top3 = ["vega", "nebula", "orbitra"]
-    .map((slug) => builds.find((b) => b.slug === slug))
-    .filter((b): b is Build => Boolean(b));
-  const topBuilds = top3.length > 0 ? top3 : builds.slice(0, 3);
+  const topBuilds = selectHomeTopBuilds(builds);
   const heroBuild = topBuilds[2] ?? topBuilds[0];
   const homeReviews = collectHomepageReviews(builds, HOME_REVIEWS_LIMIT);
   const hasHomeReviewsSection = homeReviews.length > 0;

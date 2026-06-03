@@ -99,7 +99,7 @@ export function BuildCard({
         </div>
 
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md">
-          <div className="absolute z-20 top-3 left-3 truncate font-heading text-[8px] text-black uppercase leading-none bg-brand-primary rounded-full px-3 py-2">
+          <div className="absolute z-20 top-2 left-2 max-w-[calc(100%-1rem)] whitespace-normal font-heading text-[8px] text-black uppercase leading-tight bg-brand-primary rounded-full px-3 py-2">
             {build.shortTagline}
           </div>
           <ChassisArt className="absolute inset-0 size-full" />
