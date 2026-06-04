@@ -1,3 +1,5 @@
+export const revalidate = 10;
+
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getAllBuilds } from "@/lib/sanity-pc/builds";

@@ -80,15 +80,18 @@ function parseFiltersFromSearchParams(
     budget[1] = DEFAULT_BUDGET[1];
   }
 
+  // Порожній `?games=` = custom без обраних ігор; відсутній ключ = «Усі ігри».
+  const gamesKeyPresent = searchParams?.has("games") ?? false;
   const gamesRaw = searchParams?.get("games")?.trim();
-  const gameSlugs = gamesRaw
-    ? gamesRaw
-        .split(",")
-        .map((s) => s.trim())
-        .filter((slug) => slug && validGameSlugs.has(slug))
+  const gameFilterMode: GameFilterMode = gamesKeyPresent ? "custom" : "all";
+  const gameSlugs = gamesKeyPresent
+    ? (gamesRaw
+        ? gamesRaw
+            .split(",")
+            .map((s) => s.trim())
+            .filter((slug) => slug && validGameSlugs.has(slug))
+        : [])
     : [];
-  const gameFilterMode: GameFilterMode =
-    gameSlugs.length > 0 ? "custom" : "all";
 
   const resRaw = searchParams?.get("res");
   const resolution: "all" | Resolution =
@@ -110,10 +113,7 @@ function filtersToQueryString(filters: CatalogFilters): string {
   if (filters.budget[1] !== DEFAULT_BUDGET[1]) {
     sp.set("max", String(filters.budget[1]));
   }
-  if (
-    filters.gameFilterMode === "custom" &&
-    filters.gameSlugs.length > 0
-  ) {
+  if (filters.gameFilterMode === "custom") {
     sp.set("games", filters.gameSlugs.join(","));
   }
   if (filters.resolution !== "all") {
@@ -213,10 +213,10 @@ export function CatalogClient({
 
   const allGamesSelected = gameFilterMode === "all";
 
-  const toggleGame = useCallback((slug: string) => {
+  const toggleGame = useCallback((slug: string, checked: boolean) => {
     setGameFilterMode("custom");
     setGameSlugs((prev) =>
-      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug],
+      checked ? [...prev, slug] : prev.filter((s) => s !== slug),
     );
   }, []);
 
@@ -349,15 +349,18 @@ export function CatalogClient({
                   </label>
                 </li>
                 {popularGames.map((g) => {
-                  const active =
-                    allGamesSelected || gameSlugs.includes(g.slug);
+                  const active = allGamesSelected
+                    ? true
+                    : gameSlugs.includes(g.slug);
                   return (
                     <li key={g.slug}>
                       <label className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1 text-sm transition hover:bg-accent/50">
                         <Checkbox
                           className={GAME_FILTER_CHECKBOX_CLASS}
                           checked={active}
-                          onCheckedChange={() => toggleGame(g.slug)}
+                          onCheckedChange={(value) =>
+                            toggleGame(g.slug, value === true)
+                          }
                         />
                         <span className="flex-1">{g.ukrName || g.name}</span>
                       </label>
