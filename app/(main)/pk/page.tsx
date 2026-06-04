@@ -3,6 +3,8 @@ import { Suspense } from "react";
 import { getAllBuilds } from "@/lib/sanity-pc/builds";
 import { getAllGames } from "@/lib/sanity-pc/games";
 import { CatalogClient } from "./CatalogClient";
+
+export const revalidate = 60;
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import { TechButtonLink } from "@/components/shared/TechButton";
 import Image from "next/image";

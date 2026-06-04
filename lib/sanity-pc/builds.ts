@@ -1,9 +1,7 @@
 import type { Build, BuildFpsEntry, ConfigGroup, ConfigOption, Review } from "@/types/build";
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import { sanityPcClient } from "./client";
 import { urlForPc } from "./image";
-
-const REVALIDATE_LIST = 300;
-const REVALIDATE_DETAIL = 300;
 
 const DEFAULT_REVIEW_CARD_IMAGE = "/images/home/reviews/review.webp";
 
@@ -394,7 +392,10 @@ export async function getAllBuilds(): Promise<Build[]> {
     BUILDS_QUERY,
     {},
     {
-      next: { revalidate: REVALIDATE_LIST, tags: ["sanity:pc:builds"] },
+      next: {
+        revalidate: SANITY_REVALIDATE_SECONDS,
+        tags: ["sanity:pc:builds"],
+      },
     },
   );
 

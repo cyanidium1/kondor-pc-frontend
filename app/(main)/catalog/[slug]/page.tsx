@@ -12,7 +12,7 @@ import { CatalogCard } from "@/components/catalog/CatalogCard";
 import { groupProducts } from "@/lib/catalog/group";
 import { CatalogDetailView } from "./CatalogDetailView";
 
-export const revalidate = 600;
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   const items = await getCatalogItems();

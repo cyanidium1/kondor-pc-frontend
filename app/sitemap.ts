@@ -31,7 +31,7 @@ const BASE_URL =
  * pre-launch so when we open indexing, Google has the complete URL graph
  * from day one.
  */
-export const revalidate = 600;
+export const revalidate = 60;
 
 type Entry = MetadataRoute.Sitemap[number];
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

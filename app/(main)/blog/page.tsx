@@ -7,7 +7,7 @@ import { getAllBlogPosts, getBlogPageSeo } from "@/lib/sanity/blogFetchers";
 import { buildBlogMetadata } from "@/lib/sanity/blogSeo";
 import { JsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
-export const revalidate = 300;
+export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const pageData = await getBlogPageSeo().catch(() => null);

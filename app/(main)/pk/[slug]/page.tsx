@@ -48,6 +48,8 @@ import { formatPrice } from "@/lib/format";
 import MarqueeLine from "@/components/shared/MarqueeLine";
 import Image from "next/image";
 
+export const revalidate = 60;
+
 export async function generateStaticParams() {
   return getBuildSlugs();
 }

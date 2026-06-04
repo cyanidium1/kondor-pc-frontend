@@ -1,6 +1,5 @@
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import { contentClient, contentImageUrl } from "./contentClient";
-
-const REVALIDATE = 300;
 
 export type HomePcTaskCard = {
   name: string;
@@ -45,7 +44,7 @@ export async function getHomePcTasks(): Promise<HomePcTaskCard[]> {
     {},
     {
       next: {
-        revalidate: REVALIDATE,
+        revalidate: SANITY_REVALIDATE_SECONDS,
         tags: ["sanity:homePcTasksSection"],
       },
     },

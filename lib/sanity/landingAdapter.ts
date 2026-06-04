@@ -16,6 +16,7 @@ import {
   contentClient,
   contentImageUrl,
 } from "@/lib/sanity/contentClient";
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import {
   LANDING_PAGE_BY_SLUG,
   LANDING_SLUGS_BY_PREFIX,
@@ -163,7 +164,7 @@ export async function fetchLandingPageBySlug(
     {slug, prefix},
     {
       next: {
-        revalidate: 60,
+        revalidate: SANITY_REVALIDATE_SECONDS,
         tags: [`landing:${prefix}:${slug}`, "landings:all"],
       },
     },
@@ -197,7 +198,12 @@ export async function fetchLandingSlugs(
     await contentClient.fetch(
       LANDING_SLUGS_BY_PREFIX,
       {prefix},
-      {next: {tags: ["landings:all", `landings:${prefix}`]}},
+      {
+        next: {
+          revalidate: SANITY_REVALIDATE_SECONDS,
+          tags: ["landings:all", `landings:${prefix}`],
+        },
+      },
     );
   const now = Date.now();
   return rows

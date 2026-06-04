@@ -16,7 +16,7 @@ import {
 } from "@/lib/sanity/blogFetchers";
 import { blogCanonicalUrl, buildBlogMetadata } from "@/lib/sanity/blogSeo";
 
-export const revalidate = 600;
+export const revalidate = 60;
 export const dynamicParams = true;
 
 interface ArticlePageProps {

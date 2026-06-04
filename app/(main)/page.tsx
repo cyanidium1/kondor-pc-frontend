@@ -35,7 +35,7 @@ import {
 import Image from "next/image";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 
-export const revalidate = 300;
+export const revalidate = 60;
 
 const BUDGET_BUCKETS = [
   { label: "До 40 000 ₴", href: "/pk?max=40" },
