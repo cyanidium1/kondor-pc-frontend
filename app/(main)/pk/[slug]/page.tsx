@@ -42,14 +42,13 @@ import {
   getSimilarBuilds,
 } from "@/lib/sanity-pc/builds";
 import { getAllGames, makeGameLabelMap, makeGameShortLabelMap } from "@/lib/sanity-pc/games";
-import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
-
-export const revalidate = SANITY_REVALIDATE_SECONDS;
 import { FAQS } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
 import MarqueeLine from "@/components/shared/MarqueeLine";
 import Image from "next/image";
+
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   return getBuildSlugs();

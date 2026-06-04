@@ -11,9 +11,7 @@ export const metadata: Metadata = {
 };
 
 // Revalidate the whole listing every 5 minutes — aligns with fetcher-level cache.
-import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
-
-export const revalidate = SANITY_REVALIDATE_SECONDS;
+export const revalidate = 60;
 
 export default async function CatalogPage() {
   const [categories, items] = await Promise.all([
