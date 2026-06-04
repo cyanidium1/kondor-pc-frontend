@@ -11,7 +11,11 @@ import {
   getAllBuilds,
   selectHomeTopBuilds,
 } from "@/lib/sanity-pc/builds";
-import { getAllGames, makeGameLabelMap } from "@/lib/sanity-pc/games";
+import {
+  getAllGames,
+  makeGameLabelMap,
+  makeGameShortLabelMap,
+} from "@/lib/sanity-pc/games";
 import { getHomePcTasks } from "@/lib/sanity/homePcTasksSection";
 import { faqsByScope } from "@/lib/mock/faqs";
 import {
@@ -96,6 +100,7 @@ export default async function HomePage() {
     getHomePcTasks(),
   ]);
   const gameLabels = makeGameLabelMap(gamesCatalog);
+  const gameShortLabels = makeGameShortLabelMap(gamesCatalog);
   const topBuilds = selectHomeTopBuilds(builds);
   const heroBuild = topBuilds[2] ?? topBuilds[0];
   const homeReviews = collectHomepageReviews(builds, HOME_REVIEWS_LIMIT);
@@ -242,6 +247,7 @@ export default async function HomePage() {
                 build={build}
                 variant="full"
                 gameLabels={gameLabels}
+                gameShortLabels={gameShortLabels}
                 highlightGames={["cs2", "warzone", "gta5"]}
                 badge={i === 1 ? "Хіт" : undefined}
               />

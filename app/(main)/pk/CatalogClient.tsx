@@ -16,6 +16,7 @@ import { BuildCard } from "@/components/shared/BuildCard";
 import { TechButton, TechButtonLink } from "@/components/shared/TechButton";
 import { buttonVariants } from "@/components/ui/button";
 import { formatUah } from "@/lib/format";
+import { makeGameShortLabelMap } from "@/lib/sanity-pc/games";
 import type { Build, Game, Resolution } from "@/types/build";
 import { cn } from "@/lib/utils";
 import ArrowInCircleIcon from "@/components/icons/ArrowInCircleIcon";
@@ -144,6 +145,7 @@ export function CatalogClient({
   const gameLabels = Object.fromEntries(
     games.map((g) => [g.slug, g.ukrName || g.name]),
   );
+  const gameShortLabels = makeGameShortLabelMap(games);
   const validGameSlugs = useMemo(
     () => new Set(games.map((g) => g.slug)),
     [games],
@@ -464,6 +466,7 @@ export function CatalogClient({
                 build={b}
                 variant="full"
                 gameLabels={gameLabels}
+                gameShortLabels={gameShortLabels}
                 highlightGames={highlightGames}
               />
             ))}

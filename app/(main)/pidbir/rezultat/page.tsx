@@ -4,7 +4,11 @@ import { buttonVariants } from "@/components/ui/button";
 import { BuildCard } from "@/components/shared/BuildCard";
 import { parseBudget, parseGames, pickBuilds, BADGE_META } from "@/lib/pidbir";
 import { getAllBuilds } from "@/lib/sanity-pc/builds";
-import { getAllGames, makeGameLabelMap } from "@/lib/sanity-pc/games";
+import {
+  getAllGames,
+  makeGameLabelMap,
+  makeGameShortLabelMap,
+} from "@/lib/sanity-pc/games";
 import type { Resolution } from "@/types/build";
 import { cn } from "@/lib/utils";
 import { TechButtonLink } from "@/components/shared/TechButton";
@@ -25,6 +29,7 @@ export default async function ResultPage({
   const resolution = (sp.resolution ?? undefined) as Resolution | undefined;
   const [builds, gamesCatalog] = await Promise.all([getAllBuilds(), getAllGames()]);
   const gameLabels = makeGameLabelMap(gamesCatalog);
+  const gameShortLabels = makeGameShortLabelMap(gamesCatalog);
 
   const { results, fallback } = pickBuilds(
     {
@@ -92,6 +97,7 @@ export default async function ResultPage({
                   build={r.build}
                   variant="full"
                   gameLabels={gameLabels}
+                  gameShortLabels={gameShortLabels}
                   highlightGames={
                     games.length > 0 ? games : ["cs2", "warzone", "cyberpunk"]
                   }
