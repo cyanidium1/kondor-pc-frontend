@@ -128,6 +128,9 @@ function filtersToQueryString(filters: CatalogFilters): string {
 
 const DEFAULT_HIGHLIGHT_GAMES = ["cs2", "warzone", "cyberpunk"] as const;
 
+const GAME_FILTER_CHECKBOX_CLASS =
+  "border-white bg-transparent data-checked:border-primary data-checked:bg-primary";
+
 export function CatalogClient({
   builds,
   games,
@@ -338,6 +341,7 @@ export function CatalogClient({
                 <li>
                   <label className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1 text-sm font-medium transition hover:bg-accent/50">
                     <Checkbox
+                      className={GAME_FILTER_CHECKBOX_CLASS}
                       checked={allGamesSelected}
                       onCheckedChange={toggleAllGames}
                     />
@@ -351,6 +355,7 @@ export function CatalogClient({
                     <li key={g.slug}>
                       <label className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1 text-sm transition hover:bg-accent/50">
                         <Checkbox
+                          className={GAME_FILTER_CHECKBOX_CLASS}
                           checked={active}
                           onCheckedChange={() => toggleGame(g.slug)}
                         />
