@@ -1,3 +1,4 @@
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import { sanityClient } from "./client";
 import {
   ALL_CATEGORIES,
@@ -17,12 +18,12 @@ import type {
  * via its fetch layer; we add explicit `revalidate` hints for clarity.
  */
 
-const REVALIDATE_LIST = 300; // 5 min
-const REVALIDATE_DETAIL = 600; // 10 min
-
 export async function getAllCategories(): Promise<CategorySummary[]> {
   return sanityClient.fetch(ALL_CATEGORIES, {}, {
-    next: { revalidate: REVALIDATE_LIST, tags: ["sanity:categories"] },
+    next: {
+      revalidate: SANITY_REVALIDATE_SECONDS,
+      tags: ["sanity:categories"],
+    },
   });
 }
 
@@ -33,7 +34,7 @@ export async function getCatalogItems(
     CATALOG_ITEMS,
     { categorySlugs },
     {
-      next: { revalidate: REVALIDATE_LIST, tags: ["sanity:items"] },
+      next: { revalidate: SANITY_REVALIDATE_SECONDS, tags: ["sanity:items"] },
     },
   );
 }
@@ -46,7 +47,7 @@ export async function getItemBySlug(
     { slug },
     {
       next: {
-        revalidate: REVALIDATE_DETAIL,
+        revalidate: SANITY_REVALIDATE_SECONDS,
         tags: ["sanity:items", `sanity:item:${slug}`],
       },
     },
@@ -61,13 +62,13 @@ export async function getSimilarItems(
     SIMILAR_ITEMS,
     { slug, categorySlug },
     {
-      next: { revalidate: REVALIDATE_LIST, tags: ["sanity:items"] },
+      next: { revalidate: SANITY_REVALIDATE_SECONDS, tags: ["sanity:items"] },
     },
   );
 }
 
 export async function getAddonItems(): Promise<CatalogProductListItem[]> {
   return sanityClient.fetch(ADDON_ITEMS, {}, {
-    next: { revalidate: REVALIDATE_LIST, tags: ["sanity:items", "sanity:addons"] },
+    next: { revalidate: SANITY_REVALIDATE_SECONDS, tags: ["sanity:items", "sanity:addons"] },
   });
 }

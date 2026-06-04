@@ -1,3 +1,4 @@
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import { contentClient } from "./contentClient";
 
 export interface PaymentRequisites {
@@ -26,7 +27,7 @@ export async function getPaymentRequisitesSeller(): Promise<Pick<
     {},
     {
       next: {
-        revalidate: 3600,
+        revalidate: SANITY_REVALIDATE_SECONDS,
         tags: ["sanity:paymentRequisites"],
       },
     },
@@ -48,7 +49,7 @@ export async function getPaymentRequisites(): Promise<PaymentRequisites | null> 
     {},
     {
       next: {
-        revalidate: 3600,
+        revalidate: SANITY_REVALIDATE_SECONDS,
         tags: ["sanity:paymentRequisites"],
       },
     },

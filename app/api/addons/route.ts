@@ -9,7 +9,9 @@ import { getAddonItems } from "@/lib/sanity/fetchers";
  * Consumers (CartCrossSell) call `/api/addons` instead of Sanity directly
  * to avoid CORS / CSP issues and to benefit from Next's cache.
  */
-export const revalidate = 300;
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
+
+export const revalidate = SANITY_REVALIDATE_SECONDS;
 
 export async function GET() {
   const items = await getAddonItems();

@@ -9,7 +9,9 @@ import {LandingPageBody} from "@/components/landings/LandingPageBody";
 
 // ISR. Promo pages can have `expiresAt` set in Sanity; expired ones drop
 // out of `generateStaticParams` automatically (handled in fetchLandingSlugs).
-export const revalidate = 60;
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
+
+export const revalidate = SANITY_REVALIDATE_SECONDS;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {

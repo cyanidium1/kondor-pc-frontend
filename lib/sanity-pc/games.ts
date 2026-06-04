@@ -1,4 +1,5 @@
 import type { Game } from "@/types/build";
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import { sanityPcClient } from "./client";
 import { urlForPc } from "./image";
 
@@ -39,7 +40,11 @@ function toImageUrl(image: unknown): string | undefined {
 }
 
 export async function getAllGames(): Promise<Game[]> {
-  const rows = await sanityPcClient.fetch<RawGame[]>(GAMES_QUERY, {}, { next: { revalidate: 300 } });
+  const rows = await sanityPcClient.fetch<RawGame[]>(
+    GAMES_QUERY,
+    {},
+    { next: { revalidate: SANITY_REVALIDATE_SECONDS } },
+  );
   return rows
     .filter((g) => Boolean(g.slug && g.name))
     .map((g) => ({

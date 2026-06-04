@@ -2,6 +2,7 @@
  * Blog server-side fetchers. Source: kondor-pc-admin Sanity (project `if6dzz62`).
  * Mirrors the pattern used by landingAdapter — tagged caches keep ISR coherent.
  */
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import { contentClient } from "./contentClient";
 import {
   ALL_BLOG_POSTS_QUERY,
@@ -11,15 +12,12 @@ import {
 } from "./blogQueries";
 import type { BlogPost, BlogPostPreview, PageSeo } from "@/types/blogPost";
 
-const REVALIDATE_LIST = 300;
-const REVALIDATE_DETAIL = 600;
-
 export async function getAllBlogPosts(): Promise<BlogPostPreview[]> {
   const rows = await contentClient.fetch<BlogPostPreview[]>(
     ALL_BLOG_POSTS_QUERY,
     {},
     {
-      next: { revalidate: REVALIDATE_LIST, tags: ["blog:posts"] },
+      next: { revalidate: SANITY_REVALIDATE_SECONDS, tags: ["blog:posts"] },
     },
   );
   return rows ?? [];
@@ -42,7 +40,7 @@ export async function getBlogPostBySlug(
     { slug },
     {
       next: {
-        revalidate: REVALIDATE_DETAIL,
+        revalidate: SANITY_REVALIDATE_SECONDS,
         tags: ["blog:posts", `blog:post:${slug}`],
       },
     },
@@ -54,7 +52,7 @@ export async function getBlogPageSeo(): Promise<{ seo: PageSeo | null } | null> 
     BLOG_PAGE_QUERY,
     {},
     {
-      next: { revalidate: REVALIDATE_LIST, tags: ["blog:page"] },
+      next: { revalidate: SANITY_REVALIDATE_SECONDS, tags: ["blog:page"] },
     },
   );
 }

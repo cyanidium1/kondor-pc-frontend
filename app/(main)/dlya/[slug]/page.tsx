@@ -9,7 +9,9 @@ import {
 import {LandingPageBody} from "@/components/landings/LandingPageBody";
 
 // ISR. Sanity webhook will revalidate by tag later (Sprint 3).
-export const revalidate = 60;
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
+
+export const revalidate = SANITY_REVALIDATE_SECONDS;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {

@@ -35,7 +35,9 @@ import {
 import Image from "next/image";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 
-export const revalidate = 300;
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
+
+export const revalidate = SANITY_REVALIDATE_SECONDS;
 
 const BUDGET_BUCKETS = [
   { label: "До 40 000 ₴", href: "/pk?max=40" },

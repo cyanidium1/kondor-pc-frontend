@@ -1,10 +1,11 @@
-export const revalidate = 10;
-
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getAllBuilds } from "@/lib/sanity-pc/builds";
 import { getAllGames } from "@/lib/sanity-pc/games";
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import { CatalogClient } from "./CatalogClient";
+
+export const revalidate = SANITY_REVALIDATE_SECONDS;
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import { TechButtonLink } from "@/components/shared/TechButton";
 import Image from "next/image";

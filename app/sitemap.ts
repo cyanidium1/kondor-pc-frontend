@@ -8,6 +8,7 @@ import {
   getAllBlogPostSlugs,
   getAllBlogPosts,
 } from "@/lib/sanity/blogFetchers";
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://kondor-pc.ua";
@@ -31,7 +32,7 @@ const BASE_URL =
  * pre-launch so when we open indexing, Google has the complete URL graph
  * from day one.
  */
-export const revalidate = 600;
+export const revalidate = SANITY_REVALIDATE_SECONDS;
 
 type Entry = MetadataRoute.Sitemap[number];
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

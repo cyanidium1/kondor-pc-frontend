@@ -1,3 +1,4 @@
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import { contentClient } from "./contentClient";
 
 export interface SiteContacts {
@@ -8,8 +9,6 @@ export interface SiteContacts {
   youtubeUrl?: string;
   instagramUrl?: string;
 }
-
-const REVALIDATE = 300;
 
 const SITE_CONTACTS_QUERY = `
 *[_type == "siteContacts" && _id == "siteContacts"][0]{
@@ -42,7 +41,7 @@ export async function getSiteContactEmailAndTelegram(): Promise<{
     `*[_type == "siteContacts" && _id == "siteContacts"][0]{ email, telegram }`,
     {},
     {
-      next: { revalidate: REVALIDATE, tags: ["sanity:siteContacts"] },
+      next: { revalidate: SANITY_REVALIDATE_SECONDS, tags: ["sanity:siteContacts"] },
     },
   );
 
@@ -61,7 +60,7 @@ export async function getSiteContactEmail(): Promise<string | null> {
     SITE_CONTACT_EMAIL_QUERY,
     {},
     {
-      next: { revalidate: REVALIDATE, tags: ["sanity:siteContacts"] },
+      next: { revalidate: SANITY_REVALIDATE_SECONDS, tags: ["sanity:siteContacts"] },
     },
   );
 
@@ -74,7 +73,7 @@ export async function getSiteContacts(): Promise<SiteContacts | null> {
     SITE_CONTACTS_QUERY,
     {},
     {
-      next: { revalidate: REVALIDATE, tags: ["sanity:siteContacts"] },
+      next: { revalidate: SANITY_REVALIDATE_SECONDS, tags: ["sanity:siteContacts"] },
     },
   );
 
