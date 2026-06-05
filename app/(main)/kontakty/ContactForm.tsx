@@ -9,6 +9,7 @@ import {
   type ContactFormValues,
 } from "@/lib/validations/contact";
 import { sendTelegramMessage } from "@/lib/telegram/client";
+import { TG } from "@/lib/telegram/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -30,10 +31,10 @@ export function ContactForm() {
     setStatus("idle");
 
     const text =
-      `<b>Заявка з контактної форми</b>\n` +
-      `<b>Ім'я:</b> ${values.name.trim()}\n` +
-      `<b>Телефон:</b> ${values.phone.trim()}\n` +
-      `<b>Повідомлення:</b> ${values.message.trim()}`;
+      `${TG.form} <b>Заявка з контактної форми</b>\n\n` +
+      `${TG.name} <b>Ім'я:</b> ${values.name.trim()}\n` +
+      `${TG.phone} <b>Телефон:</b> ${values.phone.trim()}\n` +
+      `${TG.message} <b>Повідомлення:</b> ${values.message.trim()}`;
 
     try {
       await sendTelegramMessage(text);
