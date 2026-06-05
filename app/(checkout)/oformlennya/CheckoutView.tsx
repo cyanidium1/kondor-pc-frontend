@@ -125,8 +125,6 @@ const PAYMENT_OPTIONS: {
   },
 ];
 
-const COD_LIMIT = 50000;
-
 export function CheckoutView() {
   const cartHydrated = useCartStore((s) => s.hydrated);
   const { items: cartItems, totalUah, clear } = useCartStore();
@@ -242,7 +240,7 @@ export function CheckoutView() {
       .slice(0, 15);
   }, [branchQuery, branches, branchesLoading, cityRef]);
 
-  const codDisabled = cartTotal > COD_LIMIT || deliveryMethod === "self_pickup";
+  const codDisabled = deliveryMethod === "self_pickup";
 
   useEffect(() => {
     if (paymentMethod === "cod" && codDisabled) {
@@ -595,9 +593,7 @@ export function CheckoutView() {
                     )}
                     {opt.value === "cod" && codDisabled && (
                       <div className="mt-1 text-xs text-destructive">
-                        {cartTotal > COD_LIMIT
-                          ? `Доступно лише до ${formatPrice(COD_LIMIT)}`
-                          : "Недоступно при самовивозі"}
+                        Недоступно при самовивозі
                       </div>
                     )}
                   </div>
