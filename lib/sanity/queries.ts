@@ -76,7 +76,7 @@ export const ALL_CATEGORIES = groq`
   slug,
   pos,
   "image": image{..., "alt": alt},
-  "itemsCount": count(items)
+  "itemsCount": count(*[_type == "item" && cat._ref == ^._id])
 }
 `;
 
