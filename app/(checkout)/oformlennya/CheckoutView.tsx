@@ -66,14 +66,9 @@ const PAYMENT_OPTIONS: {
   title: string;
   note?: string;
   group?: "main" | "other";
+  /** false — не показувати в UI (логіка та типи лишаються). */
+  visible?: boolean;
 }[] = [
-  {
-    value: "cod",
-    icon: Package,
-    title: "Оплата при отриманні на НП",
-    note: "Комісія НП: 2% + 20 ₴",
-    group: "main",
-  },
   {
     value: "monopay",
     icon: CreditCard,
@@ -82,11 +77,19 @@ const PAYMENT_OPTIONS: {
     group: "main",
   },
   {
+    value: "cod",
+    icon: Package,
+    title: "Оплата при отриманні на НП",
+    note: "Комісія НП: 2% + 20 ₴",
+    group: "main",
+  },
+  {
     value: "monobank_parts",
     icon: Wallet,
     title: "Частинами Monobank",
     note: "4 платежі без %",
     group: "main",
+    visible: false,
   },
   {
     value: "privat_parts",
@@ -94,6 +97,7 @@ const PAYMENT_OPTIONS: {
     title: "Частинами ПриватБанк",
     note: "до 9 платежів",
     group: "main",
+    visible: false,
   },
   {
     value: "pumb_parts",
@@ -101,6 +105,7 @@ const PAYMENT_OPTIONS: {
     title: "Частинами ПУМБ",
     note: "до 12 місяців",
     group: "main",
+    visible: false,
   },
   {
     value: "iban_individual",
@@ -124,6 +129,12 @@ const PAYMENT_OPTIONS: {
     group: "other",
   },
 ];
+
+function visiblePaymentOptions(group: "main" | "other") {
+  return PAYMENT_OPTIONS.filter(
+    (o) => o.group === group && o.visible !== false,
+  );
+}
 
 export function CheckoutView() {
   const cartHydrated = useCartStore((s) => s.hydrated);
@@ -152,7 +163,7 @@ export function CheckoutView() {
     defaultValues: {
       customerPhone: "+380",
       deliveryMethod: "np_branch",
-      paymentMethod: "monobank_parts",
+      paymentMethod: "monopay",
     },
   });
 
@@ -244,7 +255,14 @@ export function CheckoutView() {
 
   useEffect(() => {
     if (paymentMethod === "cod" && codDisabled) {
-      setValue("paymentMethod", "monobank_parts");
+      setValue("paymentMethod", "monopay");
+      return;
+    }
+    const isHidden = PAYMENT_OPTIONS.some(
+      (o) => o.value === paymentMethod && o.visible === false,
+    );
+    if (isHidden) {
+      setValue("paymentMethod", "monopay");
     }
   }, [codDisabled, paymentMethod, setValue]);
 
@@ -537,7 +555,7 @@ export function CheckoutView() {
         <section className="rounded-lg border border-border bg-surface p-6">
           <SectionNumber n="3" title="Спосіб оплати" />
           <div className="mt-5 space-y-3">
-            {PAYMENT_OPTIONS.filter((o) => o.group === "main").map((opt) => {
+            {visiblePaymentOptions("main").map((opt) => {
               const active = paymentMethod === opt.value;
               const disabled = opt.value === "cod" && codDisabled;
               return (
@@ -605,7 +623,7 @@ export function CheckoutView() {
             ─── Інші способи ───
           </div>
           <div className="mt-3 grid gap-2 sm:grid-cols-3">
-            {PAYMENT_OPTIONS.filter((o) => o.group === "other").map((opt) => {
+            {visiblePaymentOptions("other").map((opt) => {
               const active = paymentMethod === opt.value;
               return (
                 <label
