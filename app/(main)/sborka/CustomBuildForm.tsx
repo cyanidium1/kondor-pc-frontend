@@ -16,6 +16,7 @@ import { Slider } from "@/components/ui/slider";
 import { TechButton } from "@/components/shared/TechButton";
 import { cn } from "@/lib/utils";
 import { formatUah } from "@/lib/format";
+import { sendTelegramMessage } from "@/lib/telegram/client";
 import { useState } from "react";
 
 const TASKS = [
@@ -40,9 +41,17 @@ const CHANNELS = [
   { value: "phone", label: "Дзвінок" },
 ] as const;
 
+function labelOf<T extends { value: string; label: string }>(
+  items: readonly T[],
+  value: string,
+) {
+  return items.find((item) => item.value === value)?.label ?? value;
+}
+
 export function CustomBuildForm() {
   const router = useRouter();
   const [budgetRange, setBudgetRange] = useState<[number, number]>([40, 80]);
+  const [submitError, setSubmitError] = useState(false);
 
   const {
     register,
@@ -67,11 +76,31 @@ export function CustomBuildForm() {
   const channel = watch("channel");
 
   async function onSubmit(values: CustomBuildValues) {
+    setSubmitError(false);
+
     const orderNumber = `UA-CB-${new Date().toISOString().slice(2, 10).replace(/-/g, "")}-${Math.floor(Math.random() * 9000 + 1000)}`;
-    console.log("[custom-build:stub]", { orderNumber, ...values });
-    router.push(
-      `/oformlennya/uspikh?order=${orderNumber}&payment=iban_individual`,
-    );
+
+    const text =
+      `<b>Заявка на кастомну збірку</b>\n` +
+      `<b>Номер:</b> ${orderNumber}\n` +
+      `<b>Ім'я:</b> ${values.customerName.trim()}\n` +
+      `<b>Телефон:</b> ${values.customerPhone.trim()}\n` +
+      `<b>Telegram:</b> ${values.customerTelegram.trim()}\n` +
+      `<b>Бюджет:</b> ${formatUah(values.budgetMin)} ₴ — ${formatUah(values.budgetMax)} ₴\n` +
+      `<b>Задача:</b> ${labelOf(TASKS, values.task)}\n` +
+      `<b>Ігри/програми:</b> ${values.games?.trim() || "—"}\n` +
+      `<b>Побажання:</b> ${values.wishes?.trim() || "—"}\n` +
+      `<b>Зручний час:</b> ${labelOf(TIMES, values.preferredTime)}\n` +
+      `<b>Месенджер:</b> ${labelOf(CHANNELS, values.channel)}`;
+
+    try {
+      await sendTelegramMessage(text);
+      router.push(
+        `/oformlennya/uspikh?order=${orderNumber}&payment=iban_individual`,
+      );
+    } catch {
+      setSubmitError(true);
+    }
   }
 
   return (
@@ -250,6 +279,11 @@ export function CustomBuildForm() {
         </div>
       </div>
 
+      {submitError && (
+        <p className="text-center text-sm text-destructive">
+          Не вдалося надіслати заявку. Спробуй ще раз або напиши нам у Telegram.
+        </p>
+      )}
       <TechButton
         type="submit"
         size="sm"

@@ -66,12 +66,14 @@ const PAYMENT = [
     icon: Wallet,
     title: "Monobank Частинами",
     text: "3 платежі без %. Оформлення онлайн 2 хв.",
+    visible: false,
   },
 
   {
     icon: Wallet,
     title: "ПУМБ Частинами",
     text: "До 24 місяців (% залежить від терміну).",
+    visible: false,
   },
 
   {
@@ -82,12 +84,13 @@ const PAYMENT = [
   {
     icon: Package,
     title: "Оплата при отриманні на НП",
-    text: "Для замовлень до 50 000 ₴. Комісія НП: 2% + 20 ₴.",
+    text: "Комісія НП: 2% + 20 ₴.",
   },
   {
     icon: Wallet,
     title: "ПриватБанк Оплата частинами",
     text: "До 24 місяців (% залежить від терміну).",
+    visible: false,
   },
   {
     icon: Banknote,
@@ -101,6 +104,10 @@ const PAYMENT = [
   },
 ];
 
+function visiblePaymentOptions() {
+  return PAYMENT.filter((p) => p.visible !== false);
+}
+
 const BUSINESS_DOCS = [
   "Рахунок на оплату",
   "Договір поставки",
@@ -112,6 +119,7 @@ export default async function DeliveryPaymentPage() {
   const contactEmail = await getSiteContactEmail();
   const faqs = [...faqsByScope("delivery"), ...faqsByScope("payment")];
   const items = faqs.length > 0 ? faqs : FAQS.slice(0, 5);
+  const paymentOptions = visiblePaymentOptions();
 
   return (
     <>
@@ -295,7 +303,7 @@ export default async function DeliveryPaymentPage() {
           {" "}
           <SectionHeader
             kicker="02 · Оплата"
-            title="8 способів оплати"
+            title={`${paymentOptions.length} способів оплати`}
             subtitle="Вибирай при оформленні замовлення — умови відображаються прямо в чекауті."
             className="mb-[92px]"
             titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 lg:text-[36px]"
@@ -305,7 +313,7 @@ export default async function DeliveryPaymentPage() {
         <Reveal delay={80}>
           {" "}
           <div className="grid gap-3 sm:grid-cols-2">
-            {PAYMENT.map((p) => (
+            {paymentOptions.map((p) => (
               <div
                 key={p.title}
                 className="flex items-start gap-3 rounded-lg border border-border bg-surface p-5"
