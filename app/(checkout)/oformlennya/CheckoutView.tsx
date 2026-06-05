@@ -13,7 +13,13 @@ import { TechButton } from "@/components/shared/TechButton";
 import Image from "next/image";
 import { ChassisArt } from "@/components/brand/ChassisArt";
 import { SKU_ACCENTS } from "@/lib/sku-accents";
-import { useCartStore, lineKey as cartLineKey } from "@/lib/cartStore";
+import {
+  useCartStore,
+  lineKey as cartLineKey,
+  type CartItem,
+} from "@/lib/cartStore";
+import { sendTelegramMessage } from "@/lib/telegram/client";
+import { TG } from "@/lib/telegram/icons";
 import {
   orderSchema,
   type OrderFormValues,
@@ -136,6 +142,60 @@ function visiblePaymentOptions(group: "main" | "other") {
   );
 }
 
+function optionTitle<T extends { value: string; title: string }>(
+  items: readonly T[],
+  value: string,
+) {
+  return items.find((item) => item.value === value)?.title ?? value;
+}
+
+function formatDeliveryDetails(values: OrderFormValues): string {
+  if (values.deliveryMethod === "self_pickup") return "";
+
+  const parts: string[] = [];
+  if (values.deliveryCity?.trim()) {
+    parts.push(`${TG.location} <b>Місто:</b> ${values.deliveryCity.trim()}`);
+  }
+  if (
+    values.deliveryMethod === "np_branch" &&
+    values.deliveryBranchNumber?.trim()
+  ) {
+    parts.push(
+      `${TG.location} <b>Відділення:</b> №${values.deliveryBranchNumber.trim()}`,
+    );
+  }
+  if (
+    values.deliveryMethod === "np_courier" &&
+    values.deliveryAddress?.trim()
+  ) {
+    parts.push(
+      `${TG.location} <b>Адреса:</b> ${values.deliveryAddress.trim()}`,
+    );
+  }
+
+  return parts.length ? `${parts.join("\n")}\n` : "";
+}
+
+function formatCartItemsForTelegram(items: CartItem[]): string {
+  return items
+    .map((item, index) => {
+      const lines = [
+        `${index + 1}. <b>${item.name}</b> × ${item.quantity} — ${formatPrice(item.unitPriceUah * item.quantity)}`,
+      ];
+
+      if (item.colorName) {
+        lines.push(`   Колір: ${item.colorName}`);
+      }
+
+      item.options?.forEach((option) => {
+        lines.push(`   ${option.groupLabel}: ${option.optionLabel}`);
+      });
+
+      return lines.join("\n");
+    })
+    .join("\n");
+}
+
 export function CheckoutView() {
   const cartHydrated = useCartStore((s) => s.hydrated);
   const { items: cartItems, totalUah, clear } = useCartStore();
@@ -150,6 +210,7 @@ export function CheckoutView() {
   const [branchesLoading, setBranchesLoading] = useState(false);
   const [branchQuery, setBranchQuery] = useState("");
   const [branchOpen, setBranchOpen] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   const {
     register,
@@ -267,18 +328,38 @@ export function CheckoutView() {
   }, [codDisabled, paymentMethod, setValue]);
 
   async function onSubmit(values: OrderFormValues) {
+    setSubmitError(false);
+
     const orderNumber = `UA-${new Date().toISOString().slice(2, 10).replace(/-/g, "")}-${String(Math.floor(Math.random() * 9000 + 1000))}`;
-    // Stub: real server action will create Sanity Order + notify KeyCRM/Telegram/Sheets.
-    console.log("[order:stub]", {
-      orderNumber,
-      ...values,
-      items: cartItems,
-      totalUah: cartTotal,
-    });
-    clear();
-    router.push(
-      `/oformlennya/uspikh?order=${orderNumber}&payment=${values.paymentMethod}`,
-    );
+
+    const text =
+      `${TG.form} <b>Нове замовлення</b>\n` +
+      `${TG.number} <b>Номер:</b> ${orderNumber}\n\n` +
+      `${TG.name} <b>Ім'я:</b> ${values.customerName.trim()}\n` +
+      `${TG.phone} <b>Телефон:</b> ${values.customerPhone.trim()}\n` +
+      `${TG.email} <b>Email:</b> ${values.customerEmail.trim()}\n\n` +
+      `${TG.delivery} <b>Доставка:</b> ${optionTitle(DELIVERY_OPTIONS, values.deliveryMethod)}\n` +
+      formatDeliveryDetails(values) +
+      `${TG.payment} <b>Оплата:</b> ${optionTitle(PAYMENT_OPTIONS, values.paymentMethod)}\n` +
+      (values.customerComment?.trim()
+        ? `${TG.message} <b>Коментар:</b> ${values.customerComment.trim()}\n`
+        : "") +
+      `\n${TG.cart} <b>Товари:</b>\n` +
+      formatCartItemsForTelegram(cartItems) +
+      `\n${TG.total} <b>Сума:</b> ${formatPrice(cartTotal)}` +
+      (values.paymentMethod === "monopay"
+        ? `\n${TG.total} <b>До сплати (з комісією):</b> ${formatPrice(Math.round(cartTotal * 1.013))}`
+        : "");
+
+    try {
+      await sendTelegramMessage(text);
+      clear();
+      router.push(
+        `/oformlennya/uspikh?order=${orderNumber}&payment=${values.paymentMethod}`,
+      );
+    } catch {
+      setSubmitError(true);
+    }
   }
 
   if (!cartHydrated) {
@@ -698,6 +779,12 @@ export function CheckoutView() {
               </div>
             )}
 
+            {submitError && (
+              <p className="text-center text-sm text-destructive">
+                Не вдалося оформити замовлення. Спробуй ще раз або напиши нам у
+                Telegram.
+              </p>
+            )}
             <TechButton
               type="submit"
               size="lg"

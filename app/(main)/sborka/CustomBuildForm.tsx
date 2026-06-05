@@ -17,6 +17,7 @@ import { TechButton } from "@/components/shared/TechButton";
 import { cn } from "@/lib/utils";
 import { formatUah } from "@/lib/format";
 import { sendTelegramMessage } from "@/lib/telegram/client";
+import { TG } from "@/lib/telegram/icons";
 import { useState } from "react";
 
 const TASKS = [
@@ -81,17 +82,17 @@ export function CustomBuildForm() {
     const orderNumber = `UA-CB-${new Date().toISOString().slice(2, 10).replace(/-/g, "")}-${Math.floor(Math.random() * 9000 + 1000)}`;
 
     const text =
-      `<b>Заявка на кастомну збірку</b>\n` +
-      `<b>Номер:</b> ${orderNumber}\n` +
-      `<b>Ім'я:</b> ${values.customerName.trim()}\n` +
-      `<b>Телефон:</b> ${values.customerPhone.trim()}\n` +
-      `<b>Telegram:</b> ${values.customerTelegram.trim()}\n` +
-      `<b>Бюджет:</b> ${formatUah(values.budgetMin)} ₴ — ${formatUah(values.budgetMax)} ₴\n` +
-      `<b>Задача:</b> ${labelOf(TASKS, values.task)}\n` +
+      `${TG.form} <b>Заявка на кастомну збірку</b>\n` +
+      `${TG.number} <b>Номер:</b> ${orderNumber}\n\n` +
+      `${TG.name} <b>Ім'я:</b> ${values.customerName.trim()}\n` +
+      `${TG.phone} <b>Телефон:</b> ${values.customerPhone.trim()}\n` +
+      `${TG.telegram} <b>Telegram:</b> ${values.customerTelegram.trim()}\n\n` +
+      `${TG.budget} <b>Бюджет:</b> ${formatUah(values.budgetMin)} ₴ — ${formatUah(values.budgetMax)} ₴\n` +
+      `${TG.task} <b>Задача:</b> ${labelOf(TASKS, values.task)}\n` +
       `<b>Ігри/програми:</b> ${values.games?.trim() || "—"}\n` +
-      `<b>Побажання:</b> ${values.wishes?.trim() || "—"}\n` +
-      `<b>Зручний час:</b> ${labelOf(TIMES, values.preferredTime)}\n` +
-      `<b>Месенджер:</b> ${labelOf(CHANNELS, values.channel)}`;
+      `<b>Побажання:</b> ${values.wishes?.trim() || "—"}\n\n` +
+      `${TG.time} <b>Зручний час:</b> ${labelOf(TIMES, values.preferredTime)}\n` +
+      `${TG.channel} <b>Месенджер:</b> ${labelOf(CHANNELS, values.channel)}`;
 
     try {
       await sendTelegramMessage(text);
