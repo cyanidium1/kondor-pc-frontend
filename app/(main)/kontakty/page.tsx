@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { ContactForm } from "./ContactForm";
 import {
   Phone,
   MessageSquare,
@@ -166,42 +164,8 @@ export default async function ContactsPage() {
                 </div>
               </div>
               {/* Contact form */}
-              <div className="">
-                <form className="space-y-3.5 rounded-lg border border-border bg-surface p-6">
-                  <div className="grid gap-1">
-                    <Label className="text-[14px]">Ім&apos;я</Label>
-                    <Input
-                      placeholder="Іван Петренко"
-                      className="text-[14px]"
-                    />
-                  </div>
-                  <div className="grid gap-1">
-                    <Label className="text-[14px]">Телефон</Label>
-                    <Input
-                      placeholder="+380 95 000 00 00"
-                      className="text-[14px]"
-                    />
-                  </div>
-                  <div className="grid gap-1">
-                    <Label className="text-[14px]">Повідомлення</Label>
-                    <textarea
-                      rows={4}
-                      placeholder="Опиши свій запит..."
-                      className="w-full h-[98px] rounded-md border border-border bg-background px-3 py-2 text-[14px] focus-visible:border-ring focus-visible:outline-none"
-                    />
-                  </div>
-                  <Button
-                    type="button"
-                    size="lg"
-                    variant="default"
-                    className="h-12 w-full px-6 rounded-none normal-case font-body text-[14px] leading-[120%] font-medium tracking-normal"
-                  >
-                    Надіслати
-                  </Button>
-                  <p className="text-center text-[14px] leading-[120%] font-light text-muted-foreground">
-                    Залиш повідомлення — відповімо протягом робочої години.
-                  </p>
-                </form>
+              <div>
+                <ContactForm />
               </div>
             </div>
           </Reveal>
