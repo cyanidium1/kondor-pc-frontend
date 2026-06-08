@@ -11,8 +11,7 @@ import { cn } from "@/lib/utils";
 import { Check, ChevronDown } from "lucide-react";
 
 const BUDGET_BUCKETS = [
-  { label: "До 25 000 ₴", value: "0-25", note: "~$600" },
-  { label: "25–40 000 ₴", value: "25-40", note: "$600–1000" },
+  { label: "До 40 000 ₴", value: "0-40", note: "~$600–1000" },
   { label: "40–80 000 ₴", value: "40-80", note: "$1000–1900" },
   { label: "80 000 ₴+", value: "80-200", note: "$1900+" },
 ];
@@ -108,7 +107,7 @@ export function SelectionForm({ gamesCatalog }: { gamesCatalog: Game[] }) {
         <div className="mb-5">
           <h2 className="font-display text-2xl font-bold">Який твій бюджет?</h2>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
           {BUDGET_BUCKETS.map((b) => {
             const active = budget === b.value;
             return (
