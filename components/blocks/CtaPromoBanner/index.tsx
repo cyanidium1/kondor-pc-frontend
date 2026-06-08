@@ -1,33 +1,86 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
+import { Check, Copy } from "lucide-react";
 
 type Button = { text?: string; href?: string };
 
+export type PromoDiscount = {
+  kind: "percent" | "fixed";
+  value: number;
+};
+
+/** Resolved promoCode document from Sanity (via ctaPromoBanner reference). */
+export type PromoCodeInfo = {
+  code: string;
+  validFrom?: string;
+  validUntil?: string;
+  discountPc?: PromoDiscount;
+  discountAccessories?: PromoDiscount;
+};
+
+function formatDiscount(discount?: PromoDiscount): string | null {
+  if (!discount?.value) return null;
+  return discount.kind === "fixed"
+    ? `−${discount.value.toLocaleString("uk-UA")} ₴`
+    : `−${discount.value}%`;
+}
+
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("uk-UA", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function isPromoActive(promo: PromoCodeInfo, now = Date.now()): boolean {
+  if (promo.validFrom && new Date(promo.validFrom).getTime() > now) return false;
+  if (promo.validUntil && new Date(promo.validUntil).getTime() <= now) return false;
+  return true;
+}
+
 /**
- * CtaPromoBanner — призов до дії з опціональним промокодом і дедлайном.
- * Cyan-фон як на головній (інверсний колір — чорний текст).
+ * CtaPromoBanner — призов до дії з промокодом із довідника Sanity.
+ * Строк дії та знижки беруться з документа `promoCode`.
  */
 export function CtaPromoBanner({
   title,
   promoText,
   promoCode,
-  endDate,
   button,
 }: {
   title: string;
   promoText?: string;
-  promoCode?: string;
-  endDate?: string;
+  promoCode?: PromoCodeInfo;
   button?: Button;
 }) {
-  const ends = endDate ? new Date(endDate) : null;
-  const endsLabel = ends
-    ? ends.toLocaleDateString("uk-UA", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      })
-    : null;
+  const [copied, setCopied] = useState(false);
   const hasButton = button && button.text && button.href;
+  const active = promoCode ? isPromoActive(promoCode) : false;
+
+  const pcDiscount = formatDiscount(promoCode?.discountPc);
+  const accDiscount = formatDiscount(promoCode?.discountAccessories);
+  const discountParts = [
+    pcDiscount && `ПК ${pcDiscount}`,
+    accDiscount && `аксесуари ${accDiscount}`,
+  ].filter(Boolean);
+
+  const endsLabel = promoCode?.validUntil
+    ? formatDate(promoCode.validUntil)
+    : null;
+
+  async function copyCode() {
+    if (!promoCode?.code) return;
+    try {
+      await navigator.clipboard.writeText(promoCode.code);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard unavailable */
+    }
+  }
 
   return (
     <div className="container-site py-16 md:py-20">
@@ -55,20 +108,51 @@ export function CtaPromoBanner({
             </p>
           ) : null}
 
-          {promoCode ? (
-            <div className="flex flex-col md:flex-row mt-6 inline-flex items-center gap-3 rounded-lg border-2 border-dashed border-black/40 bg-black/[0.06] px-5 py-3">
-              <span className="text-[10px] uppercase tracking-widest text-black/60">
-                Промокод
-              </span>
-              <span className="font-display text-[18px] font-bold tracking-wider text-black md:text-[22px]">
-                {promoCode}
-              </span>
+          {discountParts.length > 0 ? (
+            <p className="mt-4 text-[12px] uppercase tracking-widest text-black/70">
+              {discountParts.join(" · ")}
+            </p>
+          ) : null}
+
+          {promoCode?.code ? (
+            <div className="mt-6 flex flex-col items-center gap-3">
+              <div className="inline-flex flex-col items-center gap-2 rounded-lg border-2 border-dashed border-black/40 bg-black/[0.06] px-5 py-3 sm:flex-row sm:gap-3">
+                <span className="text-[10px] uppercase tracking-widest text-black/60">
+                  Промокод
+                </span>
+                <span className="font-display text-[18px] font-bold tracking-wider text-black md:text-[22px]">
+                  {promoCode.code}
+                </span>
+              </div>
+              {active ? (
+                <button
+                  type="button"
+                  onClick={copyCode}
+                  className="inline-flex items-center gap-2 rounded-lg border border-black/20 bg-black/[0.06] px-4 py-2 text-[11px] font-medium uppercase tracking-wider text-black/80 transition-colors hover:bg-black/10"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="size-3.5" aria-hidden />
+                      Скопійовано
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="size-3.5" aria-hidden />
+                      Скопіювати код
+                    </>
+                  )}
+                </button>
+              ) : (
+                <p className="text-[12px] uppercase tracking-widest text-black/60">
+                  Промокод більше не діє
+                </p>
+              )}
             </div>
           ) : null}
 
           {endsLabel ? (
             <div className="mt-5 text-[12px] uppercase tracking-widest text-black/70">
-              Дійсний до {endsLabel}
+              {active ? "Дійсний до" : "Діяв до"} {endsLabel}
             </div>
           ) : null}
 

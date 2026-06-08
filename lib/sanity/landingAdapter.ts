@@ -141,8 +141,15 @@ function normalizeSection(s: any): Section {
         ...base,
         title: s.title,
         promoText: s.promoText,
-        endDate: s.endDate,
-        promoCode: s.promoCode,
+        promoCode: s.promoCode?.code
+          ? {
+              code: s.promoCode.code,
+              validFrom: s.promoCode.validFrom,
+              validUntil: s.promoCode.validUntil,
+              discountPc: s.promoCode.discountPc,
+              discountAccessories: s.promoCode.discountAccessories,
+            }
+          : undefined,
         button: s.button,
       };
 

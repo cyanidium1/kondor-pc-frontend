@@ -96,9 +96,16 @@ export const LANDING_PAGE_BY_SLUG = groq`
       "items": items[]->{_id, question, answer}
     },
 
-    // ctaPromoBanner
+    // ctaPromoBanner — promoCode is a ref to promoCode document
     _type=="ctaPromoBanner" => {
-      anchor, title, promoText, endDate, promoCode,
+      anchor, title, promoText,
+      "promoCode": promoCode->{
+        code,
+        validFrom,
+        validUntil,
+        "discountPc": discountPc{kind, value},
+        "discountAccessories": discountAccessories{kind, value}
+      },
       "button": button{text, href}
     }
   }
