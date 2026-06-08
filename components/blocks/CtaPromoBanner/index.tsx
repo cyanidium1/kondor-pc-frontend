@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-type Button = {text?: string; href?: string};
+type Button = { text?: string; href?: string };
 
 /**
  * CtaPromoBanner — призов до дії з опціональним промокодом і дедлайном.
@@ -46,7 +46,7 @@ export function CtaPromoBanner({
             Промо-акція
             <span className="ml-3 inline-block size-2 rounded-full bg-black align-middle" />
           </div>
-          <h2 className="mt-3 font-display text-[28px] font-bold uppercase tracking-tight text-black md:text-[40px]">
+          <h2 className="mt-3 font-display text-[20px] font-bold uppercase tracking-tight text-black md:text-[40px]">
             {title}
           </h2>
           {promoText ? (
@@ -56,7 +56,7 @@ export function CtaPromoBanner({
           ) : null}
 
           {promoCode ? (
-            <div className="mt-6 inline-flex items-center gap-3 rounded-lg border-2 border-dashed border-black/40 bg-black/[0.06] px-5 py-3">
+            <div className="flex flex-col md:flex-row mt-6 inline-flex items-center gap-3 rounded-lg border-2 border-dashed border-black/40 bg-black/[0.06] px-5 py-3">
               <span className="text-[10px] uppercase tracking-widest text-black/60">
                 Промокод
               </span>
