@@ -18,6 +18,7 @@ import MarqueeLine from "@/components/shared/MarqueeLine";
 import Image from "next/image";
 import { Reveal } from "@/components/shared/Reveal";
 import { getSiteContactEmail } from "@/lib/sanity/siteContacts";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -122,6 +123,7 @@ export default async function DeliveryPaymentPage() {
 
   return (
     <>
+      <SitePageSchemaJson pageId="seoDeliveryPaymentPage" />
       <div className="rounded-b-[28px] lg:rounded-b-[40px] overflow-hidden">
         {" "}
         <section>

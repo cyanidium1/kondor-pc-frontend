@@ -4,11 +4,9 @@
  * Kondor PC's SITE_URL and brand defaults.
  */
 import type { Metadata } from "next";
-import type { PageSeo, SanityImage } from "@/types/blogPost";
-import { contentImageUrl } from "./contentClient";
-
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://kondor-pc.ua";
+import type { PageSeo } from "@/types/blogPost";
+import { SITE_URL } from "@/lib/seo/constants";
+import { resolveOpengraphImageUrl } from "@/lib/sanity/seoImage";
 
 function canonical(path: string): string {
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
@@ -46,17 +44,11 @@ export function buildBlogMetadata({
     }
   }
 
-  let ogImageUrl: string | undefined;
-  if (seo?.opengraphImage) {
-    ogImageUrl = contentImageUrl(seo.opengraphImage as unknown as SanityImage)
-      .width(1200)
-      .height(630)
-      .fit("fill")
-      .url();
-  }
+  const ogImageUrl = resolveOpengraphImageUrl(seo);
 
   return {
-    title: metaTitle,
+    // Absolute title — root layout `template` must not append "· Kondor PC" again.
+    title: { absolute: metaTitle },
     description: metaDescription,
     keywords,
     alternates: {

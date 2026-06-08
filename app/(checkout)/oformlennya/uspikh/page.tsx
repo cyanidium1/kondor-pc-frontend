@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { TechButtonLink } from "@/components/shared/TechButton";
 import { Check } from "lucide-react";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -44,6 +45,8 @@ export default async function SuccessPage({
   const copy = COPY[payment ?? "monopay"] ?? COPY.monopay;
 
   return (
+    <>
+      <SitePageSchemaJson pageId="seoOrderSuccessPage" />
     <div className="container-narrow py-16 md:py-24">
       <div className="mb-8 flex flex-col items-center text-center">
         <div className="mb-5 flex size-16 items-center justify-center rounded-full bg-brand-primary/15">
@@ -69,5 +72,6 @@ export default async function SuccessPage({
         </TechButtonLink>
       </div>
     </div>
+    </>
   );
 }

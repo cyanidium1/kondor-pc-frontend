@@ -22,6 +22,7 @@ import {
   phoneHref,
   telegramHref,
 } from "@/lib/sanity/siteContacts";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -92,6 +93,7 @@ export default async function WarrantyPage() {
 
   return (
     <>
+      <SitePageSchemaJson pageId="seoWarrantyPage" />
       {/* Hero */}
       <section className="relative">
         <div className="absolute -z-10 top-[-223px] lg:top-[-154px] left-[-860px] lg:left-[-120px] w-[1929px] h-[2007px]">

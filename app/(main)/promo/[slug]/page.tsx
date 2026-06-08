@@ -5,6 +5,7 @@ import {
   getAllLandingPageSlugs,
   getLandingPageBySlug,
 } from "@/lib/data/adapter";
+import {SchemaJsonFromSeo} from "@/components/seo/SchemaJsonFromUrl";
 import {LandingPageBody} from "@/components/landings/LandingPageBody";
 import {buildLandingMetadata} from "@/lib/sanity/landingSeo";
 
@@ -26,7 +27,11 @@ export async function generateMetadata({
   const {slug} = await params;
   const page = await getLandingPageBySlug(slug, "promo");
   if (!page) return {title: "Не знайдено"};
-  return buildLandingMetadata({seo: page.seo, path: `/promo/${slug}`});
+  return buildLandingMetadata({
+    seo: page.seo,
+    path: `/promo/${slug}`,
+    defaultTitle: page.internalTitle ?? slug,
+  });
 }
 
 function PromoExpiredBanner() {
@@ -56,6 +61,7 @@ export default async function PromoLandingPage({
 
   return (
     <>
+      <SchemaJsonFromSeo seo={page.seo} />
       {isExpired ? <PromoExpiredBanner /> : null}
       <LandingPageBody page={page} pageContext={pageContext} />
     </>

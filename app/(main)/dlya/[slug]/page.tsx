@@ -6,6 +6,7 @@ import {
   getLandingPageBySlug,
   resolvePageContext,
 } from "@/lib/data/adapter";
+import {SchemaJsonFromSeo} from "@/components/seo/SchemaJsonFromUrl";
 import {LandingPageBody} from "@/components/landings/LandingPageBody";
 import {buildLandingMetadata} from "@/lib/sanity/landingSeo";
 
@@ -26,7 +27,11 @@ export async function generateMetadata({
   const {slug} = await params;
   const page = await getLandingPageBySlug(slug, "dlya");
   if (!page) return {title: "Не знайдено"};
-  return buildLandingMetadata({seo: page.seo, path: `/dlya/${slug}`});
+  return buildLandingMetadata({
+    seo: page.seo,
+    path: `/dlya/${slug}`,
+    defaultTitle: page.internalTitle ?? slug,
+  });
 }
 
 export default async function DlyaLandingPage({
@@ -42,5 +47,10 @@ export default async function DlyaLandingPage({
     ? await resolvePageContext(page.context)
     : buildSanityPageContext("dlya", slug);
 
-  return <LandingPageBody page={page} pageContext={pageContext} />;
+  return (
+    <>
+      <SchemaJsonFromSeo seo={page.seo} />
+      <LandingPageBody page={page} pageContext={pageContext} />
+    </>
+  );
 }

@@ -15,6 +15,7 @@ import type { Resolution } from "@/types/build";
 import { cn } from "@/lib/utils";
 import { TechButtonLink } from "@/components/shared/TechButton";
 import ArrowIcon from "@/components/icons/ArrowIcon";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -66,6 +67,8 @@ export default async function ResultPage({
       : 0;
 
   return (
+    <>
+      <SitePageSchemaJson pageId="seoPickerResultPage" />
     <div className="container-site py-12 md:py-16">
       <div className="mb-10">
         <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
@@ -194,6 +197,7 @@ export default async function ResultPage({
         </div>
       </div>
     </div>
+    </>
   );
 }
 

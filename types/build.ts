@@ -1,4 +1,5 @@
 import type { SkuSlug } from "@/lib/sku-accents";
+import type { PageSeo } from "@/types/blogPost";
 
 export type { SkuSlug };
 
@@ -111,6 +112,8 @@ export interface Build {
   configurableOptions?: ConfigGroup[];
   /** Відгуки з Sanity (масив на документі збірки). */
   reviews?: Review[];
+  /** SEO з Sanity (`build.seo` → `seoSettings`). */
+  seo?: PageSeo | null;
 }
 
 export interface Game {

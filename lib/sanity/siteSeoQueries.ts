@@ -4,7 +4,7 @@ const groq = (strings: TemplateStringsArray, ...values: unknown[]) =>
     "",
   );
 
-const SEO_SETTINGS_PROJECTION = `{
+export const SEO_SETTINGS_PROJECTION = `{
   metaTitle,
   metaDescription,
   keywords,

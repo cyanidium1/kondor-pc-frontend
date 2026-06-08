@@ -3,6 +3,7 @@ import { CustomBuildForm } from "./CustomBuildForm";
 import { Reveal } from "@/components/shared/Reveal";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import Image from "next/image";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -36,6 +37,8 @@ const STEPS = [
 
 export default function SborkaPage() {
   return (
+    <>
+      <SitePageSchemaJson pageId="seoCustomBuildPage" />
     <div className="relative container-site pt-8 lg:pt-12 pb-16 lg:py-24">
       <div className="absolute -z-20 top-[-97px] sm:top-[-197px] lg:top-[-167px] right-[-615px] lg:right-[-420px] w-[1876px] h-[1990px]">
         <Image
@@ -113,5 +116,6 @@ export default function SborkaPage() {
 
       <CustomBuildForm />
     </div>
+    </>
   );
 }

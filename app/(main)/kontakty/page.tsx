@@ -27,6 +27,7 @@ import {
   telegramHref,
   telegramLabel,
 } from "@/lib/sanity/siteContacts";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -41,6 +42,7 @@ export default async function ContactsPage() {
 
   return (
     <>
+      <SitePageSchemaJson pageId="seoContactsPage" />
       <section className="rounded-b-[40px] overflow-hidden">
         <div className="relative container-site pt-8 pb-[67px] lg:pt-12 lg:pb-[62px]">
           <div className="absolute -z-30 top-[170px] lg:top-[50px] right-[-64px] lg:right-[-190px] w-[322px] lg:w-[640px] h-[322px] lg:h-[640px]">

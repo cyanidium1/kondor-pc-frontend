@@ -35,7 +35,12 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import ArrowIcon from "@/components/icons/ArrowIcon";
-import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import {
+  fetchSiteSeoByPageId,
+  metadataForSitePage,
+} from "@/lib/sanity/siteSeoFetcher";
+import { resolveOrganizationLogoUrl } from "@/lib/sanity/seoImage";
 
 export const revalidate = 60;
 
@@ -96,11 +101,13 @@ const STEPS = [
 const HOME_REVIEWS_LIMIT = 3;
 
 export default async function HomePage() {
-  const [builds, gamesCatalog, pcTasks] = await Promise.all([
+  const [builds, gamesCatalog, pcTasks, homeSeo] = await Promise.all([
     getAllBuilds(),
     getAllGames(),
     getHomePcTasks(),
+    fetchSiteSeoByPageId("seoHomePage").catch(() => null),
   ]);
+  const organizationLogoUrl = resolveOrganizationLogoUrl(homeSeo);
   const gameLabels = makeGameLabelMap(gamesCatalog);
   const topBuilds = selectHomeTopBuilds(builds);
   const heroBuild = topBuilds[2] ?? topBuilds[0];
@@ -110,8 +117,13 @@ export default async function HomePage() {
 
   return (
     <>
+      <SitePageSchemaJson pageId="seoHomePage" />
       <JsonLd
-        data={[organizationJsonLd(), websiteJsonLd(), faqPageJsonLd(homeFaqs)]}
+        data={[
+          organizationJsonLd({ logoUrl: organizationLogoUrl }),
+          websiteJsonLd(),
+          faqPageJsonLd(homeFaqs),
+        ]}
       />
       {/* 1 · HERO */}
       <section className="relative overflow-hidden rounded-b-[28px]">

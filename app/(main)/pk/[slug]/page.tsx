@@ -45,6 +45,9 @@ import { getAllGames, makeGameLabelMap, makeGameShortLabelMap } from "@/lib/sani
 import { faqsByScope } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
+import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
+import { buildBlogMetadata } from "@/lib/sanity/blogSeo";
+import { resolveProductImageUrl } from "@/lib/sanity/seoImage";
 import MarqueeLine from "@/components/shared/MarqueeLine";
 import Image from "next/image";
 
@@ -62,10 +65,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const b = await getBuildBySlug(slug);
   if (!b) return { title: "Не знайдено" };
-  return {
-    title: `${b.name} — ${b.spec.cpu} + ${b.spec.gpu}`,
-    description: `${b.name} — ігровий ПК: ${b.spec.cpu}, ${b.spec.gpu}, ${b.spec.ram}. ${b.shortTagline}. Купити за ${formatPrice(b.priceUah)}.`,
-  };
+  return buildBlogMetadata({
+    seo: b.seo,
+    path: `/pk/${slug}`,
+    defaultTitle: `${b.name} — ${b.spec.cpu} + ${b.spec.gpu}`,
+    defaultDescription: `${b.name} — ігровий ПК: ${b.spec.cpu}, ${b.spec.gpu}, ${b.spec.ram}. ${b.shortTagline}. Купити за ${formatPrice(b.priceUah)}.`,
+  });
 }
 
 const ASSEMBLY_STEPS = [
@@ -175,14 +180,16 @@ export default async function BuildPage({
   const gamesCatalog = await getAllGames();
   const gameLabels = makeGameLabelMap(gamesCatalog);
   const gameShortLabels = makeGameShortLabelMap(gamesCatalog);
+  const productImageUrl = resolveProductImageUrl(build);
 
   return (
     <Suspense fallback={null}>
       <ProductConfiguratorProvider build={build}>
         <div style={{ ["--sku" as string]: accent }}>
+          <SchemaJsonFromSeo seo={build.seo} />
           <JsonLd
             data={[
-              productJsonLd(build),
+              productJsonLd(build, productImageUrl),
               breadcrumbJsonLd([
                 { name: "Головна", url: "/" },
                 { name: "Ігрові ПК", url: "/pk" },
