@@ -85,6 +85,7 @@ export function SelectionForm({ gamesCatalog }: { gamesCatalog: Game[] }) {
                   ukrName={g.ukrName}
                   heavy={g.isSystemHeavy}
                   coverImageUrl={g.coverImageUrl}
+                  imageOnly
                   className="aspect-[4/3] w-full lg:aspect-[295/126]"
                 />
                 <div className="absolute right-2 top-2">
