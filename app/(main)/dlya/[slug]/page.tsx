@@ -38,8 +38,6 @@ export default async function DlyaLandingPage({
   const page = await getLandingPageBySlug(slug, "dlya");
   if (!page) notFound();
 
-  // Mock-driven pages keep their original (game/use_case) context.
-  // Sanity-driven pages get a minimal context derived from the slug.
   const pageContext = page.context
     ? await resolvePageContext(page.context)
     : buildSanityPageContext("dlya", slug);
