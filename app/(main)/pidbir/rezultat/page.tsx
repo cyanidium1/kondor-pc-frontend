@@ -19,7 +19,14 @@ import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return metadataForSitePage("seoPickerResultPage");
+  const base = await metadataForSitePage("seoPickerResultPage");
+  return {
+    ...base,
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
 }
 
 export default async function ResultPage({
