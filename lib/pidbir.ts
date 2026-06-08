@@ -40,10 +40,9 @@ export interface PidbirPickResult {
 const RELAXED_MAX_FACTOR = 1.25;
 const RELAXED_MAX_ADD_UAH = 10_000;
 const NEAR_BUDGET_MAX_ADD_UAH = 15_000;
-/** Усі majority-good у «сусідній» ціновій групі над бюджетом */
-const PRICE_CLUSTER_UAH = 5_000;
 const ASPIRATIONAL_MAX_FACTOR = 1.35;
 const ASPIRATIONAL_MAX_ADD_UAH = 12_000;
+const PRICE_BUCKET_TOPS_UAH = [40_000, 80_000, 200_000] as const;
 
 export const PICKER_DEFAULT_RESOLUTION: Resolution = "fullhd";
 const RESOLUTION_FALLBACK_ORDER: Resolution[] = ["fullhd", "2k", "4k"];
@@ -203,6 +202,8 @@ export function relaxedBudgetMax(c: PidbirCriteria): number {
 
 /** Верхня межа «наступної» цінової смуги над бюджетом */
 export function nearBudgetMax(c: PidbirCriteria): number {
+  const nextBucketTop = PRICE_BUCKET_TOPS_UAH.find((top) => top > c.budgetMax);
+  if (nextBucketTop !== undefined) return nextBucketTop;
   return Math.max(
     relaxedBudgetMax(c),
     c.budgetMax + NEAR_BUDGET_MAX_ADD_UAH,
@@ -354,29 +355,16 @@ function sortByPriceDistance(builds: Build[], budgetMax: number): Build[] {
   );
 }
 
-/**
- * Усі majority-good у сусідній ціновій групі над бюджетом.
- * Якщо найдешевша збірка X, включаємо всі релевантні до X + cluster.
- */
+/** Усі majority-good у повному наступному ціновому діапазоні над бюджетом. */
 function majorityGoodAboveBudget(
   builds: Build[],
   c: PidbirCriteria,
 ): Build[] {
   const nearMax = nearBudgetMax(c);
-  const above = filterMajorityGood(
+  return filterMajorityGood(
     filterByPriceRange(builds, c.budgetMax + 1, nearMax),
     c,
   );
-  if (above.length === 0) return [];
-
-  const anchor = Math.min(...above.map((b) => b.priceUah));
-  const clusterMax = Math.min(nearMax, anchor + PRICE_CLUSTER_UAH);
-  const cluster = filterMajorityGood(
-    filterByPriceRange(builds, c.budgetMax + 1, clusterMax),
-    c,
-  );
-
-  return cluster.length > 0 ? cluster : above;
 }
 
 /**
