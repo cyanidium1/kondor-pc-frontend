@@ -36,6 +36,7 @@ export function GameTile({
   coverImageUrl,
   className,
   size = "md",
+  imageOnly = false,
 }: {
   slug: string;
   name: string;
@@ -44,14 +45,65 @@ export function GameTile({
   coverImageUrl?: string;
   className?: string;
   size?: "sm" | "md" | "lg";
+  /** Лише обкладинка без емодзі, сітки та підписів */
+  imageOnly?: boolean;
 }) {
   const style = GAME_STYLES[slug] ?? DEFAULT_STYLE;
-
   const titleSize = {
     sm: "text-sm",
     md: "text-base",
     lg: "text-xl md:text-2xl",
   }[size];
+
+  if (imageOnly) {
+    return (
+      <div
+        className={cn("relative overflow-hidden rounded-md", className)}
+        style={
+          coverImageUrl
+            ? undefined
+            : {
+                backgroundImage: `linear-gradient(135deg, ${style.from}, ${style.to})`,
+              }
+        }
+      >
+        {coverImageUrl && (
+          <>
+            <Image
+              src={coverImageUrl}
+              alt={ukrName || name}
+              fill
+              sizes="(min-width: 768px) 25vw, 50vw"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(180deg, transparent 15%, #00000014 45%, #000000cc 100%)",
+              }}
+            />
+          </>
+        )}
+        <div className="absolute inset-x-0 bottom-0 p-3">
+          <div
+            className={cn(
+              "font-heading font-semibold uppercase leading-[120%] tracking-wide text-white",
+              titleSize,
+            )}
+          >
+            {ukrName || name}
+          </div>
+          {heavy && (
+            <div className="mt-1 text-[10px] uppercase tracking-wider text-white/70">
+              Вимоглива
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   const emojiSize = {
     sm: "text-2xl",
     md: "text-3xl",
