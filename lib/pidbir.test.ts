@@ -139,6 +139,40 @@ describe("pickBuilds", () => {
     }
   });
 
+  it("uses full next budget bucket for 0-40 budget", () => {
+    const criteria = {
+      games: ["warthunder"],
+      budgetMin: 0,
+      budgetMax: 40000,
+    };
+    const catalog = miniCatalog([
+      {
+        slug: "nyx",
+        priceUah: 41990,
+        fps: [{ gameSlug: "warthunder", resolution: "fullhd", fpsAvg: 130 }],
+      },
+      {
+        slug: "nova",
+        priceUah: 78990,
+        fps: [{ gameSlug: "warthunder", resolution: "fullhd", fpsAvg: 145 }],
+      },
+      {
+        slug: "zenith",
+        priceUah: 80990,
+        fps: [{ gameSlug: "warthunder", resolution: "fullhd", fpsAvg: 180 }],
+      },
+    ]);
+
+    const { results, matchQuality } = pickBuilds(criteria, catalog, 10);
+    const slugs = results.map((r) => r.build.slug);
+
+    expect(matchQuality).toBe("budget_relaxed");
+    expect(slugs).toContain("nyx");
+    expect(slugs).toContain("nova");
+    expect(slugs).not.toContain("zenith");
+    expect(nearBudgetMax(criteria)).toBe(80000);
+  });
+
   it("uses fullhd FPS by default for any game", () => {
     const nyx = BUILDS.find((b) => b.slug === "nyx")!;
     for (const slug of ["dota2", "cs2", "cyberpunk", "warzone"]) {
@@ -187,9 +221,12 @@ describe("pickBuilds", () => {
     expect(formatCriteriaSuffix(undefined)).toBe("");
   });
 
-  it("near budget max is at least +15k above budget cap", () => {
+  it("near budget max uses next known bucket when available", () => {
     expect(nearBudgetMax({ games: [], budgetMin: 0, budgetMax: 25000 })).toBe(
       40000,
+    );
+    expect(nearBudgetMax({ games: [], budgetMin: 0, budgetMax: 40000 })).toBe(
+      80000,
     );
   });
 });
