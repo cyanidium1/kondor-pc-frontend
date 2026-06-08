@@ -227,8 +227,8 @@ export default async function ContactsPage() {
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">
-                Реквізити тимчасово недоступні. Напишіть нам у Telegram — надішлемо
-                дані для оплати.
+                Реквізити тимчасово недоступні. Напишіть нам у Telegram —
+                надішлемо дані для оплати.
               </p>
             )}
             <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 border-t border-border pt-4 text-sm">
