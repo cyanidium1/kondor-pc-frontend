@@ -1,5 +1,6 @@
 import type { Build, BuildFpsEntry, ConfigGroup, ConfigOption, Review } from "@/types/build";
 import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
+import { portableTextToPlain } from "@/lib/sanity/portableText";
 import { sanityPcClient } from "./client";
 import { urlForPc } from "./image";
 
@@ -34,8 +35,9 @@ type RawReviewRow = {
 };
 
 type RawCustomFaqRow = {
+  _id?: string;
   question?: string;
-  answer?: string;
+  answer?: unknown;
 };
 
 type RawBuild = {
@@ -58,7 +60,6 @@ type RawBuild = {
   noiseLevelDb?: number;
   upgradePathNotes?: string;
   includedFeatureKeys?: string[];
-  faqKeys?: string[];
   useDefaultFaq?: boolean;
   customFaq?: RawCustomFaqRow[];
   components?: Build["components"];
@@ -100,12 +101,8 @@ const BUILDS_QUERY = `
   noiseLevelDb,
   upgradePathNotes,
   "includedFeatureKeys": coalesce(includedFeatureKeys, []),
-  "faqKeys": coalesce(faqKeys, []),
   useDefaultFaq,
-  "customFaq": coalesce(customFaq[]{
-    "question": item.question,
-    "answer": item.answer
-  }, []),
+  "customFaq": coalesce(customFaq[]->{_id, question, answer}, []),
   "components": coalesce(components, []),
   heroImage,
   "gallery": coalesce(gallery, []),
@@ -292,8 +289,9 @@ function mapCustomFaq(rows?: RawCustomFaqRow[]): Build["customFaqItems"] {
   if (!rows?.length) return undefined;
   const list = rows
     .map((row) => ({
+      id: row._id,
       question: row.question?.trim() || "",
-      answer: row.answer?.trim() || "",
+      answer: portableTextToPlain(row.answer as Parameters<typeof portableTextToPlain>[0]),
     }))
     .filter((row) => row.question.length > 0 && row.answer.length > 0);
   return list.length > 0 ? list : undefined;
@@ -375,7 +373,6 @@ function mapBuild(raw: RawBuild): Build {
     noiseLevelDb: raw.noiseLevelDb,
     upgradePathNotes: raw.upgradePathNotes,
     includedFeatureKeys: raw.includedFeatureKeys ?? [],
-    faqKeys: raw.faqKeys ?? [],
     useDefaultFaq: raw.useDefaultFaq,
     customFaqItems: mapCustomFaq(raw.customFaq),
     reviews: mapReviews(raw.reviews, raw.slug as Build["slug"]),

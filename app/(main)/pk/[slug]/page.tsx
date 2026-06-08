@@ -42,7 +42,7 @@ import {
   getSimilarBuilds,
 } from "@/lib/sanity-pc/builds";
 import { getAllGames, makeGameLabelMap, makeGameShortLabelMap } from "@/lib/sanity-pc/games";
-import { FAQS } from "@/lib/mock/faqs";
+import { faqsByScope } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
 import MarqueeLine from "@/components/shared/MarqueeLine";
@@ -158,19 +158,15 @@ export default async function BuildPage({
   const accent =
     SKU_ACCENTS[build.slug as keyof typeof SKU_ACCENTS] ?? "var(--brand-primary)";
   const reviews = build.reviews?.slice(0, 3) ?? [];
+  const defaultBuildFaqs = faqsByScope("build");
   const customFaqs =
     build.customFaqItems?.map((item, index) => ({
-      key: `custom-${build.slug}-${index}`,
+      key: item.id ?? `custom-${build.slug}-${index}`,
       scope: "build" as const,
       question: item.question,
       answer: item.answer,
       relatedBuildSlug: build.slug,
     })) ?? [];
-  const defaultFaqsByKeys = FAQS.filter((f) => build.faqKeys.includes(f.key));
-  const defaultBuildFaqs =
-    defaultFaqsByKeys.length > 0
-      ? defaultFaqsByKeys
-      : FAQS.filter((f) => f.scope === "build");
   const faqs =
     build.useDefaultFaq === false && customFaqs.length > 0
       ? customFaqs
