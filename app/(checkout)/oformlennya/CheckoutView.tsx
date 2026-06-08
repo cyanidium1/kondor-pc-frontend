@@ -18,6 +18,7 @@ import {
   lineKey as cartLineKey,
   type CartItem,
 } from "@/lib/cartStore";
+import { buildMonopayBasket } from "@/lib/monopay/basket";
 import { sendTelegramMessage } from "@/lib/telegram/client";
 import { TG } from "@/lib/telegram/icons";
 import {
@@ -353,6 +354,34 @@ export function CheckoutView() {
 
     try {
       await sendTelegramMessage(text);
+
+      if (values.paymentMethod === "monopay") {
+        const payTotalUah = Math.round(cartTotal * 1.013);
+        const invoiceRes = await fetch("/api/monopay/invoice", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: payTotalUah * 100,
+            orderNumber,
+            basketOrder: buildMonopayBasket(cartItems),
+          }),
+        });
+
+        const invoiceData = (await invoiceRes.json()) as {
+          pageUrl?: string;
+          error?: unknown;
+        };
+
+        if (!invoiceRes.ok || !invoiceData.pageUrl) {
+          console.error("[checkout/monopay]", invoiceData.error);
+          throw new Error("invoice failed");
+        }
+
+        clear();
+        window.location.href = invoiceData.pageUrl;
+        return;
+      }
+
       clear();
       router.push(
         `/oformlennya/uspikh?order=${orderNumber}&payment=${values.paymentMethod}`,
