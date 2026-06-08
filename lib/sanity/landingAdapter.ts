@@ -20,6 +20,7 @@ import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import {
   LANDING_PAGE_BY_SLUG,
   LANDING_SLUGS_BY_PREFIX,
+  LANDING_NAV_BY_PREFIX,
 } from "@/lib/sanity/landingQueries";
 import {
   portableTextToContent,
@@ -140,8 +141,15 @@ function normalizeSection(s: any): Section {
         ...base,
         title: s.title,
         promoText: s.promoText,
-        endDate: s.endDate,
-        promoCode: s.promoCode,
+        promoCode: s.promoCode?.code
+          ? {
+              code: s.promoCode.code,
+              validFrom: s.promoCode.validFrom,
+              validUntil: s.promoCode.validUntil,
+              discountPc: s.promoCode.discountPc,
+              discountAccessories: s.promoCode.discountAccessories,
+            }
+          : undefined,
         button: s.button,
       };
 
@@ -186,7 +194,9 @@ export async function fetchLandingPageBySlug(
       ogImage: raw.seo?.ogImage
         ? contentImageUrl(raw.seo.ogImage).width(1200).height(630).url()
         : undefined,
+      noindex: raw.seo?.noindex ?? false,
     },
+    expiresAt: raw.expiresAt ?? undefined,
     sections,
   };
 }
@@ -212,6 +222,40 @@ export async function fetchLandingSlugs(
       return new Date(r.expiresAt).getTime() > now;
     })
     .map((r) => r.slug);
+}
+
+export type LandingNavItem = { href: string; label: string };
+
+/** Links for the «Підбірки» nav group — /dlya/* pages from Sanity. */
+export async function fetchLandingNavItems(
+  prefix: LandingPathPrefix = "dlya",
+): Promise<LandingNavItem[]> {
+  const rows: Array<{
+    slug: string;
+    label?: string;
+    expiresAt?: string;
+  }> = await contentClient.fetch(
+    LANDING_NAV_BY_PREFIX,
+    {prefix},
+    {
+      next: {
+        revalidate: SANITY_REVALIDATE_SECONDS,
+        tags: ["landings:all", `landings:${prefix}`, "landings:nav"],
+      },
+    },
+  );
+
+  const now = Date.now();
+  return rows
+    .filter((r) => {
+      if (!r.slug) return false;
+      if (!r.expiresAt) return true;
+      return new Date(r.expiresAt).getTime() > now;
+    })
+    .map((r) => ({
+      href: `/${prefix}/${r.slug}`,
+      label: r.label?.trim() || r.slug,
+    }));
 }
 
 /**

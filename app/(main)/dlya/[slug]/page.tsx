@@ -7,6 +7,7 @@ import {
   resolvePageContext,
 } from "@/lib/data/adapter";
 import {LandingPageBody} from "@/components/landings/LandingPageBody";
+import {buildLandingMetadata} from "@/lib/sanity/landingSeo";
 
 // ISR. Sanity webhook will revalidate by tag later (Sprint 3).
 export const revalidate = 60;
@@ -25,17 +26,7 @@ export async function generateMetadata({
   const {slug} = await params;
   const page = await getLandingPageBySlug(slug, "dlya");
   if (!page) return {title: "Не знайдено"};
-  return {
-    title: page.seo.title,
-    description: page.seo.description,
-    openGraph: {
-      title: page.seo.title,
-      description: page.seo.description,
-      type: "website",
-      locale: "uk_UA",
-      images: page.seo.ogImage ? [{url: page.seo.ogImage}] : undefined,
-    },
-  };
+  return buildLandingMetadata({seo: page.seo, path: `/dlya/${slug}`});
 }
 
 export default async function DlyaLandingPage({
