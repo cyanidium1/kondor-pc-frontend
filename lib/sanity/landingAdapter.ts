@@ -188,14 +188,8 @@ export async function fetchLandingPageBySlug(
     slug: raw.slug,
     type: prefix === "promo" ? "event" : "game",
     context: {refType: prefix === "promo" ? "event" : "game", refSlug: raw.slug},
-    seo: {
-      title: raw.seo?.title ?? raw.internalTitle ?? raw.slug,
-      description: raw.seo?.description ?? "",
-      ogImage: raw.seo?.ogImage
-        ? contentImageUrl(raw.seo.ogImage).width(1200).height(630).url()
-        : undefined,
-      noindex: raw.seo?.noindex ?? false,
-    },
+    internalTitle: raw.internalTitle,
+    seo: raw.seo ?? null,
     expiresAt: raw.expiresAt ?? undefined,
     sections,
   };

@@ -1,3 +1,4 @@
+import type { PageSeo } from "@/types/blogPost";
 import type { Game } from "./game";
 import type { UseCase } from "./useCase";
 
@@ -16,12 +17,8 @@ export type LandingPage = {
   slug: string;
   type: "game" | "event" | "use_case";
   context: LandingPageContextRef;
-  seo: {
-    title: string;
-    description: string;
-    ogImage?: string;
-    noindex?: boolean;
-  };
+  internalTitle?: string;
+  seo: PageSeo | null;
   /** Promo-only: after this date the page shows an expired banner. */
   expiresAt?: string;
   sections: Section[];

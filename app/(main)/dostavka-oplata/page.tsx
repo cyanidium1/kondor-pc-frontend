@@ -18,12 +18,12 @@ import MarqueeLine from "@/components/shared/MarqueeLine";
 import Image from "next/image";
 import { Reveal } from "@/components/shared/Reveal";
 import { getSiteContactEmail } from "@/lib/sanity/siteContacts";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Доставка та оплата",
-  description:
-    "Безкоштовна доставка Новою Поштою по Україні. 8 способів оплати: карта, MonoPay, частинами, IBAN, крипто, накладений платіж.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoDeliveryPaymentPage");
+}
 
 const DELIVERY = [
   {
@@ -123,6 +123,7 @@ export default async function DeliveryPaymentPage() {
 
   return (
     <>
+      <SitePageSchemaJson pageId="seoDeliveryPaymentPage" />
       <div className="rounded-b-[28px] lg:rounded-b-[40px] overflow-hidden">
         {" "}
         <section>

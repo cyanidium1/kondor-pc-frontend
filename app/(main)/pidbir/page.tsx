@@ -4,16 +4,18 @@ import { Reveal } from "@/components/shared/Reveal";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { getAllGames } from "@/lib/sanity-pc/games";
 import Image from "next/image";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Підбір ПК за 30 секунд",
-  description:
-    "Обери свої ігри та бюджет — покажемо 3–5 підходящих збірок з реальними FPS.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoPickerPage");
+}
 
 export default async function PidbirPage() {
   const gamesCatalog = await getAllGames();
   return (
+    <>
+      <SitePageSchemaJson pageId="seoPickerPage" />
     <div className="">
       <section className="relative py-[150px] lg:pb-30 mb-15 lg:mb-25 rounded-b-[40px] overflow-hidden">
         <div className="relative container-site">
@@ -70,5 +72,6 @@ export default async function PidbirPage() {
         <SelectionForm gamesCatalog={gamesCatalog} />
       </div>
     </div>
+    </>
   );
 }

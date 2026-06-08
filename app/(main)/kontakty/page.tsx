@@ -27,12 +27,12 @@ import {
   telegramHref,
   telegramLabel,
 } from "@/lib/sanity/siteContacts";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Контакти",
-  description:
-    "Шоурум у Києві, Telegram, email, телефон. Щодня з 9:00 до 21:00. Ігрові ПК з гарантією до 3 років.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoContactsPage");
+}
 
 export default async function ContactsPage() {
   const [paymentRequisites, siteContacts] = await Promise.all([
@@ -42,6 +42,7 @@ export default async function ContactsPage() {
 
   return (
     <>
+      <SitePageSchemaJson pageId="seoContactsPage" />
       <section className="rounded-b-[40px] overflow-hidden">
         <div className="relative container-site pt-8 pb-[67px] lg:pt-12 lg:pb-[62px]">
           <div className="absolute -z-30 top-[170px] lg:top-[50px] right-[-64px] lg:right-[-190px] w-[322px] lg:w-[640px] h-[322px] lg:h-[640px]">

@@ -4,6 +4,7 @@ import BlogHero from "@/components/blog/BlogHero";
 import BlogList from "@/components/blog/BlogList";
 import BlogBreadcrumbs from "@/components/blog/BlogBreadcrumbs";
 import { getAllBlogPosts, getBlogPageSeo } from "@/lib/sanity/blogFetchers";
+import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
 import { buildBlogMetadata } from "@/lib/sanity/blogSeo";
 import { JsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
@@ -20,10 +21,14 @@ const crumbs = [
 ];
 
 export default async function BlogPage() {
-  const blogPosts = await getAllBlogPosts();
+  const [blogPosts, pageData] = await Promise.all([
+    getAllBlogPosts(),
+    getBlogPageSeo().catch(() => null),
+  ]);
 
   return (
     <>
+      <SchemaJsonFromSeo seo={pageData?.seo ?? null} />
       <JsonLd
         data={breadcrumbJsonLd(crumbs.map((c) => ({ name: c.label, url: c.href })))}
       />

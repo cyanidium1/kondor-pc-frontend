@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { getAllBuilds } from "@/lib/sanity-pc/builds";
-import { SEO_LANDINGS } from "@/lib/mock/seo-landings";
 import { LEGAL_PAGES } from "@/lib/mock/legal-pages";
 import { fetchLandingSlugs } from "@/lib/sanity/landingAdapter";
 import { getAllCategories, getCatalogItems } from "@/lib/sanity/fetchers";
@@ -24,7 +23,6 @@ const BASE_URL =
  *   - /promo/[slug]      — promo landings (also expiresAt-filtered)
  *   - /blog              — list
  *   - /blog/[article]    — articles
- *   - /[seoSlug]         — flat SEO landings from mock
  *   - /legal/[slug]      — privacy/cookies/terms
  *
  * Site stays noindex (robots.ts blocks bots) — the sitemap is generated
@@ -53,13 +51,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const buildPages: MetadataRoute.Sitemap = builds.map((b) => ({
     url: `${BASE_URL}/pk/${b.slug}`,
     priority: 0.8,
-    changeFrequency: "weekly",
-    lastModified: now,
-  }));
-
-  const flatSeoPages: Entry[] = SEO_LANDINGS.map((l) => ({
-    url: `${BASE_URL}/${l.slug}`,
-    priority: 0.7,
     changeFrequency: "weekly",
     lastModified: now,
   }));
@@ -98,12 +89,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // /dlya/[slug] — Sanity landings overlap with mock-driven slugs; dedupe.
-  const dlyaSet = new Set<string>(dlyaSlugs);
-  // Mock /dlya/* pages live behind /lib/mock too — pull them via adapter
-  // file's known fallback set rather than a separate import.
-  // (Mock-only slugs are uncommon; Sanity is source of truth post-Sprint 1A.)
-  const dlyaPages: Entry[] = [...dlyaSet].map((slug) => ({
+  const dlyaPages: Entry[] = dlyaSlugs.map((slug) => ({
     url: `${BASE_URL}/dlya/${slug}`,
     priority: 0.7,
     changeFrequency: "weekly",
@@ -160,7 +146,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticPages,
     ...buildPages,
-    ...flatSeoPages,
     ...dlyaPages,
     ...promoPages,
     ...categoryPages,

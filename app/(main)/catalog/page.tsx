@@ -3,15 +3,15 @@ import { Suspense } from "react";
 import { getAllCategories, getCatalogItems } from "@/lib/sanity/fetchers";
 import { CatalogClient } from "./CatalogClient";
 import Image from "next/image";
-
-export const metadata: Metadata = {
-  title: "Каталог аксесуарів — клавіатури, миші, поверхні",
-  description:
-    "Ігрові клавіатури, миші, ігрові поверхні, комплекти кейкапів. Доставка НП, гарантія 12 міс.",
-};
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 // Revalidate the whole listing every 5 minutes — aligns with fetcher-level cache.
 export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoAccessoriesPage");
+}
 
 export default async function CatalogPage() {
   const [categories, items] = await Promise.all([
@@ -20,6 +20,8 @@ export default async function CatalogPage() {
   ]);
 
   return (
+    <>
+      <SitePageSchemaJson pageId="seoAccessoriesPage" />
     <div className="relative container-site pt-8 lg:pt-12 pb-12 lg:pb-16">
       <div className="absolute -z-10 top-[-223px] lg:top-[-154px] left-[-860px] lg:left-[-160px] w-[1929px] h-[2007px]">
         <Image
@@ -47,5 +49,6 @@ export default async function CatalogPage() {
         <CatalogClient categories={categories} items={items} />
       </Suspense>
     </div>
+    </>
   );
 }

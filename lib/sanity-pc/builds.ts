@@ -1,6 +1,8 @@
 import type { Build, BuildFpsEntry, ConfigGroup, ConfigOption, Review } from "@/types/build";
+import type { PageSeo } from "@/types/blogPost";
 import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import { portableTextToPlain } from "@/lib/sanity/portableText";
+import { SEO_SETTINGS_PROJECTION } from "@/lib/sanity/siteSeoQueries";
 import { sanityPcClient } from "./client";
 import { urlForPc } from "./image";
 
@@ -78,6 +80,7 @@ type RawBuild = {
   ssdOptions?: RawConfigOption[];
   warrantyOptions?: RawConfigOption[];
   reviews?: RawReviewRow[];
+  seo?: PageSeo | null;
 };
 
 const BUILDS_QUERY = `
@@ -129,7 +132,8 @@ const BUILDS_QUERY = `
   "ramOptions": coalesce(ramOptions, []),
   "ssdOptions": coalesce(ssdOptions, []),
   "warrantyOptions": coalesce(warrantyOptions, []),
-  "reviews": coalesce(reviews, [])
+  "reviews": coalesce(reviews, []),
+  "seo": seo${SEO_SETTINGS_PROJECTION}
 }
 `;
 
@@ -381,6 +385,7 @@ function mapBuild(raw: RawBuild): Build {
     assemblyVideoUrl: raw.assemblyVideoUrl,
     assemblyVideoPosterUrl,
     configurableOptions: makeConfigGroups(raw),
+    seo: raw.seo ?? null,
   };
 }
 

@@ -14,7 +14,9 @@ import {
   getAllBlogPosts,
   getBlogPostBySlug,
 } from "@/lib/sanity/blogFetchers";
+import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
 import { blogCanonicalUrl, buildBlogMetadata } from "@/lib/sanity/blogSeo";
+import { resolveOrganizationLogoUrl } from "@/lib/sanity/seoImage";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -63,8 +65,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     { label: heroTitle, href: `/blog/${slug}` },
   ];
 
+  const publisherLogoUrl = resolveOrganizationLogoUrl(currentArticle.seo);
+
   return (
     <>
+      <SchemaJsonFromSeo seo={currentArticle.seo} />
       <JsonLd
         data={breadcrumbJsonLd(
           crumbs.map((c) => ({ name: c.label, url: c.href })),
@@ -77,6 +82,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           datePublished={currentArticle._createdAt}
           dateModified={currentArticle._updatedAt}
           imageUrl={currentArticle.heroImageUrl ?? undefined}
+          logoUrl={publisherLogoUrl}
         />
       )}
       <Suspense fallback={null}>

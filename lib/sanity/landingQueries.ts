@@ -5,6 +5,7 @@
  * Each section type expands the refs it needs (faqEntry.items, etc.) so the
  * frontend gets a self-contained payload — no N+1 follow-up fetches.
  */
+import { SEO_SETTINGS_PROJECTION } from "@/lib/sanity/siteSeoQueries";
 
 const groq = (strings: TemplateStringsArray, ...values: unknown[]) =>
   strings.reduce(
@@ -29,7 +30,7 @@ export const LANDING_PAGE_BY_SLUG = groq`
   pathPrefix,
   "slug": slug.current,
   "tags": tags[]->{_id, name, "slug": slug.current, category},
-  seo,
+  "seo": seo${SEO_SETTINGS_PROJECTION},
   publishedAt,
   expiresAt,
   redirectsFrom,
@@ -123,7 +124,7 @@ export const LANDING_SLUGS_BY_PREFIX = groq`
 export const LANDING_NAV_BY_PREFIX = groq`
 *[_type=="page" && pathPrefix==$prefix && defined(slug.current)]{
   "slug": slug.current,
-  "label": coalesce(seo.title, internalTitle),
+  "label": coalesce(seo.metaTitle, internalTitle),
   publishedAt,
   expiresAt
 } | order(coalesce(publishedAt, _updatedAt) desc)`;
