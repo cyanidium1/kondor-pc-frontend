@@ -22,12 +22,12 @@ import {
   phoneHref,
   telegramHref,
 } from "@/lib/sanity/siteContacts";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Гарантія на ігрові ПК до 3 років",
-  description:
-    "Офіційна гарантія 12 місяців + гарантія виробника на кожен компонент до 3 років. Безкоштовне повернення Новою Поштою при поломці.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoWarrantyPage");
+}
 
 const COVERED = [
   "Справність усіх компонентів протягом 12 місяців",
@@ -93,6 +93,7 @@ export default async function WarrantyPage() {
 
   return (
     <>
+      <SitePageSchemaJson pageId="seoWarrantyPage" />
       {/* Hero */}
       <section className="relative">
         <div className="absolute -z-10 top-[-223px] lg:top-[-154px] left-[-860px] lg:left-[-120px] w-[1929px] h-[2007px]">

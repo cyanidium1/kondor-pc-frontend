@@ -1,8 +1,7 @@
 /**
  * Article JSON-LD — ported from nbyg-front, branded for Kondor PC.
  */
-const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://kondor-pc.ua";
+import { DEFAULT_SOCIAL_IMAGE_URL, SITE_URL } from "@/lib/seo/constants";
 
 interface ArticleSchemaProps {
   headline: string;
@@ -10,6 +9,7 @@ interface ArticleSchemaProps {
   datePublished: string;
   dateModified?: string;
   imageUrl?: string;
+  logoUrl?: string;
 }
 
 export default function ArticleSchema({
@@ -18,6 +18,7 @@ export default function ArticleSchema({
   datePublished,
   dateModified,
   imageUrl,
+  logoUrl = DEFAULT_SOCIAL_IMAGE_URL,
 }: ArticleSchemaProps) {
   const schema = {
     "@context": "https://schema.org",
@@ -29,14 +30,14 @@ export default function ArticleSchema({
     author: {
       "@type": "Organization",
       name: "Kondor PC",
-      url: BASE_URL,
+      url: SITE_URL,
     },
     publisher: {
       "@type": "Organization",
       name: "Kondor PC",
       logo: {
         "@type": "ImageObject",
-        url: `${BASE_URL}/og/logo.png`,
+        url: logoUrl,
       },
     },
     ...(imageUrl && {

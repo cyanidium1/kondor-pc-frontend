@@ -1,78 +1,37 @@
 import type { Metadata } from "next";
 import { TechButtonLink } from "@/components/shared/TechButton";
 import { Check } from "lucide-react";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Замовлення оформлено",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoOrderSuccessPage");
+}
 
-const COPY: Record<string, { title: string; steps: string[] }> = {
+const COPY: Record<string, { title: string }> = {
   monopay: {
     title: "Замовлення оформлено",
-    steps: [
-      "Отримаєш SMS з підтвердженням",
-      "Email з деталями замовлення вже у тебе",
-      "За 3–5 днів пришлемо відео твого ПК",
-      "Після збірки — відправимо НП та надішлемо трек-номер",
-    ],
   },
   monobank_parts: {
     title: "Замовлення оформлено",
-    steps: [
-      "Підтверджуй розстрочку в додатку Monobank",
-      "Після підтвердження — починаємо збірку",
-      "3–5 днів на збірку та відео",
-      "Відправка НП, трек-номер у email",
-    ],
   },
   privat_parts: {
     title: "Замовлення оформлено",
-    steps: [
-      "Підтверджуй розстрочку в додатку ПриватБанку",
-      "Після підтвердження — починаємо збірку",
-      "3–5 днів на збірку, потім відправка НП",
-    ],
   },
   pumb_parts: {
     title: "Замовлення оформлено",
-    steps: [
-      "Підтверджуй розстрочку в додатку ПУМБ",
-      "Після підтвердження — починаємо збірку",
-      "3–5 днів на збірку, потім відправка НП",
-    ],
   },
   cod: {
     title: "Замовлення прийнято",
-    steps: [
-      "Менеджер зателефонує протягом години для підтвердження",
-      "Збірка ПК — 3–5 днів",
-      "Відео готового ПК",
-      "Відправка НП, оплата при отриманні",
-    ],
   },
   iban_individual: {
     title: "Заявка на оплату IBAN прийнята",
-    steps: [
-      "Менеджер зателефонує протягом 2 годин у робочий час",
-      "Надішле рахунок на email",
-      "Після оплати рахунку починаємо збірку — 3–5 днів",
-    ],
   },
   iban_business: {
     title: "Заявка для ФОП / ЮО прийнята",
-    steps: [
-      "Менеджер зателефонує протягом 2 годин",
-      "Надішле рахунок, договір, УПД",
-      "Після оплати починаємо збірку",
-    ],
   },
   crypto: {
     title: "Заявка на оплату в крипто прийнята",
-    steps: [
-      "Менеджер напише тобі в Telegram протягом години",
-      "Узгодить монету (USDT/BTC/ETH) та адресу гаманця",
-      "Після надходження — починаємо збірку",
-    ],
   },
 };
 
@@ -86,6 +45,8 @@ export default async function SuccessPage({
   const copy = COPY[payment ?? "monopay"] ?? COPY.monopay;
 
   return (
+    <>
+      <SitePageSchemaJson pageId="seoOrderSuccessPage" />
     <div className="container-narrow py-16 md:py-24">
       <div className="mb-8 flex flex-col items-center text-center">
         <div className="mb-5 flex size-16 items-center justify-center rounded-full bg-brand-primary/15">
@@ -102,22 +63,6 @@ export default async function SuccessPage({
         </div>
       </div>
 
-      <div className="rounded-lg border border-border bg-surface p-6">
-        <div className="mb-4 text-[11px] uppercase tracking-wider text-muted-foreground">
-          Що далі
-        </div>
-        <ol className="tabular space-y-3">
-          {copy.steps.map((step, i) => (
-            <li key={i} className="flex items-start gap-3">
-              <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-background text-xs font-semibold text-muted-foreground">
-                {i + 1}
-              </div>
-              <div className="text-sm">{step}</div>
-            </li>
-          ))}
-        </ol>
-      </div>
-
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <TechButtonLink href="/" variant="white" className="h-12">
           На головну
@@ -127,5 +72,6 @@ export default async function SuccessPage({
         </TechButtonLink>
       </div>
     </div>
+    </>
   );
 }

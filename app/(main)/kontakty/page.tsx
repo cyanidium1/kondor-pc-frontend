@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { ContactForm } from "./ContactForm";
 import {
   Phone,
   MessageSquare,
@@ -29,12 +27,12 @@ import {
   telegramHref,
   telegramLabel,
 } from "@/lib/sanity/siteContacts";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Контакти",
-  description:
-    "Шоурум у Києві, Telegram, email, телефон. Щодня з 9:00 до 21:00. Ігрові ПК з гарантією до 3 років.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoContactsPage");
+}
 
 export default async function ContactsPage() {
   const [paymentRequisites, siteContacts] = await Promise.all([
@@ -44,6 +42,7 @@ export default async function ContactsPage() {
 
   return (
     <>
+      <SitePageSchemaJson pageId="seoContactsPage" />
       <section className="rounded-b-[40px] overflow-hidden">
         <div className="relative container-site pt-8 pb-[67px] lg:pt-12 lg:pb-[62px]">
           <div className="absolute -z-30 top-[170px] lg:top-[50px] right-[-64px] lg:right-[-190px] w-[322px] lg:w-[640px] h-[322px] lg:h-[640px]">
@@ -166,42 +165,8 @@ export default async function ContactsPage() {
                 </div>
               </div>
               {/* Contact form */}
-              <div className="">
-                <form className="space-y-3.5 rounded-lg border border-border bg-surface p-6">
-                  <div className="grid gap-1">
-                    <Label className="text-[14px]">Ім&apos;я</Label>
-                    <Input
-                      placeholder="Іван Петренко"
-                      className="text-[14px]"
-                    />
-                  </div>
-                  <div className="grid gap-1">
-                    <Label className="text-[14px]">Телефон</Label>
-                    <Input
-                      placeholder="+380 95 000 00 00"
-                      className="text-[14px]"
-                    />
-                  </div>
-                  <div className="grid gap-1">
-                    <Label className="text-[14px]">Повідомлення</Label>
-                    <textarea
-                      rows={4}
-                      placeholder="Опиши свій запит..."
-                      className="w-full h-[98px] rounded-md border border-border bg-background px-3 py-2 text-[14px] focus-visible:border-ring focus-visible:outline-none"
-                    />
-                  </div>
-                  <Button
-                    type="button"
-                    size="lg"
-                    variant="default"
-                    className="h-12 w-full px-6 rounded-none normal-case font-body text-[14px] leading-[120%] font-medium tracking-normal"
-                  >
-                    Надіслати
-                  </Button>
-                  <p className="text-center text-[14px] leading-[120%] font-light text-muted-foreground">
-                    Залиш повідомлення — відповімо протягом робочої години.
-                  </p>
-                </form>
+              <div>
+                <ContactForm />
               </div>
             </div>
           </Reveal>

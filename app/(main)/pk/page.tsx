@@ -3,22 +3,24 @@ import { Suspense } from "react";
 import { getAllBuilds } from "@/lib/sanity-pc/builds";
 import { getAllGames } from "@/lib/sanity-pc/games";
 import { CatalogClient } from "./CatalogClient";
-
-export const revalidate = 60;
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import { TechButtonLink } from "@/components/shared/TechButton";
 import Image from "next/image";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Каталог ігрових ПК",
-  description:
-    "Каталог ігрових ПК у Києві: 8 перевірених збірок від 20 000 до 200 000 ₴.",
-};
+export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoPcCatalogPage");
+}
 
 export default async function CatalogPage() {
   const [builds, games] = await Promise.all([getAllBuilds(), getAllGames()]);
 
   return (
+    <>
+      <SitePageSchemaJson pageId="seoPcCatalogPage" />
     <section className="relative container-site pt-8 lg:pt-12 pb-12 lg:pb-16">
       <div className="absolute -z-10 top-[-223px] lg:top-[-154px] left-[-860px] lg:left-[-160px] w-[1929px] h-[2007px]">
         <Image
@@ -56,5 +58,6 @@ export default async function CatalogPage() {
         <CatalogClient builds={builds} games={games} />
       </Suspense>
     </section>
+    </>
   );
 }

@@ -25,6 +25,14 @@ const zenterSP = localFont({
   display: "swap",
 });
 
+const metadataBase = (() => {
+  try {
+    return new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://kondor-pc.ua");
+  } catch {
+    return new URL("https://kondor-pc.ua");
+  }
+})();
+
 export const metadata: Metadata = {
   title: {
     default: "Kondor PC — Ігрові ПК під замовлення",
@@ -32,7 +40,7 @@ export const metadata: Metadata = {
   },
   description:
     "Готові ігрові ПК з реальними FPS, гарантією та доставкою Новою Поштою. Підбір під твої ігри та бюджет.",
-  metadataBase: new URL("https://kondor-pc.ua"),
+  metadataBase,
   openGraph: {
     type: "website",
     locale: "uk_UA",

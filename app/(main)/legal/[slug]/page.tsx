@@ -13,6 +13,11 @@ import {
   getSiteContactEmailAndTelegram,
   getSiteContacts,
 } from "@/lib/sanity/siteContacts";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import {
+  LEGAL_SEO_BY_SLUG,
+} from "@/lib/sanity/siteSeoConfig";
+import { metadataForLegalSlug } from "@/lib/sanity/siteSeoFetcher";
 
 export async function generateStaticParams() {
   return LEGAL_PAGES.map((p) => ({ slug: p.slug }));
@@ -26,6 +31,10 @@ export async function generateMetadata({
   const { slug } = await params;
   const page = legalBySlug(slug);
   if (!page) return { title: "Не знайдено" };
+
+  const fromSanity = await metadataForLegalSlug(slug);
+  if (fromSanity) return fromSanity;
+
   return {
     title: page.title,
     robots: { index: true, follow: true },
@@ -54,7 +63,11 @@ export default async function LegalPage({
       isOfferPage ? getSiteContactEmailAndTelegram() : null,
     ]);
 
+  const legalSeoPageId = LEGAL_SEO_BY_SLUG[slug];
+
   return (
+    <>
+      {legalSeoPageId ? <SitePageSchemaJson pageId={legalSeoPageId} /> : null}
     <div className="container-site py-16 md:py-24">
       <div className="mb-10">
         <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
@@ -125,5 +138,6 @@ export default async function LegalPage({
         ))}
       </article>
     </div>
+    </>
   );
 }

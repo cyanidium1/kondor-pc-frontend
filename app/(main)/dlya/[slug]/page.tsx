@@ -6,7 +6,9 @@ import {
   getLandingPageBySlug,
   resolvePageContext,
 } from "@/lib/data/adapter";
+import {SchemaJsonFromSeo} from "@/components/seo/SchemaJsonFromUrl";
 import {LandingPageBody} from "@/components/landings/LandingPageBody";
+import {buildLandingMetadata} from "@/lib/sanity/landingSeo";
 
 // ISR. Sanity webhook will revalidate by tag later (Sprint 3).
 export const revalidate = 60;
@@ -25,17 +27,11 @@ export async function generateMetadata({
   const {slug} = await params;
   const page = await getLandingPageBySlug(slug, "dlya");
   if (!page) return {title: "Не знайдено"};
-  return {
-    title: page.seo.title,
-    description: page.seo.description,
-    openGraph: {
-      title: page.seo.title,
-      description: page.seo.description,
-      type: "website",
-      locale: "uk_UA",
-      images: page.seo.ogImage ? [{url: page.seo.ogImage}] : undefined,
-    },
-  };
+  return buildLandingMetadata({
+    seo: page.seo,
+    path: `/dlya/${slug}`,
+    defaultTitle: page.internalTitle ?? slug,
+  });
 }
 
 export default async function DlyaLandingPage({
@@ -47,11 +43,14 @@ export default async function DlyaLandingPage({
   const page = await getLandingPageBySlug(slug, "dlya");
   if (!page) notFound();
 
-  // Mock-driven pages keep their original (game/use_case) context.
-  // Sanity-driven pages get a minimal context derived from the slug.
   const pageContext = page.context
     ? await resolvePageContext(page.context)
     : buildSanityPageContext("dlya", slug);
 
-  return <LandingPageBody page={page} pageContext={pageContext} />;
+  return (
+    <>
+      <SchemaJsonFromSeo seo={page.seo} />
+      <LandingPageBody page={page} pageContext={pageContext} />
+    </>
+  );
 }

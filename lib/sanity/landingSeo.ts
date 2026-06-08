@@ -1,0 +1,25 @@
+import type { Metadata } from "next";
+import type { PageSeo } from "@/types/blogPost";
+import { buildBlogMetadata } from "@/lib/sanity/blogSeo";
+
+interface LandingSeoParams {
+  seo: PageSeo | null | undefined;
+  path: string;
+  defaultTitle?: string;
+  defaultDescription?: string;
+}
+
+/** Next.js Metadata for /dlya and /promo landing pages from Sanity `page.seo` (`seoSettings`). */
+export function buildLandingMetadata({
+  seo,
+  path,
+  defaultTitle,
+  defaultDescription = "",
+}: LandingSeoParams): Metadata {
+  return buildBlogMetadata({
+    seo,
+    path,
+    defaultTitle: defaultTitle ?? "Kondor PC",
+    defaultDescription,
+  });
+}

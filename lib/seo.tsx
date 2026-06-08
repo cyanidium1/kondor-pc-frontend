@@ -1,15 +1,14 @@
 import type { Build, Faq } from "@/types/build";
+import { DEFAULT_SOCIAL_IMAGE_URL, SITE_URL } from "@/lib/seo/constants";
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://kondor-pc.ua";
-
-export function organizationJsonLd() {
+export function organizationJsonLd(options?: { logoUrl?: string }) {
+  const logoUrl = options?.logoUrl ?? DEFAULT_SOCIAL_IMAGE_URL;
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Kondor PC",
-    url: BASE_URL,
-    logo: `${BASE_URL}/og/logo.png`,
+    url: SITE_URL,
+    logo: logoUrl,
     sameAs: [
       "https://instagram.com/kondor_pc",
       "https://t.me/kondor_pc",
@@ -30,7 +29,7 @@ export function websiteJsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Kondor PC",
-    url: BASE_URL,
+    url: SITE_URL,
     inLanguage: "uk-UA",
   };
 }
@@ -45,22 +44,22 @@ export function breadcrumbJsonLd(
       "@type": "ListItem",
       position: i + 1,
       name: item.name,
-      item: `${BASE_URL}${item.url}`,
+      item: `${SITE_URL}${item.url}`,
     })),
   };
 }
 
-export function productJsonLd(build: Build) {
+export function productJsonLd(build: Build, imageUrl: string) {
   return {
     "@context": "https://schema.org",
     "@type": "Product",
     name: `${build.name} — Ігровий ПК`,
     description: `Ігровий ПК з ${build.spec.cpu}, ${build.spec.gpu}, ${build.spec.ram}.`,
-    image: `${BASE_URL}/og/pk-${build.slug}.png`,
+    image: imageUrl,
     brand: { "@type": "Brand", name: "Kondor PC" },
     offers: {
       "@type": "Offer",
-      url: `${BASE_URL}/pk/${build.slug}`,
+      url: `${SITE_URL}/pk/${build.slug}`,
       priceCurrency: "UAH",
       price: String(build.priceUah),
       availability:

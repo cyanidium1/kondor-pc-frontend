@@ -1,17 +1,39 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { CheckoutView } from "./CheckoutView";
+import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Оформлення замовлення",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoCheckoutPage");
+}
 
-export default function OformlennyaPage() {
+export default async function OformlennyaPage() {
   return (
+    <>
+      <SitePageSchemaJson pageId="seoCheckoutPage" />
     <div className="container-site py-10 md:py-14">
       <h1 className="font-display mb-8 text-3xl font-bold md:text-4xl">
         Оформлення замовлення
       </h1>
-      <CheckoutView />
+      <Suspense
+        fallback={
+          <div
+            className="grid gap-8 md:grid-cols-[1fr_340px]"
+            aria-busy="true"
+            aria-label="Завантаження оформлення"
+          >
+            <div className="space-y-10">
+              <div className="h-48 animate-pulse rounded-lg bg-muted/20" />
+              <div className="h-64 animate-pulse rounded-lg bg-muted/20" />
+            </div>
+            <div className="h-80 animate-pulse rounded-lg bg-muted/20" />
+          </div>
+        }
+      >
+        <CheckoutView />
+      </Suspense>
     </div>
+    </>
   );
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -13,7 +13,14 @@ import { TechButton } from "@/components/shared/TechButton";
 import Image from "next/image";
 import { ChassisArt } from "@/components/brand/ChassisArt";
 import { SKU_ACCENTS } from "@/lib/sku-accents";
-import { useCartStore, lineKey as cartLineKey } from "@/lib/cartStore";
+import {
+  useCartStore,
+  lineKey as cartLineKey,
+  type CartItem,
+} from "@/lib/cartStore";
+import { buildMonopayBasket } from "@/lib/monopay/basket";
+import { sendTelegramMessage } from "@/lib/telegram/client";
+import { TG } from "@/lib/telegram/icons";
 import {
   orderSchema,
   type OrderFormValues,
@@ -21,6 +28,8 @@ import {
   type PaymentMethod,
 } from "@/lib/validations/order";
 import { formatPrice, formatInstallment } from "@/lib/format";
+import type { PromoApplication } from "@/lib/promoCode";
+import { normalizePromoCodeInput } from "@/lib/promoCode";
 import type { NpBranch, NpCity } from "@/lib/nova-poshta/types";
 import { cn } from "@/lib/utils";
 import {
@@ -32,6 +41,8 @@ import {
   Building2,
   Bitcoin,
   Banknote,
+  Tag,
+  X,
 } from "lucide-react";
 
 const DELIVERY_OPTIONS: {
@@ -66,14 +77,9 @@ const PAYMENT_OPTIONS: {
   title: string;
   note?: string;
   group?: "main" | "other";
+  /** false — не показувати в UI (логіка та типи лишаються). */
+  visible?: boolean;
 }[] = [
-  {
-    value: "cod",
-    icon: Package,
-    title: "Оплата при отриманні на НП",
-    note: "Комісія НП: 2% + 20 ₴",
-    group: "main",
-  },
   {
     value: "monopay",
     icon: CreditCard,
@@ -82,11 +88,19 @@ const PAYMENT_OPTIONS: {
     group: "main",
   },
   {
+    value: "cod",
+    icon: Package,
+    title: "Оплата при отриманні на НП",
+    note: "Комісія НП: 2% + 20 ₴",
+    group: "main",
+  },
+  {
     value: "monobank_parts",
     icon: Wallet,
     title: "Частинами Monobank",
     note: "4 платежі без %",
     group: "main",
+    visible: false,
   },
   {
     value: "privat_parts",
@@ -94,6 +108,7 @@ const PAYMENT_OPTIONS: {
     title: "Частинами ПриватБанк",
     note: "до 9 платежів",
     group: "main",
+    visible: false,
   },
   {
     value: "pumb_parts",
@@ -101,6 +116,7 @@ const PAYMENT_OPTIONS: {
     title: "Частинами ПУМБ",
     note: "до 12 місяців",
     group: "main",
+    visible: false,
   },
   {
     value: "iban_individual",
@@ -125,13 +141,181 @@ const PAYMENT_OPTIONS: {
   },
 ];
 
-const COD_LIMIT = 50000;
+function visiblePaymentOptions(group: "main" | "other") {
+  return PAYMENT_OPTIONS.filter(
+    (o) => o.group === group && o.visible !== false,
+  );
+}
+
+function optionTitle<T extends { value: string; title: string }>(
+  items: readonly T[],
+  value: string,
+) {
+  return items.find((item) => item.value === value)?.title ?? value;
+}
+
+function formatDeliveryDetails(values: OrderFormValues): string {
+  if (values.deliveryMethod === "self_pickup") return "";
+
+  const parts: string[] = [];
+  if (values.deliveryCity?.trim()) {
+    parts.push(`${TG.location} <b>Місто:</b> ${values.deliveryCity.trim()}`);
+  }
+  if (
+    values.deliveryMethod === "np_branch" &&
+    values.deliveryBranchNumber?.trim()
+  ) {
+    parts.push(
+      `${TG.location} <b>Відділення:</b> №${values.deliveryBranchNumber.trim()}`,
+    );
+  }
+  if (
+    values.deliveryMethod === "np_courier" &&
+    values.deliveryAddress?.trim()
+  ) {
+    parts.push(
+      `${TG.location} <b>Адреса:</b> ${values.deliveryAddress.trim()}`,
+    );
+  }
+
+  return parts.length ? `${parts.join("\n")}\n` : "";
+}
+
+function formatCartItemsForTelegram(items: CartItem[]): string {
+  return items
+    .map((item, index) => {
+      const lines = [
+        `${index + 1}. <b>${item.name}</b> × ${item.quantity} — ${formatPrice(item.unitPriceUah * item.quantity)}`,
+      ];
+
+      if (item.colorName) {
+        lines.push(`   Колір: ${item.colorName}`);
+      }
+
+      item.options?.forEach((option) => {
+        lines.push(`   ${option.groupLabel}: ${option.optionLabel}`);
+      });
+
+      return lines.join("\n");
+    })
+    .join("\n");
+}
+
+function formatPromoForTelegram(application: PromoApplication): string {
+  const lines = [
+    `\n🎟 <b>Промокод:</b> ${application.promo.code}`,
+    `   Знижка: −${formatPrice(application.discountUah)}`,
+  ];
+  if (application.pcDiscountUah > 0) {
+    lines.push(`   · ПК: −${formatPrice(application.pcDiscountUah)}`);
+  }
+  if (application.accessoriesDiscountUah > 0) {
+    lines.push(
+      `   · Аксесуари: −${formatPrice(application.accessoriesDiscountUah)}`,
+    );
+  }
+  return `${lines.join("\n")}\n`;
+}
 
 export function CheckoutView() {
   const cartHydrated = useCartStore((s) => s.hydrated);
   const { items: cartItems, totalUah, clear } = useCartStore();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const cartTotal = totalUah();
+
+  const [promoInput, setPromoInput] = useState("");
+  const [appliedCode, setAppliedCode] = useState<string | null>(null);
+  const [appliedPromo, setAppliedPromo] = useState<PromoApplication | null>(
+    null,
+  );
+  const [promoError, setPromoError] = useState<string | null>(null);
+  const [promoLoading, setPromoLoading] = useState(false);
+  const autoAppliedRef = useRef(false);
+
+  const discountUah = appliedPromo?.discountUah ?? 0;
+  const orderTotalUah = appliedPromo?.totalUah ?? cartTotal;
+  const monopayTotalUah = Math.round(orderTotalUah * 1.013);
+
+  const applyPromoCode = useCallback(
+    async (rawCode: string, opts?: { silent?: boolean }) => {
+      const code = normalizePromoCodeInput(rawCode);
+      if (!code) {
+        if (!opts?.silent) setPromoError("Введіть промокод");
+        setAppliedPromo(null);
+        return null;
+      }
+
+      if (!opts?.silent) {
+        setPromoLoading(true);
+        setPromoError(null);
+      }
+
+      try {
+        const res = await fetch("/api/promo/validate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code,
+            items: cartItems.map((item) => ({
+              itemType: item.itemType,
+              unitPriceUah: item.unitPriceUah,
+              quantity: item.quantity,
+            })),
+          }),
+        });
+        const data = (await res.json()) as {
+          application?: PromoApplication;
+          error?: string;
+        };
+
+        if (!res.ok || !data.application) {
+          if (!opts?.silent) {
+            setPromoError(data.error ?? "Промокод не дійсний");
+          }
+          setAppliedPromo(null);
+          setAppliedCode(null);
+          return null;
+        }
+
+        setAppliedPromo(data.application);
+        setAppliedCode(data.application.promo.code);
+        setPromoInput(data.application.promo.code);
+        if (!opts?.silent) setPromoError(null);
+        return data.application;
+      } catch {
+        if (!opts?.silent) {
+          setPromoError("Не вдалося перевірити промокод");
+        }
+        setAppliedPromo(null);
+        setAppliedCode(null);
+        return null;
+      } finally {
+        if (!opts?.silent) setPromoLoading(false);
+      }
+    },
+    [cartItems],
+  );
+
+  useEffect(() => {
+    if (!appliedCode) return;
+    void applyPromoCode(appliedCode, { silent: true });
+  }, [cartItems, appliedCode, applyPromoCode]);
+
+  useEffect(() => {
+    const fromUrl = searchParams.get("promo");
+    if (
+      !cartHydrated ||
+      !fromUrl ||
+      autoAppliedRef.current ||
+      cartItems.length === 0
+    ) {
+      return;
+    }
+    autoAppliedRef.current = true;
+    setPromoInput(fromUrl.toUpperCase());
+    void applyPromoCode(fromUrl);
+  }, [cartHydrated, cartItems.length, searchParams, applyPromoCode]);
 
   const [cityQuery, setCityQuery] = useState("");
   const [cityOpen, setCityOpen] = useState(false);
@@ -141,6 +325,7 @@ export function CheckoutView() {
   const [branchesLoading, setBranchesLoading] = useState(false);
   const [branchQuery, setBranchQuery] = useState("");
   const [branchOpen, setBranchOpen] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   const {
     register,
@@ -154,7 +339,7 @@ export function CheckoutView() {
     defaultValues: {
       customerPhone: "+380",
       deliveryMethod: "np_branch",
-      paymentMethod: "monobank_parts",
+      paymentMethod: "monopay",
     },
   });
 
@@ -242,27 +427,106 @@ export function CheckoutView() {
       .slice(0, 15);
   }, [branchQuery, branches, branchesLoading, cityRef]);
 
-  const codDisabled = cartTotal > COD_LIMIT || deliveryMethod === "self_pickup";
+  const codDisabled = deliveryMethod === "self_pickup";
 
   useEffect(() => {
     if (paymentMethod === "cod" && codDisabled) {
-      setValue("paymentMethod", "monobank_parts");
+      setValue("paymentMethod", "monopay");
+      return;
+    }
+    const isHidden = PAYMENT_OPTIONS.some(
+      (o) => o.value === paymentMethod && o.visible === false,
+    );
+    if (isHidden) {
+      setValue("paymentMethod", "monopay");
     }
   }, [codDisabled, paymentMethod, setValue]);
 
   async function onSubmit(values: OrderFormValues) {
+    setSubmitError(false);
+
+    let promoForOrder = appliedPromo;
+    if (promoInput.trim()) {
+      promoForOrder = await applyPromoCode(promoInput);
+      if (promoInput.trim() && !promoForOrder) {
+        return;
+      }
+    }
+
+    const payableTotal = promoForOrder?.totalUah ?? cartTotal;
+    const promoDiscount = promoForOrder?.discountUah ?? 0;
+
     const orderNumber = `UA-${new Date().toISOString().slice(2, 10).replace(/-/g, "")}-${String(Math.floor(Math.random() * 9000 + 1000))}`;
-    // Stub: real server action will create Sanity Order + notify KeyCRM/Telegram/Sheets.
-    console.log("[order:stub]", {
-      orderNumber,
-      ...values,
-      items: cartItems,
-      totalUah: cartTotal,
-    });
-    clear();
-    router.push(
-      `/oformlennya/uspikh?order=${orderNumber}&payment=${values.paymentMethod}`,
-    );
+
+    const text =
+      `${TG.form} <b>Нове замовлення</b>\n` +
+      `${TG.number} <b>Номер:</b> ${orderNumber}\n\n` +
+      `${TG.name} <b>Ім'я:</b> ${values.customerName.trim()}\n` +
+      `${TG.phone} <b>Телефон:</b> ${values.customerPhone.trim()}\n` +
+      `${TG.email} <b>Email:</b> ${values.customerEmail.trim()}\n\n` +
+      `${TG.delivery} <b>Доставка:</b> ${optionTitle(DELIVERY_OPTIONS, values.deliveryMethod)}\n` +
+      formatDeliveryDetails(values) +
+      `${TG.payment} <b>Оплата:</b> ${optionTitle(PAYMENT_OPTIONS, values.paymentMethod)}\n` +
+      (values.customerComment?.trim()
+        ? `${TG.message} <b>Коментар:</b> ${values.customerComment.trim()}\n`
+        : "") +
+      `\n${TG.cart} <b>Товари:</b>\n` +
+      formatCartItemsForTelegram(cartItems) +
+      (promoForOrder ? formatPromoForTelegram(promoForOrder) : "") +
+      `\n${TG.total} <b>Сума:</b> ${formatPrice(cartTotal)}` +
+      (promoDiscount > 0
+        ? `\n${TG.total} <b>Знижка:</b> −${formatPrice(promoDiscount)}`
+        : "") +
+      `\n${TG.total} <b>До сплати:</b> ${formatPrice(payableTotal)}` +
+      (values.paymentMethod === "monopay"
+        ? `\n${TG.total} <b>До сплати (з комісією):</b> ${formatPrice(Math.round(payableTotal * 1.013))}`
+        : "");
+
+    try {
+      await sendTelegramMessage(text);
+
+      if (values.paymentMethod === "monopay") {
+        const payTotalUah = Math.round(payableTotal * 1.013);
+        const invoiceRes = await fetch("/api/monopay/invoice", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: payTotalUah * 100,
+            orderNumber,
+            basketOrder: buildMonopayBasket(
+              cartItems,
+              promoDiscount > 0
+                ? {
+                    amountUah: promoDiscount,
+                    label: `Знижка (${promoForOrder!.promo.code})`,
+                  }
+                : undefined,
+            ),
+          }),
+        });
+
+        const invoiceData = (await invoiceRes.json()) as {
+          pageUrl?: string;
+          error?: unknown;
+        };
+
+        if (!invoiceRes.ok || !invoiceData.pageUrl) {
+          console.error("[checkout/monopay]", invoiceData.error);
+          throw new Error("invoice failed");
+        }
+
+        clear();
+        window.location.href = invoiceData.pageUrl;
+        return;
+      }
+
+      clear();
+      router.push(
+        `/oformlennya/uspikh?order=${orderNumber}&payment=${values.paymentMethod}`,
+      );
+    } catch {
+      setSubmitError(true);
+    }
   }
 
   if (!cartHydrated) {
@@ -539,7 +803,7 @@ export function CheckoutView() {
         <section className="rounded-lg border border-border bg-surface p-6">
           <SectionNumber n="3" title="Спосіб оплати" />
           <div className="mt-5 space-y-3">
-            {PAYMENT_OPTIONS.filter((o) => o.group === "main").map((opt) => {
+            {visiblePaymentOptions("main").map((opt) => {
               const active = paymentMethod === opt.value;
               const disabled = opt.value === "cod" && codDisabled;
               return (
@@ -582,22 +846,20 @@ export function CheckoutView() {
                     )}
                     {opt.value === "monobank_parts" && (
                       <div className="tabular mt-1 text-xs text-muted-foreground">
-                        {formatInstallment(cartTotal, 4)}
+                        {formatInstallment(orderTotalUah, 4)}
                       </div>
                     )}
                     {opt.value === "monopay" && (
                       <div className="tabular mt-1 text-xs text-muted-foreground">
                         Підсумок з комісією:{" "}
                         <span className="font-semibold text-foreground">
-                          {formatPrice(Math.round(cartTotal * 1.013))}
+                          {formatPrice(monopayTotalUah)}
                         </span>
                       </div>
                     )}
                     {opt.value === "cod" && codDisabled && (
                       <div className="mt-1 text-xs text-destructive">
-                        {cartTotal > COD_LIMIT
-                          ? `Доступно лише до ${formatPrice(COD_LIMIT)}`
-                          : "Недоступно при самовивозі"}
+                        Недоступно при самовивозі
                       </div>
                     )}
                   </div>
@@ -609,7 +871,7 @@ export function CheckoutView() {
             ─── Інші способи ───
           </div>
           <div className="mt-3 grid gap-2 sm:grid-cols-3">
-            {PAYMENT_OPTIONS.filter((o) => o.group === "other").map((opt) => {
+            {visiblePaymentOptions("other").map((opt) => {
               const active = paymentMethod === opt.value;
               return (
                 <label
@@ -684,6 +946,12 @@ export function CheckoutView() {
               </div>
             )}
 
+            {submitError && (
+              <p className="text-center text-sm text-destructive">
+                Не вдалося оформити замовлення. Спробуй ще раз або напиши нам у
+                Telegram.
+              </p>
+            )}
             <TechButton
               type="submit"
               size="lg"
@@ -780,23 +1048,93 @@ export function CheckoutView() {
             <span>Товарів на</span>
             <span className="tabular">{formatPrice(cartTotal)}</span>
           </div>
+          {discountUah > 0 && appliedPromo ? (
+            <div className="flex justify-between text-emerald-400/90">
+              <span>Промокод {appliedPromo.promo.code}</span>
+              <span className="tabular">−{formatPrice(discountUah)}</span>
+            </div>
+          ) : null}
           <div className="flex justify-between text-muted-foreground">
             <span>Доставка</span>
             <span>Безкоштовно</span>
           </div>
         </div>
+
+        <div className="rounded-md border border-border bg-background/50 p-3">
+          <div className="mb-2 flex items-center gap-2 text-[11px] uppercase tracking-wider text-muted-foreground">
+            <Tag className="size-3.5" aria-hidden />
+            Промокод
+          </div>
+          {appliedPromo ? (
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <div className="font-display text-sm font-bold uppercase tracking-wide">
+                  {appliedPromo.promo.code}
+                </div>
+                <div className="text-xs text-emerald-400/90">
+                  Застосовано · −{formatPrice(discountUah)}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setAppliedPromo(null);
+                  setAppliedCode(null);
+                  setPromoInput("");
+                  setPromoError(null);
+                }}
+                className="rounded-md p-1.5 text-muted-foreground transition hover:bg-white/5 hover:text-foreground"
+                aria-label="Прибрати промокод"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <div className="flex gap-2">
+                <Input
+                  value={promoInput}
+                  onChange={(e) => {
+                    setPromoInput(e.target.value.toUpperCase());
+                    setPromoError(null);
+                  }}
+                  placeholder="Введіть промокод"
+                  className="h-9"
+                  autoComplete="off"
+                />
+                <TechButton
+                  type="button"
+                  size="sm"
+                  className="shrink-0 px-4"
+                  disabled={promoLoading || !promoInput.trim()}
+                  onClick={() => void applyPromoCode(promoInput)}
+                >
+                  {promoLoading ? "…" : "OK"}
+                </TechButton>
+              </div>
+              {promoError ? (
+                <p className="text-xs text-destructive">{promoError}</p>
+              ) : (
+                <p className="text-[11px] text-muted-foreground">
+                  Окремі знижки на ПК та аксесуари
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+
         <div className="border-t border-border pt-3">
           <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
             До сплати
           </div>
           <div className="tabular font-heading text-3xl font-bold">
             {paymentMethod === "monopay"
-              ? formatPrice(Math.round(cartTotal * 1.013))
-              : formatPrice(cartTotal)}
+              ? formatPrice(monopayTotalUah)
+              : formatPrice(orderTotalUah)}
           </div>
           {paymentMethod === "monobank_parts" && (
             <div className="tabular mt-1 text-xs text-muted-foreground">
-              {formatInstallment(cartTotal, 4)} Monobank без %
+              {formatInstallment(orderTotalUah, 4)} Monobank без %
             </div>
           )}
         </div>

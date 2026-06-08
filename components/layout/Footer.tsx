@@ -3,7 +3,7 @@ import { Wordmark } from "@/components/brand/Wordmark";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import Image from "next/image";
 import TagIcon from "../icons/TagIcon";
-import { NAV } from "@/components/layout/nav";
+import { buildNavColumns, type NavEntry } from "@/components/layout/nav";
 import {
   ensureHttps,
   formatPhoneDisplay,
@@ -15,19 +15,6 @@ const CODE_SITE_URL = "https://www.code-site.art";
 
 type FooterLink = { href: string; label: string; external?: boolean };
 type Column = { title: string; links: FooterLink[] };
-
-const NAV_COLUMNS: Column[] = (() => {
-  const flat: FooterLink[] = [];
-  const groups: Column[] = [];
-  for (const item of NAV) {
-    if ("children" in item) {
-      groups.push({ title: item.label, links: item.children });
-    } else {
-      flat.push(item);
-    }
-  }
-  return [{ title: "Розділи", links: flat }, ...groups];
-})();
 
 const LEGAL_COLUMN: Column = {
   title: "Юридична",
@@ -74,11 +61,15 @@ function buildSocialColumn(contacts: {
   return { title: "Соцмережі", links };
 }
 
-export async function Footer() {
+const FOOTER_EXCLUDED_COLUMNS = new Set(["Промо"]);
+
+export async function Footer({ navItems }: { navItems: NavEntry[] }) {
   const contacts = await getSiteContacts();
   const socialColumn = contacts ? buildSocialColumn(contacts) : null;
   const columns = [
-    ...NAV_COLUMNS,
+    ...buildNavColumns(navItems).filter(
+      (col) => !FOOTER_EXCLUDED_COLUMNS.has(col.title),
+    ),
     LEGAL_COLUMN,
     ...(socialColumn ? [socialColumn] : []),
   ];
@@ -126,7 +117,7 @@ export async function Footer() {
             <ul className="space-y-2 text-sm">
               {col.links.map((l) => (
                 <li key={l.href}>
-                  {l.external ? (
+                  {"external" in l && l.external ? (
                     <a
                       href={l.href}
                       target="_blank"

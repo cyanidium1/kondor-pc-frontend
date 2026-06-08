@@ -1,4 +1,5 @@
 import type { SkuSlug } from "@/lib/sku-accents";
+import type { PageSeo } from "@/types/blogPost";
 
 export type { SkuSlug };
 
@@ -92,11 +93,10 @@ export interface Build {
   noiseLevelDb?: number;
   upgradePathNotes?: string;
   includedFeatureKeys: string[];
-  faqKeys: string[];
   /** Toggle from Sanity build: true => use default mocked FAQ on PK page. */
   useDefaultFaq?: boolean;
-  /** Custom FAQ items from Sanity when default FAQ is disabled. */
-  customFaqItems?: Array<{ question: string; answer: string }>;
+  /** FAQ from Sanity `customFaq` refs (faqEntry) when default FAQ is disabled. */
+  customFaqItems?: Array<{ id?: string; question: string; answer: string }>;
   /** Optional chassis photo — replaces ChassisArt SVG when present. Any absolute URL (Sanity CDN, Unsplash, etc.). */
   heroImageUrl?: string;
   /** Additional gallery shots. Future: from Sanity `gallery[]`. */
@@ -112,6 +112,8 @@ export interface Build {
   configurableOptions?: ConfigGroup[];
   /** Відгуки з Sanity (масив на документі збірки). */
   reviews?: Review[];
+  /** SEO з Sanity (`build.seo` → `seoSettings`). */
+  seo?: PageSeo | null;
 }
 
 export interface Game {

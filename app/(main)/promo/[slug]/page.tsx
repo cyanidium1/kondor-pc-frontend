@@ -5,7 +5,9 @@ import {
   getAllLandingPageSlugs,
   getLandingPageBySlug,
 } from "@/lib/data/adapter";
+import {SchemaJsonFromSeo} from "@/components/seo/SchemaJsonFromUrl";
 import {LandingPageBody} from "@/components/landings/LandingPageBody";
+import {buildLandingMetadata} from "@/lib/sanity/landingSeo";
 
 // ISR. Promo pages can have `expiresAt` set in Sanity; expired ones drop
 // out of `generateStaticParams` automatically (handled in fetchLandingSlugs).
@@ -25,17 +27,22 @@ export async function generateMetadata({
   const {slug} = await params;
   const page = await getLandingPageBySlug(slug, "promo");
   if (!page) return {title: "Не знайдено"};
-  return {
-    title: page.seo.title,
-    description: page.seo.description,
-    openGraph: {
-      title: page.seo.title,
-      description: page.seo.description,
-      type: "website",
-      locale: "uk_UA",
-      images: page.seo.ogImage ? [{url: page.seo.ogImage}] : undefined,
-    },
-  };
+  return buildLandingMetadata({
+    seo: page.seo,
+    path: `/promo/${slug}`,
+    defaultTitle: page.internalTitle ?? slug,
+  });
+}
+
+function PromoExpiredBanner() {
+  return (
+    <div
+      role="status"
+      className="border-b border-amber-500/30 bg-amber-500/10 px-4 py-3 text-center text-sm text-amber-200"
+    >
+      Подія завершилась. Інформація нижче залишена для довідки.
+    </div>
+  );
 }
 
 export default async function PromoLandingPage({
@@ -46,6 +53,17 @@ export default async function PromoLandingPage({
   const {slug} = await params;
   const page = await getLandingPageBySlug(slug, "promo");
   if (!page) notFound();
+
+  const isExpired =
+    page.expiresAt != null && new Date(page.expiresAt).getTime() <= Date.now();
+
   const pageContext = buildSanityPageContext("promo", slug);
-  return <LandingPageBody page={page} pageContext={pageContext} />;
+
+  return (
+    <>
+      <SchemaJsonFromSeo seo={page.seo} />
+      {isExpired ? <PromoExpiredBanner /> : null}
+      <LandingPageBody page={page} pageContext={pageContext} />
+    </>
+  );
 }
