@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { TechButtonLink } from "@/components/shared/TechButton";
 import { Check } from "lucide-react";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Замовлення оформлено",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoOrderSuccessPage");
+}
 
 const COPY: Record<string, { title: string }> = {
   monopay: {

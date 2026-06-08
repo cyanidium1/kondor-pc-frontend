@@ -27,12 +27,11 @@ import {
   telegramHref,
   telegramLabel,
 } from "@/lib/sanity/siteContacts";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Контакти",
-  description:
-    "Шоурум у Києві, Telegram, email, телефон. Щодня з 9:00 до 21:00. Ігрові ПК з гарантією до 3 років.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoContactsPage");
+}
 
 export default async function ContactsPage() {
   const [paymentRequisites, siteContacts] = await Promise.all([

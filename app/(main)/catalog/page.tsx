@@ -3,15 +3,14 @@ import { Suspense } from "react";
 import { getAllCategories, getCatalogItems } from "@/lib/sanity/fetchers";
 import { CatalogClient } from "./CatalogClient";
 import Image from "next/image";
-
-export const metadata: Metadata = {
-  title: "Каталог аксесуарів — клавіатури, миші, поверхні",
-  description:
-    "Ігрові клавіатури, миші, ігрові поверхні, комплекти кейкапів. Доставка НП, гарантія 12 міс.",
-};
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 // Revalidate the whole listing every 5 minutes — aligns with fetcher-level cache.
 export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoAccessoriesPage");
+}
 
 export default async function CatalogPage() {
   const [categories, items] = await Promise.all([

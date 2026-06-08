@@ -4,12 +4,11 @@ import { Reveal } from "@/components/shared/Reveal";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { getAllGames } from "@/lib/sanity-pc/games";
 import Image from "next/image";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Підбір ПК за 30 секунд",
-  description:
-    "Обери свої ігри та бюджет — покажемо 3–5 підходящих збірок з реальними FPS.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoPickerPage");
+}
 
 export default async function PidbirPage() {
   const gamesCatalog = await getAllGames();

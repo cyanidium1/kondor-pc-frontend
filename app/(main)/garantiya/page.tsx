@@ -22,12 +22,11 @@ import {
   phoneHref,
   telegramHref,
 } from "@/lib/sanity/siteContacts";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Гарантія на ігрові ПК до 3 років",
-  description:
-    "Офіційна гарантія 12 місяців + гарантія виробника на кожен компонент до 3 років. Безкоштовне повернення Новою Поштою при поломці.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoWarrantyPage");
+}
 
 const COVERED = [
   "Справність усіх компонентів протягом 12 місяців",

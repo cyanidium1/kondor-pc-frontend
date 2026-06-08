@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { SectionHeader } from "@/components/shared/SectionHeader";
@@ -34,8 +35,13 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import ArrowIcon from "@/components/icons/ArrowIcon";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoHomePage");
+}
 
 const BUDGET_BUCKETS = [
   { label: "До 40 000 ₴", href: "/pk?max=40" },

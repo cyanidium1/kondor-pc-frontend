@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { CheckoutView } from "./CheckoutView";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Оформлення замовлення",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoCheckoutPage");
+}
 
 export default function OformlennyaPage() {
   return (

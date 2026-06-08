@@ -13,6 +13,7 @@ import {
   getSiteContactEmailAndTelegram,
   getSiteContacts,
 } from "@/lib/sanity/siteContacts";
+import { metadataForLegalSlug } from "@/lib/sanity/siteSeoFetcher";
 
 export async function generateStaticParams() {
   return LEGAL_PAGES.map((p) => ({ slug: p.slug }));
@@ -26,6 +27,10 @@ export async function generateMetadata({
   const { slug } = await params;
   const page = legalBySlug(slug);
   if (!page) return { title: "Не знайдено" };
+
+  const fromSanity = await metadataForLegalSlug(slug);
+  if (fromSanity) return fromSanity;
+
   return {
     title: page.title,
     robots: { index: true, follow: true },

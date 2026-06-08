@@ -15,10 +15,11 @@ import type { Resolution } from "@/types/build";
 import { cn } from "@/lib/utils";
 import { TechButtonLink } from "@/components/shared/TechButton";
 import ArrowIcon from "@/components/icons/ArrowIcon";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Результат підбору",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoPickerResultPage");
+}
 
 export default async function ResultPage({
   searchParams,

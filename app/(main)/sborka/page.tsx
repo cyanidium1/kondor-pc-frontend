@@ -3,12 +3,11 @@ import { CustomBuildForm } from "./CustomBuildForm";
 import { Reveal } from "@/components/shared/Reveal";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import Image from "next/image";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export const metadata: Metadata = {
-  title: "Кастомна збірка ПК під замовлення",
-  description:
-    "Зберемо ПК під твої задачі та бюджет. Менеджер зв'яжеться за 2 години у робочий час.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForSitePage("seoCustomBuildPage");
+}
 
 const WHAT_WE_CAN = [
   {
