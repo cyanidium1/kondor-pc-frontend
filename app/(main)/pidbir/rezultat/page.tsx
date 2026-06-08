@@ -10,7 +10,11 @@ import {
 } from "@/lib/pidbir";
 import { formatUah } from "@/lib/format";
 import { getAllBuilds } from "@/lib/sanity-pc/builds";
-import { getAllGames, makeGameLabelMap } from "@/lib/sanity-pc/games";
+import {
+  getAllGames,
+  makeGameLabelMap,
+  makeGameShortLabelMap,
+} from "@/lib/sanity-pc/games";
 import type { Resolution } from "@/types/build";
 import { cn } from "@/lib/utils";
 import { TechButtonLink } from "@/components/shared/TechButton";
@@ -43,6 +47,7 @@ export default async function ResultPage({
     getAllGames(),
   ]);
   const gameLabels = makeGameLabelMap(gamesCatalog);
+  const gameShortLabels = makeGameShortLabelMap(gamesCatalog);
 
   const criteria = {
     games,
@@ -112,7 +117,6 @@ export default async function ResultPage({
           </div>
         ))}
       </div>
-
       {aspirational && (
         <section className="mt-16 border-t border-border pt-10">
           <h2 className="font-display text-2xl font-bold md:text-3xl">

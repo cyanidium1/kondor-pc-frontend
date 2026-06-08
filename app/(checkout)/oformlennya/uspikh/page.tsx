@@ -47,31 +47,31 @@ export default async function SuccessPage({
   return (
     <>
       <SitePageSchemaJson pageId="seoOrderSuccessPage" />
-    <div className="container-narrow py-16 md:py-24">
-      <div className="mb-8 flex flex-col items-center text-center">
-        <div className="mb-5 flex size-16 items-center justify-center rounded-full bg-brand-primary/15">
-          <Check className="size-8 text-brand-primary" strokeWidth={3} />
+      <div className="container-narrow py-16 md:py-24">
+        <div className="mb-8 flex flex-col items-center text-center">
+          <div className="mb-5 flex size-16 items-center justify-center rounded-full bg-brand-primary/15">
+            <Check className="size-8 text-brand-primary" strokeWidth={3} />
+          </div>
+          <h1 className="font-display text-3xl font-bold md:text-4xl">
+            {copy.title}
+          </h1>
+          <p className="mt-3 text-muted-foreground">
+            Дякуємо за довіру. Номер замовлення:
+          </p>
+          <div className="tabular mt-1 rounded-md border border-border bg-surface px-3 py-1.5 font-body text-sm">
+            {orderNumber}
+          </div>
         </div>
-        <h1 className="font-display text-3xl font-bold md:text-4xl">
-          {copy.title}
-        </h1>
-        <p className="mt-3 text-muted-foreground">
-          Дякуємо за довіру. Номер замовлення:
-        </p>
-        <div className="tabular mt-1 rounded-md border border-border bg-surface px-3 py-1.5 font-body text-sm">
-          {orderNumber}
-        </div>
-      </div>
 
-      <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <TechButtonLink href="/" variant="white" className="h-12">
-          На головну
-        </TechButtonLink>
-        <TechButtonLink href="/pk" variant="primary" className="h-12">
-          Переглянути каталог
-        </TechButtonLink>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <TechButtonLink href="/" variant="white" className="h-12">
+            На головну
+          </TechButtonLink>
+          <TechButtonLink href="/pk" variant="primary" className="h-12">
+            Переглянути каталог
+          </TechButtonLink>
+        </div>
       </div>
-    </div>
     </>
   );
 }

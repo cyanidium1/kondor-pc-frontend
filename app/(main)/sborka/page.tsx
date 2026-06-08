@@ -39,83 +39,83 @@ export default function SborkaPage() {
   return (
     <>
       <SitePageSchemaJson pageId="seoCustomBuildPage" />
-    <div className="relative container-site pt-8 lg:pt-12 pb-16 lg:py-24">
-      <div className="absolute -z-20 top-[-97px] sm:top-[-197px] lg:top-[-167px] right-[-615px] lg:right-[-420px] w-[1876px] h-[1990px]">
-        <Image
-          src="/images/sborka/shadows.svg"
-          alt="shadows"
-          width="1876"
-          height="1990"
-          className="object-cover"
-        />
-      </div>
-      <div className="absolute -z-10 top-[120px] sm:top-[20px] right-[-110px] lg:top-[-76px] lg:right-[51px] w-[403px] lg:w-[597px] h-auto aspect-[597/797]">
-        <Image
-          src="/images/sborka/decor.webp"
-          alt="decor"
-          width="597"
-          height="797"
-          className="object-cover w-full h-full"
-        />
-      </div>
-      <Reveal>
-        <SectionHeader
-          kicker="Кастомна збірка"
-          title="ЗБІРКА ПІД ТВОЇ ЗАДАЧІ"
-          subtitle="Не знайшов ідеальну конфігурацію в каталозі? Зберемо саме те, що тобі потрібно."
-          titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 max-w-[328px] md:max-w-[490px]"
-          subtitleClassName="text-[16px] leading-[120%] max-w-[328px] lg:max-w-[430px]"
-          className="mb-12"
-          titleAs="h1"
-        />
-      </Reveal>
-
-      <Reveal>
-        {" "}
-        <div className="mb-12 grid gap-4 sm:grid-cols-3">
-          {WHAT_WE_CAN.map((c) => (
-            <div
-              key={c.n}
-              className="relative overflow-hidden clip-angular-12 bg-brand-primary p-6 min-h-[183px] sm:min-h-[230px] md:min-h-[210px] lg:min-h-[230px] xl:min-h-[183px]"
-            >
-              <div className="mb-4 flex items-center justify-between" />
-              <div className="font-display text-[24px] sm:text-[15px] md:text-[20px] lg:text-[24px] font-semibold leading-[120%] text-black">
-                {c.title}
-              </div>
-              <p className="mt-3 max-w-[204px] text-[12px] leading-[120%] text-black">
-                {c.text}
-              </p>
-              <div className="absolute bottom-[0px] right-[0px] tabular font-heading text-[60px] font-bold text-black lg:bottom-[-27px] lg:right-[-27px] lg:text-[104px]">
-                {c.n}
-              </div>
-            </div>
-          ))}
+      <div className="relative container-site pt-8 lg:pt-12 pb-16 lg:py-24">
+        <div className="absolute -z-20 top-[-97px] sm:top-[-197px] lg:top-[-167px] right-[-615px] lg:right-[-420px] w-[1876px] h-[1990px]">
+          <Image
+            src="/images/sborka/shadows.svg"
+            alt="shadows"
+            width="1876"
+            height="1990"
+            className="object-cover"
+          />
         </div>
-      </Reveal>
+        <div className="absolute -z-10 top-[120px] sm:top-[20px] right-[-110px] lg:top-[-76px] lg:right-[51px] w-[403px] lg:w-[597px] h-auto aspect-[597/797]">
+          <Image
+            src="/images/sborka/decor.webp"
+            alt="decor"
+            width="597"
+            height="797"
+            className="object-cover w-full h-full"
+          />
+        </div>
+        <Reveal>
+          <SectionHeader
+            kicker="Кастомна збірка"
+            title="ЗБІРКА ПІД ТВОЇ ЗАДАЧІ"
+            subtitle="Не знайшов ідеальну конфігурацію в каталозі? Зберемо саме те, що тобі потрібно."
+            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 max-w-[328px] md:max-w-[490px]"
+            subtitleClassName="text-[16px] leading-[120%] max-w-[328px] lg:max-w-[430px]"
+            className="mb-12"
+            titleAs="h1"
+          />
+        </Reveal>
 
-      <Reveal>
-        {" "}
-        <div className="mb-12">
-          <ol className="tabular flex flex-col sm:flex-row sm:flex-wrap md:items-center gap-x-6 gap-y-3 text-sm">
-            {STEPS.map((s, i) => (
-              <li
-                key={i}
-                className="flex items-center gap-4 rounded-[6px] bg-white px-4 py-3"
+        <Reveal>
+          {" "}
+          <div className="mb-12 grid gap-4 sm:grid-cols-3">
+            {WHAT_WE_CAN.map((c) => (
+              <div
+                key={c.n}
+                className="relative overflow-hidden clip-angular-12 bg-brand-primary p-6 min-h-[183px] sm:min-h-[230px] md:min-h-[210px] lg:min-h-[230px] xl:min-h-[183px]"
               >
-                <span className="flex size-6 items-center justify-center rounded-full bg-background font-display text-xs font-semibold text-white">
-                  {i + 1}
-                </span>
-                <span className="font-heading text-[12px] lg:text-[14px] font-medium leading-[120%] text-black uppercase">
-                  {s}
-                </span>
-              </li>
+                <div className="mb-4 flex items-center justify-between" />
+                <div className="font-display text-[24px] sm:text-[15px] md:text-[20px] lg:text-[24px] font-semibold leading-[120%] text-black">
+                  {c.title}
+                </div>
+                <p className="mt-3 max-w-[204px] text-[12px] leading-[120%] text-black">
+                  {c.text}
+                </p>
+                <div className="absolute bottom-[0px] right-[0px] tabular font-heading text-[60px] font-bold text-black lg:bottom-[-27px] lg:right-[-27px] lg:text-[104px]">
+                  {c.n}
+                </div>
+              </div>
             ))}
-          </ol>
-        </div>
-      </Reveal>
+          </div>
+        </Reveal>
 
-      <CustomBuildForm />
-    </div>
+        <Reveal>
+          {" "}
+          <div className="mb-12">
+            <ol className="tabular flex flex-col sm:flex-row sm:flex-wrap md:items-center gap-x-6 gap-y-3 text-sm">
+              {STEPS.map((s, i) => (
+                <li
+                  key={i}
+                  className="flex items-center gap-4 rounded-[6px] bg-white px-4 py-3"
+                >
+                  <span className="flex size-6 items-center justify-center rounded-full bg-background font-display text-xs font-semibold text-white">
+                    {i + 1}
+                  </span>
+                  <span className="font-heading text-[12px] lg:text-[14px] font-medium leading-[120%] text-black uppercase">
+                    {s}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </Reveal>
+
+        <CustomBuildForm />
+      </div>
     </>
   );
 }

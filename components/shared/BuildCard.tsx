@@ -35,6 +35,7 @@ export function BuildCard({
   variant = "full",
   highlightGames,
   gameLabels,
+  gameShortLabels,
   badge,
   className,
 }: {
@@ -42,6 +43,8 @@ export function BuildCard({
   variant?: Variant;
   highlightGames?: string[];
   gameLabels?: Record<string, string>;
+  /** Скорочені назви для блоку FPS (shortName з Sanity). */
+  gameShortLabels?: Record<string, string>;
   badge?: string;
   className?: string;
 }) {
@@ -191,7 +194,7 @@ export function BuildCard({
                   className="flex items-center justify-between text-sm"
                 >
                   <span className="text-muted-foreground">
-                    {gameLabels?.[slug] ?? slug}
+                    {gameShortLabels?.[slug] ?? gameLabels?.[slug] ?? slug}
                   </span>
                   <span className="flex items-center gap-2">
                     <span

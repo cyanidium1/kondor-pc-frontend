@@ -577,6 +577,7 @@ export default async function BuildPage({
                     build={s}
                     variant="compact"
                     gameLabels={gameLabels}
+                    gameShortLabels={gameShortLabels}
                     highlightGames={["cs2", "warzone", "cyberpunk"]}
                   />
                 ))}
