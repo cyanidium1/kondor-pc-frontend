@@ -45,8 +45,6 @@ const INCLUDED_ALL = [
   "return",
 ];
 
-const FAQ_BUILD = ["b-gta6", "b-monitor", "b-power", "b-upgrade", "b-return"];
-
 function cmp(c: BuildComponent): BuildComponent {
   return c;
 }
@@ -110,7 +108,6 @@ export const BUILDS: Build[] = [
     noiseLevelDb: 28,
     upgradePathNotes: "Вільні M.2 слоти для +2 ТБ NVMe, можна поставити кулер Tower, PSU витримує GPU наступного покоління.",
     includedFeatureKeys: INCLUDED_ALL,
-    faqKeys: FAQ_BUILD,
   },
   {
     slug: "hyper",
@@ -154,7 +151,6 @@ export const BUILDS: Build[] = [
     noiseLevelDb: 30,
     upgradePathNotes: "Апгрейд до Ryzen 7 на AM4 без заміни плати. Вільний M.2 слот.",
     includedFeatureKeys: INCLUDED_ALL,
-    faqKeys: FAQ_BUILD,
   },
   {
     slug: "nebula",
@@ -199,7 +195,6 @@ export const BUILDS: Build[] = [
     noiseLevelDb: 32,
     upgradePathNotes: "Плата тримає Ryzen 9 7950X3D без заміни. Легко +NVMe до 4 ТБ.",
     includedFeatureKeys: INCLUDED_ALL,
-    faqKeys: FAQ_BUILD,
   },
   {
     slug: "orbitra",
@@ -243,7 +238,6 @@ export const BUILDS: Build[] = [
     noiseLevelDb: 34,
     upgradePathNotes: "Платформа AM5 тримає всі наступні X3D. БЖ з запасом на RTX 5080.",
     includedFeatureKeys: INCLUDED_ALL,
-    faqKeys: FAQ_BUILD,
   },
   {
     slug: "nyx",
@@ -283,7 +277,6 @@ export const BUILDS: Build[] = [
     noiseLevelDb: 32,
     upgradePathNotes: "Можна додати +16 ГБ RAM, +NVMe 1 ТБ.",
     includedFeatureKeys: INCLUDED_ALL,
-    faqKeys: FAQ_BUILD,
   },
   {
     slug: "velar",
@@ -325,7 +318,6 @@ export const BUILDS: Build[] = [
     noiseLevelDb: 33,
     upgradePathNotes: "AM5 до Ryzen 9 9950X. БЖ тримає топові GPU.",
     includedFeatureKeys: INCLUDED_ALL,
-    faqKeys: FAQ_BUILD,
   },
   {
     slug: "pulsar",
@@ -367,7 +359,6 @@ export const BUILDS: Build[] = [
     noiseLevelDb: 32,
     upgradePathNotes: "64 ГБ RAM вже з запасом. Можна додати +NVMe 2 ТБ.",
     includedFeatureKeys: INCLUDED_ALL,
-    faqKeys: FAQ_BUILD,
   },
   {
     slug: "comet",
@@ -407,7 +398,6 @@ export const BUILDS: Build[] = [
     noiseLevelDb: 28,
     upgradePathNotes: "Можна апгрейдити до Ryzen 7 на AM4, +RAM до 32 ГБ.",
     includedFeatureKeys: INCLUDED_ALL,
-    faqKeys: FAQ_BUILD,
   },
 ];
 

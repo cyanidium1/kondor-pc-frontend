@@ -92,11 +92,10 @@ export interface Build {
   noiseLevelDb?: number;
   upgradePathNotes?: string;
   includedFeatureKeys: string[];
-  faqKeys: string[];
   /** Toggle from Sanity build: true => use default mocked FAQ on PK page. */
   useDefaultFaq?: boolean;
-  /** Custom FAQ items from Sanity when default FAQ is disabled. */
-  customFaqItems?: Array<{ question: string; answer: string }>;
+  /** FAQ from Sanity `customFaq` refs (faqEntry) when default FAQ is disabled. */
+  customFaqItems?: Array<{ id?: string; question: string; answer: string }>;
   /** Optional chassis photo — replaces ChassisArt SVG when present. Any absolute URL (Sanity CDN, Unsplash, etc.). */
   heroImageUrl?: string;
   /** Additional gallery shots. Future: from Sanity `gallery[]`. */
