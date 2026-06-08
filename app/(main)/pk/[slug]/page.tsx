@@ -560,7 +560,7 @@ export default async function BuildPage({
               <SectionHeader
                 kicker="Альтернативи"
                 title="ІНШІ ЗБІРКИ ЦЬОГО КЛАСУ"
-                subtitle="Якщо сумніваєшся — глянь сусідів по ціні."
+                subtitle="Порівняйте альтернативні збірки в цьому ціновому сегменті."
                 titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
               />
               <div className="grid gap-4 md:grid-cols-3">
