@@ -111,3 +111,12 @@ export const LANDING_SLUGS_BY_PREFIX = groq`
   _updatedAt,
   expiresAt
 } | order(_updatedAt desc)`;
+
+/** Nav menu items for /dlya or /promo landing groups. */
+export const LANDING_NAV_BY_PREFIX = groq`
+*[_type=="page" && pathPrefix==$prefix && defined(slug.current)]{
+  "slug": slug.current,
+  "label": coalesce(seo.title, internalTitle),
+  publishedAt,
+  expiresAt
+} | order(coalesce(publishedAt, _updatedAt) desc)`;

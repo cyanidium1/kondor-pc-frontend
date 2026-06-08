@@ -11,7 +11,11 @@ import { CartButton } from "@/components/layout/CartButton";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { cn } from "@/lib/utils";
 import MenuIcon from "@/components/icons/MenuIcon";
-import { NAV, isNavGroup, type NavGroup } from "@/components/layout/nav";
+import {
+  isNavGroup,
+  type NavEntry,
+  type NavGroup,
+} from "@/components/layout/nav";
 
 function NavDropdown({ group }: { group: NavGroup }) {
   const [open, setOpen] = useState(false);
@@ -45,10 +49,7 @@ function NavDropdown({ group }: { group: NavGroup }) {
     if (!open) return;
     const onPointerDown = (e: MouseEvent) => {
       const t = e.target as Node;
-      if (
-        !buttonRef.current?.contains(t) &&
-        !panelRef.current?.contains(t)
-      ) {
+      if (!buttonRef.current?.contains(t) && !panelRef.current?.contains(t)) {
         setOpen(false);
       }
     };
@@ -137,7 +138,7 @@ function NavDropdown({ group }: { group: NavGroup }) {
   );
 }
 
-export function Header() {
+export function Header({ navItems }: { navItems: NavEntry[] }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -204,7 +205,7 @@ export function Header() {
               </Link>
               {/* DESKTOP NAV */}
               <nav className="hidden items-center gap-0.5 lg:flex">
-                {NAV.map((n) =>
+                {navItems.map((n) =>
                   isNavGroup(n) ? (
                     <NavDropdown key={n.label} group={n} />
                   ) : (
@@ -212,7 +213,7 @@ export function Header() {
                       key={n.href}
                       href={n.href}
                       className={cn(
-                        "group/nav relative rounded-sm px-2.5 xl:px-3 py-1.5",
+                        "group/nav relative rounded-sm px-1.5 xl:px-3 py-1.5",
                         "text-[8px] xl:text-[10px] font-medium uppercase tracking-[0.18em]",
                         "transition-colors duration-200 ease-out hover:text-foreground",
                       )}
@@ -288,7 +289,7 @@ export function Header() {
         <MobileMenu
           isOpen={menuOpen}
           onClose={() => setMenuOpen(false)}
-          navItems={NAV}
+          navItems={navItems}
         />
       </div>
     </>
