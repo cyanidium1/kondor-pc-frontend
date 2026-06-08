@@ -3,29 +3,19 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
+import {
+  formatPromoDiscount,
+  isPromoActive,
+  type PromoCode,
+} from "@/lib/promoCode";
 
 type Button = { text?: string; href?: string };
 
-export type PromoDiscount = {
-  kind: "percent" | "fixed";
-  value: number;
-};
-
 /** Resolved promoCode document from Sanity (via ctaPromoBanner reference). */
-export type PromoCodeInfo = {
-  code: string;
-  validFrom?: string;
-  validUntil?: string;
-  discountPc?: PromoDiscount;
-  discountAccessories?: PromoDiscount;
-};
-
-function formatDiscount(discount?: PromoDiscount): string | null {
-  if (!discount?.value) return null;
-  return discount.kind === "fixed"
-    ? `−${discount.value.toLocaleString("uk-UA")} ₴`
-    : `−${discount.value}%`;
-}
+export type PromoCodeInfo = Pick<
+  PromoCode,
+  "code" | "validFrom" | "validUntil" | "discountPc" | "discountAccessories"
+>;
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("uk-UA", {
@@ -33,12 +23,6 @@ function formatDate(iso: string): string {
     month: "long",
     year: "numeric",
   });
-}
-
-function isPromoActive(promo: PromoCodeInfo, now = Date.now()): boolean {
-  if (promo.validFrom && new Date(promo.validFrom).getTime() > now) return false;
-  if (promo.validUntil && new Date(promo.validUntil).getTime() <= now) return false;
-  return true;
 }
 
 /**
@@ -60,8 +44,8 @@ export function CtaPromoBanner({
   const hasButton = button && button.text && button.href;
   const active = promoCode ? isPromoActive(promoCode) : false;
 
-  const pcDiscount = formatDiscount(promoCode?.discountPc);
-  const accDiscount = formatDiscount(promoCode?.discountAccessories);
+  const pcDiscount = formatPromoDiscount(promoCode?.discountPc);
+  const accDiscount = formatPromoDiscount(promoCode?.discountAccessories);
   const discountParts = [
     pcDiscount && `ПК ${pcDiscount}`,
     accDiscount && `аксесуари ${accDiscount}`,

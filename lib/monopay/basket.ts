@@ -2,8 +2,16 @@ import type { CartItem } from "@/lib/cartStore";
 
 import type { MonopayBasket } from "./types";
 
-export function buildMonopayBasket(items: CartItem[]): MonopayBasket {
-  return items.map((item) => {
+type BasketDiscount = {
+  amountUah: number;
+  label: string;
+};
+
+export function buildMonopayBasket(
+  items: CartItem[],
+  discount?: BasketDiscount,
+): MonopayBasket {
+  const basket: MonopayBasket = items.map((item) => {
     const sum = item.unitPriceUah * 100;
     const total = sum * item.quantity;
 
@@ -22,4 +30,24 @@ export function buildMonopayBasket(items: CartItem[]): MonopayBasket {
       uktzed: null,
     };
   });
+
+  if (discount && discount.amountUah > 0) {
+    const kop = discount.amountUah * 100;
+    basket.push({
+      name: discount.label,
+      qty: 1,
+      sum: -kop,
+      total: -kop,
+      icon: null,
+      unit: "шт.",
+      code: "promo-discount",
+      barcode: null,
+      header: null,
+      footer: null,
+      tax: [],
+      uktzed: null,
+    });
+  }
+
+  return basket;
 }
