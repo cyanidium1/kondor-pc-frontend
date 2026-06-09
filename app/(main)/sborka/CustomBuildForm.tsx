@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { formatUah } from "@/lib/format";
 import { sendTelegramMessage } from "@/lib/telegram/client";
 import { TG } from "@/lib/telegram/icons";
-import { useState } from "react";
+import { useState, useId } from "react";
 
 const TASKS = [
   { value: "gaming", label: "Геймінг" },
@@ -51,6 +51,7 @@ function labelOf<T extends { value: string; label: string }>(
 
 export function CustomBuildForm() {
   const router = useRouter();
+  const budgetLabelId = useId();
   const [budgetRange, setBudgetRange] = useState<[number, number]>([40, 80]);
   const [submitError, setSubmitError] = useState(false);
 
@@ -108,7 +109,9 @@ export function CustomBuildForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {/* Budget */}
       <div className="rounded-lg border border-border bg-surface p-6">
-        <Label className="mb-2 block">Приблизний бюджет</Label>
+        <Label id={budgetLabelId} className="mb-2 block">
+          Приблизний бюджет
+        </Label>
         <div className="tabular mb-3 flex items-baseline justify-between text-sm">
           <span className="font-semibold">
             {formatUah(budgetRange[0] * 1000)} ₴
@@ -123,6 +126,8 @@ export function CustomBuildForm() {
           max={200}
           step={5}
           value={budgetRange}
+          aria-labelledby={budgetLabelId}
+          thumbLabels={["Мінімальний бюджет", "Максимальний бюджет"]}
           onValueChange={(v) => {
             if (!Array.isArray(v)) return;
             const next: [number, number] = [v[0], v[1]];
