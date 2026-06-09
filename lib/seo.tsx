@@ -1,4 +1,5 @@
 import type { Build, Faq } from "@/types/build";
+import type { CatalogProductDetail } from "@/types/catalog";
 import { DEFAULT_SOCIAL_IMAGE_URL, SITE_URL } from "@/lib/seo/constants";
 import {
   ensureHttps,
@@ -78,6 +79,37 @@ export function productJsonLd(build: Build, imageUrl: string) {
             ? "https://schema.org/PreOrder"
             : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
+    },
+  };
+}
+
+export function catalogProductJsonLd(
+  item: CatalogProductDetail,
+  options?: { imageUrl?: string },
+) {
+  const price = item.priceDiscount ?? item.price;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: item.name,
+    ...(item.description ? { description: item.description } : {}),
+    ...(options?.imageUrl ? { image: options.imageUrl } : {}),
+    brand: { "@type": "Brand", name: "Kondor PC" },
+    sku: item.id,
+    category: item.category?.name,
+    offers: {
+      "@type": "Offer",
+      url: `${SITE_URL}/catalog/${item.slug}`,
+      priceCurrency: "UAH",
+      price: String(price),
+      availability: item.preorder
+        ? "https://schema.org/PreOrder"
+        : "https://schema.org/InStock",
+      itemCondition: "https://schema.org/NewCondition",
+      seller: {
+        "@type": "Organization",
+        name: "Kondor PC",
+      },
     },
   };
 }

@@ -5,7 +5,18 @@ import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return metadataForSitePage("seoCheckoutPage");
+  const metadata = await metadataForSitePage("seoCheckoutPage");
+  return {
+    ...metadata,
+    robots: {
+      index: false,
+      follow: false,
+      googleBot: {
+        index: false,
+        follow: false,
+      },
+    },
+  };
 }
 
 export default async function OformlennyaPage() {

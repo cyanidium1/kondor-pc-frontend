@@ -10,9 +10,30 @@ import { JsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
 export const revalidate = 60;
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | undefined>>;
+}): Promise<Metadata> {
+  const params = await searchParams;
+  const pageParam = Number.parseInt(params.page ?? "1", 10);
+  const isPaginatedPage = Number.isFinite(pageParam) && pageParam > 1;
+
   const pageData = await getBlogPageSeo().catch(() => null);
-  return buildBlogMetadata({ seo: pageData?.seo ?? null, path: "/blog" });
+  const metadata = buildBlogMetadata({ seo: pageData?.seo ?? null, path: "/blog" });
+  if (!isPaginatedPage) return metadata;
+
+  return {
+    ...metadata,
+    robots: {
+      index: false,
+      follow: true,
+      googleBot: {
+        index: false,
+        follow: true,
+      },
+    },
+  };
 }
 
 const crumbs = [
@@ -28,7 +49,10 @@ export default async function BlogPage() {
 
   return (
     <>
-      <SchemaJsonFromSeo seo={pageData?.seo ?? null} />
+      <SchemaJsonFromSeo
+        seo={pageData?.seo ?? null}
+        excludeTypes={["BreadcrumbList"]}
+      />
       <JsonLd
         data={breadcrumbJsonLd(crumbs.map((c) => ({ name: c.label, url: c.href })))}
       />

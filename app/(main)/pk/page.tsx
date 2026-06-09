@@ -11,8 +11,33 @@ import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 export const revalidate = 60;
 
-export async function generateMetadata(): Promise<Metadata> {
-  return metadataForSitePage("seoPcCatalogPage");
+function hasSeoFilterParams(params: Record<string, string | undefined>): boolean {
+  return ["min", "max", "games", "res", "sort"].some((key) => {
+    const value = params[key];
+    return typeof value === "string" && value.trim().length > 0;
+  });
+}
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | undefined>>;
+}): Promise<Metadata> {
+  const metadata = await metadataForSitePage("seoPcCatalogPage");
+  const params = await searchParams;
+  if (!hasSeoFilterParams(params)) return metadata;
+
+  return {
+    ...metadata,
+    robots: {
+      index: false,
+      follow: true,
+      googleBot: {
+        index: false,
+        follow: true,
+      },
+    },
+  };
 }
 
 export default async function CatalogPage() {

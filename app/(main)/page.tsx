@@ -125,7 +125,10 @@ export default async function HomePage() {
 
   return (
     <>
-      <SitePageSchemaJson pageId="seoHomePage" />
+      <SitePageSchemaJson
+        pageId="seoHomePage"
+        excludeTypes={["Organization", "WebSite", "FAQPage"]}
+      />
       <JsonLd
         data={[
           organizationSchema,

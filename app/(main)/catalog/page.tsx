@@ -9,8 +9,33 @@ import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 // Revalidate the whole listing every 5 minutes — aligns with fetcher-level cache.
 export const revalidate = 60;
 
-export async function generateMetadata(): Promise<Metadata> {
-  return metadataForSitePage("seoAccessoriesPage");
+function hasSeoFilterParams(params: Record<string, string | undefined>): boolean {
+  return ["cat", "min", "max", "avail", "sort"].some((key) => {
+    const value = params[key];
+    return typeof value === "string" && value.trim().length > 0;
+  });
+}
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | undefined>>;
+}): Promise<Metadata> {
+  const metadata = await metadataForSitePage("seoAccessoriesPage");
+  const params = await searchParams;
+  if (!hasSeoFilterParams(params)) return metadata;
+
+  return {
+    ...metadata,
+    robots: {
+      index: false,
+      follow: true,
+      googleBot: {
+        index: false,
+        follow: true,
+      },
+    },
+  };
 }
 
 export default async function CatalogPage() {

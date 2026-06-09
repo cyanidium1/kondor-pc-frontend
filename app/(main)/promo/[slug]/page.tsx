@@ -27,11 +27,28 @@ export async function generateMetadata({
   const {slug} = await params;
   const page = await getLandingPageBySlug(slug, "promo");
   if (!page) return {title: "Не знайдено"};
-  return buildLandingMetadata({
+  const metadata = buildLandingMetadata({
     seo: page.seo,
     path: `/promo/${slug}`,
     defaultTitle: page.internalTitle ?? slug,
   });
+
+  const isExpired =
+    page.expiresAt != null && new Date(page.expiresAt).getTime() <= Date.now();
+
+  if (!isExpired) return metadata;
+
+  return {
+    ...metadata,
+    robots: {
+      index: false,
+      follow: true,
+      googleBot: {
+        index: false,
+        follow: true,
+      },
+    },
+  };
 }
 
 function PromoExpiredBanner() {
@@ -61,7 +78,7 @@ export default async function PromoLandingPage({
 
   return (
     <>
-      <SchemaJsonFromSeo seo={page.seo} />
+      <SchemaJsonFromSeo seo={page.seo} excludeTypes={["FAQPage"]} />
       {isExpired ? <PromoExpiredBanner /> : null}
       <LandingPageBody page={page} pageContext={pageContext} />
     </>
