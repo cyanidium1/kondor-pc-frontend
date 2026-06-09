@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { getAllCategories, getCatalogItems } from "@/lib/sanity/fetchers";
-import { CatalogClient } from "./CatalogClient";
+import { LazyCatalogFilters } from "./LazyCatalogFilters";
+import { CatalogCardStatic } from "@/components/catalog/CatalogCardStatic";
 import Image from "next/image";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
+import {
+  buildCatalogGroups,
+  computePriceBounds,
+  filterCatalogGroups,
+  parseFiltersFromParams,
+} from "@/lib/catalog/accessoryFilters";
 
-// Revalidate the whole listing every 5 minutes — aligns with fetcher-level cache.
 export const revalidate = 60;
 
 function hasSeoFilterParams(
@@ -40,11 +46,38 @@ export async function generateMetadata({
   };
 }
 
-export default async function CatalogPage() {
+function OtherProductsDivider() {
+  return (
+    <div className="my-10 flex items-center gap-3">
+      <div className="h-px flex-1 bg-border" />
+      <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+        Інші товари, які можуть сподобатись
+      </div>
+      <div className="h-px flex-1 bg-border" />
+    </div>
+  );
+}
+
+export default async function CatalogPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | undefined>>;
+}) {
+  const params = await searchParams;
   const [categories, items] = await Promise.all([
     getAllCategories(),
     getCatalogItems(),
   ]);
+
+  const groups = buildCatalogGroups(items);
+  const priceBounds = computePriceBounds(groups);
+  const validCategorySlugs = new Set(categories.map((c) => c.slug));
+  const filters = parseFiltersFromParams(params, validCategorySlugs, priceBounds);
+  const { primary, secondary, hasFilters } = filterCatalogGroups(
+    groups,
+    filters,
+    priceBounds,
+  );
 
   return (
     <>
@@ -53,9 +86,10 @@ export default async function CatalogPage() {
         <div className="absolute -z-10 top-[-223px] lg:top-[-154px] left-[-860px] lg:left-[-160px] w-[1929px] h-[2007px]">
           <Image
             src="/images/pk/shadows.svg"
-            alt="PK background"
-            width="1929"
-            height="2007"
+            alt=""
+            width={1929}
+            height={2007}
+            loading="lazy"
             className="object-cover"
           />
         </div>
@@ -72,9 +106,86 @@ export default async function CatalogPage() {
           </p>
         </div>
 
-        <Suspense fallback={null}>
-          <CatalogClient categories={categories} items={items} />
-        </Suspense>
+        <div className="grid gap-8 md:grid-cols-[260px_1fr]">
+          <LazyCatalogFilters
+            categories={categories}
+            filters={filters}
+            priceBounds={priceBounds}
+          />
+
+          <div>
+            <div className="mb-4 flex items-center justify-between text-sm text-muted-foreground">
+              <div>
+                Знайдено:{" "}
+                <span className="font-semibold text-foreground">
+                  {primary.length}
+                </span>
+                {hasFilters && <> із {groups.length}</>}
+              </div>
+            </div>
+
+            {primary.length === 0 && !hasFilters ? (
+              <div className="rounded-lg border border-border bg-surface p-10 text-center">
+                <div className="font-display text-xl font-bold">
+                  Каталог порожній
+                </div>
+              </div>
+            ) : primary.length === 0 && hasFilters ? (
+              <>
+                <div className="rounded-lg border border-border bg-surface p-8 text-center">
+                  <div className="font-display text-lg font-bold">
+                    За такими критеріями нічого не знайдено
+                  </div>
+                  <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+                    Спробуй скинути фільтри або розширити діапазон цін.
+                  </p>
+                  <div className="mt-4 flex justify-center">
+                    <TechButtonLink
+                      href="/catalog"
+                      variant="white"
+                      className="font-heading tracking-normal h-9"
+                    >
+                      Скинути фільтри
+                    </TechButtonLink>
+                  </div>
+                </div>
+                {secondary.length > 0 && (
+                  <>
+                    <OtherProductsDivider />
+                    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                      {secondary.map((group) => (
+                        <CatalogCardStatic key={group.key} group={group} />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                  {primary.map((group, i) => (
+                    <CatalogCardStatic
+                      key={group.key}
+                      group={group}
+                      priority={i < 2}
+                    />
+                  ))}
+                </div>
+
+                {hasFilters && secondary.length > 0 && (
+                  <>
+                    <OtherProductsDivider />
+                    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                      {secondary.map((group) => (
+                        <CatalogCardStatic key={group.key} group={group} />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+          </div>
+        </div>
       </div>
     </>
   );
