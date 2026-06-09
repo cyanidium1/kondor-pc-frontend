@@ -68,6 +68,7 @@ function fps(
 export const BUILDS: Build[] = [
   {
     slug: "vega",
+    sku: "KPC-VEGA",
     name: "VEGA",
     tier: "base",
     targetResolution: "fullhd",
@@ -111,6 +112,7 @@ export const BUILDS: Build[] = [
   },
   {
     slug: "hyper",
+    sku: "KPC-HYPER",
     name: "HYPER",
     tier: "base",
     targetResolution: "fullhd",
@@ -154,6 +156,7 @@ export const BUILDS: Build[] = [
   },
   {
     slug: "nebula",
+    sku: "KPC-NEBULA",
     name: "NEBULA",
     tier: "prime",
     targetResolution: "2k",
@@ -198,6 +201,7 @@ export const BUILDS: Build[] = [
   },
   {
     slug: "orbitra",
+    sku: "KPC-ORBITRA",
     name: "ORBITRA",
     tier: "phantom",
     targetResolution: "4k",
@@ -241,6 +245,7 @@ export const BUILDS: Build[] = [
   },
   {
     slug: "nyx",
+    sku: "KPC-NYX",
     name: "NYX",
     tier: "starter",
     targetResolution: "fullhd",
@@ -280,6 +285,7 @@ export const BUILDS: Build[] = [
   },
   {
     slug: "velar",
+    sku: "KPC-VELAR",
     name: "VELAR",
     tier: "pulsar",
     targetResolution: "4k",
@@ -321,6 +327,7 @@ export const BUILDS: Build[] = [
   },
   {
     slug: "pulsar",
+    sku: "KPC-PULSAR",
     name: "PULSAR",
     tier: "phantom",
     targetResolution: "2k",
@@ -362,6 +369,7 @@ export const BUILDS: Build[] = [
   },
   {
     slug: "comet",
+    sku: "KPC-COMET",
     name: "COMET",
     tier: "starter",
     targetResolution: "fullhd",

@@ -39,6 +39,16 @@ export function getCartItemSpecificationLines(item: CartItem): string[] {
   return lines;
 }
 
+/** Деталі товару для Telegram — артикул + специфікація. */
+export function getCartItemTelegramDetailLines(item: CartItem): string[] {
+  const lines: string[] = [];
+  if (item.sku) {
+    lines.push(`Артикул: ${item.sku}`);
+  }
+  lines.push(...getCartItemSpecificationLines(item));
+  return lines;
+}
+
 /** Назва товару з повною специфікацією для MonoPay. */
 export function formatCartItemOrderTitle(item: CartItem): string {
   const specs = getCartItemSpecificationLines(item);

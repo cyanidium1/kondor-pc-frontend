@@ -18,6 +18,8 @@ export interface CartItemOption {
 export interface CartItem {
   itemType: CartItemType;
   slug: string;
+  /** Артикул збірки з Sanity (`build.sku`) або SKU аксесуара. */
+  sku?: string;
   name: string;
   priceUah: number;
   unitPriceUah: number;
@@ -32,6 +34,7 @@ export interface CartItem {
 interface AddInput {
   itemType?: CartItemType;
   slug: string;
+  sku?: string;
   name: string;
   priceUah: number;
   unitPriceUah?: number;
@@ -125,6 +128,7 @@ export const useCartStore = create<CartStore>()(
           const next: CartItem = {
             itemType,
             slug: input.slug,
+            sku: input.sku,
             name: input.name,
             priceUah: input.priceUah,
             unitPriceUah: unit,

@@ -56,6 +56,7 @@ export function StickyMobileBuyBar({
       unitPriceUah: displayPrice,
       options: config?.cartOptions,
       spec: config?.resolvedSpec,
+      sku: config?.build.sku,
       image: imageSrc,
     });
     router.push("/oformlennya");

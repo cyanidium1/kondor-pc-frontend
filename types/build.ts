@@ -75,6 +75,8 @@ export interface ConfigGroup {
 
 export interface Build {
   slug: SkuSlug;
+  /** Артикул для CRM / інвентаризації (Sanity `build.sku`). */
+  sku: string;
   name: string;
   tier: BuildTier;
   targetResolution: Resolution;

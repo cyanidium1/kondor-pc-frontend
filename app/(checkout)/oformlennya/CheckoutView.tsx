@@ -13,7 +13,7 @@ import { TechButton } from "@/components/shared/TechButton";
 import Image from "next/image";
 import { ChassisArt } from "@/components/brand/ChassisArt";
 import { SKU_ACCENTS } from "@/lib/sku-accents";
-import { getCartItemSpecificationLines } from "@/lib/cart/formatItemSpecification";
+import { getCartItemTelegramDetailLines } from "@/lib/cart/formatItemSpecification";
 import {
   useCartStore,
   lineKey as cartLineKey,
@@ -193,7 +193,7 @@ function formatCartItemsForTelegram(items: CartItem[]): string {
         `${index + 1}. <b>${item.name}</b> × ${item.quantity} — ${formatPrice(item.unitPriceUah * item.quantity)}`,
       ];
 
-      getCartItemSpecificationLines(item).forEach((line) => {
+      getCartItemTelegramDetailLines(item).forEach((line) => {
         lines.push(`   ${line}`);
       });
 

@@ -76,12 +76,25 @@ function mapDelivery(
 }
 
 function mapProducts(items: CartItem[]) {
-  return items.map((item) => ({
-    price: item.unitPriceUah,
-    quantity: item.quantity,
-    name: formatCartItemCrmName(item),
-    sku: item.slug,
-  }));
+  return items.map((item) => {
+    const product: {
+      price: number;
+      quantity: number;
+      name: string;
+      sku?: string;
+    } = {
+      price: item.unitPriceUah,
+      quantity: item.quantity,
+      name: formatCartItemCrmName(item),
+    };
+
+    const sku = item.sku ?? (item.itemType !== "build" ? item.slug : undefined);
+    if (sku) {
+      product.sku = sku;
+    }
+
+    return product;
+  });
 }
 
 export function buildKeyCrmOrderPayload(params: {
