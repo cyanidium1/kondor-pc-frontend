@@ -1,6 +1,7 @@
 import { createVerify } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
+import { markKeyCrmOrderAsPaid } from "@/lib/keycrm/server";
 import { fetchMonopayPubKey } from "@/lib/monopay/server";
 import { TG } from "@/lib/telegram/icons";
 
@@ -53,6 +54,14 @@ export async function POST(req: NextRequest) {
     if (data.status === "success") {
       const orderNumber = data.reference ?? "—";
       const amountUah = (data.finalAmount ?? 0) / 100;
+
+      if (data.reference) {
+        try {
+          await markKeyCrmOrderAsPaid(data.reference, amountUah);
+        } catch (error) {
+          console.error("[monopay/webhook][keycrm]", error);
+        }
+      }
 
       await notifyTelegram(
         `${TG.payment} <b>Оплата MonoPay успішна</b>\n` +

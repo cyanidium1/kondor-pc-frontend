@@ -44,6 +44,7 @@ type RawCustomFaqRow = {
 
 type RawBuild = {
   slug: string;
+  sku?: string;
   name: string;
   tier: Build["tier"];
   status: Build["status"];
@@ -86,6 +87,7 @@ type RawBuild = {
 const BUILDS_QUERY = `
 *[_type == "build" && defined(slug.current)] | order(priceUah asc) {
   "slug": slug.current,
+  sku,
   name,
   tier,
   status,
@@ -353,6 +355,7 @@ function mapBuild(raw: RawBuild): Build {
 
   return {
     slug: raw.slug as Build["slug"],
+    sku: raw.sku ?? `KPC-${raw.name.toUpperCase().replace(/\s+/g, "-")}`,
     name: raw.name,
     tier: raw.tier,
     targetResolution: raw.targetResolution,

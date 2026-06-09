@@ -3,6 +3,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import type { BuildSpecShort } from "@/types/build";
+
 export type CartItemType = "build" | "accessory";
 
 export interface CartItemOption {
@@ -16,11 +18,14 @@ export interface CartItemOption {
 export interface CartItem {
   itemType: CartItemType;
   slug: string;
+  /** Артикул збірки з Sanity (`build.sku`) або SKU аксесуара. */
+  sku?: string;
   name: string;
   priceUah: number;
   unitPriceUah: number;
   quantity: number;
   options?: CartItemOption[];
+  spec?: BuildSpecShort;
   image?: string;
   colorCode?: string;
   colorName?: string;
@@ -29,10 +34,12 @@ export interface CartItem {
 interface AddInput {
   itemType?: CartItemType;
   slug: string;
+  sku?: string;
   name: string;
   priceUah: number;
   unitPriceUah?: number;
   options?: CartItemOption[];
+  spec?: BuildSpecShort;
   image?: string;
   colorCode?: string;
   colorName?: string;
@@ -121,11 +128,13 @@ export const useCartStore = create<CartStore>()(
           const next: CartItem = {
             itemType,
             slug: input.slug,
+            sku: input.sku,
             name: input.name,
             priceUah: input.priceUah,
             unitPriceUah: unit,
             quantity,
             options: input.options,
+            spec: input.spec,
             image: input.image,
             colorCode: input.colorCode,
             colorName: input.colorName,

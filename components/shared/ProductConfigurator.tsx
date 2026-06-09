@@ -205,20 +205,15 @@ export function ProductConfiguratorProvider({
       }
     }
 
-    const cartOptions: CartItemOption[] = selectedOptions
-      // only include non-default picks in cart payload — cleaner display
-      .filter(({ option, groupId }) => {
-        const group = groups.find((g) => g.id === groupId);
-        const def = group?.options.find((o) => o.isDefault);
-        return option.priceDelta !== 0 || option.id !== def?.id;
-      })
-      .map(({ groupId, groupLabel, option }) => ({
+    const cartOptions: CartItemOption[] = selectedOptions.map(
+      ({ groupId, groupLabel, option }) => ({
         groupId,
         groupLabel,
         optionId: option.id,
         optionLabel: option.label,
         priceDelta: option.priceDelta,
-      }));
+      }),
+    );
 
     // Derive which preset (if any) the current selections match.
     const matches = (preset: "base" | "optimal" | "premium") => {

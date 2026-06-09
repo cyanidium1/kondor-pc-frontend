@@ -3,6 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 const BOT_ID = process.env.TELEGRAM_BOT_ID ?? "";
 const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
+function stripHtml(input: string): string {
+  return input.replace(/<[^>]*>/g, "");
+}
+
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
@@ -32,10 +36,24 @@ export async function POST(request: NextRequest) {
     );
 
     if (!res.ok) {
-      return NextResponse.json(
-        { error: "Failed to send message" },
-        { status: 500 },
+      const fallback = await fetch(
+        `https://api.telegram.org/bot${BOT_ID}/sendMessage`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: stripHtml(data),
+          }),
+        },
       );
+
+      if (!fallback.ok) {
+        return NextResponse.json(
+          { error: "Failed to send message" },
+          { status: 500 },
+        );
+      }
     }
 
     return NextResponse.json({ message: "Data sent successfully" });

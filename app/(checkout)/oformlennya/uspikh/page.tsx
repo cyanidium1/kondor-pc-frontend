@@ -19,41 +19,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const COPY: Record<string, { title: string }> = {
-  monopay: {
-    title: "Замовлення оформлено",
-  },
-  monobank_parts: {
-    title: "Замовлення оформлено",
-  },
-  privat_parts: {
-    title: "Замовлення оформлено",
-  },
-  pumb_parts: {
-    title: "Замовлення оформлено",
-  },
-  cod: {
-    title: "Замовлення прийнято",
-  },
-  iban_individual: {
-    title: "Заявка на оплату IBAN прийнята",
-  },
-  iban_business: {
-    title: "Заявка для ФОП / ЮО прийнята",
-  },
-  crypto: {
-    title: "Заявка на оплату в крипто прийнята",
-  },
-};
-
 export default async function SuccessPage({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
-  const { order, payment } = await searchParams;
+  const { order } = await searchParams;
   const orderNumber = order ?? "UA-XXXXXX-XXXX";
-  const copy = COPY[payment ?? "monopay"] ?? COPY.monopay;
 
   return (
     <>
@@ -64,10 +36,10 @@ export default async function SuccessPage({
             <Check className="size-8 text-brand-primary" strokeWidth={3} />
           </div>
           <h1 className="font-display text-3xl font-bold md:text-4xl">
-            {copy.title}
+            ДЯКУЄМО ЗА ЗАМОВЛЕННЯ!
           </h1>
           <p className="mt-3 text-muted-foreground">
-            Дякуємо за довіру. Номер замовлення:
+            Ми вже отримали вашу заявку. Номер замовлення:
           </p>
           <div className="tabular mt-1 rounded-md border border-border bg-surface px-3 py-1.5 font-body text-sm">
             {orderNumber}

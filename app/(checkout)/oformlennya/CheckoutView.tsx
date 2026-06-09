@@ -13,12 +13,17 @@ import { TechButton } from "@/components/shared/TechButton";
 import Image from "next/image";
 import { ChassisArt } from "@/components/brand/ChassisArt";
 import { SKU_ACCENTS } from "@/lib/sku-accents";
+import { getCartItemTelegramDetailLines } from "@/lib/cart/formatItemSpecification";
 import {
   useCartStore,
   lineKey as cartLineKey,
   type CartItem,
 } from "@/lib/cartStore";
 import { buildMonopayBasket } from "@/lib/monopay/basket";
+import {
+  buildKeyCrmOrderPayload,
+  sendOrderToKeyCrm,
+} from "@/lib/keycrm/client";
 import { sendTelegramMessage } from "@/lib/telegram/client";
 import { TG } from "@/lib/telegram/icons";
 import {
@@ -188,12 +193,8 @@ function formatCartItemsForTelegram(items: CartItem[]): string {
         `${index + 1}. <b>${item.name}</b> × ${item.quantity} — ${formatPrice(item.unitPriceUah * item.quantity)}`,
       ];
 
-      if (item.colorName) {
-        lines.push(`   Колір: ${item.colorName}`);
-      }
-
-      item.options?.forEach((option) => {
-        lines.push(`   ${option.groupLabel}: ${option.optionLabel}`);
+      getCartItemTelegramDetailLines(item).forEach((line) => {
+        lines.push(`   ${line}`);
       });
 
       return lines.join("\n");
@@ -456,7 +457,8 @@ export function CheckoutView() {
     const payableTotal = promoForOrder?.totalUah ?? cartTotal;
     const promoDiscount = promoForOrder?.discountUah ?? 0;
 
-    const orderNumber = `UA-${new Date().toISOString().slice(2, 10).replace(/-/g, "")}-${String(Math.floor(Math.random() * 9000 + 1000))}`;
+    const orderDate = new Date();
+    const orderNumber = `UA-${orderDate.toISOString().slice(2, 10).replace(/-/g, "")}-${String(Math.floor(Math.random() * 9000 + 1000))}`;
 
     const text =
       `${TG.form} <b>Нове замовлення</b>\n` +
@@ -484,6 +486,20 @@ export function CheckoutView() {
 
     try {
       await sendTelegramMessage(text);
+
+      const keyCrmPayload = buildKeyCrmOrderPayload({
+        orderNumber,
+        orderDate,
+        values,
+        cartItems,
+        promoForOrder,
+        payableTotal,
+      });
+      try {
+        await sendOrderToKeyCrm(keyCrmPayload);
+      } catch (error) {
+        console.error("[checkout/keycrm]", error);
+      }
 
       if (values.paymentMethod === "monopay") {
         const payTotalUah = Math.round(payableTotal * 1.013);
