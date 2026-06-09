@@ -1,26 +1,35 @@
 import type { Build, Faq } from "@/types/build";
 import { DEFAULT_SOCIAL_IMAGE_URL, SITE_URL } from "@/lib/seo/constants";
+import {
+  ensureHttps,
+  getSiteContacts,
+  telegramHref,
+} from "@/lib/sanity/siteContacts";
 
-export function organizationJsonLd(options?: { logoUrl?: string }) {
+export async function organizationJsonLd(options?: { logoUrl?: string }) {
   const logoUrl = options?.logoUrl ?? DEFAULT_SOCIAL_IMAGE_URL;
+  const contacts = await getSiteContacts().catch(() => null);
+  const sameAs = [
+    contacts?.instagramUrl ? ensureHttps(contacts.instagramUrl) : null,
+    contacts?.telegramChatUrl ? ensureHttps(contacts.telegramChatUrl) : null,
+    contacts?.youtubeUrl ? ensureHttps(contacts.youtubeUrl) : null,
+    contacts?.telegram ? telegramHref(contacts.telegram) : null,
+  ].filter((url): url is string => Boolean(url));
+
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Kondor PC",
     url: SITE_URL,
     logo: logoUrl,
-    sameAs: [
-      "https://instagram.com/kondor_pc",
-      "https://t.me/kondor_pc",
-      "https://youtube.com/@kondor-pc",
-    ],
+    sameAs,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Київ",
       addressCountry: "UA",
     },
-    telephone: "+380000000000",
-    email: "info@kondor-pc.ua",
+    telephone: contacts?.phone ?? "+380000000000",
+    email: contacts?.email ?? "info@kondor-pc.ua",
   };
 }
 

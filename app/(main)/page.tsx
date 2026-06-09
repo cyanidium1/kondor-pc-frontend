@@ -112,6 +112,9 @@ export default async function HomePage() {
     fetchSiteSeoByPageId("seoHomePage").catch(() => null),
   ]);
   const organizationLogoUrl = resolveOrganizationLogoUrl(homeSeo);
+  const organizationSchema = await organizationJsonLd({
+    logoUrl: organizationLogoUrl,
+  });
   const gameLabels = makeGameLabelMap(gamesCatalog);
   const gameShortLabels = makeGameShortLabelMap(gamesCatalog);
   const topBuilds = selectHomeTopBuilds(builds);
@@ -125,7 +128,7 @@ export default async function HomePage() {
       <SitePageSchemaJson pageId="seoHomePage" />
       <JsonLd
         data={[
-          organizationJsonLd({ logoUrl: organizationLogoUrl }),
+          organizationSchema,
           websiteJsonLd(),
           faqPageJsonLd(homeFaqs),
         ]}
