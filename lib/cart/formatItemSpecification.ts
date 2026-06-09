@@ -5,7 +5,9 @@ import type { BuildSpecShort } from "@/types/build";
 const SPEC_COVERED_OPTION_GROUPS = new Set(["ram", "ssd", "storage"]);
 
 function formatGpuLine(spec: BuildSpecShort): string {
-  if (!spec.gpuVram || spec.gpu.toLowerCase().includes(spec.gpuVram.toLowerCase())) {
+  if (!spec.gpuVram) return spec.gpu;
+  const normalize = (value: string) => value.toLowerCase().replace(/\s+/g, "");
+  if (normalize(spec.gpu).includes(normalize(spec.gpuVram))) {
     return spec.gpu;
   }
   return `${spec.gpu} ${spec.gpuVram}`;
@@ -37,9 +39,16 @@ export function getCartItemSpecificationLines(item: CartItem): string[] {
   return lines;
 }
 
-/** Назва товару з повною специфікацією для CRM / MonoPay. */
+/** Назва товару з повною специфікацією для MonoPay. */
 export function formatCartItemOrderTitle(item: CartItem): string {
   const specs = getCartItemSpecificationLines(item);
   if (specs.length === 0) return item.name;
   return `${item.name} (${specs.join("; ")})`;
+}
+
+/** Назва товару для KeyCRM — лише специфікація без назви моделі. */
+export function formatCartItemCrmName(item: CartItem): string {
+  const specs = getCartItemSpecificationLines(item);
+  if (specs.length === 0) return item.name;
+  return specs.join("; ");
 }

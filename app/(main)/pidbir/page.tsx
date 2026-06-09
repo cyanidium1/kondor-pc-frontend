@@ -58,7 +58,7 @@ export default async function PidbirPage() {
             <Reveal>
               <SectionHeader
                 kicker="Підбір · 30 секунд"
-                title="Підберемо ПК за 30 секунд"
+                title="ПІДБЕРЕМО ПК ЗА 30 СЕКУНД"
                 subtitle="Покажемо реальні FPS у твоїх іграх та варіанти в твоєму бюджеті."
                 titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10"
                 subtitleClassName="lg:max-w-[398px]"

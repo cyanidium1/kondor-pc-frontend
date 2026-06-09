@@ -36,7 +36,7 @@ export default async function SuccessPage({
             <Check className="size-8 text-brand-primary" strokeWidth={3} />
           </div>
           <h1 className="font-display text-3xl font-bold md:text-4xl">
-            Дякуємо за замовлення!
+            ДЯКУЄМО ЗА ЗАМОВЛЕННЯ!
           </h1>
           <p className="mt-3 text-muted-foreground">
             Ми вже отримали вашу заявку. Номер замовлення:
