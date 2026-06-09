@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { getAllBuilds } from "@/lib/sanity-pc/builds";
 import { getAllGames } from "@/lib/sanity-pc/games";
 import { CatalogClient } from "./CatalogClient";
+import { CatalogSkeleton } from "./CatalogSkeleton";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import Image from "next/image";
@@ -50,9 +51,10 @@ export default async function CatalogPage() {
         <div className="absolute -z-10 top-[-223px] lg:top-[-154px] left-[-860px] lg:left-[-160px] w-[1929px] h-[2007px]">
           <Image
             src="/images/pk/shadows.svg"
-            alt="PK background"
-            width="1929"
-            height="2007"
+            alt=""
+            width={1929}
+            height={2007}
+            loading="lazy"
             className="object-cover"
           />
         </div>
@@ -79,7 +81,7 @@ export default async function CatalogPage() {
           </TechButtonLink>
         </div>
 
-        <Suspense fallback={null}>
+        <Suspense fallback={<CatalogSkeleton />}>
           <CatalogClient builds={builds} games={games} />
         </Suspense>
       </section>
