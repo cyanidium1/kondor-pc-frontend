@@ -130,11 +130,7 @@ export default async function HomePage() {
         excludeTypes={["Organization", "WebSite", "FAQPage"]}
       />
       <JsonLd
-        data={[
-          organizationSchema,
-          websiteJsonLd(),
-          faqPageJsonLd(homeFaqs),
-        ]}
+        data={[organizationSchema, websiteJsonLd(), faqPageJsonLd(homeFaqs)]}
       />
       {/* 1 · HERO */}
       <section className="relative overflow-hidden rounded-b-[28px]">
@@ -305,7 +301,7 @@ export default async function HomePage() {
           <Reveal>
             <SectionHeader
               kicker="Як це працює"
-              title="Як знайти свій ПК за 30 секунд"
+              title="ЯК ЗНАЙТИ СВІЙ ПК ЗА 30 СЕКУНД"
               titleClassName="text-black"
               kickerClassName="text-black mb-3"
             />
