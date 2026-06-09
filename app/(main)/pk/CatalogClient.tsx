@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -171,6 +171,8 @@ export function CatalogClient({
   );
   const [sort, setSort] = useState<SortValue>(() => initialFilters.sort);
   const [filtersExpanded, setFiltersExpanded] = useState(true);
+  const budgetLabelId = useId();
+  const sortLabelId = useId();
 
   const hasHydratedFromUrl = useRef(false);
   const hasSyncedToUrl = useRef(false);
@@ -296,7 +298,10 @@ export function CatalogClient({
           <>
             <div>
               <div className="flex items-center justify-between">
-                <Label className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                <Label
+                  id={budgetLabelId}
+                  className="text-[11px] uppercase tracking-wider text-muted-foreground"
+                >
                   Бюджет
                 </Label>
                 {activeFilters > 0 && (
@@ -324,6 +329,8 @@ export function CatalogClient({
                 max={BUDGET_MAX}
                 step={BUDGET_STEP}
                 value={budget}
+                aria-labelledby={budgetLabelId}
+                thumbLabels={["Мінімальний бюджет", "Максимальний бюджет"]}
                 onValueChange={(v) => {
                   if (Array.isArray(v))
                     setBudget([v[0], v[1]] as [number, number]);
@@ -398,7 +405,10 @@ export function CatalogClient({
             </div>
 
             <div>
-              <Label className="mb-2 block text-[11px] uppercase tracking-wider text-muted-foreground">
+              <Label
+                id={sortLabelId}
+                className="mb-2 block text-[11px] uppercase tracking-wider text-muted-foreground"
+              >
                 Сортування
               </Label>
               <Select
@@ -407,7 +417,10 @@ export function CatalogClient({
                   if (v) setSort(v as SortValue);
                 }}
               >
-                <SelectTrigger className="h-9 w-full">
+                <SelectTrigger
+                  className="h-9 w-full"
+                  aria-labelledby={sortLabelId}
+                >
                   <SelectValue>
                     {SORTS.find((s) => s.value === sort)?.label}
                   </SelectValue>

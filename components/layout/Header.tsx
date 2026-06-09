@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { X, ChevronDown } from "lucide-react";
 import { Wordmark } from "@/components/brand/Wordmark";
@@ -25,6 +25,8 @@ function NavDropdown({ group }: { group: NavGroup }) {
   );
   const buttonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const buttonId = useId();
+  const panelId = useId();
 
   useEffect(() => setMounted(true), []);
 
@@ -78,7 +80,9 @@ function NavDropdown({ group }: { group: NavGroup }) {
   const panel = (
     <div
       ref={panelRef}
-      role="menu"
+      id={panelId}
+      role="group"
+      aria-labelledby={buttonId}
       style={
         coords
           ? { left: coords.left, top: coords.top }
@@ -100,7 +104,6 @@ function NavDropdown({ group }: { group: NavGroup }) {
             <Link
               href={c.href}
               onClick={() => setOpen(false)}
-              role="menuitem"
               className={cn(
                 "block px-4 py-2 text-[10px] xl:text-[11px] font-medium uppercase tracking-[0.18em]",
                 "text-muted-foreground transition-colors duration-150 ease-out",
@@ -119,10 +122,12 @@ function NavDropdown({ group }: { group: NavGroup }) {
     <>
       <button
         ref={buttonRef}
+        id={buttonId}
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-haspopup="menu"
+        aria-haspopup="true"
         aria-expanded={open}
+        aria-controls={panelId}
         className={cn(
           "group/nav relative inline-flex items-center gap-1 rounded-sm px-2.5 xl:px-3 py-1.5",
           "text-[8px] xl:text-[10px] font-medium uppercase tracking-[0.18em]",
