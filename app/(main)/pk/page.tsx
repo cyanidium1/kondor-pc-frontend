@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { getAllBuilds } from "@/lib/sanity-pc/builds";
-import { getAllGames } from "@/lib/sanity-pc/games";
-import { CatalogClient } from "./CatalogClient";
-import { CatalogSkeleton } from "./CatalogSkeleton";
-import ArrowIcon from "@/components/icons/ArrowIcon";
+import { getAllGames, makeGameShortLabelMap } from "@/lib/sanity-pc/games";
+import { LazyCatalogFilters } from "./LazyCatalogFilters";
+import { BuildCardStatic } from "@/components/shared/BuildCardStatic";
 import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
+import ArrowIcon from "@/components/icons/ArrowIcon";
 import Image from "next/image";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
+import {
+  filterBuilds,
+  highlightGamesForFilters,
+  parseFiltersFromParams,
+} from "@/lib/catalog/pkFilters";
 
 export const revalidate = 60;
 
@@ -41,8 +45,21 @@ export async function generateMetadata({
   };
 }
 
-export default async function CatalogPage() {
+export default async function CatalogPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | undefined>>;
+}) {
+  const params = await searchParams;
   const [builds, games] = await Promise.all([getAllBuilds(), getAllGames()]);
+  const validGameSlugs = new Set(games.map((g) => g.slug));
+  const filters = parseFiltersFromParams(params, validGameSlugs);
+  const filtered = filterBuilds(builds, filters);
+  const gameLabels = Object.fromEntries(
+    games.map((g) => [g.slug, g.ukrName || g.name]),
+  );
+  const gameShortLabels = makeGameShortLabelMap(games);
+  const highlightGames = highlightGamesForFilters(filters);
 
   return (
     <>
@@ -81,9 +98,60 @@ export default async function CatalogPage() {
           </TechButtonLink>
         </div>
 
-        <Suspense fallback={<CatalogSkeleton />}>
-          <CatalogClient builds={builds} games={games} />
-        </Suspense>
+        <div className="grid gap-8 md:grid-cols-[260px_1fr]">
+          <LazyCatalogFilters games={games} filters={filters} />
+
+          <div>
+            <div className="mb-4 flex items-center justify-between text-sm text-muted-foreground">
+              <div>
+                Знайдено:{" "}
+                <span className="font-semibold text-foreground">
+                  {filtered.length}
+                </span>
+              </div>
+            </div>
+            {filtered.length === 0 ? (
+              <div className="rounded-lg border border-border bg-surface p-10 text-center">
+                <div className="font-display text-xl font-bold">
+                  За такими критеріями нічого не знайдено
+                </div>
+                <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
+                  Спробуй: збільшити бюджет, прибрати обмеження по роздільній
+                  або обрати менше ігор.
+                </p>
+                <div className="mt-5 flex flex-wrap justify-center gap-3">
+                  <TechButtonLink
+                    href="/pk"
+                    variant="white"
+                    className="font-heading tracking-normal h-9"
+                  >
+                    Скинути фільтри
+                  </TechButtonLink>
+                  <TechButtonLink
+                    href="/pidbir"
+                    className="font-heading tracking-normal h-9"
+                  >
+                    Пройти підбір
+                  </TechButtonLink>
+                </div>
+              </div>
+            ) : (
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {filtered.map((b, i) => (
+                  <BuildCardStatic
+                    key={b.slug}
+                    build={b}
+                    variant="full"
+                    gameLabels={gameLabels}
+                    gameShortLabels={gameShortLabels}
+                    highlightGames={highlightGames}
+                    priority={i < 2}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </section>
     </>
   );
