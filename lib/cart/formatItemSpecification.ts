@@ -1,4 +1,15 @@
 import type { CartItem } from "@/lib/cartStore";
+import type { BuildSpecShort } from "@/types/build";
+
+/** Групи опцій, які вже відображаються в `spec` (mock: ssd, Sanity: storage). */
+const SPEC_COVERED_OPTION_GROUPS = new Set(["ram", "ssd", "storage"]);
+
+function formatGpuLine(spec: BuildSpecShort): string {
+  if (!spec.gpuVram || spec.gpu.toLowerCase().includes(spec.gpuVram.toLowerCase())) {
+    return spec.gpu;
+  }
+  return `${spec.gpu} ${spec.gpuVram}`;
+}
 
 /** Рядки специфікації товару для замовлень (Telegram, KeyCRM, MonoPay). */
 export function getCartItemSpecificationLines(item: CartItem): string[] {
@@ -6,8 +17,7 @@ export function getCartItemSpecificationLines(item: CartItem): string[] {
 
   if (item.itemType === "build" && item.spec) {
     lines.push(`CPU: ${item.spec.cpu}`);
-    const gpu = [item.spec.gpu, item.spec.gpuVram].filter(Boolean).join(" ");
-    lines.push(`GPU: ${gpu}`);
+    lines.push(`GPU: ${formatGpuLine(item.spec)}`);
     const ramSpeed = item.spec.ramSpeed ? ` ${item.spec.ramSpeed} MHz` : "";
     lines.push(`RAM: ${item.spec.ram}${ramSpeed}`);
     lines.push(`Накопичувач: ${item.spec.storage}`);
@@ -18,7 +28,7 @@ export function getCartItemSpecificationLines(item: CartItem): string[] {
   }
 
   item.options?.forEach((option) => {
-    if (item.spec && (option.groupId === "ram" || option.groupId === "ssd")) {
+    if (item.spec && SPEC_COVERED_OPTION_GROUPS.has(option.groupId)) {
       return;
     }
     lines.push(`${option.groupLabel}: ${option.optionLabel}`);
