@@ -22,14 +22,14 @@ export async function organizationJsonLd(options?: { logoUrl?: string }) {
     name: "Kondor PC",
     url: SITE_URL,
     logo: logoUrl,
-    sameAs,
+    ...(sameAs.length > 0 ? { sameAs } : {}),
     address: {
       "@type": "PostalAddress",
       addressLocality: "Київ",
       addressCountry: "UA",
     },
-    telephone: contacts?.phone ?? "+380000000000",
-    email: contacts?.email ?? "info@kondor-pc.ua",
+    ...(contacts?.phone ? { telephone: contacts.phone } : {}),
+    ...(contacts?.email ? { email: contacts.email } : {}),
   };
 }
 

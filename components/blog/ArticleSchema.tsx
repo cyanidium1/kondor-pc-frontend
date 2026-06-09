@@ -2,6 +2,11 @@
  * Article JSON-LD — ported from nbyg-front, branded for Kondor PC.
  */
 import { DEFAULT_SOCIAL_IMAGE_URL, SITE_URL } from "@/lib/seo/constants";
+import {
+  ensureHttps,
+  getSiteContacts,
+  telegramHref,
+} from "@/lib/sanity/siteContacts";
 
 interface ArticleSchemaProps {
   headline: string;
@@ -12,7 +17,7 @@ interface ArticleSchemaProps {
   logoUrl?: string;
 }
 
-export default function ArticleSchema({
+export default async function ArticleSchema({
   headline,
   url,
   datePublished,
@@ -20,6 +25,14 @@ export default function ArticleSchema({
   imageUrl,
   logoUrl = DEFAULT_SOCIAL_IMAGE_URL,
 }: ArticleSchemaProps) {
+  const contacts = await getSiteContacts().catch(() => null);
+  const sameAs = [
+    contacts?.instagramUrl ? ensureHttps(contacts.instagramUrl) : null,
+    contacts?.telegramChatUrl ? ensureHttps(contacts.telegramChatUrl) : null,
+    contacts?.youtubeUrl ? ensureHttps(contacts.youtubeUrl) : null,
+    contacts?.telegram ? telegramHref(contacts.telegram) : null,
+  ].filter((socialUrl): socialUrl is string => Boolean(socialUrl));
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -31,10 +44,13 @@ export default function ArticleSchema({
       "@type": "Organization",
       name: "Kondor PC",
       url: SITE_URL,
+      ...(sameAs.length > 0 ? { sameAs } : {}),
     },
     publisher: {
       "@type": "Organization",
       name: "Kondor PC",
+      url: SITE_URL,
+      ...(sameAs.length > 0 ? { sameAs } : {}),
       logo: {
         "@type": "ImageObject",
         url: logoUrl,
