@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { CustomBuildForm } from "./CustomBuildForm";
-import { Reveal } from "@/components/shared/Reveal";
+import { LazyCustomBuildForm } from "./LazyCustomBuildForm";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import Image from "next/image";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
@@ -43,36 +42,35 @@ export default function SborkaPage() {
         <div className="absolute -z-20 top-[-97px] sm:top-[-197px] lg:top-[-167px] right-[-615px] lg:right-[-420px] w-[1876px] h-[1990px]">
           <Image
             src="/images/sborka/shadows.svg"
-            alt="shadows"
-            width="1876"
-            height="1990"
+            alt=""
+            width={1876}
+            height={1990}
+            loading="lazy"
             className="object-cover"
           />
         </div>
-        <div className="absolute -z-10 top-[120px] sm:top-[20px] right-[-110px] lg:top-[-76px] lg:right-[51px] w-[403px] lg:w-[597px] h-auto aspect-[597/797]">
+        <div className="absolute -z-10 top-[120px] sm:top-[20px] right-[-110px] lg:top-[-76px] lg:right-[51px] w-[403px] lg:w-[597px] h-auto aspect-[597/797] pointer-events-none">
           <Image
             src="/images/sborka/decor.webp"
-            alt="decor"
-            width="597"
-            height="797"
+            alt=""
+            width={597}
+            height={797}
+            loading="lazy"
+            fetchPriority="low"
             className="object-cover w-full h-full"
           />
         </div>
-        <Reveal>
-          <SectionHeader
-            kicker="Кастомна збірка"
-            title="ЗБІРКА ПІД ТВОЇ ЗАДАЧІ"
-            subtitle="Не знайшов ідеальну конфігурацію в каталозі? Зберемо саме те, що тобі потрібно."
-            titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 max-w-[328px] md:max-w-[490px]"
-            subtitleClassName="text-[16px] leading-[120%] max-w-[328px] lg:max-w-[430px]"
-            className="mb-12"
-            titleAs="h1"
-          />
-        </Reveal>
+        <SectionHeader
+          kicker="Кастомна збірка"
+          title="ЗБІРКА ПІД ТВОЇ ЗАДАЧІ"
+          subtitle="Не знайшов ідеальну конфігурацію в каталозі? Зберемо саме те, що тобі потрібно."
+          titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 max-w-[328px] md:max-w-[490px]"
+          subtitleClassName="text-[16px] leading-[120%] max-w-[328px] lg:max-w-[430px]"
+          className="mb-12"
+          titleAs="h1"
+        />
 
-        <Reveal>
-          {" "}
-          <div className="mb-12 grid gap-4 sm:grid-cols-3">
+        <div className="mb-12 grid gap-4 sm:grid-cols-3">
             {WHAT_WE_CAN.map((c) => (
               <div
                 key={c.n}
@@ -90,13 +88,10 @@ export default function SborkaPage() {
                 </div>
               </div>
             ))}
-          </div>
-        </Reveal>
+        </div>
 
-        <Reveal>
-          {" "}
-          <div className="mb-12">
-            <ol className="tabular flex flex-col sm:flex-row sm:flex-wrap md:items-center gap-x-6 gap-y-3 text-sm">
+        <div className="mb-12">
+          <ol className="tabular flex flex-col sm:flex-row sm:flex-wrap md:items-center gap-x-6 gap-y-3 text-sm">
               {STEPS.map((s, i) => (
                 <li
                   key={i}
@@ -110,11 +105,10 @@ export default function SborkaPage() {
                   </span>
                 </li>
               ))}
-            </ol>
-          </div>
-        </Reveal>
+          </ol>
+        </div>
 
-        <CustomBuildForm />
+        <LazyCustomBuildForm />
       </div>
     </>
   );
