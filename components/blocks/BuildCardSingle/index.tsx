@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getBuildBySlug } from "@/lib/data/adapter";
 import type { ResolvedPageContext } from "@/lib/data/types";
 import type { FpsEntry } from "@/lib/data/types/build";
-import { TechButtonDisplay } from "@/components/shared/TechButton";
+import { TechButtonDisplay } from "@/components/shared/TechButtonPrimitives";
 import { cn } from "@/lib/utils";
 
 type Variant = "compact" | "full";

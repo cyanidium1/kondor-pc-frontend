@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Phone, MessageSquare, Mail, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { TechButtonLink } from "@/components/shared/TechButton";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import {
   isNavGroup,
   type NavEntry,
@@ -22,6 +22,19 @@ export function MobileMenu({
   navItems: NavEntry[];
 }) {
   const pathname = usePathname();
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Apply inert via DOM after hydration — React SSR can omit the attribute and
+  // cause a #418 hydration mismatch if set as a JSX prop.
+  useEffect(() => {
+    const el = menuRef.current;
+    if (!el) return;
+    if (isOpen) {
+      el.removeAttribute("inert");
+    } else {
+      el.setAttribute("inert", "");
+    }
+  }, [isOpen]);
 
   // Auto-close when route changes (link click inside menu triggers this via pathname).
   useEffect(() => {
@@ -51,7 +64,7 @@ export function MobileMenu({
 
   return (
     <div
-      aria-hidden={!isOpen}
+      ref={menuRef}
       className={cn(
         "fixed inset-x-0 bottom-0 top-[var(--header-h,64px)] z-20 lg:hidden",
         "transition-opacity duration-200 ease-out",

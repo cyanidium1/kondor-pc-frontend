@@ -3,7 +3,7 @@ import { groupProducts } from "@/lib/catalog/group";
 import { CatalogCard } from "./CatalogCard";
 import { AccessoriesRailMobileSlider } from "./AccessoriesRailMobileSlider";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { TechButtonLink } from "../shared/TechButton";
+import { TechButtonLink } from "../shared/TechButtonPrimitives";
 import ArrowIcon from "../icons/ArrowIcon";
 
 /**

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { TechButtonLink } from "@/components/shared/TechButton";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import { cn } from "@/lib/utils";
 
 type SimpleImage = { src: string; alt: string; caption?: string };

@@ -2,20 +2,18 @@ import type { Metadata } from "next";
 import { Montserrat, Unbounded } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import { ScrollToTopButton } from "@/components/shared/ScrollToTopButton";
-import { CartDrawer } from "@/components/cart/CartDrawer";
+import { LazyCartDrawer } from "@/components/cart/LazyCartDrawer";
+import { LazyScrollToTop } from "@/components/shared/LazyScrollToTop";
 
 const montserrat = Montserrat({
   variable: "--font-body",
   subsets: ["latin", "cyrillic"],
-  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 
 const unbounded = Unbounded({
   variable: "--font-heading",
   subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -75,8 +73,8 @@ export default function RootLayout({
     >
       <body>
         {children}
-        <CartDrawer />
-        <ScrollToTopButton />
+        <LazyCartDrawer />
+        <LazyScrollToTop />
       </body>
     </html>
   );

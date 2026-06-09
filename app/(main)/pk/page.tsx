@@ -4,7 +4,7 @@ import { getAllBuilds } from "@/lib/sanity-pc/builds";
 import { getAllGames } from "@/lib/sanity-pc/games";
 import { CatalogClient } from "./CatalogClient";
 import ArrowIcon from "@/components/icons/ArrowIcon";
-import { TechButtonLink } from "@/components/shared/TechButton";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import Image from "next/image";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";

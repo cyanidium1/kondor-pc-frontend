@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { RichContent } from "@/components/blocks/RichContent";
-import { TechButtonLink } from "@/components/shared/TechButton";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import type { ContentNode, ImageAsset } from "@/lib/data/types/content";
 import { cn } from "@/lib/utils";
 

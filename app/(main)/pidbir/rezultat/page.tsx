@@ -17,7 +17,7 @@ import {
 } from "@/lib/sanity-pc/games";
 import type { Resolution } from "@/types/build";
 import { cn } from "@/lib/utils";
-import { TechButtonLink } from "@/components/shared/TechButton";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";

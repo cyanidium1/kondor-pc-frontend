@@ -1,4 +1,4 @@
-import { TechButtonLink } from "@/components/shared/TechButton";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import type { ResolvedPageContext } from "@/lib/data/types";
 import { BuildCardSingle } from "@/components/blocks/BuildCardSingle";
 
