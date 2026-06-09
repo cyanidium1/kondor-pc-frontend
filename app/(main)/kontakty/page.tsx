@@ -21,6 +21,7 @@ import {
   getPaymentRequisites,
 } from "@/lib/sanity/paymentRequisites";
 import {
+  ensureHttps,
   formatPhoneDisplay,
   getSiteContacts,
   phoneHref,
@@ -143,23 +144,27 @@ export default async function ContactsPage() {
                       Соцмережі
                     </div>
                     <div className="grid gap-2 sm:grid-cols-3">
-                      {siteContacts && (
+                      {siteContacts?.telegramChatUrl && (
                         <ExternalLink
                           icon={MessageSquare}
                           label="Telegram"
-                          href={telegramHref(siteContacts.telegram)}
+                          href={ensureHttps(siteContacts.telegramChatUrl)}
                         />
                       )}
-                      <ExternalLink
-                        icon={AtSign}
-                        label="Instagram"
-                        href="https://instagram.com/kondor_pc"
-                      />
-                      <ExternalLink
-                        icon={Send}
-                        label="YouTube"
-                        href="https://youtube.com/@kondor-pc"
-                      />
+                      {siteContacts?.instagramUrl && (
+                        <ExternalLink
+                          icon={AtSign}
+                          label="Instagram"
+                          href={ensureHttps(siteContacts.instagramUrl)}
+                        />
+                      )}
+                      {siteContacts?.youtubeUrl && (
+                        <ExternalLink
+                          icon={Send}
+                          label="YouTube"
+                          href={ensureHttps(siteContacts.youtubeUrl)}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

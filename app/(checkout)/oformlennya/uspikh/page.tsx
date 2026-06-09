@@ -5,7 +5,18 @@ import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return metadataForSitePage("seoOrderSuccessPage");
+  const metadata = await metadataForSitePage("seoOrderSuccessPage");
+  return {
+    ...metadata,
+    robots: {
+      index: false,
+      follow: false,
+      googleBot: {
+        index: false,
+        follow: false,
+      },
+    },
+  };
 }
 
 const COPY: Record<string, { title: string }> = {

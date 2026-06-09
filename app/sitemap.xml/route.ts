@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { getAllBuilds } from "@/lib/sanity-pc/builds";
 import { LEGAL_PAGES } from "@/lib/mock/legal-pages";
-import { fetchLandingSlugs } from "@/lib/sanity/landingAdapter";
-import { getAllCategories, getCatalogItems } from "@/lib/sanity/fetchers";
-import { getAllBlogPostSlugs, getAllBlogPosts } from "@/lib/sanity/blogFetchers";
+import { sanityPcClient } from "@/lib/sanity-pc/client";
+import { sanityClient } from "@/lib/sanity/client";
+import { contentClient } from "@/lib/sanity/contentClient";
 
 type SitemapUrl = {
   loc: string;
@@ -15,6 +14,23 @@ type SitemapUrl = {
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 const DEFAULT_BASE_URL = "https://kondor-pc.ua";
+const BUILD_SITEMAP_QUERY = `*[_type == "build" && defined(slug.current)]{
+  "slug": slug.current,
+  "updatedAt": _updatedAt
+}`;
+const CATALOG_SITEMAP_QUERY = `*[_type == "item" && defined(slug.current)]{
+  "slug": slug.current,
+  "updatedAt": _updatedAt
+}`;
+const BLOG_SITEMAP_QUERY = `*[_type == "blogPost" && defined(slug.current)]{
+  "slug": slug.current,
+  "updatedAt": _updatedAt
+}`;
+const LANDING_SITEMAP_QUERY = `*[_type == "page" && pathPrefix == $prefix && defined(slug.current)]{
+  "slug": slug.current,
+  "updatedAt": _updatedAt,
+  expiresAt
+}`;
 
 function normalizeBaseUrl(url: string): string {
   return url.replace(/\/+$/, "");
@@ -69,15 +85,6 @@ ${entries}
 </urlset>`;
 }
 
-function resolveSlug(slugValue: unknown): string | undefined {
-  if (typeof slugValue === "string") return slugValue;
-  if (slugValue && typeof slugValue === "object" && "current" in slugValue) {
-    const current = (slugValue as { current?: unknown }).current;
-    return typeof current === "string" ? current : undefined;
-  }
-  return undefined;
-}
-
 export async function GET() {
   try {
     const baseUrl = normalizeBaseUrl(await resolveBaseUrl());
@@ -95,68 +102,74 @@ export async function GET() {
       { loc: "/kontakty", lastmod: now, changefreq: "monthly", priority: 0.5 },
     ];
 
-    const [builds, dlyaSlugs, promoSlugs, categories, catalogItems, blogSlugs, blogPosts] =
+    const [builds, dlyaPagesRaw, promoPagesRaw, catalogItems, blogPosts] =
       await Promise.all([
-        getAllBuilds().catch(() => []),
-        fetchLandingSlugs("dlya").catch(() => [] as string[]),
-        fetchLandingSlugs("promo").catch(() => [] as string[]),
-        getAllCategories().catch(() => []),
-        getCatalogItems().catch(() => []),
-        getAllBlogPostSlugs().catch(() => [] as string[]),
-        getAllBlogPosts().catch(() => []),
+        sanityPcClient
+          .fetch<Array<{ slug: string; updatedAt?: string }>>(BUILD_SITEMAP_QUERY)
+          .catch(() => []),
+        contentClient
+          .fetch<Array<{ slug: string; updatedAt?: string; expiresAt?: string }>>(
+            LANDING_SITEMAP_QUERY,
+            { prefix: "dlya" },
+          )
+          .catch(() => []),
+        contentClient
+          .fetch<Array<{ slug: string; updatedAt?: string; expiresAt?: string }>>(
+            LANDING_SITEMAP_QUERY,
+            { prefix: "promo" },
+          )
+          .catch(() => []),
+        sanityClient
+          .fetch<Array<{ slug: string; updatedAt?: string }>>(CATALOG_SITEMAP_QUERY)
+          .catch(() => []),
+        contentClient
+          .fetch<Array<{ slug: string; updatedAt?: string }>>(BLOG_SITEMAP_QUERY)
+          .catch(() => []),
       ]);
 
     const buildPages: SitemapUrl[] = builds.map((build) => ({
       loc: `/pk/${build.slug}`,
-      lastmod: now,
+      lastmod: build.updatedAt ?? now,
       changefreq: "weekly",
       priority: 0.8,
     }));
 
-    const dlyaPages: SitemapUrl[] = dlyaSlugs.map((slug) => ({
-      loc: `/dlya/${slug}`,
-      lastmod: now,
-      changefreq: "weekly",
-      priority: 0.7,
-    }));
+    const isNotExpired = (expiresAt?: string): boolean => {
+      if (!expiresAt) return true;
+      const expiresAtMs = new Date(expiresAt).getTime();
+      return Number.isFinite(expiresAtMs) && expiresAtMs > Date.now();
+    };
 
-    const promoPages: SitemapUrl[] = promoSlugs.map((slug) => ({
-      loc: `/promo/${slug}`,
-      lastmod: now,
-      changefreq: "daily",
-      priority: 0.6,
-    }));
-
-    const categoryPages: SitemapUrl[] = categories
-      .map((category) => resolveSlug(category.slug))
-      .filter((slug): slug is string => Boolean(slug))
-      .map((slug) => ({
-        loc: `/catalog/${slug}`,
-        lastmod: now,
+    const dlyaPages: SitemapUrl[] = dlyaPagesRaw
+      .filter((page) => isNotExpired(page.expiresAt))
+      .map((page) => ({
+        loc: `/dlya/${page.slug}`,
+        lastmod: page.updatedAt ?? now,
         changefreq: "weekly",
+        priority: 0.7,
+      }));
+
+    const promoPages: SitemapUrl[] = promoPagesRaw
+      .filter((page) => isNotExpired(page.expiresAt))
+      .map((page) => ({
+        loc: `/promo/${page.slug}`,
+        lastmod: page.updatedAt ?? now,
+        changefreq: "daily",
         priority: 0.6,
       }));
 
     const productPages: SitemapUrl[] = catalogItems
-      .map((item) => resolveSlug(item.slug))
-      .filter((slug): slug is string => Boolean(slug))
-      .map((slug) => ({
-        loc: `/catalog/${slug}`,
-        lastmod: now,
+      .filter((item): item is { slug: string; updatedAt?: string } => Boolean(item.slug))
+      .map((item) => ({
+        loc: `/catalog/${item.slug}`,
+        lastmod: item.updatedAt ?? now,
         changefreq: "weekly",
         priority: 0.6,
       }));
 
-    const blogDateBySlug = new Map<string, string>();
-    for (const post of blogPosts) {
-      if (post.slug && post._createdAt) {
-        blogDateBySlug.set(post.slug, post._createdAt);
-      }
-    }
-
-    const blogPostPages: SitemapUrl[] = blogSlugs.map((slug) => ({
-      loc: `/blog/${slug}`,
-      lastmod: blogDateBySlug.get(slug) ?? now,
+    const blogPostPages: SitemapUrl[] = blogPosts.map((post) => ({
+      loc: `/blog/${post.slug}`,
+      lastmod: post.updatedAt ?? now,
       changefreq: "monthly",
       priority: 0.6,
     }));
@@ -173,7 +186,6 @@ export async function GET() {
       ...buildPages,
       ...dlyaPages,
       ...promoPages,
-      ...categoryPages,
       ...productPages,
       ...blogPostPages,
       ...legalPages,

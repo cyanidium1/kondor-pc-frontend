@@ -49,7 +49,7 @@ export default async function DlyaLandingPage({
 
   return (
     <>
-      <SchemaJsonFromSeo seo={page.seo} />
+      <SchemaJsonFromSeo seo={page.seo} excludeTypes={["FAQPage"]} />
       <LandingPageBody page={page} pageContext={pageContext} />
     </>
   );

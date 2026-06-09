@@ -1,26 +1,36 @@
 import type { Build, Faq } from "@/types/build";
+import type { CatalogProductDetail } from "@/types/catalog";
 import { DEFAULT_SOCIAL_IMAGE_URL, SITE_URL } from "@/lib/seo/constants";
+import {
+  ensureHttps,
+  getSiteContacts,
+  telegramHref,
+} from "@/lib/sanity/siteContacts";
 
-export function organizationJsonLd(options?: { logoUrl?: string }) {
+export async function organizationJsonLd(options?: { logoUrl?: string }) {
   const logoUrl = options?.logoUrl ?? DEFAULT_SOCIAL_IMAGE_URL;
+  const contacts = await getSiteContacts().catch(() => null);
+  const sameAs = [
+    contacts?.instagramUrl ? ensureHttps(contacts.instagramUrl) : null,
+    contacts?.telegramChatUrl ? ensureHttps(contacts.telegramChatUrl) : null,
+    contacts?.youtubeUrl ? ensureHttps(contacts.youtubeUrl) : null,
+    contacts?.telegram ? telegramHref(contacts.telegram) : null,
+  ].filter((url): url is string => Boolean(url));
+
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Kondor PC",
     url: SITE_URL,
     logo: logoUrl,
-    sameAs: [
-      "https://instagram.com/kondor_pc",
-      "https://t.me/kondor_pc",
-      "https://youtube.com/@kondor-pc",
-    ],
+    ...(sameAs.length > 0 ? { sameAs } : {}),
     address: {
       "@type": "PostalAddress",
       addressLocality: "Київ",
       addressCountry: "UA",
     },
-    telephone: "+380000000000",
-    email: "info@kondor-pc.ua",
+    ...(contacts?.phone ? { telephone: contacts.phone } : {}),
+    ...(contacts?.email ? { email: contacts.email } : {}),
   };
 }
 
@@ -69,6 +79,37 @@ export function productJsonLd(build: Build, imageUrl: string) {
             ? "https://schema.org/PreOrder"
             : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
+    },
+  };
+}
+
+export function catalogProductJsonLd(
+  item: CatalogProductDetail,
+  options?: { imageUrl?: string },
+) {
+  const price = item.priceDiscount ?? item.price;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: item.name,
+    ...(item.description ? { description: item.description } : {}),
+    ...(options?.imageUrl ? { image: options.imageUrl } : {}),
+    brand: { "@type": "Brand", name: "Kondor PC" },
+    sku: item.id,
+    category: item.category?.name,
+    offers: {
+      "@type": "Offer",
+      url: `${SITE_URL}/catalog/${item.slug}`,
+      priceCurrency: "UAH",
+      price: String(price),
+      availability: item.preorder
+        ? "https://schema.org/PreOrder"
+        : "https://schema.org/InStock",
+      itemCondition: "https://schema.org/NewCondition",
+      seller: {
+        "@type": "Organization",
+        name: "Kondor PC",
+      },
     },
   };
 }

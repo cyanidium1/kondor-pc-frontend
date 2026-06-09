@@ -17,6 +17,9 @@ interface MetadataFromSeoParams {
   path: string;
   defaultTitle?: string;
   defaultDescription?: string;
+  openGraphType?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
 }
 
 export function buildBlogMetadata({
@@ -25,6 +28,9 @@ export function buildBlogMetadata({
   defaultTitle = "Блог Kondor PC",
   defaultDescription =
     "Гайди, огляди та поради по ігровим ПК, комплектуючим та оптимізації.",
+  openGraphType = "website",
+  publishedTime,
+  modifiedTime,
 }: MetadataFromSeoParams): Metadata {
   const canonicalUrl = canonical(path);
 
@@ -61,10 +67,16 @@ export function buildBlogMetadata({
     openGraph: {
       title: metaTitle,
       description: metaDescription,
-      type: "website",
+      type: openGraphType,
       locale: "uk_UA",
       siteName: "Kondor PC",
       url: canonicalUrl,
+      ...(openGraphType === "article" && publishedTime
+        ? { publishedTime }
+        : {}),
+      ...(openGraphType === "article" && modifiedTime
+        ? { modifiedTime }
+        : {}),
       images: ogImageUrl
         ? [
             {

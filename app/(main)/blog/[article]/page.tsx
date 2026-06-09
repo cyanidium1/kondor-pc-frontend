@@ -41,6 +41,9 @@ export async function generateMetadata({
     path: `/blog/${post.slug}`,
     defaultTitle: post.heroTitle,
     defaultDescription: post.heroDescription,
+    openGraphType: "article",
+    publishedTime: post._createdAt,
+    modifiedTime: post._updatedAt ?? post._createdAt,
   });
 }
 
@@ -69,7 +72,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   return (
     <>
-      <SchemaJsonFromSeo seo={currentArticle.seo} />
+      <SchemaJsonFromSeo
+        seo={currentArticle.seo}
+        excludeTypes={["Article", "BreadcrumbList", "FAQPage"]}
+      />
       <JsonLd
         data={breadcrumbJsonLd(
           crumbs.map((c) => ({ name: c.label, url: c.href })),

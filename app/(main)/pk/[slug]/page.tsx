@@ -186,7 +186,10 @@ export default async function BuildPage({
     <Suspense fallback={null}>
       <ProductConfiguratorProvider build={build}>
         <div style={{ ["--sku" as string]: accent }}>
-          <SchemaJsonFromSeo seo={build.seo} />
+          <SchemaJsonFromSeo
+            seo={build.seo}
+            excludeTypes={["Product", "BreadcrumbList", "FAQPage"]}
+          />
           <JsonLd
             data={[
               productJsonLd(build, productImageUrl),
