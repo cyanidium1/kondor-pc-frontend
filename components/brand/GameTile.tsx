@@ -37,6 +37,7 @@ export function GameTile({
   className,
   size = "md",
   imageOnly = false,
+  priority = false,
 }: {
   slug: string;
   name: string;
@@ -47,6 +48,8 @@ export function GameTile({
   size?: "sm" | "md" | "lg";
   /** Лише обкладинка без емодзі, сітки та підписів */
   imageOnly?: boolean;
+  /** Preload cover — use for above-the-fold tiles only. */
+  priority?: boolean;
 }) {
   const style = GAME_STYLES[slug] ?? DEFAULT_STYLE;
   const titleSize = {
@@ -74,6 +77,8 @@ export function GameTile({
               alt={ukrName || name}
               fill
               sizes="(min-width: 768px) 25vw, 50vw"
+              priority={priority}
+              loading={priority ? undefined : "lazy"}
               className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
             />
             <div
@@ -131,6 +136,8 @@ export function GameTile({
           alt=""
           fill
           sizes="(min-width: 768px) 25vw, 50vw"
+          priority={priority}
+          loading={priority ? undefined : "lazy"}
           className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
         />
       )}

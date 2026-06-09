@@ -60,7 +60,7 @@ export function SelectionForm({ gamesCatalog }: { gamesCatalog: Game[] }) {
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-          {gamesCatalog.map((g) => {
+          {gamesCatalog.map((g, i) => {
             const active = games.includes(g.slug);
             const disabled = !active && games.length >= 3;
             return (
@@ -85,6 +85,7 @@ export function SelectionForm({ gamesCatalog }: { gamesCatalog: Game[] }) {
                   heavy={g.isSystemHeavy}
                   coverImageUrl={g.coverImageUrl}
                   imageOnly
+                  priority={i < 4}
                   className="aspect-[4/3] w-full lg:aspect-[295/126]"
                 />
                 <div className="absolute right-2 top-2">
