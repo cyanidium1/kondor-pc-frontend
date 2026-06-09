@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    optimizePackageImports: ["lucide-react"],
+    optimizePackageImports: ["lucide-react", "@base-ui/react"],
   },
   async headers() {
     return [

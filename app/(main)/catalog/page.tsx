@@ -9,7 +9,9 @@ import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 // Revalidate the whole listing every 5 minutes — aligns with fetcher-level cache.
 export const revalidate = 60;
 
-function hasSeoFilterParams(params: Record<string, string | undefined>): boolean {
+function hasSeoFilterParams(
+  params: Record<string, string | undefined>,
+): boolean {
   return ["cat", "min", "max", "avail", "sort"].some((key) => {
     const value = params[key];
     return typeof value === "string" && value.trim().length > 0;
@@ -62,7 +64,7 @@ export default async function CatalogPage() {
             Аксесуари
           </div>
           <h1 className="font-display text-[24px] font-bold md:text-5xl">
-            Клавіатури, миші, поверхні
+            КЛАВІАТУРИ, МИШІ, ПОВЕРХНІ
           </h1>
           <p className="mt-4 max-w-2xl text-[14px] lg:text-[16px] leading-[120%] text-muted-foreground">
             Клавіатури, миші, ігрові поверхні та кейкапи — все, що потрібно для
