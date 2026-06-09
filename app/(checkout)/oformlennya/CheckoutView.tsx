@@ -19,6 +19,10 @@ import {
   type CartItem,
 } from "@/lib/cartStore";
 import { buildMonopayBasket } from "@/lib/monopay/basket";
+import {
+  buildKeyCrmOrderPayload,
+  sendOrderToKeyCrm,
+} from "@/lib/keycrm/client";
 import { sendTelegramMessage } from "@/lib/telegram/client";
 import { TG } from "@/lib/telegram/icons";
 import {
@@ -456,7 +460,8 @@ export function CheckoutView() {
     const payableTotal = promoForOrder?.totalUah ?? cartTotal;
     const promoDiscount = promoForOrder?.discountUah ?? 0;
 
-    const orderNumber = `UA-${new Date().toISOString().slice(2, 10).replace(/-/g, "")}-${String(Math.floor(Math.random() * 9000 + 1000))}`;
+    const orderDate = new Date();
+    const orderNumber = `UA-${orderDate.toISOString().slice(2, 10).replace(/-/g, "")}-${String(Math.floor(Math.random() * 9000 + 1000))}`;
 
     const text =
       `${TG.form} <b>Нове замовлення</b>\n` +
@@ -484,6 +489,20 @@ export function CheckoutView() {
 
     try {
       await sendTelegramMessage(text);
+
+      const keyCrmPayload = buildKeyCrmOrderPayload({
+        orderNumber,
+        orderDate,
+        values,
+        cartItems,
+        promoForOrder,
+        payableTotal,
+      });
+      try {
+        await sendOrderToKeyCrm(keyCrmPayload);
+      } catch (error) {
+        console.error("[checkout/keycrm]", error);
+      }
 
       if (values.paymentMethod === "monopay") {
         const payTotalUah = Math.round(payableTotal * 1.013);
