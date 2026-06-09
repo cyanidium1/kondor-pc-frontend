@@ -51,7 +51,7 @@ export function MobileMenu({
 
   return (
     <div
-      aria-hidden={!isOpen}
+      inert={!isOpen}
       className={cn(
         "fixed inset-x-0 bottom-0 top-[var(--header-h,64px)] z-20 lg:hidden",
         "transition-opacity duration-200 ease-out",

@@ -68,7 +68,7 @@ function NavDropdown({ group }: { group: NavGroup }) {
     <div
       ref={panelRef}
       role="menu"
-      aria-hidden={!open}
+      inert={!open}
       style={
         coords
           ? { left: coords.left, top: coords.top }
