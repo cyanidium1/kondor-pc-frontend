@@ -13,7 +13,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { BuildCard } from "@/components/shared/BuildCard";
-import { TechButton, TechButtonLink } from "@/components/shared/TechButton";
+import { TechButton } from "@/components/shared/TechButton";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import { buttonVariants } from "@/components/ui/button";
 import { formatUah } from "@/lib/format";
 import { makeGameShortLabelMap } from "@/lib/sanity-pc/games";

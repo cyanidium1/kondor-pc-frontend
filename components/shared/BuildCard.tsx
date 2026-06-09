@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SpecPill } from "@/components/shared/SpecPill";
 import { PriceBlock } from "@/components/shared/PriceBlock";
-import { TechButtonDisplay } from "@/components/shared/TechButton";
+import { TechButtonDisplay } from "@/components/shared/TechButtonPrimitives";
 import { ChassisArt } from "@/components/brand/ChassisArt";
 import type { Build } from "@/types/build";
 import { fpsTier, FPS_TIER_META } from "@/lib/fps-thresholds";

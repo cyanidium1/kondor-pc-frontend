@@ -14,6 +14,22 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cdn.sanity.io" },
     ],
   },
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Link",
+            value: "<https://cdn.sanity.io>; rel=preconnect; crossorigin",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

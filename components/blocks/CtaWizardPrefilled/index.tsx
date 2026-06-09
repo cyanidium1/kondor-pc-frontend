@@ -1,5 +1,5 @@
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { TechButtonLink } from "@/components/shared/TechButton";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import { BudgetChipLink } from "@/components/shared/BudgetChipLink";
 import type { ResolvedPageContext } from "@/lib/data/types";
 

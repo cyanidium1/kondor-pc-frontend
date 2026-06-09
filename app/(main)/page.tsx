@@ -27,7 +27,7 @@ import {
 } from "@/lib/seo";
 import { Reveal } from "@/components/shared/Reveal";
 import { BudgetChipLink } from "@/components/shared/BudgetChipLink";
-import { TechButtonLink } from "@/components/shared/TechButton";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import { cn } from "@/lib/utils";
 import {
   Video,
@@ -148,9 +148,10 @@ export default async function HomePage() {
               МАЄМО ПК
               <Image
                 src="/images/home/hero/triangle.svg"
-                alt="triangle decoration"
+                alt=""
                 width={41}
                 height={41}
+                loading="lazy"
                 className="absolute top-0 lg:top-1 -left-1 -z-10 w-[41px] lg:w-[62px] h-auto"
               />
             </h1>
@@ -167,9 +168,11 @@ export default async function HomePage() {
                 {" "}
                 <Image
                   src="/images/home/hero/pc.webp"
-                  alt="pc"
+                  alt=""
                   width={395}
                   height={527}
+                  priority
+                  sizes="(min-width: 1024px) 395px, 338px"
                   className="w-[338px] lg:w-[395px] h-auto"
                 />
                 <div className="absolute bottom-[-58px] lg:bottom-[-140px] left-[-131px] w-[495px] lg:w-[882px] h-[270px] lg:h-[316px] z-10 bg-black rounded-full blur-[46px]" />
@@ -211,6 +214,7 @@ export default async function HomePage() {
               <BuildHeroCard
                 build={heroBuild}
                 variant="full"
+                priority
                 gameLabels={gameLabels}
                 highlightGames={["cs2", "warzone", "cyberpunk"]}
               />

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { TechButtonLink } from "@/components/shared/TechButton";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import { Check } from "lucide-react";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";

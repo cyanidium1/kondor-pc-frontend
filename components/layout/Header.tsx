@@ -6,7 +6,7 @@ import { createPortal } from "react-dom";
 import { X, ChevronDown } from "lucide-react";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { Button } from "@/components/ui/button";
-import { TechButtonLink } from "@/components/shared/TechButton";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import { CartButton } from "@/components/layout/CartButton";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { cn } from "@/lib/utils";
@@ -64,11 +64,21 @@ function NavDropdown({ group }: { group: NavGroup }) {
     };
   }, [open]);
 
+  // Block focus on closed dropdown items without SSR/client attribute mismatch.
+  useEffect(() => {
+    const el = panelRef.current;
+    if (!el) return;
+    if (open) {
+      el.removeAttribute("inert");
+    } else {
+      el.setAttribute("inert", "");
+    }
+  }, [open]);
+
   const panel = (
     <div
       ref={panelRef}
       role="menu"
-      inert={!open}
       style={
         coords
           ? { left: coords.left, top: coords.top }

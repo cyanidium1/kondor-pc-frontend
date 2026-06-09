@@ -6,7 +6,7 @@ import { useState, type MouseEvent } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PriceBlock } from "@/components/shared/PriceBlock";
-import { TechButtonDisplay } from "@/components/shared/TechButton";
+import { TechButtonDisplay } from "@/components/shared/TechButtonPrimitives";
 import { ChassisArt } from "@/components/brand/ChassisArt";
 import type { Build } from "@/types/build";
 import { fpsTier, FPS_TIER_META } from "@/lib/fps-thresholds";
@@ -26,6 +26,7 @@ export function BuildHeroCard({
   highlightGames,
   gameLabels,
   badge,
+  priority = false,
   className,
 }: {
   build: Build;
@@ -33,6 +34,8 @@ export function BuildHeroCard({
   highlightGames?: string[];
   gameLabels?: Record<string, string>;
   badge?: string;
+  /** Preload the first gallery image — use for above-the-fold hero cards. */
+  priority?: boolean;
   className?: string;
 }) {
   const images: string[] =
@@ -92,6 +95,8 @@ export function BuildHeroCard({
                 alt={visible ? `${build.name} — ігровий ПК` : ""}
                 fill
                 sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 90vw"
+                priority={priority && i === 0}
+                loading={priority && i === 0 ? undefined : "lazy"}
                 className={cn(
                   "absolute inset-0 z-10 object-cover",
                   "transition-opacity duration-400 ease-out",

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ShoppingBag, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCartStore, lineKey } from "@/lib/cartStore";
-import { TechButtonLink } from "@/components/shared/TechButton";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import { formatPrice } from "@/lib/format";
 import { CartListItem } from "./CartListItem";
 import { CartCrossSell } from "./CartCrossSell";
