@@ -1,3 +1,4 @@
+import { formatCartItemOrderTitle } from "@/lib/cart/formatItemSpecification";
 import type { CartItem } from "@/lib/cartStore";
 
 import type { MonopayBasket } from "./types";
@@ -16,7 +17,7 @@ export function buildMonopayBasket(
     const total = sum * item.quantity;
 
     return {
-      name: item.name,
+      name: formatCartItemOrderTitle(item),
       qty: item.quantity,
       sum,
       total,

@@ -41,6 +41,7 @@ export function PurchaseActions({
 
   const unitPriceUah = config?.resolvedPriceUah ?? priceUah;
   const options = config?.cartOptions;
+  const spec = config?.resolvedSpec;
 
   function triggerFly(e: React.MouseEvent<HTMLButtonElement>) {
     if (!image) return;
@@ -70,6 +71,7 @@ export function PurchaseActions({
         priceUah,
         unitPriceUah,
         options,
+        spec,
         image,
       });
       setJustAdded(true);
@@ -86,6 +88,7 @@ export function PurchaseActions({
       priceUah,
       unitPriceUah,
       options,
+      spec,
       image,
     });
     router.push("/oformlennya");

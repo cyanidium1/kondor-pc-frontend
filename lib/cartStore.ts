@@ -3,6 +3,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import type { BuildSpecShort } from "@/types/build";
+
 export type CartItemType = "build" | "accessory";
 
 export interface CartItemOption {
@@ -21,6 +23,7 @@ export interface CartItem {
   unitPriceUah: number;
   quantity: number;
   options?: CartItemOption[];
+  spec?: BuildSpecShort;
   image?: string;
   colorCode?: string;
   colorName?: string;
@@ -33,6 +36,7 @@ interface AddInput {
   priceUah: number;
   unitPriceUah?: number;
   options?: CartItemOption[];
+  spec?: BuildSpecShort;
   image?: string;
   colorCode?: string;
   colorName?: string;
@@ -126,6 +130,7 @@ export const useCartStore = create<CartStore>()(
             unitPriceUah: unit,
             quantity,
             options: input.options,
+            spec: input.spec,
             image: input.image,
             colorCode: input.colorCode,
             colorName: input.colorName,

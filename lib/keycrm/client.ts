@@ -1,3 +1,4 @@
+import { formatCartItemOrderTitle } from "@/lib/cart/formatItemSpecification";
 import type { CartItem } from "@/lib/cartStore";
 import type { PromoApplication } from "@/lib/promoCode";
 import type {
@@ -78,7 +79,7 @@ function mapProducts(items: CartItem[]) {
   return items.map((item) => ({
     price: item.unitPriceUah,
     quantity: item.quantity,
-    name: item.name,
+    name: formatCartItemOrderTitle(item),
     sku: item.slug,
   }));
 }
