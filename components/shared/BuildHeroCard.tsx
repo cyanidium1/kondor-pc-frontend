@@ -96,8 +96,7 @@ export function BuildHeroCard({
                 fill
                 sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 90vw"
                 priority={priority && i === 0}
-                loading={priority && i === 0 ? undefined : "lazy"}
-                className={cn(
+className={cn(
                   "absolute inset-0 z-10 object-cover",
                   "transition-opacity duration-400 ease-out",
                   "motion-reduce:transform-none",

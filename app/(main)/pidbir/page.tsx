@@ -26,8 +26,7 @@ export default async function PidbirPage() {
                 alt=""
                 width={873}
                 height={755}
-                loading="lazy"
-                fetchPriority="low"
+fetchPriority="low"
                 className="object-cover"
               />
             </div>
@@ -37,8 +36,7 @@ export default async function PidbirPage() {
                 alt=""
                 width={3375}
                 height={1887}
-                loading="lazy"
-                className="object-cover"
+className="object-cover"
               />
             </div>
             <div className="hidden lg:block absolute -z-20 top-[-160px] left-[-277px] w-[890px] h-[916px] pointer-events-none">
@@ -47,8 +45,7 @@ export default async function PidbirPage() {
                 alt=""
                 width={890}
                 height={916}
-                loading="lazy"
-                fetchPriority="low"
+fetchPriority="low"
                 className="object-cover"
               />
             </div>
@@ -58,8 +55,7 @@ export default async function PidbirPage() {
                 alt=""
                 width={871}
                 height={640}
-                loading="lazy"
-                fetchPriority="low"
+fetchPriority="low"
                 className="object-cover"
               />
             </div>

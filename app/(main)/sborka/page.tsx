@@ -45,8 +45,7 @@ export default function SborkaPage() {
             alt=""
             width={1876}
             height={1990}
-            loading="lazy"
-            className="object-cover"
+className="object-cover"
           />
         </div>
         <div className="absolute -z-10 top-[120px] sm:top-[20px] right-[-110px] lg:top-[-76px] lg:right-[51px] w-[403px] lg:w-[597px] h-auto aspect-[597/797] pointer-events-none">
@@ -55,8 +54,7 @@ export default function SborkaPage() {
             alt=""
             width={597}
             height={797}
-            loading="lazy"
-            fetchPriority="low"
+fetchPriority="low"
             className="object-cover w-full h-full"
           />
         </div>

@@ -97,8 +97,7 @@ export function BuildCardStatic({
               fill
               sizes="(min-width: 1280px) 33vw, (min-width: 640px) 50vw, 90vw"
               priority={priority}
-              loading={priority ? undefined : "lazy"}
-              className="absolute inset-0 z-10 object-cover"
+className="absolute inset-0 z-10 object-cover"
             />
           ) : null}
         </div>
