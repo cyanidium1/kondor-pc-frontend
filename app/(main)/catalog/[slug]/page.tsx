@@ -5,10 +5,16 @@ import { JsonLd, breadcrumbJsonLd, catalogProductJsonLd } from "@/lib/seo";
 
 import { getItemBySlug, getCatalogItems } from "@/lib/sanity/fetchers";
 import { urlFor } from "@/lib/sanity/image";
-import { CatalogDetailView } from "./CatalogDetailView";
+import { catalogLcpSrc } from "@/lib/catalog/photoUrls";
 import { SimilarCatalogSection } from "./SimilarCatalogSection";
 import { SimilarCatalogSkeleton } from "./SimilarCatalogSkeleton";
 import { SITE_URL } from "@/lib/seo/constants";
+import { CatalogDetailProvider } from "./CatalogDetailProvider";
+import { CatalogHeroLcpImage } from "./CatalogHeroLcpImage";
+import { CatalogHeroTitle } from "./CatalogHeroTitle";
+import { LazyCatalogGalleryOverlay } from "./LazyCatalogGalleryOverlay";
+import { CatalogPurchasePanel } from "./CatalogPurchasePanel";
+import { CatalogDetailSections } from "./CatalogDetailSections";
 
 export const revalidate = 60;
 
@@ -85,8 +91,14 @@ export default async function CatalogDetailPage({
   const productImageUrl = item.seoImage?.asset
     ? urlFor(item.seoImage).width(1200).height(630).fit("crop").url()
     : item.coloropts?.[0]?.photos?.[0]?.asset
-      ? urlFor(item.coloropts[0].photos[0]).width(1200).height(630).fit("crop").url()
+      ? urlFor(item.coloropts[0].photos[0])
+          .width(1200)
+          .height(630)
+          .fit("crop")
+          .url()
       : undefined;
+
+  const lcpSrc = catalogLcpSrc(item.coloropts?.[0]?.photos?.[0]);
 
   return (
     <>
@@ -100,7 +112,32 @@ export default async function CatalogDetailPage({
           ]),
         ]}
       />
-      <CatalogDetailView item={item} />
+
+      <CatalogDetailProvider item={item}>
+        <section className="container-site pb-10">
+          <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
+            <div>
+              <div className="relative">
+                {lcpSrc ? (
+                  <CatalogHeroLcpImage src={lcpSrc} alt={item.name} />
+                ) : (
+                  <div className="card-frame-md flex aspect-square items-center justify-center overflow-hidden bg-surface/40 text-sm text-muted-foreground">
+                    Без фото
+                  </div>
+                )}
+                {lcpSrc ? <LazyCatalogGalleryOverlay /> : null}
+              </div>
+            </div>
+
+            <div>
+              <CatalogHeroTitle item={item} />
+              <CatalogPurchasePanel />
+            </div>
+          </div>
+        </section>
+
+        <CatalogDetailSections item={item} />
+      </CatalogDetailProvider>
 
       {item.category?.slug && (
         <Suspense fallback={<SimilarCatalogSkeleton />}>
