@@ -89,8 +89,7 @@ export default async function CatalogPage({
             alt=""
             width={1929}
             height={2007}
-            loading="lazy"
-            className="object-cover"
+className="object-cover"
           />
         </div>
         <div className="mb-8">

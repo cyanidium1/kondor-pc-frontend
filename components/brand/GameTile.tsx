@@ -78,8 +78,7 @@ export function GameTile({
               fill
               sizes="(min-width: 768px) 25vw, 50vw"
               priority={priority}
-              loading={priority ? undefined : "lazy"}
-              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
             />
             <div
               className="absolute inset-0"
@@ -137,8 +136,7 @@ export function GameTile({
           fill
           sizes="(min-width: 768px) 25vw, 50vw"
           priority={priority}
-          loading={priority ? undefined : "lazy"}
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
         />
       )}
 

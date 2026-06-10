@@ -63,8 +63,7 @@ export function CatalogCardStatic({
             fill
             sizes="(min-width: 1280px) 33vw, (min-width: 640px) 50vw, 90vw"
             priority={priority}
-            loading={priority ? undefined : "lazy"}
-            className="object-cover"
+className="object-cover"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-surface text-[10px] uppercase tracking-wider text-muted-foreground">

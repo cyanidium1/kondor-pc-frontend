@@ -151,8 +151,7 @@ export default async function HomePage() {
                 alt=""
                 width={41}
                 height={41}
-                loading="lazy"
-                className="absolute top-0 lg:top-1 -left-1 -z-10 w-[41px] lg:w-[62px] h-auto"
+className="absolute top-0 lg:top-1 -left-1 -z-10 w-[41px] lg:w-[62px] h-auto"
               />
             </h1>
             <p className="max-w-[148px] lg:max-w-[358px] mt-3.5 font-heading text-[14px] lg:text-[33px] uppercase font-bold leading-[120%]">
