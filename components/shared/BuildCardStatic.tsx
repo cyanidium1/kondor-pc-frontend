@@ -7,6 +7,7 @@ import { TechButtonDisplay } from "@/components/shared/TechButtonPrimitives";
 import { ChassisArt } from "@/components/brand/ChassisArt";
 import type { Build } from "@/types/build";
 import { fpsTier, FPS_TIER_META } from "@/lib/fps-thresholds";
+import { lcpImageUrl } from "@/lib/sanity/lcpImageUrl";
 
 type Variant = "compact" | "full";
 
@@ -92,12 +93,13 @@ export function BuildCardStatic({
 
           {heroImage ? (
             <Image
-              src={heroImage}
+              src={priority ? lcpImageUrl(heroImage) : heroImage}
               alt={`${build.name} — ігровий ПК`}
               fill
-              sizes="(min-width: 1280px) 33vw, (min-width: 640px) 50vw, 90vw"
+              sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 90vw"
+              quality={priority ? 80 : undefined}
               priority={priority}
-className="absolute inset-0 z-10 object-cover"
+              className="absolute inset-0 z-10 object-cover"
             />
           ) : null}
         </div>
