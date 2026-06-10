@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { Metadata } from "next";
 import type { PageSeo } from "@/types/blogPost";
 import { buildBlogMetadata } from "@/lib/sanity/blogSeo";
@@ -10,21 +11,21 @@ import { contentClient } from "@/lib/sanity/contentClient";
 import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import { SITE_SEO_BY_DOCUMENT_ID } from "@/lib/sanity/siteSeoQueries";
 
-export async function fetchSiteSeoByPageId(
-  pageId: SiteSeoPageId,
-): Promise<PageSeo | null> {
-  const row = await contentClient.fetch<{ seo?: PageSeo | null } | null>(
-    SITE_SEO_BY_DOCUMENT_ID,
-    { documentId: pageId },
-    {
-      next: {
-        revalidate: SANITY_REVALIDATE_SECONDS,
-        tags: ["site-seo", `site-seo:${pageId}`],
+export const fetchSiteSeoByPageId = cache(
+  async (pageId: SiteSeoPageId): Promise<PageSeo | null> => {
+    const row = await contentClient.fetch<{ seo?: PageSeo | null } | null>(
+      SITE_SEO_BY_DOCUMENT_ID,
+      { documentId: pageId },
+      {
+        next: {
+          revalidate: SANITY_REVALIDATE_SECONDS,
+          tags: ["site-seo", `site-seo:${pageId}`],
+        },
       },
-    },
-  );
-  return row?.seo ?? null;
-}
+    );
+    return row?.seo ?? null;
+  },
+);
 
 /** Build Next.js Metadata for a configured site page (Sanity → defaults). */
 export async function metadataForSitePage(

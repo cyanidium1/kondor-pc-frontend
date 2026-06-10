@@ -1,30 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { TrustStrip } from "@/components/shared/TrustStrip";
-import { BuildCard } from "@/components/shared/BuildCard";
-import { BuildHeroCard } from "@/components/shared/BuildHeroCard";
 import { ReviewCard } from "@/components/shared/ReviewCard";
-import { FaqBlock } from "@/components/shared/FaqBlock";
 import {
   collectHomepageReviews,
   getAllBuilds,
   selectHomeTopBuilds,
 } from "@/lib/sanity-pc/builds";
-import {
-  getAllGames,
-  makeGameLabelMap,
-  makeGameShortLabelMap,
-} from "@/lib/sanity-pc/games";
-import { getHomePcTasks } from "@/lib/sanity/homePcTasksSection";
 import { faqsByScope } from "@/lib/mock/faqs";
-import {
-  JsonLd,
-  organizationJsonLd,
-  websiteJsonLd,
-  faqPageJsonLd,
-} from "@/lib/seo";
+import { JsonLd, websiteJsonLd, faqPageJsonLd } from "@/lib/seo";
 import { Reveal } from "@/components/shared/Reveal";
 import { BudgetChipLink } from "@/components/shared/BudgetChipLink";
 import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
@@ -39,12 +26,14 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import ArrowIcon from "@/components/icons/ArrowIcon";
-import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
-import {
-  fetchSiteSeoByPageId,
-  metadataForSitePage,
-} from "@/lib/sanity/siteSeoFetcher";
-import { resolveOrganizationLogoUrl } from "@/lib/sanity/seoImage";
+import { DeferredSitePageSchema } from "@/components/seo/DeferredSitePageSchema";
+import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
+import { HomeHeroBuild } from "./home/HomeHeroBuild";
+import { HomeTopBuildsSection } from "./home/HomeTopBuildsSection";
+import { TopBuildsSkeleton } from "./home/TopBuildsSkeleton";
+import { HomePcTasksSection } from "./home/HomePcTasksSection";
+import { HomeOrganizationJsonLd } from "./home/HomeOrganizationJsonLd";
+import { LazyHomeFaq } from "./home/LazyHomeFaq";
 
 export const revalidate = 60;
 
@@ -105,18 +94,7 @@ const STEPS = [
 const HOME_REVIEWS_LIMIT = 3;
 
 export default async function HomePage() {
-  const [builds, gamesCatalog, pcTasks, homeSeo] = await Promise.all([
-    getAllBuilds(),
-    getAllGames(),
-    getHomePcTasks(),
-    fetchSiteSeoByPageId("seoHomePage").catch(() => null),
-  ]);
-  const organizationLogoUrl = resolveOrganizationLogoUrl(homeSeo);
-  const organizationSchema = await organizationJsonLd({
-    logoUrl: organizationLogoUrl,
-  });
-  const gameLabels = makeGameLabelMap(gamesCatalog);
-  const gameShortLabels = makeGameShortLabelMap(gamesCatalog);
+  const builds = await getAllBuilds();
   const topBuilds = selectHomeTopBuilds(builds);
   const heroBuild = topBuilds[2] ?? topBuilds[0];
   const homeReviews = collectHomepageReviews(builds, HOME_REVIEWS_LIMIT);
@@ -125,13 +103,14 @@ export default async function HomePage() {
 
   return (
     <>
-      <SitePageSchemaJson
+      <DeferredSitePageSchema
         pageId="seoHomePage"
         excludeTypes={["Organization", "WebSite", "FAQPage"]}
       />
-      <JsonLd
-        data={[organizationSchema, websiteJsonLd(), faqPageJsonLd(homeFaqs)]}
-      />
+      <Suspense fallback={null}>
+        <HomeOrganizationJsonLd />
+      </Suspense>
+      <JsonLd data={[websiteJsonLd(), faqPageJsonLd(homeFaqs)]} />
       {/* 1 · HERO */}
       <section className="relative overflow-hidden rounded-b-[28px]">
         <div className="absolute bottom-[-92px] md:bottom-[-319px] left-[-261px] size-[469px] rounded-full bg-[#00FFFE] blur-[100px]" />
@@ -151,7 +130,8 @@ export default async function HomePage() {
                 alt=""
                 width={41}
                 height={41}
-className="absolute top-0 lg:top-1 -left-1 -z-10 w-[41px] lg:w-[62px] h-auto"
+                fetchPriority="low"
+                className="absolute top-0 lg:top-1 -left-1 -z-10 w-[41px] lg:w-[62px] h-auto"
               />
             </h1>
             <p className="max-w-[148px] lg:max-w-[358px] mt-3.5 font-heading text-[14px] lg:text-[33px] uppercase font-bold leading-[120%]">
@@ -170,8 +150,8 @@ className="absolute top-0 lg:top-1 -left-1 -z-10 w-[41px] lg:w-[62px] h-auto"
                   alt=""
                   width={395}
                   height={527}
-                  priority
                   sizes="(min-width: 1024px) 395px, 338px"
+                  fetchPriority="low"
                   className="w-[338px] lg:w-[395px] h-auto"
                 />
                 <div className="absolute bottom-[-58px] lg:bottom-[-140px] left-[-131px] w-[495px] lg:w-[882px] h-[270px] lg:h-[316px] z-10 bg-black rounded-full blur-[46px]" />
@@ -209,75 +189,14 @@ className="absolute top-0 lg:top-1 -left-1 -z-10 w-[41px] lg:w-[62px] h-auto"
 
           {/* Right hero — showcase SKU card */}
           <div className="relative">
-            {heroBuild && (
-              <BuildHeroCard
-                build={heroBuild}
-                variant="full"
-                priority
-                gameLabels={gameLabels}
-                highlightGames={["cs2", "warzone", "cyberpunk"]}
-              />
-            )}
+            {heroBuild ? <HomeHeroBuild build={heroBuild} /> : null}
           </div>
         </div>
       </section>
 
-      {/* 2 · TOP-3 BUILDS */}
-      <section className="relative container-site py-[92px] lg:pt-[154px] lg:pb-[90px]">
-        <div className="hidden lg:block absolute -z-40 top-[-96px] left-[-43px] w-[2245px] h-[2316px]">
-          <Image
-            src="/images/home/top-rated/shadow-desk.svg"
-            alt="shadow-desk"
-            width="2245"
-            height="2316"
-            className="object-cover"
-          />
-        </div>
-        <div className="block lg:hidden absolute -z-40 top-[-20px] left-[-43px] w-[878px] h-[906px]">
-          <Image
-            src="/images/home/top-rated/shadow-mob.svg"
-            alt="shadow-mob"
-            width="878"
-            height="906"
-            className="object-cover"
-          />
-        </div>
-        <div className="hidden lg:block -z-30 absolute top-[281px] lg:left-[787px] xl:left-[897px] w-[354px] h-[346px]">
-          <Image
-            src="/images/home/top-rated/figure.svg"
-            alt="figure"
-            width="354"
-            height="346"
-            className="object-cover"
-          />
-          <div className="absolute bottom-[-388px] left-[-138px] w-[617px] h-[582px] rounded-full bg-black blur-[35px]" />
-        </div>
-        <Reveal>
-          <SectionHeader
-            kicker="Найчастіше обирають цього місяця"
-            title="ТРИ ПЕРЕВІРЕНІ ЗБІРКИ В РІЗНИХ БЮДЖЕТАХ"
-            subtitle="По одній оптимальній моделі на кожен ціновий діапазон — з реальними FPS у популярних іграх."
-            className="lg:mb-[130px]"
-            titleClassName="lg:max-w-[891px] lg:mt-7 lg:mb-10"
-            subtitleClassName="lg:max-w-[428px]"
-          />
-        </Reveal>
-        <Reveal delay={80}>
-          <div className="grid gap-4 md:grid-cols-3">
-            {topBuilds.map((build, i) => (
-              <BuildCard
-                key={build.slug}
-                build={build}
-                variant="full"
-                gameLabels={gameLabels}
-                gameShortLabels={gameShortLabels}
-                highlightGames={["cs2", "warzone", "gta5"]}
-                badge={i === 1 ? "Хіт" : undefined}
-              />
-            ))}
-          </div>
-        </Reveal>
-      </section>
+      <Suspense fallback={<TopBuildsSkeleton />}>
+        <HomeTopBuildsSection topBuilds={topBuilds} />
+      </Suspense>
 
       {/* 3 · HOW IT WORKS */}
       <section className="relative rounded-[40px] overflow-hidden">
@@ -396,119 +315,9 @@ className="absolute top-0 lg:top-1 -left-1 -z-10 w-[41px] lg:w-[62px] h-auto"
         </Reveal>
       </section>
 
-      {/* 5 · USE CASES */}
-      <section className="relative  bg-surface/30 rounded-[15px] lg:rounded-[40px] overflow-hidden">
-        <div className="lg:hidden absolute -z-10 bottom-[-20px] left-[-200px] w-[618px] h-[347px]">
-          <Image
-            src="/images/home/use-cases/bottom-shadows-mob.webp"
-            alt="top-image-mob"
-            width="618"
-            height="347"
-            className="object-cover"
-          />
-        </div>
-
-        <div className="lg:hidden absolute -z-10 bottom-[-80px] right-[-260px] w-[686px] h-[436px]">
-          <Image
-            src="/images/home/use-cases/bottom-decor-mob.webp"
-            alt="bottom-decor-mob"
-            width="686"
-            height="436"
-            className="object-cover"
-          />
-        </div>
-
-        <div className="absolute -z-20 bottom-[-529px] right-[-559px] w-[735px] h-[735px] rounded-full bg-[#005996] blur-[255px]" />
-
-        <div className="relative container-site pt-[200px] pb-20 lg:pt-[213px] lg:pb-[109px] lg:max-w-[825px]">
-          <div className="hidden lg:block absolute -z-10 bottom-[-600px] left-[-1130px] w-[1631px] h-[1253px]">
-            <Image
-              src="/images/home/use-cases/bottom-shadows-desk.webp"
-              alt="bottom-shadows-desk"
-              width="1631"
-              height="1253"
-              className="object-cover"
-            />
-          </div>
-          <div className="lg:hidden absolute -z-10 top-[50px] left-[calc(50%-180px)] w-[360px] h-[450px]">
-            <Image
-              src="/images/home/use-cases/top-image-mob.webp"
-              alt="top-image-mob"
-              width="360"
-              height="450"
-              className="object-cover"
-            />
-          </div>
-          <div className="hidden lg:block absolute -z-20 top-[30px] left-[calc(50%-840px)] w-[890px] h-[916px]">
-            <Image
-              src="/images/home/use-cases/top-left-image-desk.webp"
-              alt="top-left-image-desk"
-              width="890"
-              height="916"
-              className="object-cover"
-            />
-          </div>
-          <div className="hidden lg:block absolute -z-10 top-[-20px] right-[calc(50%-960px)] w-[1430px] h-[803px]">
-            <Image
-              src="/images/home/use-cases/top-right-image-desk.webp"
-              alt="top-right-image-desk"
-              width="1430"
-              height="803"
-              className="object-cover"
-            />
-          </div>
-
-          <div className="hidden lg:block absolute -z-20 bottom-[-624px] right-[calc(50%-1260px)] w-[1607px] h-[1500px]">
-            <Image
-              src="/images/home/use-cases/bottom-right-shadows-desk.webp"
-              alt="bottom-right-shadows-desk"
-              width="1607"
-              height="1500"
-              className="object-cover"
-            />
-          </div>
-          <div className="hidden lg:block absolute -z-20 top-[0px] right-[calc(50%-310px)] w-[733px] h-[1133px] rounded-full bg-black blur-[105px]" />
-
-          {pcTasks.length > 0 && (
-            <>
-              <Reveal>
-                <SectionHeader
-                  kicker="Під задачу"
-                  title="ДЛЯ ЯКИХ ЗАДАЧ ЗБИРАЄМО ПК"
-                  titleClassName="mt-2.5"
-                />
-              </Reveal>
-              <Reveal delay={80}>
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-2">
-                  {pcTasks.map((task) => (
-                    <Link
-                      key={task.href}
-                      href={task.href}
-                      className="group relative flex items-center gap-4 overflow-hidden rounded-lg border border-border bg-surface p-5 hover:-translate-y-0.5 hover:border-white/15 transition-all duration-300 ease-out"
-                    >
-                      <div className="relative flex size-10 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
-                        <Image
-                          src={task.iconUrl}
-                          alt=""
-                          width={20}
-                          height={20}
-                          className="size-5 object-contain"
-                        />
-                      </div>
-                      <div className="relative flex-1 font-heading uppercase text-[14px] leading-[120%]">
-                        {task.name}
-                      </div>
-                      <div className="relative rounded-full size-9 bg-white flex items-center justify-center text-black transition duration-300 ease-out group-hover:translate-x-0.5">
-                        <ArrowIcon />
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </Reveal>
-            </>
-          )}
-        </div>
-      </section>
+      <Suspense fallback={null}>
+        <HomePcTasksSection />
+      </Suspense>
 
       {/* 6 · REVIEWS */}
       {hasHomeReviewsSection && (
@@ -686,7 +495,7 @@ className="absolute top-0 lg:top-1 -left-1 -z-10 w-[41px] lg:w-[62px] h-auto"
               </div>
             </div>
 
-            <FaqBlock items={homeFaqs} />
+            <LazyHomeFaq items={homeFaqs} />
           </Reveal>
         </div>
       </section>
