@@ -31,18 +31,6 @@ export function BuildIdentityColumn() {
 
   return (
     <div className="min-w-0 flex flex-col gap-5">
-      <div className="min-w-0">
-        <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-          Ігровий ПК · {build.tier}
-        </div>
-        <h1 className="break-words font-display text-[40px] lg:text-[60px] font-bold uppercase leading-none tracking-tight">
-          {build.name}
-        </h1>
-        <p className="mt-3 lg:mt-2 text-[16px] lg:text-[18px] text-muted-foreground">
-          {build.shortTagline}
-        </p>
-      </div>
-
       <div className="tabular grid grid-cols-2 gap-3 rounded-md border border-border bg-surface p-4 text-sm">
         <div className="min-w-0">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">

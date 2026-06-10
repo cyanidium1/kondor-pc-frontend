@@ -13,6 +13,7 @@ import {
 import { useCartStore } from "@/lib/cartStore";
 import { urlFor } from "@/lib/sanity/image";
 import { formatPrice } from "@/lib/format";
+import { lockBodyScroll } from "@/lib/bodyScrollLock";
 import { cn } from "@/lib/utils";
 import type { CatalogProductDetail, ColorVariant } from "@/types/catalog";
 
@@ -73,6 +74,11 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
     setPhotoIdx(0);
   }, []);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    return lockBodyScroll();
+  }, [lightboxOpen]);
 
   const activeVariant: ColorVariant | undefined = variants[variantIdx];
   const photos = useMemo(() => activeVariant?.photos ?? [], [activeVariant]);
@@ -542,6 +548,7 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
       <Lightbox
         open={lightboxOpen}
         close={() => setLightboxOpen(false)}
+        noScroll={{ disabled: true }}
         index={photoIdx}
         on={{
           view: ({ index: i }) => setPhotoIdx(i),

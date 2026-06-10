@@ -5,13 +5,9 @@ import dynamic from "next/dynamic";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChassisArt } from "@/components/brand/ChassisArt";
+import { lockBodyScroll } from "@/lib/bodyScrollLock";
 import { cn } from "@/lib/utils";
 
-import "yet-another-react-lightbox/styles.css";
-import "yet-another-react-lightbox/plugins/thumbnails.css";
-import "yet-another-react-lightbox/plugins/counter.css";
-
-// Dynamic import — lightbox is only loaded when the user opens it.
 const Lightbox = dynamic(() => import("yet-another-react-lightbox"), {
   ssr: false,
 });
@@ -39,6 +35,8 @@ export function ProductGallery({
   videoPosterUrl,
   alt,
   priority = false,
+  /** When true, slide 0 is transparent — server LCP image shows through. */
+  overlayMode = false,
   className,
 }: {
   images: string[];
@@ -46,6 +44,7 @@ export function ProductGallery({
   videoPosterUrl?: string;
   alt: string;
   priority?: boolean;
+  overlayMode?: boolean;
   className?: string;
 }) {
   const galleryGlowStyle = { ["--sku" as string]: "var(--brand-primary)" };
@@ -71,9 +70,23 @@ export function ProductGallery({
 
   const [index, setIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    void import("yet-another-react-lightbox/styles.css");
+    void import("yet-another-react-lightbox/plugins/thumbnails.css");
+    void import("yet-another-react-lightbox/plugins/counter.css");
+  }, [lightboxOpen]);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    return lockBodyScroll();
+  }, [lightboxOpen]);
   const stageRef = useRef<HTMLDivElement>(null);
   const hasMany = slides.length > 1;
   const current = slides[index];
+  const deferStageMedia =
+    overlayMode && index === 0 && current?.kind === "image";
 
   const go = useCallback(
     (delta: number) => {
@@ -137,40 +150,37 @@ export function ProductGallery({
       {/* STAGE */}
       <div
         ref={stageRef}
-        className="sku-glow relative aspect-[4/3] w-full overflow-hidden rounded-lg"
-        style={galleryGlowStyle}
+        className={cn(
+          "relative w-full overflow-hidden rounded-lg",
+          overlayMode
+            ? "absolute inset-x-0 top-0 z-10 aspect-[4/3]"
+            : "sku-glow aspect-[4/3]",
+        )}
+        style={overlayMode ? undefined : galleryGlowStyle}
       >
-        <ChassisArt className="absolute inset-0 size-full rounded-lg" />
+        {!overlayMode && (
+          <ChassisArt className="absolute inset-0 size-full rounded-lg" />
+        )}
 
-        {slides.map((slide, i) => {
-          const visible = i === index;
-          if (slide.kind === "image") {
-            return (
-              <Image
-                key={slide.src + i}
-                src={slide.src}
-                alt={visible ? alt : ""}
-                fill
-                sizes="(min-width: 1024px) 620px, 90vw"
-                priority={priority && i === 0}
-                className={cn(
-                  "absolute inset-0 z-10 object-cover",
-                  "transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-                  visible ? "opacity-100" : "opacity-0 pointer-events-none",
-                )}
-              />
-            );
-          }
-          return (
-            <VideoStage
-              key={"video-" + i}
-              slide={slide}
-              visible={visible}
-              onOpen={() => setLightboxOpen(true)}
-              alt={alt}
-            />
-          );
-        })}
+        {current?.kind === "image" && !deferStageMedia ? (
+          <Image
+            key={current.src}
+            src={current.src}
+            alt={alt}
+            fill
+            sizes="(min-width: 1024px) 620px, 90vw"
+            priority={priority && index === 0}
+            className="absolute inset-0 z-10 object-cover"
+          />
+        ) : current?.kind === "video" ? (
+          <VideoStage
+            key="video-stage"
+            slide={current}
+            visible
+            onOpen={() => setLightboxOpen(true)}
+            alt={alt}
+          />
+        ) : null}
 
         {/* Click stage to open lightbox (skip when video — video has its own play button) */}
         {current?.kind === "image" && (
@@ -286,6 +296,7 @@ export function ProductGallery({
       <Lightbox
         open={lightboxOpen}
         close={() => setLightboxOpen(false)}
+        noScroll={{ disabled: true }}
         index={index}
         on={{
           view: ({ index: i }) => setIndex(i),

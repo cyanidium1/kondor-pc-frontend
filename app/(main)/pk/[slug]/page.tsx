@@ -15,9 +15,7 @@ import {
   Send,
 } from "lucide-react";
 
-import { ProductGallery } from "@/components/shared/ProductGallery";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { FpsTable } from "@/components/shared/FpsTable";
 import { ComponentList } from "@/components/shared/ComponentList";
 import { IncludedFeaturesBlock } from "@/components/shared/IncludedFeaturesBlock";
 import { ReviewCard } from "@/components/shared/ReviewCard";
@@ -26,9 +24,7 @@ import { SimilarBuildsSection } from "./SimilarBuildsSection";
 import { AccessoriesRailSection } from "./AccessoriesRailSection";
 import { ProductConfiguratorProvider } from "@/components/shared/ProductConfigurator";
 import { BuildIdentityColumn } from "@/components/shared/BuildIdentityColumn";
-import { BuildAudience } from "@/components/shared/BuildAudience";
 import { BuildRepeatCta } from "@/components/shared/BuildRepeatCta";
-import { AccessoriesRail } from "@/components/catalog/AccessoriesRail";
 import { SKU_ACCENTS } from "@/lib/sku-accents";
 import {
   JsonLd,
@@ -37,7 +33,6 @@ import {
   faqPageJsonLd,
 } from "@/lib/seo";
 import { getBuildBySlug, getBuildSlugs } from "@/lib/sanity-pc/builds";
-import { getAllGames, makeGameShortLabelMap } from "@/lib/sanity-pc/games";
 import { faqsByScope } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
@@ -48,6 +43,11 @@ import { LazyMarqueeLine } from "@/components/shared/LazyMarqueeLine";
 import { LazyFaqSection } from "../../garantiya/LazyFaqSection";
 import Image from "next/image";
 import { SimilarBuildsSkeleton } from "./SimilarBuildsSkeleton";
+import { BuildHeroLcpImage } from "./BuildHeroLcpImage";
+import { BuildHeroTitle } from "./BuildHeroTitle";
+import { LazyProductGallery } from "./LazyProductGallery";
+import { FpsTableSection } from "./FpsTableSection";
+import { FpsTableSkeleton } from "./FpsTableSkeleton";
 
 export const revalidate = 60;
 
@@ -174,9 +174,14 @@ export default async function BuildPage({
     build.useDefaultFaq === false && customFaqs.length > 0
       ? customFaqs
       : defaultBuildFaqs;
-  const gamesCatalog = await getAllGames();
-  const gameShortLabels = makeGameShortLabelMap(gamesCatalog);
   const productImageUrl = resolveProductImageUrl(build);
+  const galleryImages =
+    build.galleryImageUrls ??
+    (build.heroImageUrl ? [build.heroImageUrl] : []);
+  const heroImage = galleryImages[0];
+  const galleryAlt = `${build.name} — ігровий ПК`;
+  const needsInteractiveGallery =
+    galleryImages.length > 1 || Boolean(build.assemblyVideoUrl);
 
   return (
       <ProductConfiguratorProvider build={build}>
@@ -215,20 +220,26 @@ export default async function BuildPage({
             card under this column aligns edge-to-edge with BuildAudience and
             the later full-width sections on mobile. */}
             <div className="container-site relative grid gap-10 pb-12 lg:pb-0 lg:grid-cols-[1.1fr_1fr] [&>*]:min-w-0">
-              {/* Gallery */}
-              <ProductGallery
-                images={
-                  build.galleryImageUrls ??
-                  (build.heroImageUrl ? [build.heroImageUrl] : [])
-                }
-                videoUrl={build.assemblyVideoUrl}
-                videoPosterUrl={build.assemblyVideoPosterUrl}
-                alt={`${build.name} — ігровий ПК`}
-                priority
-              />
+              <div className="relative">
+                {heroImage ? (
+                  <BuildHeroLcpImage src={heroImage} alt={galleryAlt} />
+                ) : null}
+                {needsInteractiveGallery ? (
+                  <LazyProductGallery
+                    images={galleryImages}
+                    videoUrl={build.assemblyVideoUrl}
+                    videoPosterUrl={build.assemblyVideoPosterUrl}
+                    alt={galleryAlt}
+                    overlayMode
+                    className="contents"
+                  />
+                ) : null}
+              </div>
 
-              {/* Identification */}
-              <BuildIdentityColumn />
+              <div className="min-w-0 flex flex-col gap-5">
+                <BuildHeroTitle build={build} />
+                <BuildIdentityColumn />
+              </div>
             </div>
           </section>
 
@@ -237,17 +248,9 @@ export default async function BuildPage({
             <BuildAudience build={build} />
           </div> */}
 
-          {/* BLOCK 2 — FPS TABLE */}
-          <Section className="pt-3 pb-15 lg:pb-0 lg:pt-[128px]">
-            <SectionHeader
-              kicker="Що ти отримаєш"
-              title="СКІЛЬКИ FPS ТИ ОТРИМАЄШ У СВОЇХ ІГРАХ"
-              subtitle="Тестуємо кожну збірку в нашій лабораторії. Значення нижче — середні FPS на налаштуваннях «Високі»."
-              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
-              subtitleClassName="lg:max-w-[466px]"
-            />
-            <FpsTable build={build} gameShortLabels={gameShortLabels} />
-          </Section>
+          <Suspense fallback={<FpsTableSkeleton />}>
+            <FpsTableSection build={build} />
+          </Suspense>
 
           {/* BLOCK 4 — ASSEMBLY VIDEO */}
           <Section className="pb-22 lg:pb-0 lg:pt-30">
@@ -263,7 +266,6 @@ export default async function BuildPage({
                 style={{ ["--sku" as string]: "var(--brand-primary)" }}
               >
                 <div
-                  aria-hidden
                   className="pointer-events-none absolute inset-0 opacity-25"
                   style={{
                     background:

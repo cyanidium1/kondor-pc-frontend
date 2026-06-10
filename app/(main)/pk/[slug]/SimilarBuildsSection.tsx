@@ -24,7 +24,7 @@ export async function SimilarBuildsSection({ slug }: { slug: string }) {
           titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
         />
         <div className="grid gap-4 md:grid-cols-3">
-          {similar.map((s, i) => (
+          {similar.map((s) => (
             <BuildCardStatic
               key={s.slug}
               build={s}
@@ -32,7 +32,6 @@ export async function SimilarBuildsSection({ slug }: { slug: string }) {
               gameLabels={gameLabels}
               gameShortLabels={gameShortLabels}
               highlightGames={["cs2", "warzone", "cyberpunk"]}
-              priority={i === 0}
             />
           ))}
         </div>
