@@ -1,6 +1,7 @@
 import Image from "next/image";
+import { preload } from "react-dom";
 
-/** Server-rendered LCP frame — paints before gallery client JS. */
+/** Server-rendered LCP frame — direct Sanity CDN, no /_next/image hop. */
 export function CatalogHeroLcpImage({
   src,
   alt,
@@ -8,6 +9,8 @@ export function CatalogHeroLcpImage({
   src: string;
   alt: string;
 }) {
+  preload(src, { as: "image", fetchPriority: "high" });
+
   return (
     <div className="card-frame-md relative aspect-square w-full overflow-hidden bg-surface/40">
       <Image

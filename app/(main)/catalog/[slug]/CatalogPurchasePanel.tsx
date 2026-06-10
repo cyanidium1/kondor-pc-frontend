@@ -9,7 +9,6 @@ import {
   FLY_DURATION_MS,
 } from "@/components/cart/AddToCartAnimation";
 import { useCartStore } from "@/lib/cartStore";
-import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { useCatalogDetail } from "./CatalogDetailProvider";
 
@@ -22,10 +21,12 @@ export function CatalogPurchasePanel() {
     variantIdx,
     setVariant,
     thumbUrl,
-    finalPrice,
-    hasDiscount,
     activeVariant,
   } = useCatalogDetail();
+
+  const hasDiscount =
+    typeof item.priceDiscount === "number" && item.priceDiscount < item.price;
+  const finalPrice = hasDiscount ? item.priceDiscount! : item.price;
 
   const [animationKey, setAnimationKey] = useState<number | null>(null);
   const [startPos, setStartPos] = useState<{
@@ -113,17 +114,6 @@ export function CatalogPurchasePanel() {
             </div>
           </div>
         )}
-
-        <div className="flex items-baseline gap-3">
-          <div className="font-heading tabular text-4xl font-bold">
-            {formatPrice(finalPrice)}
-          </div>
-          {hasDiscount && (
-            <div className="tabular text-base text-muted-foreground line-through">
-              {formatPrice(item.price)}
-            </div>
-          )}
-        </div>
 
         {item.preorder && (
           <div className="flex gap-2 rounded-md border border-border bg-surface/60 p-3 text-xs text-muted-foreground">
