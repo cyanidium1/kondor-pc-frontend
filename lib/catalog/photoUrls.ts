@@ -1,4 +1,3 @@
-import { lcpImageUrl } from "@/lib/sanity/lcpImageUrl";
 import { urlFor } from "@/lib/sanity/image";
 import type { SanityImageRef } from "@/types/catalog";
 
@@ -34,13 +33,14 @@ export function buildCatalogPhotoUrls(
   );
 }
 
+/** ~640px display cap on mobile — smaller than gallery `main` (960). */
 export function catalogLcpSrc(photo?: SanityImageRef): string | null {
   if (!photo?.asset) return null;
-  const url = urlFor(photo)
-    .width(960)
-    .height(960)
+  return urlFor(photo)
+    .width(720)
+    .height(720)
     .fit("crop")
-    .quality(80)
+    .quality(75)
+    .auto("format")
     .url();
-  return lcpImageUrl(url);
 }

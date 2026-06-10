@@ -12,8 +12,9 @@ import { SITE_URL } from "@/lib/seo/constants";
 import { CatalogDetailProvider } from "./CatalogDetailProvider";
 import { CatalogHeroLcpImage } from "./CatalogHeroLcpImage";
 import { CatalogHeroTitle } from "./CatalogHeroTitle";
+import { CatalogHeroPrice } from "./CatalogHeroPrice";
 import { LazyCatalogGalleryOverlay } from "./LazyCatalogGalleryOverlay";
-import { CatalogPurchasePanel } from "./CatalogPurchasePanel";
+import { LazyCatalogPurchasePanel } from "./LazyCatalogPurchasePanel";
 import { CatalogDetailSections } from "./CatalogDetailSections";
 
 export const revalidate = 60;
@@ -131,13 +132,14 @@ export default async function CatalogDetailPage({
 
             <div>
               <CatalogHeroTitle item={item} />
-              <CatalogPurchasePanel />
+              <CatalogHeroPrice item={item} />
+              <LazyCatalogPurchasePanel />
             </div>
           </div>
         </section>
-
-        <CatalogDetailSections item={item} />
       </CatalogDetailProvider>
+
+      <CatalogDetailSections item={item} />
 
       {item.category?.slug && (
         <Suspense fallback={<SimilarCatalogSkeleton />}>
