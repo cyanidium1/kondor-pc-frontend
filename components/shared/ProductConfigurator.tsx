@@ -2,13 +2,16 @@
 
 import {
   createContext,
+  Suspense,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
+  type Dispatch,
   type ReactNode,
+  type SetStateAction,
 } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -81,6 +84,26 @@ function selectionsFromUrl(
   return map;
 }
 
+/** Reads URL params after paint — must not block SSR of the product hero. */
+function UrlSelectionSync({
+  build,
+  setSelections,
+}: {
+  build: Build;
+  setSelections: Dispatch<SetStateAction<Record<string, string>>>;
+}) {
+  const searchParams = useSearchParams();
+  const synced = useRef(false);
+
+  useEffect(() => {
+    if (synced.current) return;
+    synced.current = true;
+    setSelections(selectionsFromUrl(build, searchParams));
+  }, [build, searchParams, setSelections]);
+
+  return null;
+}
+
 export function ProductConfiguratorProvider({
   build,
   children,
@@ -89,12 +112,9 @@ export function ProductConfiguratorProvider({
   children: ReactNode;
 }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  // Initial state from URL (falls back to defaults). Runs once at mount —
-  // subsequent URL changes from our own `router.replace` must not re-seed.
   const [selections, setSelections] = useState<Record<string, string>>(() =>
-    selectionsFromUrl(build, searchParams),
+    defaultSelections(build),
   );
 
   /**
@@ -268,6 +288,9 @@ export function ProductConfiguratorProvider({
 
   return (
     <ProductConfiguratorContext.Provider value={value}>
+      <Suspense fallback={null}>
+        <UrlSelectionSync build={build} setSelections={setSelections} />
+      </Suspense>
       {children}
     </ProductConfiguratorContext.Provider>
   );
