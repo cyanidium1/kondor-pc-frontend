@@ -554,20 +554,25 @@
     opacity: 1;
   }
 
-  /* FPS green-tier dot: slow breathing pulse */
+  /*
+   * FPS green-tier dot: slow breathing pulse.
+   * Animates only transform + opacity (GPU-composited) — no box-shadow, which
+   * would force per-frame paints on the main thread (non-composited animation).
+   */
   @keyframes fps-pulse {
     0%,
     100% {
       transform: scale(1);
-      box-shadow: 0 0 0 0 color-mix(in srgb, var(--fps-green) 45%, transparent);
+      opacity: 1;
     }
     50% {
-      transform: scale(1.15);
-      box-shadow: 0 0 0 4px transparent;
+      transform: scale(1.18);
+      opacity: 0.72;
     }
   }
   .animate-fps-pulse {
     animation: fps-pulse 2.8s ease-in-out infinite;
+    will-change: transform, opacity;
   }
 
   /* Reveal on scroll — paired with IntersectionObserver in Reveal.tsx */

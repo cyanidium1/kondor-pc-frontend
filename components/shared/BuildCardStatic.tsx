@@ -89,8 +89,6 @@ export function BuildCardStatic({
           <div className="absolute z-20 top-2 left-2 max-w-[calc(100%-1rem)] whitespace-normal font-heading text-[8px] text-black uppercase leading-tight bg-brand-primary rounded-full px-3 py-2">
             {build.shortTagline}
           </div>
-          <ChassisArt className="absolute inset-0 size-full" />
-
           {heroImage ? (
             <Image
               src={priority ? lcpImageUrl(heroImage) : heroImage}
@@ -101,7 +99,9 @@ export function BuildCardStatic({
               priority={priority}
               className="absolute inset-0 z-10 object-cover"
             />
-          ) : null}
+          ) : (
+            <ChassisArt className="absolute inset-0 size-full" />
+          )}
         </div>
 
         <SpecPill
