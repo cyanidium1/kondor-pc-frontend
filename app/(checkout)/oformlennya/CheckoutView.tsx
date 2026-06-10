@@ -1024,7 +1024,6 @@ export function CheckoutView() {
                       fill
                       sizes="48px"
                       className="relative z-10 object-cover"
-                      unoptimized={!isBuild}
                     />
                   )}
                 </div>
