@@ -20,10 +20,10 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import { FpsTable } from "@/components/shared/FpsTable";
 import { ComponentList } from "@/components/shared/ComponentList";
 import { IncludedFeaturesBlock } from "@/components/shared/IncludedFeaturesBlock";
-import { FaqBlock } from "@/components/shared/FaqBlock";
 import { ReviewCard } from "@/components/shared/ReviewCard";
-import { BuildCard } from "@/components/shared/BuildCard";
-import { StickyMobileBuyBar } from "@/components/shared/StickyMobileBuyBar";
+import { LazyStickyBuyBar } from "./LazyStickyBuyBar";
+import { SimilarBuildsSection } from "./SimilarBuildsSection";
+import { AccessoriesRailSection } from "./AccessoriesRailSection";
 import { ProductConfiguratorProvider } from "@/components/shared/ProductConfigurator";
 import { BuildIdentityColumn } from "@/components/shared/BuildIdentityColumn";
 import { BuildAudience } from "@/components/shared/BuildAudience";
@@ -36,20 +36,18 @@ import {
   breadcrumbJsonLd,
   faqPageJsonLd,
 } from "@/lib/seo";
-import {
-  getBuildBySlug,
-  getBuildSlugs,
-  getSimilarBuilds,
-} from "@/lib/sanity-pc/builds";
-import { getAllGames, makeGameLabelMap, makeGameShortLabelMap } from "@/lib/sanity-pc/games";
+import { getBuildBySlug, getBuildSlugs } from "@/lib/sanity-pc/builds";
+import { getAllGames, makeGameShortLabelMap } from "@/lib/sanity-pc/games";
 import { faqsByScope } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
 import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
 import { buildBlogMetadata } from "@/lib/sanity/blogSeo";
 import { resolveProductImageUrl } from "@/lib/sanity/seoImage";
-import MarqueeLine from "@/components/shared/MarqueeLine";
+import { LazyMarqueeLine } from "@/components/shared/LazyMarqueeLine";
+import { LazyFaqSection } from "../../garantiya/LazyFaqSection";
 import Image from "next/image";
+import { SimilarBuildsSkeleton } from "./SimilarBuildsSkeleton";
 
 export const revalidate = 60;
 
@@ -176,20 +174,19 @@ export default async function BuildPage({
     build.useDefaultFaq === false && customFaqs.length > 0
       ? customFaqs
       : defaultBuildFaqs;
-  const similar = await getSimilarBuilds(build.slug, 3);
   const gamesCatalog = await getAllGames();
-  const gameLabels = makeGameLabelMap(gamesCatalog);
   const gameShortLabels = makeGameShortLabelMap(gamesCatalog);
   const productImageUrl = resolveProductImageUrl(build);
 
   return (
-    <Suspense fallback={null}>
       <ProductConfiguratorProvider build={build}>
         <div style={{ ["--sku" as string]: accent }}>
-          <SchemaJsonFromSeo
-            seo={build.seo}
-            excludeTypes={["Product", "BreadcrumbList", "FAQPage"]}
-          />
+          <Suspense fallback={null}>
+            <SchemaJsonFromSeo
+              seo={build.seo}
+              excludeTypes={["Product", "BreadcrumbList", "FAQPage"]}
+            />
+          </Suspense>
           <JsonLd
             data={[
               productJsonLd(build, productImageUrl),
@@ -203,12 +200,13 @@ export default async function BuildPage({
           />
           {/* BLOCK 1 — ID + PRICE + CTA */}
           <section className="relative">
-            <div className="absolute -z-10 left-[-662px] lg:left-[-305px] top-[-1063px] lg:top-[-735px] w-[1860px] h-[1992px]">
+            <div className="absolute -z-10 left-[-662px] lg:left-[-305px] top-[-1063px] lg:top-[-735px] w-[1860px] h-[1992px] pointer-events-none">
               <Image
                 src="/images/pk/product/shadows-hero.svg"
-                alt="shadows-hero"
-                width="1860"
-                height="1992"
+                alt=""
+                width={1860}
+                height={1992}
+                fetchPriority="low"
                 className="object-cover"
               />
             </div>
@@ -348,10 +346,9 @@ export default async function BuildPage({
           </Section>
 
           {/* BLOCK 6.5 — ACCESSORIES CROSS-SELL */}
-          <AccessoriesRail
+          <AccessoriesRailSection
             title={`Аксесуари до ${build.name}`}
             subtitle="Клавіатура, миша, ігрова поверхня — обираються окремо й доповнюють збірку."
-            limit={4}
           />
 
           {/* BLOCK 7 — HOW WE BUILD */}
@@ -431,7 +428,7 @@ export default async function BuildPage({
             <BuildRepeatCta />
           </Section>
 
-          <MarqueeLine className="mb-16 lg:mb-[107px]" />
+          <LazyMarqueeLine className="mb-16 lg:mb-[107px]" />
 
           {/* BLOCK 10 — REVIEWS FOR THIS BUILD */}
           {reviews.length > 0 && (
@@ -560,36 +557,17 @@ export default async function BuildPage({
                 showKickerDot={false}
                 className="lg:max-w-[706px] lg:mx-auto"
               />
-              <FaqBlock items={faqs} className="lg:max-w-[706px] lg:mx-auto" />
+              <div className="lg:max-w-[706px] lg:mx-auto">
+                <LazyFaqSection items={faqs} />
+              </div>
             </div>
           </section>
 
-          {/* BLOCK 12 — SIMILAR */}
-          {similar.length > 0 && (
-            <Section className="pt-[92px] lg:pt-30 lg:pb-[77px]">
-              <SectionHeader
-                kicker="Альтернативи"
-                title="ІНШІ ЗБІРКИ ЦЬОГО КЛАСУ"
-                subtitle="Порівняйте альтернативні збірки в цьому ціновому сегменті."
-                titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
-              />
-              <div className="grid gap-4 md:grid-cols-3">
-                {similar.map((s) => (
-                  <BuildCard
-                    key={s.slug}
-                    build={s}
-                    variant="compact"
-                    gameLabels={gameLabels}
-                    gameShortLabels={gameShortLabels}
-                    highlightGames={["cs2", "warzone", "cyberpunk"]}
-                  />
-                ))}
-              </div>
-            </Section>
-          )}
+          <Suspense fallback={<SimilarBuildsSkeleton />}>
+            <SimilarBuildsSection slug={build.slug} />
+          </Suspense>
 
-          {/* BLOCK 13 — STICKY MOBILE BUY BAR */}
-          <StickyMobileBuyBar
+          <LazyStickyBuyBar
             name={build.name}
             slug={build.slug}
             priceUah={build.priceUah}
@@ -597,6 +575,5 @@ export default async function BuildPage({
           />
         </div>
       </ProductConfiguratorProvider>
-    </Suspense>
   );
 }
