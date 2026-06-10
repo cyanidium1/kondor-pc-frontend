@@ -3,20 +3,22 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ArticleHero from "@/components/blog/ArticleHero";
 import ContentSection from "@/components/blog/ContentSection";
-import BlogFaq from "@/components/blog/BlogFaq";
-import RecommendedPostsDesktop from "@/components/blog/RecommendedPostsDesktop";
-import RecommendedPostsMobile from "@/components/blog/RecommendedPostsMobile";
 import BlogBreadcrumbs from "@/components/blog/BlogBreadcrumbs";
 import ArticleSchema from "@/components/blog/ArticleSchema";
 import { JsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import {
   getAllBlogPostSlugs,
-  getAllBlogPosts,
   getBlogPostBySlug,
 } from "@/lib/sanity/blogFetchers";
 import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
 import { blogCanonicalUrl, buildBlogMetadata } from "@/lib/sanity/blogSeo";
 import { resolveOrganizationLogoUrl } from "@/lib/sanity/seoImage";
+import { LazyBlogFaq } from "./LazyBlogFaq";
+import {
+  RecommendedPostsAside,
+  RecommendedPostsRail,
+} from "./RecommendedPostsSection";
+import { RecommendedAsideSkeleton } from "./RecommendedPostsSkeleton";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -49,18 +51,13 @@ export async function generateMetadata({
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { article } = await params;
-
-  const [currentArticle, blogPosts] = await Promise.all([
-    getBlogPostBySlug(article),
-    getAllBlogPosts(),
-  ]);
+  const currentArticle = await getBlogPostBySlug(article);
 
   if (!currentArticle) {
     notFound();
   }
 
   const { heroTitle, slug } = currentArticle;
-  const recommended = blogPosts.filter((p) => p.slug !== slug);
 
   const crumbs = [
     { label: "Головна", href: "/" },
@@ -69,13 +66,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   ];
 
   const publisherLogoUrl = resolveOrganizationLogoUrl(currentArticle.seo);
+  const uniqueKey = `blog-${slug}`;
 
   return (
     <>
-      <SchemaJsonFromSeo
-        seo={currentArticle.seo}
-        excludeTypes={["Article", "BreadcrumbList", "FAQPage"]}
-      />
+      <Suspense fallback={null}>
+        <SchemaJsonFromSeo
+          seo={currentArticle.seo}
+          excludeTypes={["Article", "BreadcrumbList", "FAQPage"]}
+        />
+      </Suspense>
       <JsonLd
         data={breadcrumbJsonLd(
           crumbs.map((c) => ({ name: c.label, url: c.href })),
@@ -91,34 +91,26 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           logoUrl={publisherLogoUrl}
         />
       )}
-      <Suspense fallback={null}>
-        <BlogBreadcrumbs crumbs={crumbs} />
-        <ArticleHero article={currentArticle} />
-        <div className="container-site lg:flex lg:gap-12">
-          <div className="min-w-0 flex-1">
-            {currentArticle.content && currentArticle.content.length > 0 && (
-              <ContentSection article={currentArticle} />
-            )}
-            {currentArticle.faq && (
-              <BlogFaq
-                faq={currentArticle.faq}
-                uniqueKey={`blog-${currentArticle.slug}-faq`}
-              />
-            )}
-          </div>
-          <div className="hidden w-80 shrink-0 lg:block">
-            <RecommendedPostsDesktop
-              posts={recommended}
-              uniqueKey={`blog-${currentArticle.slug}-recommended-desktop`}
+      <BlogBreadcrumbs crumbs={crumbs} />
+      <ArticleHero article={currentArticle} />
+      <div className="container-site lg:flex lg:gap-12">
+        <div className="min-w-0 flex-1">
+          {currentArticle.content && currentArticle.content.length > 0 && (
+            <ContentSection article={currentArticle} />
+          )}
+          {currentArticle.faq && (
+            <LazyBlogFaq
+              faq={currentArticle.faq}
+              uniqueKey={`${uniqueKey}-faq`}
             />
-          </div>
+          )}
         </div>
-        <div className="lg:hidden">
-          <RecommendedPostsMobile
-            posts={recommended}
-            uniqueKey={`blog-${currentArticle.slug}-recommended-mobile`}
-          />
-        </div>
+        <Suspense fallback={<RecommendedAsideSkeleton />}>
+          <RecommendedPostsAside slug={slug} uniqueKey={uniqueKey} />
+        </Suspense>
+      </div>
+      <Suspense fallback={null}>
+        <RecommendedPostsRail slug={slug} uniqueKey={uniqueKey} />
       </Suspense>
     </>
   );
