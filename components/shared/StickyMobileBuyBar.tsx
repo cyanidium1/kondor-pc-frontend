@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Send } from "lucide-react";
 import Link from "next/link";
@@ -40,12 +40,21 @@ export function StickyMobileBuyBar({
   const displayPrice = config?.resolvedPriceUah ?? priceUah;
   const imageSrc = image ?? config?.build.heroImageUrl;
 
+  const barRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > triggerPx);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [triggerPx]);
+
+  useEffect(() => {
+    const el = barRef.current;
+    if (!el) return;
+    if (visible) el.removeAttribute("inert");
+    else el.setAttribute("inert", "");
+  }, [visible]);
 
   function buy() {
     add({
@@ -64,7 +73,7 @@ export function StickyMobileBuyBar({
 
   return (
     <div
-      aria-hidden={!visible}
+      ref={barRef}
       className={cn(
         "fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur-md",
         "transition-transform duration-300 ease-out",
