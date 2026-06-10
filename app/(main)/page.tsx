@@ -151,7 +151,8 @@ export default async function HomePage() {
                   width={395}
                   height={527}
                   sizes="(min-width: 1024px) 395px, 338px"
-                  fetchPriority="low"
+                  priority
+                  fetchPriority="high"
                   className="w-[338px] lg:w-[395px] h-auto"
                 />
                 <div className="absolute bottom-[-58px] lg:bottom-[-140px] left-[-131px] w-[495px] lg:w-[882px] h-[270px] lg:h-[316px] z-10 bg-black rounded-full blur-[46px]" />

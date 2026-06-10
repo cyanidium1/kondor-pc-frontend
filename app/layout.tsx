@@ -17,10 +17,14 @@ const unbounded = Unbounded({
   display: "swap",
 });
 
+// Latin-only display face (Cyrillic falls through to Unbounded via the
+// unicode-range @font-face in globals.css). It is never used by the Cyrillic
+// hero H1, so we skip preloading it to free 4G bandwidth for the LCP image.
 const zenterSP = localFont({
   src: "../public/fonts/ZenterSPDemo.woff2",
   variable: "--font-display",
   display: "swap",
+  preload: false,
 });
 
 const metadataBase = (() => {
