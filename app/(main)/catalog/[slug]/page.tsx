@@ -3,15 +3,11 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { JsonLd, breadcrumbJsonLd, catalogProductJsonLd } from "@/lib/seo";
 
-import {
-  getItemBySlug,
-  getSimilarItems,
-  getCatalogItems,
-} from "@/lib/sanity/fetchers";
+import { getItemBySlug, getCatalogItems } from "@/lib/sanity/fetchers";
 import { urlFor } from "@/lib/sanity/image";
-import { CatalogCard } from "@/components/catalog/CatalogCard";
-import { groupProducts } from "@/lib/catalog/group";
 import { CatalogDetailView } from "./CatalogDetailView";
+import { SimilarCatalogSection } from "./SimilarCatalogSection";
+import { SimilarCatalogSkeleton } from "./SimilarCatalogSkeleton";
 import { SITE_URL } from "@/lib/seo/constants";
 
 export const revalidate = 60;
@@ -86,9 +82,6 @@ export default async function CatalogDetailPage({
   const item = await getItemBySlug(slug);
   if (!item) notFound();
 
-  const similar = item.category?.slug
-    ? await getSimilarItems(item.slug, item.category.slug)
-    : [];
   const productImageUrl = item.seoImage?.asset
     ? urlFor(item.seoImage).width(1200).height(630).fit("crop").url()
     : item.coloropts?.[0]?.photos?.[0]?.asset
@@ -107,30 +100,15 @@ export default async function CatalogDetailPage({
           ]),
         ]}
       />
-      {/* Suspense boundary required because CatalogDetailView calls
-          useSearchParams() — Next's prerender needs this to bail out safely. */}
-      <Suspense fallback={null}>
-        <CatalogDetailView item={item} />
-      </Suspense>
+      <CatalogDetailView item={item} />
 
-      {similar.length > 0 && (
-        <section className="container-site py-12 md:py-16">
-          <div className="mb-6">
-            <div className="mb-1 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-              Схожі товари
-            </div>
-            <h2 className="font-display text-2xl font-bold md:text-3xl">
-              З ЦІЄЇ Ж КАТЕГОРІЇ
-            </h2>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {groupProducts(similar)
-              .slice(0, 4)
-              .map((g) => (
-                <CatalogCard key={g.key} group={g} />
-              ))}
-          </div>
-        </section>
+      {item.category?.slug && (
+        <Suspense fallback={<SimilarCatalogSkeleton />}>
+          <SimilarCatalogSection
+            slug={item.slug}
+            categorySlug={item.category.slug}
+          />
+        </Suspense>
       )}
     </>
   );

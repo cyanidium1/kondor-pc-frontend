@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { Suspense, useEffect, useRef, useState, useMemo, useCallback } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -37,23 +37,41 @@ function youtubeEmbed(url: string): string | null {
   return null;
 }
 
+function UrlColorSync({
+  variants,
+  onSync,
+}: {
+  variants: ColorVariant[];
+  onSync: (idx: number) => void;
+}) {
+  const searchParams = useSearchParams();
+  const synced = useRef(false);
+
+  useEffect(() => {
+    if (synced.current) return;
+    synced.current = true;
+    const color = searchParams.get("color");
+    if (!color) return;
+    const idx = variants.findIndex(
+      (v) => v.color.toLowerCase() === color.toLowerCase(),
+    );
+    if (idx >= 0) onSync(idx);
+  }, [variants, searchParams, onSync]);
+
+  return null;
+}
+
 export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { add, openDrawer } = useCartStore();
 
   const variants = item.coloropts || [];
-  const initialColorParam = searchParams.get("color");
-  const initialIdx = Math.max(
-    0,
-    variants.findIndex(
-      (v) => v.color.toLowerCase() === (initialColorParam || "").toLowerCase(),
-    ),
-  );
-  const [variantIdx, setVariantIdx] = useState<number>(
-    initialIdx >= 0 ? initialIdx : 0,
-  );
+  const [variantIdx, setVariantIdx] = useState(0);
   const [photoIdx, setPhotoIdx] = useState(0);
+  const syncColorFromUrl = useCallback((idx: number) => {
+    setVariantIdx(idx);
+    setPhotoIdx(0);
+  }, []);
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const activeVariant: ColorVariant | undefined = variants[variantIdx];
@@ -66,26 +84,24 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
     ? Math.round(((item.price - item.priceDiscount!) / item.price) * 100)
     : 0;
 
-  // Pre-compute high-quality URLs for all photos of the active variant so
-  // switching via thumbnails is instant (all <Image> layers are already in the DOM).
   const photoUrls = useMemo(
     () =>
       photos.map((p) =>
         p?.asset
           ? {
               main: urlFor(p)
-                .width(1600)
-                .height(1600)
-                .fit("crop")
-                .quality(90)
-                .url(),
-              thumb: urlFor(p)
-                .width(300)
-                .height(300)
+                .width(960)
+                .height(960)
                 .fit("crop")
                 .quality(85)
                 .url(),
-              full: urlFor(p).width(2400).fit("max").quality(92).url(),
+              thumb: urlFor(p)
+                .width(240)
+                .height(240)
+                .fit("crop")
+                .quality(80)
+                .url(),
+              full: urlFor(p).width(1920).fit("max").quality(90).url(),
               alt: p.alt || "",
             }
           : null,
@@ -164,38 +180,29 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
   // (many variants are dark/black and would render TechButton text invisible).
   const badgeAccent = item.badge?.hex || activeVariant?.hex || undefined;
 
+  const activePhoto = photoUrls[photoIdx];
+
   return (
     <>
+      <Suspense fallback={null}>
+        <UrlColorSync variants={variants} onSync={syncColorFromUrl} />
+      </Suspense>
       <section className="container-site pb-10">
         <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
           {/* Gallery */}
           <div>
             <div className="card-frame-md group relative aspect-square overflow-hidden bg-surface/40">
-              {photoUrls.length > 0 ? (
+              {activePhoto ? (
                 <>
-                  {/* All photos stacked — opacity transition for instant switching */}
-                  {photoUrls.map((u, i) => {
-                    if (!u) return null;
-                    const visible = i === photoIdx;
-                    return (
-                      <Image
-                        key={u.main}
-                        src={u.main}
-                        alt={visible ? u.alt || item.name : ""}
-                        fill
-                        sizes="(min-width: 1024px) 640px, 90vw"
-                        quality={90}
-                        priority={i === 0}
-                        className={cn(
-                          "absolute inset-0 object-cover",
-                          "transition-opacity duration-300 ease-out",
-                          visible
-                            ? "opacity-100"
-                            : "opacity-0 pointer-events-none",
-                        )}
-                      />
-                    );
-                  })}
+                  <Image
+                    key={activePhoto.main}
+                    src={activePhoto.main}
+                    alt={activePhoto.alt || item.name}
+                    fill
+                    sizes="(min-width: 1024px) 640px, 90vw"
+                    priority={photoIdx === 0 && variantIdx === 0}
+                    className="absolute inset-0 object-cover"
+                  />
                   {/* Click layer — opens lightbox */}
                   <button
                     type="button"
@@ -257,7 +264,6 @@ export function CatalogDetailView({ item }: { item: CatalogProductDetail }) {
                         alt=""
                         fill
                         sizes="120px"
-                        quality={85}
                         className="object-cover"
                       />
                     </button>
