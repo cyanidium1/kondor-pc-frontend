@@ -2,6 +2,7 @@
  * Blog server-side fetchers. Source: kondor-pc-admin Sanity (project `if6dzz62`).
  * Mirrors the pattern used by landingAdapter — tagged caches keep ISR coherent.
  */
+import { cache } from "react";
 import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import { contentClient } from "./contentClient";
 import {
@@ -12,7 +13,7 @@ import {
 } from "./blogQueries";
 import type { BlogPost, BlogPostPreview, PageSeo } from "@/types/blogPost";
 
-export async function getAllBlogPosts(): Promise<BlogPostPreview[]> {
+export const getAllBlogPosts = cache(async (): Promise<BlogPostPreview[]> => {
   const rows = await contentClient.fetch<BlogPostPreview[]>(
     ALL_BLOG_POSTS_QUERY,
     {},
@@ -21,7 +22,7 @@ export async function getAllBlogPosts(): Promise<BlogPostPreview[]> {
     },
   );
   return rows ?? [];
-}
+});
 
 export async function getAllBlogPostSlugs(): Promise<string[]> {
   const rows = await contentClient.fetch<Array<{ slug: string }>>(

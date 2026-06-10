@@ -1,6 +1,7 @@
 import Image from "next/image";
+import { preload } from "react-dom";
 import type { BlogPost } from "@/types/blogPost";
-import { contentImageUrl } from "@/lib/sanity/contentClient";
+import { blogHeroDesktopUrl, blogHeroLcpUrl } from "@/lib/blog/heroImage";
 
 interface HeroProps {
   article: BlogPost;
@@ -10,28 +11,46 @@ export default function ArticleHero({ article }: HeroProps) {
   const { heroTitle, heroDescription, heroMobileImage, heroDesktopImage } =
     article;
 
+  const lcpImage = heroMobileImage?.asset
+    ? heroMobileImage
+    : heroDesktopImage?.asset
+      ? heroDesktopImage
+      : null;
+
+  const lcpSrc = lcpImage ? blogHeroLcpUrl(lcpImage) : null;
+  if (lcpSrc) {
+    preload(lcpSrc, { as: "image", fetchPriority: "high" });
+  }
+
+  const showDedicatedMobile =
+    Boolean(heroMobileImage?.asset) && Boolean(heroDesktopImage?.asset);
+
   return (
     <section className="relative overflow-hidden border-b border-border">
-      {heroMobileImage?.asset && (
+      {lcpSrc && (
         <Image
-          src={contentImageUrl(heroMobileImage).width(960).auto("format").url()}
+          src={lcpSrc}
           fill
-          alt={heroMobileImage?.alt || heroTitle}
+          alt={lcpImage?.alt || heroTitle}
           sizes="100vw"
-          className="-z-20 object-cover md:hidden"
+          quality={80}
+          className={
+            showDedicatedMobile
+              ? "-z-20 object-cover md:hidden"
+              : "-z-20 object-cover"
+          }
           priority
-          fetchPriority="high"
         />
       )}
-      {heroDesktopImage?.asset && (
+      {heroDesktopImage?.asset && showDedicatedMobile && (
         <Image
-          src={contentImageUrl(heroDesktopImage).width(1920).auto("format").url()}
+          src={blogHeroDesktopUrl(heroDesktopImage)}
           fill
           alt={heroDesktopImage?.alt || heroTitle}
           sizes="100vw"
+          quality={80}
           className="-z-20 hidden object-cover md:block"
-          priority
-          fetchPriority="high"
+          fetchPriority="low"
         />
       )}
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/40 via-black/55 to-black/85" />
