@@ -35,8 +35,15 @@ export function IncludedFeaturesBlock({
             <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
               <Icon className="size-4" strokeWidth={1.75} />
             </div>
-            <div className="font-heading text-[14px] leading-[120%] font-medium uppercase">
-              {benefit.title}
+            <div>
+              <div className="font-heading text-[14px] leading-[120%] font-medium uppercase">
+                {benefit.title}
+              </div>
+              {benefit.description ? (
+                <div className="mt-1.5 text-[12px] leading-[120%] text-muted-foreground">
+                  {benefit.description}
+                </div>
+              ) : null}
             </div>
           </li>
         );
