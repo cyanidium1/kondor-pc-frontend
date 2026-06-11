@@ -94,7 +94,8 @@ export interface Build {
   powerConsumptionW?: number;
   noiseLevelDb?: number;
   upgradePathNotes?: string;
-  includedFeatureKeys: string[];
+  /** Переваги з Sanity (`build.includedBenefits` → `buildBenefit`). */
+  includedBenefits: BuildBenefit[];
   /** Toggle from Sanity build: true => use default mocked FAQ on PK page. */
   useDefaultFaq?: boolean;
   /** FAQ from Sanity `customFaq` refs (faqEntry) when default FAQ is disabled. */
@@ -139,11 +140,9 @@ export interface Game {
   coverImageUrl?: string;
 }
 
-export interface IncludedFeature {
+export interface BuildBenefit {
   key: string;
   title: string;
-  description: string;
-  icon: string;
 }
 
 export interface Review {

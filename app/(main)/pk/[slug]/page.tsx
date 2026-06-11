@@ -308,44 +308,45 @@ export default async function BuildPage({
             <ComponentList build={build} />
           </Section>
 
-          {/* BLOCK 6 — INCLUDED FEATURES */}
-          <Section className="pb-[92px] lg:pb-[111px]">
-            <div className="absolute -z-20 left-[-108px] lg:left-auto lg:right-[-220px] xl:right-[-100px] top-[-289px] lg:top-[-50px] w-[409px] lg:w-[547px] h-auto aspect-[547/568]">
-              <Image
-                src="/images/pk/product/pc-included.webp"
-                alt="pc-included"
-                width="547"
-                height="568"
-                className="object-cover w-[409px] lg:w-[547px] h-auto"
+          {build.includedBenefits.length > 0 ? (
+            <Section className="pb-[92px] lg:pb-[111px]">
+              <div className="absolute -z-20 left-[-108px] lg:left-auto lg:right-[-220px] xl:right-[-100px] top-[-289px] lg:top-[-50px] w-[409px] lg:w-[547px] h-auto aspect-[547/568]">
+                <Image
+                  src="/images/pk/product/pc-included.webp"
+                  alt="pc-included"
+                  width="547"
+                  height="568"
+                  className="object-cover w-[409px] lg:w-[547px] h-auto"
+                />
+              </div>
+              <div className="lg:hidden absolute -z-10 left-[-932px] top-[-434px] w-[1483px] h-[1400px]">
+                <Image
+                  src="/images/pk/product/shadows-included-mob.svg"
+                  alt="shadows-included-mob"
+                  width="1483"
+                  height="1400"
+                  className="object-cover"
+                />
+              </div>
+              <div className="hidden lg:block absolute -z-10 lg:right-[-440px] lg:top-[-250px] w-[1981px] h-[1870px]">
+                <Image
+                  src="/images/pk/product/shadows-included-desk.svg"
+                  alt="shadows-included-desk"
+                  width="1981"
+                  height="1870"
+                  className="object-cover"
+                />
+              </div>
+              <SectionHeader
+                kicker="Без доплат"
+                title="ВЖЕ ВКЛЮЧЕНО В ЦІНУ"
+                subtitle="Ми продаємо готове рішення, а не набір деталей. У багатох інших магазинах це продають як додаткові функції, або взагалі про це не згадують, у нас це безкоштовно"
+                titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
+                subtitleClassName="lg:max-w-[672px]"
               />
-            </div>
-            <div className="lg:hidden absolute -z-10 left-[-932px] top-[-434px] w-[1483px] h-[1400px]">
-              <Image
-                src="/images/pk/product/shadows-included-mob.svg"
-                alt="shadows-included-mob"
-                width="1483"
-                height="1400"
-                className="object-cover"
-              />
-            </div>
-            <div className="hidden lg:block absolute -z-10 lg:right-[-440px] lg:top-[-250px] w-[1981px] h-[1870px]">
-              <Image
-                src="/images/pk/product/shadows-included-desk.svg"
-                alt="shadows-included-desk"
-                width="1981"
-                height="1870"
-                className="object-cover"
-              />
-            </div>
-            <SectionHeader
-              kicker="Без доплат"
-              title="ВЖЕ ВКЛЮЧЕНО В ЦІНУ"
-              subtitle="Ми продаємо готове рішення, а не набір деталей. У багатох інших магазинах це продають як додаткові функції, або взагалі про це не згадують, у нас це безкоштовно"
-              titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
-              subtitleClassName="lg:max-w-[672px]"
-            />
-            <IncludedFeaturesBlock featureKeys={build.includedFeatureKeys} />
-          </Section>
+              <IncludedFeaturesBlock benefits={build.includedBenefits} />
+            </Section>
+          ) : null}
 
           {/* BLOCK 6.5 — ACCESSORIES CROSS-SELL */}
           <AccessoriesRailSection
