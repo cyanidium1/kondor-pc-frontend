@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { faqsByScope, FAQS } from "@/lib/mock/faqs";
+import { faqsByScope, visibleFaqs } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
 import {
   Shield,
@@ -79,7 +79,7 @@ const PLANS = [
 const faqs =
   faqsByScope("warranty").length > 0
     ? faqsByScope("warranty")
-    : FAQS.slice(0, 5);
+    : visibleFaqs().slice(0, 5);
 
 export default function WarrantyPage() {
   return (

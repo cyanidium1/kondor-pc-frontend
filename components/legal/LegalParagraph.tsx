@@ -2,10 +2,12 @@ import {
   telegramHref,
   telegramLabel,
 } from "@/lib/sanity/siteContacts";
+import { SITE_URL, siteDisplayHost } from "@/lib/seo/constants";
 import type { ReactNode } from "react";
+import { Fragment } from "react";
 
-const PLACEHOLDER_RE = /\{\{(seller|edrpou|email|telegram)\}\}/g;
-const HAS_PLACEHOLDER_RE = /\{\{(seller|edrpou|email|telegram)\}\}/;
+const PLACEHOLDER_RE = /\{\{(seller|edrpou|email|telegram|site)\}\}/g;
+const HAS_PLACEHOLDER_RE = /\{\{(seller|edrpou|email|telegram|site)\}\}/;
 
 type PaymentSeller = { seller: string; edrpouOrRnokpp: string };
 type SiteContactLinks = { email: string; telegram: string };
@@ -53,17 +55,21 @@ export function LegalParagraph({
 
   for (let i = 0; i < segments.length; i++) {
     if (i % 2 === 0) {
-      if (segments[i]) nodes.push(segments[i]);
+      if (segments[i]) {
+        nodes.push(<Fragment key={`text-${i}`}>{segments[i]}</Fragment>);
+      }
       continue;
     }
 
-    const key = segments[i] as "seller" | "edrpou" | "email" | "telegram";
+    const key = segments[i] as "seller" | "edrpou" | "email" | "telegram" | "site";
     const node = renderPlaceholder(key, {
       contactEmail: email,
       paymentSeller,
       siteContacts,
     });
-    if (node) nodes.push(node);
+    if (node) {
+      nodes.push(<Fragment key={`${key}-${i}`}>{node}</Fragment>);
+    }
   }
 
   if (nodes.length === 0) {
@@ -74,7 +80,7 @@ export function LegalParagraph({
 }
 
 function renderPlaceholder(
-  key: "seller" | "edrpou" | "email" | "telegram",
+  key: "seller" | "edrpou" | "email" | "telegram" | "site",
   ctx: {
     contactEmail?: string | null;
     paymentSeller?: PaymentSeller | null;
@@ -112,5 +118,11 @@ function renderPlaceholder(
         </a>
       );
     }
+    case "site":
+      return (
+        <a href={SITE_URL} className={linkClass}>
+          {siteDisplayHost()}
+        </a>
+      );
   }
 }

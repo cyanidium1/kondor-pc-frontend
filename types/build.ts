@@ -171,6 +171,8 @@ export interface Faq {
   question: string;
   answer: string;
   relatedBuildSlug?: SkuSlug;
+  /** false — не показувати на сайті (дані лишаються в коді). */
+  visible?: boolean;
 }
 
 export interface TrustSignal {

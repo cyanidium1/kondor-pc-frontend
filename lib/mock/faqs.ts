@@ -15,6 +15,7 @@ export const FAQS: Faq[] = [
     question: "Чи є розстрочка?",
     answer:
       "Так. Monobank Частинами (4 платежі без %), ПриватБанк (до 9 платежів), ПУМБ (до 12 місяців). Оформлюється онлайн за 2 хвилини.",
+    visible: false,
   },
   {
     key: "g-delivery",
@@ -79,6 +80,14 @@ export function faqByKey(key: string): Faq | undefined {
   return FAQS.find((f) => f.key === key);
 }
 
+export function isFaqVisible(faq: Faq): boolean {
+  return faq.visible !== false;
+}
+
+export function visibleFaqs(faqs: Faq[] = FAQS): Faq[] {
+  return faqs.filter(isFaqVisible);
+}
+
 export function faqsByScope(scope: Faq["scope"]): Faq[] {
-  return FAQS.filter((f) => f.scope === scope);
+  return visibleFaqs(FAQS.filter((f) => f.scope === scope));
 }
