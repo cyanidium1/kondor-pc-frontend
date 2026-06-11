@@ -32,17 +32,17 @@ const GALLERY_POOL = [
   "photo-1612287230202-1ff1d85d1bdf",
 ];
 
-const INCLUDED_ALL = [
-  "assembly",
-  "stress-test",
-  "windows",
-  "office",
-  "video-report",
-  "delivery",
-  "warranty",
-  "support",
-  "consult",
-  "return",
+const MOCK_INCLUDED_BENEFITS = [
+  { key: "assembly", title: "Збірка та налаштування" },
+  { key: "stress-test", title: "Стрес-тест 4 години" },
+  { key: "windows", title: "Windows 11 Home" },
+  { key: "office", title: "Базовий офісний пакет" },
+  { key: "video-report", title: "Фото- та відеозвіт" },
+  { key: "delivery", title: "Безкоштовна доставка" },
+  { key: "warranty", title: "Гарантія 12 місяців" },
+  { key: "support", title: "Технічна підтримка" },
+  { key: "consult", title: "Безкоштовна консультація" },
+  { key: "return", title: "Повернення 14 днів" },
 ];
 
 function cmp(c: BuildComponent): BuildComponent {
@@ -108,7 +108,7 @@ export const BUILDS: Build[] = [
     powerConsumptionW: 350,
     noiseLevelDb: 28,
     upgradePathNotes: "Вільні M.2 слоти для +2 ТБ NVMe, можна поставити кулер Tower, PSU витримує GPU наступного покоління.",
-    includedFeatureKeys: INCLUDED_ALL,
+    includedBenefits: MOCK_INCLUDED_BENEFITS,
   },
   {
     slug: "hyper",
@@ -152,7 +152,7 @@ export const BUILDS: Build[] = [
     powerConsumptionW: 340,
     noiseLevelDb: 30,
     upgradePathNotes: "Апгрейд до Ryzen 7 на AM4 без заміни плати. Вільний M.2 слот.",
-    includedFeatureKeys: INCLUDED_ALL,
+    includedBenefits: MOCK_INCLUDED_BENEFITS,
   },
   {
     slug: "nebula",
@@ -197,7 +197,7 @@ export const BUILDS: Build[] = [
     powerConsumptionW: 450,
     noiseLevelDb: 32,
     upgradePathNotes: "Плата тримає Ryzen 9 7950X3D без заміни. Легко +NVMe до 4 ТБ.",
-    includedFeatureKeys: INCLUDED_ALL,
+    includedBenefits: MOCK_INCLUDED_BENEFITS,
   },
   {
     slug: "orbitra",
@@ -241,7 +241,7 @@ export const BUILDS: Build[] = [
     powerConsumptionW: 620,
     noiseLevelDb: 34,
     upgradePathNotes: "Платформа AM5 тримає всі наступні X3D. БЖ з запасом на RTX 5080.",
-    includedFeatureKeys: INCLUDED_ALL,
+    includedBenefits: MOCK_INCLUDED_BENEFITS,
   },
   {
     slug: "nyx",
@@ -281,7 +281,7 @@ export const BUILDS: Build[] = [
     powerConsumptionW: 380,
     noiseLevelDb: 32,
     upgradePathNotes: "Можна додати +16 ГБ RAM, +NVMe 1 ТБ.",
-    includedFeatureKeys: INCLUDED_ALL,
+    includedBenefits: MOCK_INCLUDED_BENEFITS,
   },
   {
     slug: "velar",
@@ -323,7 +323,7 @@ export const BUILDS: Build[] = [
     powerConsumptionW: 620,
     noiseLevelDb: 33,
     upgradePathNotes: "AM5 до Ryzen 9 9950X. БЖ тримає топові GPU.",
-    includedFeatureKeys: INCLUDED_ALL,
+    includedBenefits: MOCK_INCLUDED_BENEFITS,
   },
   {
     slug: "pulsar",
@@ -365,7 +365,7 @@ export const BUILDS: Build[] = [
     powerConsumptionW: 560,
     noiseLevelDb: 32,
     upgradePathNotes: "64 ГБ RAM вже з запасом. Можна додати +NVMe 2 ТБ.",
-    includedFeatureKeys: INCLUDED_ALL,
+    includedBenefits: MOCK_INCLUDED_BENEFITS,
   },
   {
     slug: "comet",
@@ -405,7 +405,7 @@ export const BUILDS: Build[] = [
     powerConsumptionW: 300,
     noiseLevelDb: 28,
     upgradePathNotes: "Можна апгрейдити до Ryzen 7 на AM4, +RAM до 32 ГБ.",
-    includedFeatureKeys: INCLUDED_ALL,
+    includedBenefits: MOCK_INCLUDED_BENEFITS,
   },
 ];
 

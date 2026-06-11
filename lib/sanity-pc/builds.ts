@@ -1,4 +1,11 @@
-import type { Build, BuildFpsEntry, ConfigGroup, ConfigOption, Review } from "@/types/build";
+import type {
+  Build,
+  BuildBenefit,
+  BuildFpsEntry,
+  ConfigGroup,
+  ConfigOption,
+  Review,
+} from "@/types/build";
 import type { PageSeo } from "@/types/blogPost";
 import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import { portableTextToPlain } from "@/lib/sanity/portableText";
@@ -42,6 +49,11 @@ type RawCustomFaqRow = {
   answer?: unknown;
 };
 
+type RawBuildBenefit = {
+  key?: string;
+  title?: string;
+};
+
 type RawBuild = {
   slug: string;
   sku?: string;
@@ -62,7 +74,7 @@ type RawBuild = {
   powerConsumptionW?: number;
   noiseLevelDb?: number;
   upgradePathNotes?: string;
-  includedFeatureKeys?: string[];
+  includedBenefits?: RawBuildBenefit[];
   useDefaultFaq?: boolean;
   customFaq?: RawCustomFaqRow[];
   components?: Build["components"];
@@ -70,6 +82,8 @@ type RawBuild = {
   gallery?: unknown[];
   assemblyVideoUrl?: string;
   assemblyVideoPoster?: unknown;
+  gameplayVideoUrl?: string;
+  gameplayVideoPoster?: unknown;
   fpsCoefficient?: number;
   gpuDoc?: {
     brand?: string;
@@ -105,7 +119,13 @@ const BUILDS_QUERY = `
   powerConsumptionW,
   noiseLevelDb,
   upgradePathNotes,
-  "includedFeatureKeys": coalesce(includedFeatureKeys, []),
+  "includedBenefits": coalesce(
+    includedBenefits[]->{
+      key,
+      title
+    },
+    []
+  ),
   useDefaultFaq,
   "customFaq": coalesce(customFaq[]->{_id, question, answer}, []),
   "components": coalesce(components, []),
@@ -113,6 +133,8 @@ const BUILDS_QUERY = `
   "gallery": coalesce(gallery, []),
   assemblyVideoUrl,
   assemblyVideoPoster,
+  gameplayVideoUrl,
+  gameplayVideoPoster,
   fpsCoefficient,
   "gpuDoc": gpu->{
     brand,
@@ -291,6 +313,18 @@ function mapReviews(
   return list.length > 0 ? list : undefined;
 }
 
+function mapBenefits(rows?: RawBuildBenefit[]): BuildBenefit[] {
+  if (!rows?.length) return [];
+  return rows
+    .map((row) => {
+      const key = row.key?.trim();
+      const title = row.title?.trim();
+      if (!key || !title) return null;
+      return { key, title };
+    })
+    .filter((row): row is BuildBenefit => row !== null);
+}
+
 function mapCustomFaq(rows?: RawCustomFaqRow[]): Build["customFaqItems"] {
   if (!rows?.length) return undefined;
   const list = rows
@@ -351,6 +385,7 @@ function mapBuild(raw: RawBuild): Build {
     .filter((url): url is string => Boolean(url));
 
   const assemblyVideoPosterUrl = toImageUrl(raw.assemblyVideoPoster);
+  const gameplayVideoPosterUrl = toImageUrl(raw.gameplayVideoPoster);
   const gpuLabel = [raw.gpuDoc?.brand, raw.gpuDoc?.model].filter(Boolean).join(" ").trim();
 
   return {
@@ -379,7 +414,7 @@ function mapBuild(raw: RawBuild): Build {
     powerConsumptionW: raw.powerConsumptionW,
     noiseLevelDb: raw.noiseLevelDb,
     upgradePathNotes: raw.upgradePathNotes,
-    includedFeatureKeys: raw.includedFeatureKeys ?? [],
+    includedBenefits: mapBenefits(raw.includedBenefits),
     useDefaultFaq: raw.useDefaultFaq,
     customFaqItems: mapCustomFaq(raw.customFaq),
     reviews: mapReviews(raw.reviews, raw.slug as Build["slug"]),
@@ -387,6 +422,8 @@ function mapBuild(raw: RawBuild): Build {
     galleryImageUrls: galleryImageUrls.length > 0 ? galleryImageUrls : undefined,
     assemblyVideoUrl: raw.assemblyVideoUrl,
     assemblyVideoPosterUrl,
+    gameplayVideoUrl: raw.gameplayVideoUrl,
+    gameplayVideoPosterUrl,
     configurableOptions: makeConfigGroups(raw),
     seo: raw.seo ?? null,
   };

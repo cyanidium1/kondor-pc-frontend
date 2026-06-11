@@ -68,7 +68,8 @@ export const SITE_SEO_CONFIG: Record<SiteSeoPageId, SiteSeoPageConfig> = {
     path: "/dostavka-oplata",
     defaultTitle: "Доставка та оплата",
     defaultDescription:
-      "Безкоштовна доставка Новою Поштою по Україні. 8 способів оплати: карта, MonoPay, частинами, IBAN, крипто, накладений платіж.",
+      "Безкоштовна доставка Новою Поштою по Україні. Оплата: карта, MonoPay, IBAN, крипто, накладений платіж.",
+    // Повний опис (з частинами): карта, MonoPay, частинами, IBAN, крипто, накладений платіж.
   },
   seoWarrantyPage: {
     path: "/garantiya",

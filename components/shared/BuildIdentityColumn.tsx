@@ -8,7 +8,6 @@ import {
 } from "@/components/shared/ProductConfigurator";
 import { ContactManager } from "@/components/shared/ContactManager";
 import { UpgradeSuggestion } from "@/components/shared/UpgradeSuggestion";
-import { formatInstallment } from "@/lib/format";
 import type { BuildStatus } from "@/types/build";
 
 const STATUS = {
@@ -74,30 +73,7 @@ export function BuildIdentityColumn() {
         priceUah={resolvedPriceUah}
         oldPriceUah={resolvedOldPriceUah}
         size="lg"
-        showInstallment={false}
       />
-
-      <div className="tabular rounded-md border border-border bg-surface p-4 text-sm">
-        <div className="mb-2 text-[11px] uppercase tracking-wider text-muted-foreground">
-          Або в розстрочку без %
-        </div>
-        <div className="grid gap-1.5">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-            <span>Monobank Частинами</span>
-            <span className="font-medium">
-              {formatInstallment(resolvedPriceUah, 4)}
-            </span>
-          </div>
-          <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-            <span>ПриватБанк</span>
-            <span className="font-medium">до 9 платежів</span>
-          </div>
-          <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-            <span>ПУМБ</span>
-            <span className="font-medium">до 12 місяців</span>
-          </div>
-        </div>
-      </div>
 
       <div className="flex items-center gap-2 rounded-md border border-border bg-surface/60 px-3 py-2 text-sm">
         <span

@@ -162,15 +162,6 @@ export async function BuildCardSingle({
               </div>
             ) : null}
           </div>
-          {build.monobankInstallments ? (
-            <div className="text-xs text-muted-foreground">
-              або{" "}
-              <span className="tabular text-foreground">
-                {formatUah(build.monobankInstallments.perMonthUah)} ₴
-              </span>{" "}
-              × {build.monobankInstallments.months} міс. Monobank
-            </div>
-          ) : null}
           <TechButtonDisplay
             size="sm"
             variant="inverse"

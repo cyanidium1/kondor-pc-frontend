@@ -94,7 +94,8 @@ export interface Build {
   powerConsumptionW?: number;
   noiseLevelDb?: number;
   upgradePathNotes?: string;
-  includedFeatureKeys: string[];
+  /** Переваги з Sanity (`build.includedBenefits` → `buildBenefit`). */
+  includedBenefits: BuildBenefit[];
   /** Toggle from Sanity build: true => use default mocked FAQ on PK page. */
   useDefaultFaq?: boolean;
   /** FAQ from Sanity `customFaq` refs (faqEntry) when default FAQ is disabled. */
@@ -103,13 +104,14 @@ export interface Build {
   heroImageUrl?: string;
   /** Additional gallery shots. Future: from Sanity `gallery[]`. */
   galleryImageUrls?: string[];
-  /**
-   * Assembly / showcase video. MP4 (direct file) or YouTube URL.
-   * Sanity schema: `build.assemblyVideo` (url field).
-   */
+  /** Відео збірки в галереї hero. MP4 або YouTube (Sanity `assemblyVideoUrl`). */
   assemblyVideoUrl?: string;
-  /** Poster shown in the gallery thumbnail rail when the slide is a video. */
+  /** Постер відео збірки (Sanity `assemblyVideoPoster`). */
   assemblyVideoPosterUrl?: string;
+  /** Відео секції «Реальні тести» (Sanity `gameplayVideoUrl`). */
+  gameplayVideoUrl?: string;
+  /** Постер відео секції «Реальні тести» (Sanity `gameplayVideoPoster`). */
+  gameplayVideoPosterUrl?: string;
   /** Optional upgrade/option groups shown on the PC page configurator. When absent — configurator is hidden. */
   configurableOptions?: ConfigGroup[];
   /** Відгуки з Sanity (масив на документі збірки). */
@@ -139,11 +141,9 @@ export interface Game {
   coverImageUrl?: string;
 }
 
-export interface IncludedFeature {
+export interface BuildBenefit {
   key: string;
   title: string;
-  description: string;
-  icon: string;
 }
 
 export interface Review {
@@ -171,6 +171,8 @@ export interface Faq {
   question: string;
   answer: string;
   relatedBuildSlug?: SkuSlug;
+  /** false — не показувати на сайті (дані лишаються в коді). */
+  visible?: boolean;
 }
 
 export interface TrustSignal {

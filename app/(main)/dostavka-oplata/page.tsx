@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { faqsByScope, FAQS } from "@/lib/mock/faqs";
+import { faqsByScope, visibleFaqs } from "@/lib/mock/faqs";
 import {
   Truck,
   Package,
@@ -104,7 +104,7 @@ function visiblePaymentOptions() {
 }
 
 const faqs = [...faqsByScope("delivery"), ...faqsByScope("payment")];
-const items = faqs.length > 0 ? faqs : FAQS.slice(0, 5);
+const items = faqs.length > 0 ? faqs : visibleFaqs().slice(0, 5);
 const paymentOptions = visiblePaymentOptions();
 
 export default function DeliveryPaymentPage() {
@@ -117,7 +117,7 @@ export default function DeliveryPaymentPage() {
             <SectionHeader
               kicker="Доставка та оплата"
               title="ШВИДКА ДОСТАВКА ПО УКРАЇНІ, ЗРУЧНА ОПЛАТА"
-              subtitle="Надійно пакуємо та відправляємо ПК по всій Україні. Доступна розстрочка, безготівкова оплата та кілька способів отримання замовлення."
+              subtitle="Надійно пакуємо та відправляємо ПК по всій Україні. Безготівкова оплата та кілька способів отримання замовлення."
               titleAs="h1"
               className="mb-0"
               titleClassName="mt-3 mb-5 lg:mt-7 lg:mb-10 md:max-w-[1054px]"

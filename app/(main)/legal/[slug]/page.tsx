@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { LEGAL_PAGES, legalBySlug } from "@/lib/mock/legal-pages";
+import { LEGAL_PAGES, legalBySlug, visibleLegalParagraphs } from "@/lib/mock/legal-pages";
 import { SiteContactsBlock } from "@/components/shared/SiteContactsBlock";
 import {
   formatIbanDisplay,
@@ -116,7 +116,7 @@ export default async function LegalPage({
                   {section.heading}
                 </h2>
               )}
-              {section.paragraphs.map((p, j) => (
+              {visibleLegalParagraphs(section.paragraphs).map((p, j) => (
                 <LegalParagraph
                   key={j}
                   text={p}

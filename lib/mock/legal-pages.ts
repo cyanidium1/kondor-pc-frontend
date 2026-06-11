@@ -4,9 +4,22 @@ export interface LegalPage {
   updatedAt: string;
   body: Array<{
     heading?: string;
-    paragraphs: string[];
+    paragraphs: LegalParagraphContent[];
     list?: string[];
   }>;
+}
+
+/** string — показується; `{ text, visible: false }` — лишається в коді, не рендериться. */
+export type LegalParagraphContent =
+  | string
+  | { text: string; visible?: boolean };
+
+export function visibleLegalParagraphs(
+  paragraphs: LegalParagraphContent[],
+): string[] {
+  return paragraphs
+    .filter((p) => typeof p === "string" || p.visible !== false)
+    .map((p) => (typeof p === "string" ? p : p.text));
 }
 
 export const LEGAL_PAGES: LegalPage[] = [
@@ -25,7 +38,7 @@ export const LEGAL_PAGES: LegalPage[] = [
         heading: "1. ЗАГАЛЬНІ ПОЛОЖЕННЯ",
         paragraphs: [
           "Продавець — {{seller}}, ЄДРПОУ {{edrpou}}, діє на підставі виписки з ЄДР.",
-          "Покупець — фізична або юридична особа, яка оформила замовлення на сайті kondor-pc.ua.",
+          "Покупець — фізична або юридична особа, яка оформила замовлення на сайті {{site}}.",
         ],
       },
       {
@@ -38,7 +51,11 @@ export const LEGAL_PAGES: LegalPage[] = [
         heading: "3. ЦІНА ТА ПОРЯДОК ОПЛАТИ",
         paragraphs: [
           "Ціни вказані на сторінках товарів у гривнях.",
-          "Доступні способи оплати: картою онлайн (MonoPay), частинами (Monobank / ПриватБанк / ПУМБ), IBAN-переказом, накладеним платежем у межах 50 000 грн, криптовалютою.",
+          {
+            text: "Доступні способи оплати: картою онлайн (MonoPay), частинами (Monobank / ПриватБанк / ПУМБ), IBAN-переказом, накладеним платежем, криптовалютою.",
+            visible: false,
+          },
+          "Доступні способи оплати: картою онлайн (MonoPay), IBAN-переказом, накладеним платежем, криптовалютою.",
         ],
       },
       {
