@@ -87,6 +87,7 @@ export function ProductGallery({
   const current = slides[index];
   const deferStageMedia =
     overlayMode && index === 0 && current?.kind === "image";
+  const showStageGlow = !overlayMode || !deferStageMedia;
 
   const go = useCallback(
     (delta: number) => {
@@ -151,12 +152,11 @@ export function ProductGallery({
       <div
         ref={stageRef}
         className={cn(
-          "relative w-full overflow-hidden rounded-lg",
-          overlayMode
-            ? "absolute inset-x-0 top-0 z-10 aspect-[4/3]"
-            : "sku-glow aspect-[4/3]",
+          "relative w-full overflow-hidden rounded-lg aspect-[4/3]",
+          overlayMode && "absolute inset-x-0 top-0 z-10",
+          showStageGlow && "sku-glow",
         )}
-        style={overlayMode ? undefined : galleryGlowStyle}
+        style={showStageGlow ? galleryGlowStyle : undefined}
       >
         {!overlayMode && (
           <ChassisArt className="absolute inset-0 size-full rounded-lg" />
