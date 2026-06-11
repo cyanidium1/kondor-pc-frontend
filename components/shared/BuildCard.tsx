@@ -217,6 +217,7 @@ export function BuildCard({
             priceUah={build.priceUah}
             oldPriceUah={build.oldPriceUah}
             size="sm"
+            showInstallment={false}
           />
           <TechButtonDisplay size="sm" variant="inverse" className="w-full h-9">
             Детальніше

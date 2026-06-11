@@ -188,6 +188,7 @@ className={cn(
             priceUah={build.priceUah}
             oldPriceUah={build.oldPriceUah}
             size="sm"
+            showInstallment={false}
           />
           <TechButtonDisplay
             size="sm"
