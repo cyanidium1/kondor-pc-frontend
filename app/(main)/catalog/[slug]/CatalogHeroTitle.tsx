@@ -13,7 +13,7 @@ export function CatalogHeroTitle({ item }: { item: CatalogProductDetail }) {
         {item.name}
       </h1>
       {item.description && (
-        <p className="text-sm leading-[120%] text-muted-foreground">
+        <p className="mb-4 text-sm leading-[120%] text-muted-foreground">
           {item.description}
         </p>
       )}
