@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import {
-  Play,
   Bell,
   Camera,
   Truck,
@@ -48,6 +47,7 @@ import { BuildHeroTitle } from "./BuildHeroTitle";
 import { LazyProductGallery } from "./LazyProductGallery";
 import { FpsTableSection } from "./FpsTableSection";
 import { FpsTableSkeleton } from "./FpsTableSkeleton";
+import { BuildGameplayVideo } from "./BuildGameplayVideo";
 
 export const revalidate = 60;
 
@@ -105,29 +105,27 @@ const ASSEMBLY_STEPS = [
 ];
 
 const AFTER_STEPS = [
-  { icon: Bell, title: "Відразу", text: "SMS + email з номером замовлення" },
+  { icon: Bell, title: "Відразу", text: "Отримуєш номер замовлення" },
+  {
+    icon: Camera,
+    title: "Через 3–5 днів",
+    text: "Відео готового ПК перед відправкою",
+  },
   {
     icon: Truck,
     title: "Доставка",
     text: "1–3 дні Новою Поштою, трек-номер у email",
   },
   {
-    icon: Shield,
-    title: "Гарантія",
-    text: "Якщо щось зламається — забираємо НП. Ремонт за 3–10 днів.",
-  },
-  {
-    icon: Camera,
-    title: "Через 3–5 днів",
-    text: "Відео готового ПК перед відправкою",
-  },
-
-  {
     icon: Package,
     title: "Отримання",
     text: "Перевір коробку при отриманні. Пошкодження? Не приймай — ми вирішимо.",
   },
-
+  {
+    icon: Shield,
+    title: "Гарантія",
+    text: "Якщо щось зламається — забираємо НП. Ремонт за 3–10 днів.",
+  },
   {
     icon: RotateCcw,
     title: "Повернення",
@@ -252,39 +250,21 @@ export default async function BuildPage({
             <FpsTableSection build={build} />
           </Suspense>
 
-          {/* BLOCK 4 — ASSEMBLY VIDEO */}
-          <Section className="pb-22 lg:pb-0 lg:pt-30">
-            <SectionHeader
-              kicker="реальний геймплей"
-              title="РЕАЛЬНІ ТЕСТИ НАШИХ ПК"
-              className="mb-9"
-              titleClassName="mt-3 lg:mt-7 lg:text-[36px]"
-            />
-            <div className="relative mx-auto max-w-4xl">
-              <div
-                className="sku-glow group relative flex aspect-video items-center justify-center overflow-hidden rounded-lg border border-border bg-background"
-                style={{ ["--sku" as string]: "var(--brand-primary)" }}
-              >
-                <div
-                  className="pointer-events-none absolute inset-0 opacity-25"
-                  style={{
-                    background:
-                      "radial-gradient(ellipse 60% 60% at 50% 40%, color-mix(in srgb, var(--sku) 60%, transparent), transparent 70%)",
-                  }}
-                />
-                <button
-                  type="button"
-                  aria-label="Переглянути відео збірки"
-                  className="relative flex size-20 items-center justify-center rounded-full bg-foreground/90 text-background transition group-hover:scale-105"
-                >
-                  <Play className="ml-1 size-8" fill="currentColor" />
-                </button>
-                <div className="absolute bottom-4 left-4 text-[11px] uppercase tracking-wider text-muted-foreground">
-                  assembly video · 60–90s
-                </div>
-              </div>
-            </div>
-          </Section>
+          {build.gameplayVideoUrl ? (
+            <Section className="pb-22 lg:pb-0 lg:pt-30">
+              <SectionHeader
+                kicker="реальний геймплей"
+                title="РЕАЛЬНІ ТЕСТИ НАШИХ ПК"
+                className="mb-9"
+                titleClassName="mt-3 lg:mt-7 lg:text-[36px]"
+              />
+              <BuildGameplayVideo
+                videoUrl={build.gameplayVideoUrl}
+                posterUrl={build.gameplayVideoPosterUrl}
+                buildName={build.name}
+              />
+            </Section>
+          ) : null}
 
           {/* BLOCK 5 — COMPONENTS */}
           <Section className="relative pb-[348px] lg:pb-30 lg:pt-[178px]">

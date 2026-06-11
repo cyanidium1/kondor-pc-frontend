@@ -82,6 +82,8 @@ type RawBuild = {
   gallery?: unknown[];
   assemblyVideoUrl?: string;
   assemblyVideoPoster?: unknown;
+  gameplayVideoUrl?: string;
+  gameplayVideoPoster?: unknown;
   fpsCoefficient?: number;
   gpuDoc?: {
     brand?: string;
@@ -131,6 +133,8 @@ const BUILDS_QUERY = `
   "gallery": coalesce(gallery, []),
   assemblyVideoUrl,
   assemblyVideoPoster,
+  gameplayVideoUrl,
+  gameplayVideoPoster,
   fpsCoefficient,
   "gpuDoc": gpu->{
     brand,
@@ -381,6 +385,7 @@ function mapBuild(raw: RawBuild): Build {
     .filter((url): url is string => Boolean(url));
 
   const assemblyVideoPosterUrl = toImageUrl(raw.assemblyVideoPoster);
+  const gameplayVideoPosterUrl = toImageUrl(raw.gameplayVideoPoster);
   const gpuLabel = [raw.gpuDoc?.brand, raw.gpuDoc?.model].filter(Boolean).join(" ").trim();
 
   return {
@@ -417,6 +422,8 @@ function mapBuild(raw: RawBuild): Build {
     galleryImageUrls: galleryImageUrls.length > 0 ? galleryImageUrls : undefined,
     assemblyVideoUrl: raw.assemblyVideoUrl,
     assemblyVideoPosterUrl,
+    gameplayVideoUrl: raw.gameplayVideoUrl,
+    gameplayVideoPosterUrl,
     configurableOptions: makeConfigGroups(raw),
     seo: raw.seo ?? null,
   };

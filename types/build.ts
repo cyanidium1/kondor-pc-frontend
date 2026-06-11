@@ -104,13 +104,14 @@ export interface Build {
   heroImageUrl?: string;
   /** Additional gallery shots. Future: from Sanity `gallery[]`. */
   galleryImageUrls?: string[];
-  /**
-   * Assembly / showcase video. MP4 (direct file) or YouTube URL.
-   * Sanity schema: `build.assemblyVideo` (url field).
-   */
+  /** Відео збірки в галереї hero. MP4 або YouTube (Sanity `assemblyVideoUrl`). */
   assemblyVideoUrl?: string;
-  /** Poster shown in the gallery thumbnail rail when the slide is a video. */
+  /** Постер відео збірки (Sanity `assemblyVideoPoster`). */
   assemblyVideoPosterUrl?: string;
+  /** Відео секції «Реальні тести» (Sanity `gameplayVideoUrl`). */
+  gameplayVideoUrl?: string;
+  /** Постер відео секції «Реальні тести» (Sanity `gameplayVideoPoster`). */
+  gameplayVideoPosterUrl?: string;
   /** Optional upgrade/option groups shown on the PC page configurator. When absent — configurator is hidden. */
   configurableOptions?: ConfigGroup[];
   /** Відгуки з Sanity (масив на документі збірки). */
