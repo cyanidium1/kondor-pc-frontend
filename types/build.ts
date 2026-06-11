@@ -144,6 +144,7 @@ export interface Game {
 export interface BuildBenefit {
   key: string;
   title: string;
+  description?: string;
 }
 
 export interface Review {

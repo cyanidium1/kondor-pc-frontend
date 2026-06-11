@@ -10,7 +10,10 @@ export function BuildHeroLcpImage({
   alt: string;
 }) {
   return (
-    <div className="sku-glow relative aspect-[4/3] w-full overflow-hidden rounded-lg">
+    <div
+      className="sku-glow relative aspect-[4/3] w-full overflow-hidden rounded-lg"
+      style={{ ["--sku" as string]: "var(--brand-primary)" }}
+    >
       <Image
         src={lcpImageUrl(src)}
         alt={alt}

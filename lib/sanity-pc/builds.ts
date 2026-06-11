@@ -52,6 +52,7 @@ type RawCustomFaqRow = {
 type RawBuildBenefit = {
   key?: string;
   title?: string;
+  description?: string;
 };
 
 type RawBuild = {
@@ -122,7 +123,8 @@ const BUILDS_QUERY = `
   "includedBenefits": coalesce(
     includedBenefits[]->{
       key,
-      title
+      title,
+      description
     },
     []
   ),
@@ -320,7 +322,12 @@ function mapBenefits(rows?: RawBuildBenefit[]): BuildBenefit[] {
       const key = row.key?.trim();
       const title = row.title?.trim();
       if (!key || !title) return null;
-      return { key, title };
+      const description = row.description?.trim();
+      return {
+        key,
+        title,
+        ...(description ? { description } : {}),
+      };
     })
     .filter((row): row is BuildBenefit => row !== null);
 }
