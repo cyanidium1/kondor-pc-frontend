@@ -5,7 +5,7 @@ export function PriceBlock({
   priceUah,
   oldPriceUah,
   size = "md",
-  showInstallment = true,
+  showInstallment = false,
   className,
 }: {
   priceUah: number;
