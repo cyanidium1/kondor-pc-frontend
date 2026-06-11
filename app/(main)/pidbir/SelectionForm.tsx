@@ -53,7 +53,7 @@ export function SelectionForm({ gamesCatalog }: { gamesCatalog: Game[] }) {
       {/* GAMES */}
       <section>
         <div className="mb-9 md:mb-5 flex flex-col md:flex-row items-baseline justify-between gap-6">
-          <h2 className="font-display text-2xl font-bold">У ЩО ТИ ГРАЄШ?</h2>
+          <h2 className="font-display text-2xl font-bold">ДЛЯ ЯКИХ ІГОР АБО ЗАДАЧ?</h2>
           <div className="text-xs text-muted-foreground">
             Обрано: {games.length}/3
           </div>
