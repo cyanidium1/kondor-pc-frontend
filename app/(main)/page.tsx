@@ -160,7 +160,7 @@ export default async function HomePage() {
               <TechButtonLink
                 href="/pidbir"
                 size="lg"
-                className="w-full max-w-[320px] lg:max-w-[555px] h-[42px]"
+                className="w-full max-w-[320px] lg:max-w-[555px] h-[42px] px-4"
               >
                 ПІДІБРАТИ ПК ЗА 30 СЕКУНД
               </TechButtonLink>
