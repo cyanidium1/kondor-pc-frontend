@@ -1,8 +1,13 @@
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { FaqBlock } from "@/components/shared/FaqBlock";
+import type { ContentNode } from "@/lib/data/types/content";
 import Image from "next/image";
 
-type FaqItem = { question: string; answer: string };
+type FaqItem = {
+  question: string;
+  answer: string;
+  answerContent?: ContentNode[];
+};
 
 export function FaqAccordion({
   heading,
@@ -17,6 +22,7 @@ export function FaqAccordion({
     scope: "build" as const,
     question: it.question,
     answer: it.answer,
+    answerContent: it.answerContent,
   }));
 
   const jsonLd = {

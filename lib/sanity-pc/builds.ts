@@ -7,8 +7,9 @@ import type {
   Review,
 } from "@/types/build";
 import type { PageSeo } from "@/types/blogPost";
+import type { ContentNode } from "@/lib/data/types/content";
 import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
-import { portableTextToPlain } from "@/lib/sanity/portableText";
+import { portableTextToContent, portableTextToPlain } from "@/lib/sanity/portableText";
 import { SEO_SETTINGS_PROJECTION } from "@/lib/sanity/siteSeoQueries";
 import { sanityPcClient } from "./client";
 import { urlForPc } from "./image";
@@ -333,12 +334,22 @@ function mapBenefits(rows?: RawBuildBenefit[]): BuildBenefit[] {
 function mapCustomFaq(rows?: RawCustomFaqRow[]): Build["customFaqItems"] {
   if (!rows?.length) return undefined;
   const list = rows
-    .map((row) => ({
-      id: row._key,
-      question: row.question?.trim() || "",
-      answer: portableTextToPlain(row.answer as Parameters<typeof portableTextToPlain>[0]),
-    }))
-    .filter((row) => row.question.length > 0 && row.answer.length > 0);
+    .map((row) => {
+      const pt = row.answer as Parameters<typeof portableTextToPlain>[0];
+      const answerContent = portableTextToContent(pt);
+      const answer = portableTextToPlain(pt);
+      return {
+        id: row._key,
+        question: row.question?.trim() || "",
+        answer,
+        answerContent,
+      };
+    })
+    .filter(
+      (row) =>
+        row.question.length > 0 &&
+        (row.answer.length > 0 || row.answerContent.length > 0),
+    );
   return list.length > 0 ? list : undefined;
 }
 

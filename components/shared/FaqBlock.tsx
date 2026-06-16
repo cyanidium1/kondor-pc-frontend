@@ -8,9 +8,13 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import type { Faq } from "@/types/build";
+import type { ContentNode, InlineNode } from "@/lib/data/types/content";
 
 const URL_SPLIT_RE = /(https?:\/\/[^\s]+)/g;
 const URL_TEST_RE = /^https?:\/\/[^\s]+$/;
+
+const FAQ_ANSWER_TEXT_CLASS =
+  "text-[12px] lg:text-[14px] leading-[120%] text-black";
 
 function resolveLink(url: string): { href: string; label: string; external: boolean } {
   const tg = url.match(/^https?:\/\/t\.me\/(.+)$/);
@@ -20,6 +24,66 @@ function resolveLink(url: string): { href: string; label: string; external: bool
   if (pidbir) return { href: "/pidbir", label: "Підбір ПК", external: false };
 
   return { href: url, label: url, external: true };
+}
+
+const faqLinkClassName =
+  "font-medium !text-black !no-underline underline-offset-2 transition-all hover:!underline";
+
+function renderFaqInline(node: InlineNode, i: number) {
+  if (node.type === "link") {
+    return (
+      <a
+        key={i}
+        href={node.href}
+        {...(node.external
+          ? { target: "_blank", rel: "noopener noreferrer" }
+          : {})}
+        className={faqLinkClassName}
+      >
+        {node.text}
+      </a>
+    );
+  }
+  let el: React.ReactNode = node.text;
+  if (node.bold) el = <strong>{el}</strong>;
+  if (node.italic) el = <em>{el}</em>;
+  return <span key={i}>{el}</span>;
+}
+
+function FaqAnswerContent({ nodes }: { nodes: ContentNode[] }) {
+  if (nodes.length === 0) return null;
+
+  return (
+    <div className={`flex flex-col gap-2 ${FAQ_ANSWER_TEXT_CLASS}`}>
+      {nodes.map((node, i) => {
+        switch (node.type) {
+          case "p":
+            return (
+              <p key={i}>
+                {node.children.map(renderFaqInline)}
+              </p>
+            );
+          case "list": {
+            const Tag = node.ordered ? "ol" : "ul";
+            return (
+              <Tag
+                key={i}
+                className={`ml-4 space-y-1 ${
+                  node.ordered ? "list-decimal" : "list-disc"
+                }`}
+              >
+                {node.items.map((children, j) => (
+                  <li key={j}>{children.map(renderFaqInline)}</li>
+                ))}
+              </Tag>
+            );
+          }
+          default:
+            return null;
+        }
+      })}
+    </div>
+  );
 }
 
 function renderAnswer(text: string) {
@@ -35,7 +99,7 @@ function renderAnswer(text: string) {
           {...(external
             ? { target: "_blank", rel: "noopener noreferrer" }
             : {})}
-          className="font-medium !text-black !no-underline underline-offset-2 transition-all hover:!underline"
+          className={faqLinkClassName}
         >
           {label}
         </a>
@@ -46,6 +110,8 @@ function renderAnswer(text: string) {
 }
 
 function FaqRow({ f }: { f: Faq }) {
+  const hasRichAnswer = Boolean(f.answerContent && f.answerContent.length > 0);
+
   return (
     <AccordionItem value={f.key} className="border-0">
       <AccordionTrigger className="text-left hover:no-underline [&_svg]:text-muted-foreground bg-white text-black p-5">
@@ -53,8 +119,12 @@ function FaqRow({ f }: { f: Faq }) {
           {f.question}
         </span>
       </AccordionTrigger>
-      <AccordionContent className="p-5 mt-0.5 text-[12px] lg:text-[14px] leading-[120%] text-black bg-white rounded-[8px]">
-        {renderAnswer(f.answer)}
+      <AccordionContent className={`p-5 mt-0.5 ${FAQ_ANSWER_TEXT_CLASS} bg-white rounded-[8px]`}>
+        {hasRichAnswer ? (
+          <FaqAnswerContent nodes={f.answerContent!} />
+        ) : (
+          renderAnswer(f.answer)
+        )}
       </AccordionContent>
     </AccordionItem>
   );

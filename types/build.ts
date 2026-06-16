@@ -1,5 +1,6 @@
 import type { SkuSlug } from "@/lib/sku-accents";
 import type { PageSeo } from "@/types/blogPost";
+import type { ContentNode } from "@/lib/data/types/content";
 
 export type { SkuSlug };
 
@@ -97,7 +98,12 @@ export interface Build {
   /** Переваги з Sanity (`build.includedBenefits` → `buildBenefit`). */
   includedBenefits: BuildBenefit[];
   /** FAQ з Sanity (`customFaq`, inline faqQuestion). */
-  customFaqItems?: Array<{ id?: string; question: string; answer: string }>;
+  customFaqItems?: Array<{
+    id?: string;
+    question: string;
+    answer: string;
+    answerContent: ContentNode[];
+  }>;
   /** Optional chassis photo — replaces ChassisArt SVG when present. Any absolute URL (Sanity CDN, Unsplash, etc.). */
   heroImageUrl?: string;
   /** Additional gallery shots. Future: from Sanity `gallery[]`. */
@@ -169,6 +175,8 @@ export interface Faq {
     | "assembly";
   question: string;
   answer: string;
+  /** Portable Text з Sanity — bold, italic, списки, посилання. */
+  answerContent?: ContentNode[];
   relatedBuildSlug?: SkuSlug;
   /** false — не показувати на сайті (дані лишаються в коді). */
   visible?: boolean;

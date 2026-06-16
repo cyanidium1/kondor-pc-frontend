@@ -65,6 +65,12 @@ function spansToInlines(
     });
 }
 
+function hasVisibleText(inlines: InlineNode[]): boolean {
+  return inlines.some(
+    (n) => (n.type === "text" || n.type === "link") && n.text.trim().length > 0,
+  );
+}
+
 export function portableTextToContent(pt: PtArray | undefined): ContentNode[] {
   if (!pt || !Array.isArray(pt) || pt.length === 0) return [];
 
@@ -72,14 +78,14 @@ export function portableTextToContent(pt: PtArray | undefined): ContentNode[] {
   let currentList: {ordered: boolean; items: InlineNode[][]} | null = null;
 
   const flushList = () => {
-    if (currentList) {
+    if (currentList && currentList.items.length > 0) {
       out.push({
         type: "list",
         ordered: currentList.ordered,
         items: currentList.items,
       });
-      currentList = null;
     }
+    currentList = null;
   };
 
   for (const node of pt) {
@@ -94,6 +100,12 @@ export function portableTextToContent(pt: PtArray | undefined): ContentNode[] {
         currentList = {ordered, items: []};
       }
       currentList.items.push(spansToInlines(block.children, block.markDefs));
+      if (
+        currentList.items.length > 0 &&
+        !hasVisibleText(currentList.items[currentList.items.length - 1])
+      ) {
+        currentList.items.pop();
+      }
       continue;
     }
 
@@ -107,17 +119,19 @@ export function portableTextToContent(pt: PtArray | undefined): ContentNode[] {
 
     switch (block.style) {
       case "h2":
-        out.push({type: "h2", text});
+        if (text.trim()) out.push({type: "h2", text});
         break;
       case "h3":
-        out.push({type: "h3", text});
+        if (text.trim()) out.push({type: "h3", text});
         break;
       case "blockquote":
-        out.push({type: "quote", text});
+        if (text.trim()) out.push({type: "quote", text});
         break;
       case "normal":
       default:
-        out.push({type: "p", children: inlines});
+        if (hasVisibleText(inlines)) {
+          out.push({type: "p", children: inlines});
+        }
         break;
     }
   }
@@ -162,6 +176,7 @@ export function portableTextToPlain(pt: PtArray | undefined): string {
       const b = n as PtBlock;
       return spansToPlainText(b.children, b.markDefs);
     })
+    .filter((text) => text.trim().length > 0)
     .join("\n\n")
     .trim();
 }

@@ -180,6 +180,7 @@ export default async function BuildPage({
       scope: "build" as const,
       question: item.question,
       answer: item.answer,
+      answerContent: item.answerContent,
       relatedBuildSlug: build.slug,
     })) ?? [];
   const productImageUrl = resolveProductImageUrl(build);
