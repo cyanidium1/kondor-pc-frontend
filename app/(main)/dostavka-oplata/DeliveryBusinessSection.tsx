@@ -3,7 +3,7 @@ import Image from "next/image";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { Reveal } from "@/components/shared/Reveal";
 import type { Faq } from "@/types/build";
-import { LazyFaqSection } from "../garantiya/LazyFaqSection";
+import { FaqBlock } from "@/components/shared/FaqBlock";
 import { BusinessContactNote } from "./BusinessContactNote";
 
 const BUSINESS_DOCS = [
@@ -162,7 +162,7 @@ export function DeliveryBusinessSection({ items }: { items: Faq[] }) {
         </Reveal>
 
         <Reveal delay={160}>
-          <LazyFaqSection items={items} />
+          <FaqBlock items={items} />
         </Reveal>
       </div>
     </section>

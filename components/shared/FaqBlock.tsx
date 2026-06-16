@@ -16,6 +16,7 @@ export function FaqBlock({
   if (items.length === 0) return null;
   return (
     <Accordion
+      hiddenUntilFound
       className={`divide-y divide-border overflow-hidden rounded-lg border border-border gap-2 ${className ?? ""}`}
     >
       {items.map((f) => (

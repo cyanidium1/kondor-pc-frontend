@@ -14,9 +14,9 @@ import { Reveal } from "@/components/shared/Reveal";
 import { LazyMarqueeLine } from "@/components/shared/LazyMarqueeLine";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
+import { FaqBlock } from "@/components/shared/FaqBlock";
 import { WarrantyContactsBlock } from "./WarrantyContactsBlock";
 import { ServiceStepContacts } from "./ServiceStepContacts";
-import { LazyFaqSection } from "./LazyFaqSection";
 
 export async function generateMetadata(): Promise<Metadata> {
   return metadataForSitePage("seoWarrantyPage");
@@ -429,16 +429,14 @@ fetchPriority="low"
               <p className="mt-4 mb-12 text-sm text-black">
                 Робочі години: щодня 9:00–21:00
               </p>
-              <Suspense fallback={<div className="h-10" aria-hidden />}>
-                <WarrantyContactsBlock />
-              </Suspense>
+              <WarrantyContactsBlock />
             </Reveal>
           </div>
         </section>
         {/* FAQ */}
         <Reveal delay={160}>
           <section className="container-prose pt-9 pb-6.5 lg:pt-12 lg:pb-[66px]">
-            <LazyFaqSection items={faqs} />
+            <FaqBlock items={faqs} />
           </section>
         </Reveal>
       </div>

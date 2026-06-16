@@ -41,7 +41,7 @@ import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
 import { buildBlogMetadata } from "@/lib/sanity/blogSeo";
 import { resolveProductImageUrl } from "@/lib/sanity/seoImage";
 import { LazyMarqueeLine } from "@/components/shared/LazyMarqueeLine";
-import { FaqBlockSeo } from "@/components/shared/FaqBlockSeo";
+import { FaqBlock } from "@/components/shared/FaqBlock";
 import { FpsTable } from "@/components/shared/FpsTable";
 import { AccessoriesRailContent } from "@/components/catalog/AccessoriesRailContent";
 import Image from "next/image";
@@ -562,7 +562,7 @@ export default async function BuildPage({
               className="lg:max-w-[706px] lg:mx-auto"
             />
             <div className="lg:max-w-[706px] lg:mx-auto">
-              <FaqBlockSeo items={faqs} />
+              <FaqBlock items={faqs} />
             </div>
           </div>
         </section>

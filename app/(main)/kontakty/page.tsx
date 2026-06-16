@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { LazyMarqueeLine } from "@/components/shared/LazyMarqueeLine";
 import Image from "next/image";
@@ -8,7 +7,6 @@ import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 import { LazyContactForm } from "./LazyContactForm";
 import { ContactsPanel } from "./ContactsPanel";
-import { ContactsPanelSkeleton } from "./ContactsPanelSkeleton";
 import { RequisitesSection } from "./RequisitesSection";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -73,9 +71,7 @@ export default function ContactsPage() {
 
           <Reveal>
             <div className="grid gap-6 md:grid-cols-2">
-              <Suspense fallback={<ContactsPanelSkeleton />}>
-                <ContactsPanel />
-              </Suspense>
+              <ContactsPanel />
               <LazyContactForm />
             </div>
           </Reveal>
@@ -83,9 +79,7 @@ export default function ContactsPage() {
       </section>
       <LazyMarqueeLine />
 
-      <Suspense fallback={<div className="container-site py-30" aria-hidden />}>
-        <RequisitesSection />
-      </Suspense>
+      <RequisitesSection />
     </>
   );
 }

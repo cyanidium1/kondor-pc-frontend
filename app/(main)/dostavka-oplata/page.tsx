@@ -186,28 +186,28 @@ export default function DeliveryPaymentPage() {
           />
 
           <div className="grid gap-4 md:grid-cols-3">
-              {DELIVERY.map((d) => (
-                <div
-                  key={d.title}
-                  className="rounded-lg border border-border bg-surface p-6"
-                >
-                  <div className="mb-4 flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
-                    <d.icon className="size-5" strokeWidth={1.5} />
-                  </div>
-                  <div className="text-[16px] leading-[120%] font-semibold tracking-wide uppercase">
-                    {d.title}
-                  </div>
-                  <div className="tabular mt-3 flex flex-wrap items-baseline gap-3">
-                    <span className="font-display text-xl font-bold">
-                      {d.price}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      · {d.term}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{d.note}</p>
+            {DELIVERY.map((d) => (
+              <div
+                key={d.title}
+                className="rounded-lg border border-border bg-surface p-6"
+              >
+                <div className="mb-4 flex size-10 items-center justify-center rounded-md bg-background ring-1 ring-inset ring-white/5">
+                  <d.icon className="size-5" strokeWidth={1.5} />
                 </div>
-              ))}
+                <div className="text-[16px] leading-[120%] font-semibold tracking-wide uppercase">
+                  {d.title}
+                </div>
+                <div className="tabular mt-3 flex flex-wrap items-baseline gap-3">
+                  <span className="font-display text-xl font-bold">
+                    {d.price}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    · {d.term}
+                  </span>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">{d.note}</p>
+              </div>
+            ))}
           </div>
         </section>
       </div>
@@ -278,7 +278,7 @@ export default function DeliveryPaymentPage() {
 
       {/* PAYMENT */}
       <section className="relative container-site py-[92px] lg:pt-[66px] lg:pb-[76px]">
-        <div className="absolute -z-10 top-[301px] sm:top-[231px] lg:top-[81px] left-[52px] sm:left-[362px] lg:left-[787px] xl:left-[827px] w-[252px] h-[269px] sm:w-[252px] sm:h-[269px] lg:w-[354px] lg:h-[346px] pointer-events-none">
+        <div className="absolute -z-40 top-[301px] sm:top-[231px] lg:top-[81px] left-[52px] sm:left-[362px] lg:left-[787px] xl:left-[827px] w-[252px] h-[269px] sm:w-[252px] sm:h-[269px] lg:w-[354px] lg:h-[346px] pointer-events-none">
           <Image
             src="/images/home/top-rated/figure.svg"
             alt=""

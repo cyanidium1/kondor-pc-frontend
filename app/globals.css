@@ -588,6 +588,16 @@
     opacity: 1;
     transform: translateY(0);
   }
+  /* When JavaScript is disabled the IntersectionObserver never runs, so the
+     content would stay at opacity: 0. Force it visible for no-JS clients and
+     crawlers that do not execute scripts. */
+  @media (scripting: none) {
+    .reveal-init {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
 
   /* Subtle top shimmer line on SKU cards */
   .sku-top-line {
