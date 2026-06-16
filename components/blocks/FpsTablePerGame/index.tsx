@@ -3,6 +3,7 @@ import { getAllBuilds } from "@/lib/data/adapter";
 import type { ResolvedPageContext } from "@/lib/data/types";
 import type { FpsEntry, FpsResolution } from "@/lib/data/types/build";
 import { cn } from "@/lib/utils";
+import { formatUah } from "@/lib/format";
 
 const PRESET_ORDER: Record<string, number> = {
   competitive: 5,
@@ -32,10 +33,6 @@ function fpsTone(fps: number): { dot: string; text: string } {
   if (fps >= 60) return { dot: "bg-fps-yellow", text: "text-fps-yellow" };
   if (fps >= 30) return { dot: "bg-fps-orange", text: "text-fps-orange" };
   return { dot: "bg-fps-red", text: "text-fps-red" };
-}
-
-function formatUah(uah: number) {
-  return new Intl.NumberFormat("uk-UA").format(uah);
 }
 
 export async function FpsTablePerGame({

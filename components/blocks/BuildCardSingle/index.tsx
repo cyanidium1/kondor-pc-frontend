@@ -4,12 +4,9 @@ import type { ResolvedPageContext } from "@/lib/data/types";
 import type { FpsEntry } from "@/lib/data/types/build";
 import { TechButtonDisplay } from "@/components/shared/TechButtonPrimitives";
 import { cn } from "@/lib/utils";
+import { formatUah } from "@/lib/format";
 
 type Variant = "compact" | "full";
-
-function formatUah(uah: number) {
-  return new Intl.NumberFormat("uk-UA").format(uah);
-}
 
 const PRESET_ORDER: Record<string, number> = {
   competitive: 5,

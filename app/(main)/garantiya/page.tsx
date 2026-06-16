@@ -15,6 +15,7 @@ import { LazyMarqueeLine } from "@/components/shared/LazyMarqueeLine";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 import { FaqBlock } from "@/components/shared/FaqBlock";
+import { formatUah } from "@/lib/format";
 import { WarrantyContactsBlock } from "./WarrantyContactsBlock";
 import { ServiceStepContacts } from "./ServiceStepContacts";
 
@@ -306,7 +307,7 @@ fetchPriority="low"
                 <div className="tabular mt-4 font-heading text-xl font-bold">
                   {p.price === 0
                     ? "Безкоштовно"
-                    : `+${p.price.toLocaleString("uk-UA")} ₴`}
+                    : `+${formatUah(p.price)} ₴`}
                 </div>
               </div>
             ))}

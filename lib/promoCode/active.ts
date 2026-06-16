@@ -1,4 +1,5 @@
 import type { PromoCode, PromoDiscount } from "./types";
+import { formatUah } from "@/lib/format";
 
 export function normalizePromoCodeInput(raw: string): string {
   return raw.trim().toUpperCase();
@@ -33,6 +34,6 @@ export function promoInactiveMessage(
 export function formatPromoDiscount(discount?: PromoDiscount): string | null {
   if (!discount?.value) return null;
   return discount.kind === "fixed"
-    ? `−${discount.value.toLocaleString("uk-UA")} ₴`
+    ? `−${formatUah(discount.value)} ₴`
     : `−${discount.value}%`;
 }

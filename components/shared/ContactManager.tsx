@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatUah } from "@/lib/format";
 
 /**
  * Inline "ask the manager" affordance used next to primary CTAs on product pages.
@@ -76,7 +77,7 @@ export function ContactManager({
 }: Props) {
   const prefill = buildName
     ? `Привіт! Маю питання по ${buildName}${
-        typeof priceUah === "number" ? ` (${priceUah.toLocaleString("uk-UA")} ₴)` : ""
+        typeof priceUah === "number" ? ` (${formatUah(priceUah)} ₴)` : ""
       }.`
     : undefined;
 
