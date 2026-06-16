@@ -25,16 +25,6 @@ export function FaqAccordion({
     answerContent: it.answerContent,
   }));
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: items.map((it) => ({
-      "@type": "Question",
-      name: it.question,
-      acceptedAnswer: { "@type": "Answer", text: it.answer },
-    })),
-  };
-
   return (
     <div className="relative container-site py-16 md:py-20">
       <div className="hidden xl:block absolute top-[190px] left-[-10px] -z-10 w-[347px] h-auto aspect-[547/568]">
@@ -62,11 +52,6 @@ export function FaqAccordion({
       />
 
       <FaqBlock items={faqItems} className="mx-auto max-w-3xl" />
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
     </div>
   );
 }

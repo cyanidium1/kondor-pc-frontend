@@ -5,7 +5,8 @@ import ArticleHero from "@/components/blog/ArticleHero";
 import ContentSection from "@/components/blog/ContentSection";
 import BlogBreadcrumbs from "@/components/blog/BlogBreadcrumbs";
 import ArticleSchema from "@/components/blog/ArticleSchema";
-import { JsonLd, breadcrumbJsonLd } from "@/lib/seo";
+import { JsonLd, breadcrumbJsonLd, faqPageJsonLd } from "@/lib/seo";
+import { blogFaqToSchemaItems } from "@/lib/seo/faqSchema";
 import {
   getAllBlogPostSlugs,
   getBlogPostBySlug,
@@ -67,6 +68,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   const publisherLogoUrl = resolveOrganizationLogoUrl(currentArticle.seo);
   const uniqueKey = `blog-${slug}`;
+  const faqSchema = faqPageJsonLd(
+    blogFaqToSchemaItems(currentArticle.customFaq),
+  );
 
   return (
     <>
@@ -77,9 +81,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         />
       </Suspense>
       <JsonLd
-        data={breadcrumbJsonLd(
-          crumbs.map((c) => ({ name: c.label, url: c.href })),
-        )}
+        data={[
+          breadcrumbJsonLd(
+            crumbs.map((c) => ({ name: c.label, url: c.href })),
+          ),
+          ...(faqSchema ? [faqSchema] : []),
+        ]}
       />
       {currentArticle._createdAt && (
         <ArticleSchema

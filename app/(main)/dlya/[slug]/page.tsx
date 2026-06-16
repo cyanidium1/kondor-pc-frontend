@@ -9,6 +9,8 @@ import {
 import {SchemaJsonFromSeo} from "@/components/seo/SchemaJsonFromUrl";
 import {LandingPageBody} from "@/components/landings/LandingPageBody";
 import {buildLandingMetadata} from "@/lib/sanity/landingSeo";
+import {JsonLd, faqPageJsonLd} from "@/lib/seo";
+import {extractLandingFaqSchemaItems} from "@/lib/seo/faqSchema";
 
 // ISR. Sanity webhook will revalidate by tag later (Sprint 3).
 export const revalidate = 60;
@@ -47,9 +49,12 @@ export default async function DlyaLandingPage({
     ? await resolvePageContext(page.context)
     : buildSanityPageContext("dlya", slug);
 
+  const faqSchema = faqPageJsonLd(extractLandingFaqSchemaItems(page.sections));
+
   return (
     <>
       <SchemaJsonFromSeo seo={page.seo} excludeTypes={["FAQPage"]} />
+      {faqSchema ? <JsonLd data={faqSchema} /> : null}
       <LandingPageBody page={page} pageContext={pageContext} />
     </>
   );

@@ -1,5 +1,6 @@
 import type { Build, Faq } from "@/types/build";
 import type { CatalogProductDetail } from "@/types/catalog";
+import type { FaqSchemaItem } from "@/lib/seo/faqSchema";
 import { DEFAULT_SOCIAL_IMAGE_URL, SITE_URL } from "@/lib/seo/constants";
 import {
   ensureHttps,
@@ -114,15 +115,25 @@ export function catalogProductJsonLd(
   };
 }
 
-export function faqPageJsonLd(items: Faq[] | { question: string; answer: string }[]) {
+export type { FaqSchemaItem } from "@/lib/seo/faqSchema";
+
+export function faqPageJsonLd(
+  items: Faq[] | FaqSchemaItem[],
+): object | null {
+  const mainEntity = items
+    .filter((f) => f.question?.trim() && f.answer?.trim())
+    .map((f) => ({
+      "@type": "Question",
+      name: f.question.trim(),
+      acceptedAnswer: { "@type": "Answer", text: f.answer.trim() },
+    }));
+
+  if (mainEntity.length === 0) return null;
+
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: items.map((f) => ({
-      "@type": "Question",
-      name: f.question,
-      acceptedAnswer: { "@type": "Answer", text: f.answer },
-    })),
+    mainEntity,
   };
 }
 

@@ -99,6 +99,7 @@ export default async function HomePage() {
   const homeReviews = collectHomepageReviews(builds, HOME_REVIEWS_LIMIT);
   const hasHomeReviewsSection = homeReviews.length > 0;
   const homeFaqs = faqsByScope("global");
+  const homeFaqSchema = faqPageJsonLd(homeFaqs);
 
   return (
     <>
@@ -109,7 +110,9 @@ export default async function HomePage() {
       <Suspense fallback={null}>
         <HomeOrganizationJsonLd />
       </Suspense>
-      <JsonLd data={[websiteJsonLd(), faqPageJsonLd(homeFaqs)]} />
+      <JsonLd
+        data={[websiteJsonLd(), ...(homeFaqSchema ? [homeFaqSchema] : [])]}
+      />
       {/* 1 · HERO */}
       <section className="relative overflow-hidden rounded-b-[28px]">
         <div className="absolute bottom-[-92px] md:bottom-[-319px] left-[-261px] size-[469px] rounded-full bg-[#00FFFE] blur-[100px]" />

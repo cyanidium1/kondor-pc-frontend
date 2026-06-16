@@ -190,6 +190,7 @@ export default async function BuildPage({
   const galleryAlt = `${build.name} — ігровий ПК`;
   const needsInteractiveGallery =
     galleryImages.length > 1 || Boolean(build.assemblyVideoUrl);
+  const faqSchema = faqPageJsonLd(faqs);
 
   return (
     <ProductConfiguratorProvider build={build}>
@@ -209,7 +210,7 @@ export default async function BuildPage({
               { name: "Ігрові ПК", url: "/pk" },
               { name: build.name, url: `/pk/${build.slug}` },
             ]),
-            ...(faqs.length > 0 ? [faqPageJsonLd(faqs)] : []),
+            ...(faqSchema ? [faqSchema] : []),
           ]}
         />
         {/* BLOCK 1 — ID + PRICE + CTA */}

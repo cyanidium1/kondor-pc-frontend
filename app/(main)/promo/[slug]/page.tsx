@@ -8,6 +8,8 @@ import {
 import {SchemaJsonFromSeo} from "@/components/seo/SchemaJsonFromUrl";
 import {LandingPageBody} from "@/components/landings/LandingPageBody";
 import {buildLandingMetadata} from "@/lib/sanity/landingSeo";
+import {JsonLd, faqPageJsonLd} from "@/lib/seo";
+import {extractLandingFaqSchemaItems} from "@/lib/seo/faqSchema";
 
 // ISR. Promo pages can have `expiresAt` set in Sanity; expired ones drop
 // out of `generateStaticParams` automatically (handled in fetchLandingSlugs).
@@ -75,10 +77,12 @@ export default async function PromoLandingPage({
     page.expiresAt != null && new Date(page.expiresAt).getTime() <= Date.now();
 
   const pageContext = buildSanityPageContext("promo", slug);
+  const faqSchema = faqPageJsonLd(extractLandingFaqSchemaItems(page.sections));
 
   return (
     <>
       <SchemaJsonFromSeo seo={page.seo} excludeTypes={["FAQPage"]} />
+      {faqSchema ? <JsonLd data={faqSchema} /> : null}
       {isExpired ? <PromoExpiredBanner /> : null}
       <LandingPageBody page={page} pageContext={pageContext} />
     </>

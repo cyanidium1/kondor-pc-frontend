@@ -17,16 +17,6 @@ export default function BlogFaq({ items, uniqueKey }: BlogFaqProps) {
     answerContent: it.answerContent,
   }));
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: items.map((it) => ({
-      "@type": "Question",
-      name: it.question,
-      acceptedAnswer: { "@type": "Answer", text: it.answer },
-    })),
-  };
-
   return (
     <section className="py-12 md:py-16">
       <h2 className="mb-6 font-display text-[22px] font-bold uppercase leading-[120%] text-foreground lg:text-[32px]">
@@ -34,11 +24,6 @@ export default function BlogFaq({ items, uniqueKey }: BlogFaqProps) {
       </h2>
 
       <FaqBlock items={faqItems} />
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
     </section>
   );
 }
