@@ -38,7 +38,8 @@ import { faqsByScope } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
 import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
-import { buildBlogMetadata } from "@/lib/sanity/blogSeo";
+import { ProductOgType } from "@/components/seo/ProductOgType";
+import { buildPageMetadata } from "@/lib/sanity/pageSeo";
 import { resolveProductImageUrl } from "@/lib/sanity/seoImage";
 import { LazyMarqueeLine } from "@/components/shared/LazyMarqueeLine";
 import { FaqBlock } from "@/components/shared/FaqBlock";
@@ -64,9 +65,10 @@ export async function generateMetadata({
   const { slug } = await params;
   const b = await getBuildBySlug(slug);
   if (!b) return { title: "Не знайдено" };
-  return buildBlogMetadata({
+  return buildPageMetadata({
     seo: b.seo,
     path: `/pk/${slug}`,
+    openGraphType: "product",
     defaultTitle: `${b.name} — ${b.spec.cpu} + ${b.spec.gpu}`,
     defaultDescription: `${b.name} — ігровий ПК: ${b.spec.cpu}, ${b.spec.gpu}, ${b.spec.ram}. ${b.shortTagline}. Купити за ${formatPrice(b.priceUah)}.`,
   });
@@ -197,6 +199,7 @@ export default async function BuildPage({
   return (
     <ProductConfiguratorProvider build={build}>
       <div style={{ ["--sku" as string]: accent }}>
+        <ProductOgType />
         <Suspense fallback={null}>
           <SchemaJsonFromSeo
             seo={build.seo}

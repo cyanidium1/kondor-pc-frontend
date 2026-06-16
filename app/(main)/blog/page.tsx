@@ -4,7 +4,7 @@ import BlogList from "@/components/blog/BlogList";
 import BlogBreadcrumbs from "@/components/blog/BlogBreadcrumbs";
 import { getAllBlogPosts, getBlogPageSeo } from "@/lib/sanity/blogFetchers";
 import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
-import { buildBlogMetadata } from "@/lib/sanity/blogSeo";
+import { buildPageMetadata } from "@/lib/sanity/pageSeo";
 import { JsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
 export const revalidate = 60;
@@ -19,7 +19,7 @@ export async function generateMetadata({
   const isPaginatedPage = Number.isFinite(pageParam) && pageParam > 1;
 
   const pageData = await getBlogPageSeo().catch(() => null);
-  const metadata = buildBlogMetadata({ seo: pageData?.seo ?? null, path: "/blog" });
+  const metadata = buildPageMetadata({ seo: pageData?.seo ?? null, path: "/blog" });
   if (!isPaginatedPage) return metadata;
 
   return {

@@ -1,7 +1,8 @@
 /**
- * Convert Sanity `seoSettings` payload into Next.js Metadata for the blog.
- * Pattern mirrors what nbyg-front's getMetadataFromSanity did, adapted to
- * Kondor PC's SITE_URL and brand defaults.
+ * Shared builder that converts a Sanity `seoSettings` payload into Next.js
+ * Metadata. Used across the site (blog, landing pages, product cards, etc.),
+ * not just the blog. Pattern mirrors nbyg-front's getMetadataFromSanity,
+ * adapted to Kondor PC's SITE_URL and brand defaults.
  */
 import type { Metadata } from "next";
 import type { PageSeo } from "@/types/blogPost";
@@ -12,17 +13,25 @@ function canonical(path: string): string {
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+/**
+ * `product` is part of the Open Graph spec but not Next.js's typed
+ * `openGraph.type` union (Next throws on unknown types). For it we omit
+ * `og:type` from the resolved metadata and let the page render its own
+ * `<meta property="og:type" content="product" />` (hoisted by React 19).
+ */
+type OpenGraphTypeOption = "website" | "article" | "product";
+
 interface MetadataFromSeoParams {
   seo: PageSeo | null | undefined;
   path: string;
   defaultTitle?: string;
   defaultDescription?: string;
-  openGraphType?: "website" | "article";
+  openGraphType?: OpenGraphTypeOption;
   publishedTime?: string;
   modifiedTime?: string;
 }
 
-export function buildBlogMetadata({
+export function buildPageMetadata({
   seo,
   path,
   defaultTitle = "Блог Kondor PC",
@@ -52,6 +61,42 @@ export function buildBlogMetadata({
 
   const ogImageUrl = resolveOpengraphImageUrl(seo);
 
+  const ogImages = ogImageUrl
+    ? [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: seo?.opengraphImage?.alt || metaTitle,
+        },
+      ]
+    : undefined;
+
+  const baseOpenGraph = {
+    title: metaTitle,
+    description: metaDescription,
+    locale: "uk_UA",
+    siteName: "Kondor PC",
+    url: canonicalUrl,
+    images: ogImages,
+  };
+
+  // For `product` we leave `type` off so Next emits no `og:type`; the product
+  // page renders <ProductOgType /> instead (og:type=product).
+  const openGraph =
+    openGraphType === "product"
+      ? baseOpenGraph
+      : {
+          ...baseOpenGraph,
+          type: openGraphType,
+          ...(openGraphType === "article" && publishedTime
+            ? { publishedTime }
+            : {}),
+          ...(openGraphType === "article" && modifiedTime
+            ? { modifiedTime }
+            : {}),
+        };
+
   return {
     // Absolute title — root layout `template` must not append "· Kondor PC" again.
     title: { absolute: metaTitle },
@@ -64,30 +109,7 @@ export function buildBlogMetadata({
         "x-default": canonicalUrl,
       },
     },
-    openGraph: {
-      title: metaTitle,
-      description: metaDescription,
-      type: openGraphType,
-      locale: "uk_UA",
-      siteName: "Kondor PC",
-      url: canonicalUrl,
-      ...(openGraphType === "article" && publishedTime
-        ? { publishedTime }
-        : {}),
-      ...(openGraphType === "article" && modifiedTime
-        ? { modifiedTime }
-        : {}),
-      images: ogImageUrl
-        ? [
-            {
-              url: ogImageUrl,
-              width: 1200,
-              height: 630,
-              alt: seo?.opengraphImage?.alt || metaTitle,
-            },
-          ]
-        : undefined,
-    },
+    openGraph,
     twitter: {
       card: "summary_large_image",
       title: metaTitle,
@@ -97,6 +119,6 @@ export function buildBlogMetadata({
   };
 }
 
-export function blogCanonicalUrl(path: string): string {
+export function pageCanonicalUrl(path: string): string {
   return canonical(path);
 }

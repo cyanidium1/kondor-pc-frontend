@@ -1,7 +1,7 @@
 import { cache } from "react";
 import type { Metadata } from "next";
 import type { PageSeo } from "@/types/blogPost";
-import { buildBlogMetadata } from "@/lib/sanity/blogSeo";
+import { buildPageMetadata } from "@/lib/sanity/pageSeo";
 import {
   LEGAL_SEO_BY_SLUG,
   SITE_SEO_CONFIG,
@@ -33,7 +33,7 @@ export async function metadataForSitePage(
 ): Promise<Metadata> {
   const config = SITE_SEO_CONFIG[pageId];
   const seo = await fetchSiteSeoByPageId(pageId).catch(() => null);
-  return buildBlogMetadata({
+  return buildPageMetadata({
     seo,
     path: config.path,
     defaultTitle: config.defaultTitle,

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { JsonLd, breadcrumbJsonLd, catalogProductJsonLd } from "@/lib/seo";
+import { ProductOgType } from "@/components/seo/ProductOgType";
 
 import { getItemBySlug, getCatalogItems } from "@/lib/sanity/fetchers";
 import { urlFor } from "@/lib/sanity/image";
@@ -61,9 +62,10 @@ export async function generateMetadata({
       },
     },
     openGraph: {
+      // No `type` here so Next emits no `og:type`; the page renders
+      // <ProductOgType /> instead (product card → og:type=product).
       title,
       description,
-      type: "website",
       locale: "uk_UA",
       siteName: "Kondor PC",
       url: canonicalUrl,
@@ -103,6 +105,7 @@ export default async function CatalogDetailPage({
 
   return (
     <>
+      <ProductOgType />
       <JsonLd
         data={[
           catalogProductJsonLd(item, { imageUrl: productImageUrl }),

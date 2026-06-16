@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { PageSeo } from "@/types/blogPost";
-import { buildBlogMetadata } from "@/lib/sanity/blogSeo";
+import { buildPageMetadata } from "@/lib/sanity/pageSeo";
 
 interface LandingSeoParams {
   seo: PageSeo | null | undefined;
@@ -16,7 +16,7 @@ export function buildLandingMetadata({
   defaultTitle,
   defaultDescription = "",
 }: LandingSeoParams): Metadata {
-  return buildBlogMetadata({
+  return buildPageMetadata({
     seo,
     path,
     defaultTitle: defaultTitle ?? "Kondor PC",

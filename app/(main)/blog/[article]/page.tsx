@@ -11,7 +11,7 @@ import {
   getBlogPostBySlug,
 } from "@/lib/sanity/blogFetchers";
 import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
-import { blogCanonicalUrl, buildBlogMetadata } from "@/lib/sanity/blogSeo";
+import { pageCanonicalUrl, buildPageMetadata } from "@/lib/sanity/pageSeo";
 import { resolveOrganizationLogoUrl } from "@/lib/sanity/seoImage";
 import { LazyBlogFaq } from "./LazyBlogFaq";
 import {
@@ -38,7 +38,7 @@ export async function generateMetadata({
   const { article } = await params;
   const post = await getBlogPostBySlug(article).catch(() => null);
   if (!post) return { title: "Стаття не знайдена" };
-  return buildBlogMetadata({
+  return buildPageMetadata({
     seo: post.seo ?? null,
     path: `/blog/${post.slug}`,
     defaultTitle: post.heroTitle,
@@ -84,7 +84,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       {currentArticle._createdAt && (
         <ArticleSchema
           headline={heroTitle}
-          url={blogCanonicalUrl(`/blog/${slug}`)}
+          url={pageCanonicalUrl(`/blog/${slug}`)}
           datePublished={currentArticle._createdAt}
           dateModified={currentArticle._updatedAt}
           imageUrl={currentArticle.heroImageUrl ?? undefined}
