@@ -38,8 +38,16 @@ export type PageSeo = {
   metaTitle?: string;
   metaDescription?: string;
   keywords?: string[] | string;
+  opengraphTitle?: string;
+  opengraphDescription?: string;
   opengraphImage?: SanityImage;
   schemaJsonUrl?: string;
+};
+
+export type BlogAuthor = {
+  name: string;
+  profileUrl?: string;
+  photo?: SanityImage;
 };
 
 export type BlogFaqItem = {
@@ -104,11 +112,20 @@ export type BlogPostContentGallerySection = {
   items?: BlogPostContentGalleryItem[];
 };
 
+export type BlogPostContentFaqAnswerButton = {
+  _key: string;
+  _type: "faqAnswerButton";
+  label?: string;
+  href?: string;
+  newTab?: boolean;
+};
+
 export type BlogPostContent =
   | BlogPostContentBlock
   | BlogPostContentImage
   | BlogPostContentTable
-  | BlogPostContentGallerySection;
+  | BlogPostContentGallerySection
+  | BlogPostContentFaqAnswerButton;
 
 export type BlogPost = {
   heroTitle: string;
@@ -116,6 +133,7 @@ export type BlogPost = {
   heroDesktopImage: SanityImage;
   heroMobileImage: SanityImage;
   slug: string;
+  author?: BlogAuthor | null;
   content: BlogPostContent[];
   customFaq?: BlogFaqItem[];
   seo?: PageSeo | null;

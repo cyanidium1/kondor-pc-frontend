@@ -45,6 +45,8 @@ export function buildPageMetadata({
 
   const metaTitle = seo?.metaTitle || defaultTitle;
   const metaDescription = seo?.metaDescription || defaultDescription;
+  const ogTitle = seo?.opengraphTitle?.trim() || metaTitle;
+  const ogDescription = seo?.opengraphDescription?.trim() || metaDescription;
 
   let keywords: string[] | undefined;
   if (seo?.keywords) {
@@ -73,8 +75,8 @@ export function buildPageMetadata({
     : undefined;
 
   const baseOpenGraph = {
-    title: metaTitle,
-    description: metaDescription,
+    title: ogTitle,
+    description: ogDescription,
     locale: "uk_UA",
     siteName: "Kondor PC",
     url: canonicalUrl,
@@ -112,8 +114,8 @@ export function buildPageMetadata({
     openGraph,
     twitter: {
       card: "summary_large_image",
-      title: metaTitle,
-      description: metaDescription,
+      title: ogTitle,
+      description: ogDescription,
       images: ogImageUrl ? [ogImageUrl] : undefined,
     },
   };

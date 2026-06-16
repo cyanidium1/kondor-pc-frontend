@@ -11,11 +11,13 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import type {
+  BlogPostContentFaqAnswerButton,
   BlogPostContentGallerySection,
   BlogPostContentImage,
   BlogPostContentTable,
 } from "@/types/blogPost";
 import { contentImageUrl } from "@/lib/sanity/contentClient";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 
 const BLOG_CONTENT_IMAGE_SIZES =
   "(max-width: 1024px) 100vw, min(896px, calc(100vw - 8rem))";
@@ -246,6 +248,28 @@ export const getBlogPortableTextComponents = (
               })}
             </tbody>
           </table>
+        </div>
+      );
+    },
+    faqAnswerButton: ({ value }: { value: BlogPostContentFaqAnswerButton }) => {
+      const label = value?.label?.trim();
+      const href = value?.href?.trim();
+      if (!label || !href) return null;
+
+      const key = `${slug}-${value?._key || `button-${Math.random()}`}`;
+
+      return (
+        <div key={key} className="my-6">
+          <TechButtonLink
+            href={href}
+            size="sm"
+            variant="primary"
+            className="h-[40px] px-6 text-[13px] lg:text-[14px] !no-underline hover:!no-underline"
+            target={value.newTab ? "_blank" : undefined}
+            rel={value.newTab ? "noopener noreferrer" : undefined}
+          >
+            {label}
+          </TechButtonLink>
         </div>
       );
     },

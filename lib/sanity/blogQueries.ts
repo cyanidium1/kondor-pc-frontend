@@ -4,6 +4,7 @@
  * shape returned matches what the components consume.
  * Source: kondor-pc-admin (project `if6dzz62`, dataset `production`).
  */
+import { SEO_SETTINGS_PROJECTION } from "@/lib/sanity/siteSeoQueries";
 
 const groq = (strings: TemplateStringsArray, ...values: unknown[]) =>
   strings.reduce(
@@ -12,16 +13,7 @@ const groq = (strings: TemplateStringsArray, ...values: unknown[]) =>
   );
 
 export const BLOG_PAGE_QUERY = groq`*[_type == "blogPage"][0]{
-  seo{
-    metaTitle,
-    metaDescription,
-    keywords,
-    "opengraphImage": opengraphImage{
-      ...,
-      "alt": alt
-    },
-    "schemaJsonUrl": schemaJson.asset->url
-  }
+  "seo": seo${SEO_SETTINGS_PROJECTION}
 }`;
 
 export const ALL_BLOG_POSTS_QUERY = groq`*[_type == "blogPost"] | order(_createdAt desc){
@@ -56,6 +48,14 @@ export const BLOG_POST_BY_SLUG_QUERY = groq`*[
   "slug": slug.current,
   _createdAt,
   _updatedAt,
+  "author": author->{
+    name,
+    profileUrl,
+    photo{
+      ...,
+      "alt": alt
+    }
+  },
   "heroImageUrl": heroDesktopImage.asset->url,
   content[]{
     ...,
@@ -98,6 +98,13 @@ export const BLOG_POST_BY_SLUG_QUERY = groq`*[
         cells[]
       }
     },
+    _type == "faqAnswerButton" => {
+      _key,
+      _type,
+      label,
+      href,
+      newTab
+    },
     markDefs[]{
       ...,
       _type == "link" => {
@@ -109,14 +116,5 @@ export const BLOG_POST_BY_SLUG_QUERY = groq`*[
     }
   },
   "customFaq": coalesce(customFaq[]{_key, question, answer}, []),
-  seo{
-    metaTitle,
-    metaDescription,
-    keywords,
-    "opengraphImage": opengraphImage{
-      ...,
-      "alt": alt
-    },
-    "schemaJsonUrl": schemaJson.asset->url
-  }
+  "seo": seo${SEO_SETTINGS_PROJECTION}
 }`;

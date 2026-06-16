@@ -8,6 +8,8 @@ export const SEO_SETTINGS_PROJECTION = `{
   metaTitle,
   metaDescription,
   keywords,
+  opengraphTitle,
+  opengraphDescription,
   "opengraphImage": opengraphImage{
     ...,
     "alt": alt

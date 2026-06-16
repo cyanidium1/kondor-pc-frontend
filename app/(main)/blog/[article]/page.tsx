@@ -96,6 +96,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           dateModified={currentArticle._updatedAt}
           imageUrl={currentArticle.heroImageUrl ?? undefined}
           logoUrl={publisherLogoUrl}
+          author={currentArticle.author}
         />
       )}
       <BlogBreadcrumbs crumbs={crumbs} />

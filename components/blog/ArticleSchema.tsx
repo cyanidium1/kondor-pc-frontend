@@ -8,6 +8,8 @@ import {
   telegramHref,
 } from "@/lib/sanity/siteContacts";
 
+import type { BlogAuthor } from "@/types/blogPost";
+
 interface ArticleSchemaProps {
   headline: string;
   url: string;
@@ -15,6 +17,7 @@ interface ArticleSchemaProps {
   dateModified?: string;
   imageUrl?: string;
   logoUrl?: string;
+  author?: BlogAuthor | null;
 }
 
 export default async function ArticleSchema({
@@ -24,6 +27,7 @@ export default async function ArticleSchema({
   dateModified,
   imageUrl,
   logoUrl = DEFAULT_SOCIAL_IMAGE_URL,
+  author,
 }: ArticleSchemaProps) {
   const contacts = await getSiteContacts().catch(() => null);
   const sameAs = [
@@ -33,6 +37,22 @@ export default async function ArticleSchema({
     contacts?.telegram ? telegramHref(contacts.telegram) : null,
   ].filter((socialUrl): socialUrl is string => Boolean(socialUrl));
 
+  const authorName = author?.name?.trim();
+  const authorSchema = authorName
+    ? {
+        "@type": "Person" as const,
+        name: authorName,
+        ...(author?.profileUrl?.trim()
+          ? { url: author.profileUrl.trim() }
+          : {}),
+      }
+    : {
+        "@type": "Organization" as const,
+        name: "Kondor PC",
+        url: SITE_URL,
+        ...(sameAs.length > 0 ? { sameAs } : {}),
+      };
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -40,12 +60,7 @@ export default async function ArticleSchema({
     url,
     datePublished,
     dateModified: dateModified ?? datePublished,
-    author: {
-      "@type": "Organization",
-      name: "Kondor PC",
-      url: SITE_URL,
-      ...(sameAs.length > 0 ? { sameAs } : {}),
-    },
+    author: authorSchema,
     publisher: {
       "@type": "Organization",
       name: "Kondor PC",
