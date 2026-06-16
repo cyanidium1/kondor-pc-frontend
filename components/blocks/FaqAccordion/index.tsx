@@ -31,7 +31,7 @@ export function FaqAccordion({
 
   return (
     <div className="relative container-site py-16 md:py-20">
-      <div className="hidden xl:block absolute top-[250px] left-[-10px] -z-10 w-[347px] h-auto aspect-[547/568]">
+      <div className="hidden xl:block absolute top-[190px] left-[-10px] -z-10 w-[347px] h-auto aspect-[547/568]">
         <Image
           src="/images/blocks/faq-left.webp"
           alt="FAQ"
@@ -40,7 +40,7 @@ export function FaqAccordion({
           className="object-cover"
         />
       </div>
-      <div className="hidden xl:block absolute top-[240px] right-[20px] -z-10 w-[347px] h-auto aspect-[669/892]">
+      <div className="hidden xl:block absolute top-[140px] right-[20px] -z-10 w-[347px] h-auto aspect-[669/892]">
         <Image
           src="/images/blocks/faq-right.webp"
           alt="FAQ"
