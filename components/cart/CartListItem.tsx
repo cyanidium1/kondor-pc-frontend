@@ -79,7 +79,6 @@ export function CartListItem({
               fill
               sizes="72px"
               className="relative z-10 object-cover"
-              unoptimized={!isBuild}
             />
           )}
         </Link>

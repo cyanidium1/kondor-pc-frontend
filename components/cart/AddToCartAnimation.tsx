@@ -68,7 +68,6 @@ export function AddToCartAnimation({
           fill
           sizes="60px"
           className="object-cover"
-          unoptimized
         />
       </div>
     </motion.div>

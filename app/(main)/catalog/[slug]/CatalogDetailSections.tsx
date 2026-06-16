@@ -81,7 +81,6 @@ export function CatalogDetailSections({ item }: { item: CatalogProductDetail }) 
                                 width={28}
                                 height={28}
                                 className="size-7 object-contain [filter:brightness(0)_invert(1)]"
-                                unoptimized
                               />
                             ) : null}
                           </div>
