@@ -96,9 +96,7 @@ export interface Build {
   upgradePathNotes?: string;
   /** Переваги з Sanity (`build.includedBenefits` → `buildBenefit`). */
   includedBenefits: BuildBenefit[];
-  /** Toggle from Sanity build: true => use default mocked FAQ on PK page. */
-  useDefaultFaq?: boolean;
-  /** FAQ from Sanity `customFaq` refs (faqEntry) when default FAQ is disabled. */
+  /** FAQ з Sanity (`customFaq`, inline faqQuestion). */
   customFaqItems?: Array<{ id?: string; question: string; answer: string }>;
   /** Optional chassis photo — replaces ChassisArt SVG when present. Any absolute URL (Sanity CDN, Unsplash, etc.). */
   heroImageUrl?: string;

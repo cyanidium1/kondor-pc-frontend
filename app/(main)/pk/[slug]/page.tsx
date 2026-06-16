@@ -34,7 +34,6 @@ import { getAllBuilds, getBuildBySlug, getBuildSlugs, pickSimilarBuilds } from "
 import { getAllGames, makeGameLabelMap, makeGameShortLabelMap } from "@/lib/sanity-pc/games";
 import { getAddonItems } from "@/lib/sanity/fetchers";
 import { groupProducts } from "@/lib/catalog/group";
-import { faqsByScope } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
 import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
@@ -175,8 +174,7 @@ export default async function BuildPage({
     SKU_ACCENTS[build.slug as keyof typeof SKU_ACCENTS] ??
     "var(--brand-primary)";
   const reviews = build.reviews?.slice(0, 3) ?? [];
-  const defaultBuildFaqs = faqsByScope("build");
-  const customFaqs =
+  const faqs =
     build.customFaqItems?.map((item, index) => ({
       key: item.id ?? `custom-${build.slug}-${index}`,
       scope: "build" as const,
@@ -184,10 +182,6 @@ export default async function BuildPage({
       answer: item.answer,
       relatedBuildSlug: build.slug,
     })) ?? [];
-  const faqs =
-    build.useDefaultFaq === false && customFaqs.length > 0
-      ? customFaqs
-      : defaultBuildFaqs;
   const productImageUrl = resolveProductImageUrl(build);
   const galleryImages =
     build.galleryImageUrls ?? (build.heroImageUrl ? [build.heroImageUrl] : []);
@@ -214,7 +208,7 @@ export default async function BuildPage({
               { name: "Ігрові ПК", url: "/pk" },
               { name: build.name, url: `/pk/${build.slug}` },
             ]),
-            faqPageJsonLd(faqs),
+            ...(faqs.length > 0 ? [faqPageJsonLd(faqs)] : []),
           ]}
         />
         {/* BLOCK 1 — ID + PRICE + CTA */}
@@ -462,7 +456,7 @@ export default async function BuildPage({
           </Section>
         )}
 
-        {/* BLOCK 11 — FAQ */}
+        {faqs.length > 0 ? (
         <section className="relative rounded-[40px] overflow-hidden">
           <div className="absolute -z-40 inset-0 bg-brand-primary rounded-[40px]" />
           <div className="relative container-site pt-[233px] lg:py-[66px] pb-[122px]">
@@ -569,6 +563,7 @@ export default async function BuildPage({
             </div>
           </div>
         </section>
+        ) : null}
 
         {similarBuilds.length > 0 ? (
           <section className="">

@@ -2,7 +2,7 @@
  * GROQ queries for the landing-page constructor.
  * Source of truth: kondor-pc-admin (projectId `if6dzz62`, dataset `production`).
  *
- * Each section type expands the refs it needs (faqEntry.items, etc.) so the
+ * Each section type expands the refs it needs (promoCode, tags, etc.) so the
  * frontend gets a self-contained payload — no N+1 follow-up fetches.
  */
 import { SEO_SETTINGS_PROJECTION } from "@/lib/sanity/siteSeoQueries";
@@ -91,10 +91,10 @@ export const LANDING_PAGE_BY_SLUG = groq`
       "posterImage": posterImage${IMAGE_FRAGMENT}
     },
 
-    // faqAccordion — items are refs to faqEntry
+    // faqAccordion — inline faqQuestion objects
     _type=="faqAccordion" => {
       anchor, heading,
-      "items": items[]->{_id, question, answer}
+      "items": items[]{_key, question, answer}
     },
 
     // ctaPromoBanner — promoCode is a ref to promoCode document

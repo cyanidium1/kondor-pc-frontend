@@ -4,7 +4,7 @@
  * Goal: blocks stay unchanged. They consume the same shape they consumed
  * when data lived in mocks (`lib/data/mocks/*`). All Sanity-specific
  * transformations (Portable Text → ContentNode, image refs → URLs,
- * faqEntry refs → flat `{question, answer}`, field renames like
+ * inline faqQuestion → flat `{question, answer}`, field renames like
  * `body → content`, `stats → items`) happen here.
  */
 import type {
@@ -124,7 +124,7 @@ function normalizeSection(s: any): Section {
       return {
         ...base,
         heading: s.heading,
-        // Sanity items are faqEntry refs with Portable Text answer.
+        // Sanity items are inline faqQuestion with Portable Text answer.
         // Frontend block expects `{question, answer: string}`.
         items: (s.items ?? [])
           // eslint-disable-next-line @typescript-eslint/no-explicit-any

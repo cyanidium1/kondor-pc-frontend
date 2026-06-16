@@ -44,7 +44,7 @@ type RawReviewRow = {
 };
 
 type RawCustomFaqRow = {
-  _id?: string;
+  _key?: string;
   question?: string;
   answer?: unknown;
 };
@@ -76,7 +76,6 @@ type RawBuild = {
   noiseLevelDb?: number;
   upgradePathNotes?: string;
   includedBenefits?: RawBuildBenefit[];
-  useDefaultFaq?: boolean;
   customFaq?: RawCustomFaqRow[];
   components?: Build["components"];
   heroImage?: unknown;
@@ -128,8 +127,7 @@ const BUILDS_QUERY = `
     },
     []
   ),
-  useDefaultFaq,
-  "customFaq": coalesce(customFaq[]->{_id, question, answer}, []),
+  "customFaq": coalesce(customFaq[]{_key, question, answer}, []),
   "components": coalesce(components, []),
   heroImage,
   "gallery": coalesce(gallery, []),
@@ -336,7 +334,7 @@ function mapCustomFaq(rows?: RawCustomFaqRow[]): Build["customFaqItems"] {
   if (!rows?.length) return undefined;
   const list = rows
     .map((row) => ({
-      id: row._id,
+      id: row._key,
       question: row.question?.trim() || "",
       answer: portableTextToPlain(row.answer as Parameters<typeof portableTextToPlain>[0]),
     }))
@@ -422,7 +420,6 @@ function mapBuild(raw: RawBuild): Build {
     noiseLevelDb: raw.noiseLevelDb,
     upgradePathNotes: raw.upgradePathNotes,
     includedBenefits: mapBenefits(raw.includedBenefits),
-    useDefaultFaq: raw.useDefaultFaq,
     customFaqItems: mapCustomFaq(raw.customFaq),
     reviews: mapReviews(raw.reviews, raw.slug as Build["slug"]),
     heroImageUrl,

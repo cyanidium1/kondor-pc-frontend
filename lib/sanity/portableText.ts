@@ -132,16 +132,35 @@ export function portableTextToContent(pt: PtArray | undefined): ContentNode[] {
  * and for the simple <details> body when the existing FaqAccordion expects
  * a string `answer`.
  */
+function spansToPlainText(
+  spans: PtSpan[] | undefined,
+  markDefs: PtBlock["markDefs"] = [],
+): string {
+  if (!spans) return "";
+  const linkDefs = new Map(
+    markDefs.filter((m) => m._type === "link").map((m) => [m._key, m]),
+  );
+  return spans
+    .filter((s) => s && s._type === "span")
+    .map((s) => {
+      const marks = s.marks ?? [];
+      const linkKey = marks.find((m) => linkDefs.has(m));
+      if (linkKey) {
+        const href = linkDefs.get(linkKey)?.href;
+        if (href) return href;
+      }
+      return s.text;
+    })
+    .join("");
+}
+
 export function portableTextToPlain(pt: PtArray | undefined): string {
   if (!pt || !Array.isArray(pt)) return "";
   return pt
     .filter((n) => n._type === "block")
     .map((n) => {
       const b = n as PtBlock;
-      return (b.children ?? [])
-        .filter((s) => s._type === "span")
-        .map((s) => s.text)
-        .join("");
+      return spansToPlainText(b.children, b.markDefs);
     })
     .join("\n\n")
     .trim();
