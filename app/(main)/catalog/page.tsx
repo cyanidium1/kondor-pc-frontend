@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getAllCategories, getCatalogItems } from "@/lib/sanity/fetchers";
-import { LazyCatalogFilters } from "./LazyCatalogFilters";
+import { CatalogFilters } from "./CatalogFilters";
 import { CatalogCardStatic } from "@/components/catalog/CatalogCardStatic";
 import Image from "next/image";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
@@ -106,7 +106,7 @@ className="object-cover"
         </div>
 
         <div className="grid gap-8 md:grid-cols-[260px_1fr]">
-          <LazyCatalogFilters
+          <CatalogFilters
             categories={categories}
             filters={filters}
             priceBounds={priceBounds}

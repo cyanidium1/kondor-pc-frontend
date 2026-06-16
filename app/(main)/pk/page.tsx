@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getAllBuilds } from "@/lib/sanity-pc/builds";
 import { getAllGames, makeGameShortLabelMap } from "@/lib/sanity-pc/games";
-import { LazyCatalogFilters } from "./LazyCatalogFilters";
+import { CatalogFilters } from "./CatalogFilters";
 import { BuildCardStatic } from "@/components/shared/BuildCardStatic";
 import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import ArrowIcon from "@/components/icons/ArrowIcon";
@@ -98,7 +98,7 @@ className="object-cover"
         </div>
 
         <div className="grid gap-8 md:grid-cols-[260px_1fr]">
-          <LazyCatalogFilters games={games} filters={filters} />
+          <CatalogFilters games={games} filters={filters} />
 
           <div>
             <div className="mb-4 flex items-center justify-between text-sm text-muted-foreground">
