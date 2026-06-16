@@ -130,7 +130,7 @@ export default function DeliveryPaymentPage() {
           <div className="hidden lg:block absolute -z-30 bottom-[-40px] lg:top-[-210px] right-[-218px] lg:right-[-160px] w-[503px] h-[522px] pointer-events-none">
             <Image
               src="/images/delivery/pc.webp"
-              alt=""
+              alt="Ігровий ПК Kondor PC"
               width={503}
               height={522}
               sizes="(min-width: 1024px) 640px, 460px"
@@ -238,7 +238,7 @@ export default function DeliveryPaymentPage() {
           <div className="absolute -z-10 bottom-0 right-[-7px] lg:right-[90px] w-[307px] lg:w-[501px] h-auto aspect-[501/367] pointer-events-none">
             <Image
               src="/images/delivery/pc-packaging.webp"
-              alt=""
+              alt="Ігровий ПК Kondor PC в упаковці для доставки Новою Поштою"
               width={501}
               height={367}
               sizes="(min-width: 1024px) 501px, 307px"

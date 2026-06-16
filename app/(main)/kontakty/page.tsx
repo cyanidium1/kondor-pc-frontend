@@ -22,7 +22,7 @@ export default function ContactsPage() {
           <div className="absolute -z-30 top-[170px] lg:top-[50px] right-[-64px] lg:right-[-190px] w-[322px] lg:w-[640px] h-[322px] lg:h-[640px] pointer-events-none">
             <Image
               src="/images/garantiya/pc.webp"
-              alt=""
+              alt="Ігровий ПК Kondor PC"
               width={469}
               height={469}
               sizes="(min-width: 1024px) 640px, 322px"

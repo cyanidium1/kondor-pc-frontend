@@ -178,7 +178,7 @@ fetchPriority="low"
           <div className="absolute -z-30 bottom-[-40px] lg:top-[-10px] right-[-218px] lg:right-[-210px] w-[469px] lg:w-[640px] h-[469px] lg:h-[640px] pointer-events-none">
             <Image
               src="/images/garantiya/pc.webp"
-              alt=""
+              alt="Ігровий ПК Kondor PC"
               width={469}
               height={469}
               sizes="(min-width: 1024px) 640px, 460px"

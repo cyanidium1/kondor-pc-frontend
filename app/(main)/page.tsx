@@ -146,7 +146,7 @@ export default async function HomePage() {
                 {" "}
                 <Image
                   src="/images/home/hero/pc.webp"
-                  alt=""
+                  alt="Ігровий ПК Kondor PC"
                   width={395}
                   height={527}
                   sizes="(min-width: 1024px) 395px, 338px"
