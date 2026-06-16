@@ -30,10 +30,9 @@ import { DeferredSitePageSchema } from "@/components/seo/DeferredSitePageSchema"
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 import { HomeHeroBuild } from "./home/HomeHeroBuild";
 import { HomeTopBuildsSection } from "./home/HomeTopBuildsSection";
-import { TopBuildsSkeleton } from "./home/TopBuildsSkeleton";
 import { HomePcTasksSection } from "./home/HomePcTasksSection";
 import { HomeOrganizationJsonLd } from "./home/HomeOrganizationJsonLd";
-import { LazyHomeFaq } from "./home/LazyHomeFaq";
+import { FaqBlock } from "@/components/shared/FaqBlock";
 
 export const revalidate = 60;
 
@@ -195,9 +194,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <Suspense fallback={<TopBuildsSkeleton />}>
-        <HomeTopBuildsSection topBuilds={topBuilds} />
-      </Suspense>
+      <HomeTopBuildsSection topBuilds={topBuilds} />
 
       {/* 3 · HOW IT WORKS */}
       <section className="relative rounded-[40px] overflow-hidden">
@@ -316,9 +313,7 @@ export default async function HomePage() {
         </Reveal>
       </section>
 
-      <Suspense fallback={null}>
-        <HomePcTasksSection />
-      </Suspense>
+      <HomePcTasksSection />
 
       {/* 6 · REVIEWS */}
       {hasHomeReviewsSection && (
@@ -496,7 +491,7 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <LazyHomeFaq items={homeFaqs} />
+            <FaqBlock items={homeFaqs} />
           </Reveal>
         </div>
       </section>
