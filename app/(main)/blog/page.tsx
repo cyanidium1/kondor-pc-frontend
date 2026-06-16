@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import BlogHero from "@/components/blog/BlogHero";
 import BlogList from "@/components/blog/BlogList";
@@ -41,11 +40,37 @@ const crumbs = [
   { label: "Блог", href: "/blog" },
 ];
 
-export default async function BlogPage() {
-  const [blogPosts, pageData] = await Promise.all([
+export default async function BlogPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | undefined>>;
+}) {
+  const [params, blogPosts, pageData] = await Promise.all([
+    searchParams,
     getAllBlogPosts(),
     getBlogPageSeo().catch(() => null),
   ]);
+
+  const pageParam = Number.parseInt(params.page ?? "1", 10);
+  const currentPage = Number.isFinite(pageParam) && pageParam > 0 ? pageParam : 1;
+
+  // TEMP: інфляція до 200 карток для перевірки пагінації. Видалити після тесту.
+  const testPosts =
+    blogPosts.length > 0
+      ? Array.from({ length: 200 }, (_, i) => {
+          const base = blogPosts[i % blogPosts.length];
+          return { ...base, slug: `${base.slug}-test-${i}` };
+        })
+      : blogPosts;
+
+  // TEMP: inflate to 200 cards to test pagination. Remove before release.
+  const debugBlogPosts =
+    blogPosts.length > 0
+      ? Array.from({ length: 200 }, (_, i) => ({
+          ...blogPosts[i % blogPosts.length],
+          slug: `${blogPosts[i % blogPosts.length].slug}-${i}`,
+        }))
+      : blogPosts;
 
   return (
     <>
@@ -58,9 +83,7 @@ export default async function BlogPage() {
       />
       <BlogBreadcrumbs crumbs={crumbs} />
       <BlogHero />
-      <Suspense fallback={null}>
-        <BlogList blogPosts={blogPosts} />
-      </Suspense>
+      <BlogList blogPosts={testPosts} currentPage={currentPage} />
     </>
   );
 }
