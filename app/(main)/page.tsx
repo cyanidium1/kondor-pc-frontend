@@ -491,7 +491,7 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <FaqBlock items={homeFaqs} />
+            <FaqBlock items={homeFaqs} collapseAfter={4} />
           </Reveal>
         </div>
       </section>

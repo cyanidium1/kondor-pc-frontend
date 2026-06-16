@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -6,31 +9,111 @@ import {
 } from "@/components/ui/accordion";
 import type { Faq } from "@/types/build";
 
+const URL_SPLIT_RE = /(https?:\/\/[^\s]+)/g;
+const URL_TEST_RE = /^https?:\/\/[^\s]+$/;
+
+function resolveLink(url: string): { href: string; label: string; external: boolean } {
+  const tg = url.match(/^https?:\/\/t\.me\/(.+)$/);
+  if (tg) return { href: url, label: `@${tg[1]}`, external: true };
+
+  const pidbir = url.match(/^https?:\/\/[^/]+(\/pidbir\/?)$/);
+  if (pidbir) return { href: "/pidbir", label: "Підбір ПК", external: false };
+
+  return { href: url, label: url, external: true };
+}
+
+function renderAnswer(text: string) {
+  return text.split(URL_SPLIT_RE).map((part, i) => {
+    if (!URL_TEST_RE.test(part)) return part;
+    const trailing = part.match(/[.,;]+$/)?.[0] ?? "";
+    const url = trailing ? part.slice(0, -trailing.length) : part;
+    const { href, label, external } = resolveLink(url);
+    return (
+      <span key={i}>
+        <a
+          href={href}
+          {...(external
+            ? { target: "_blank", rel: "noopener noreferrer" }
+            : {})}
+          className="font-medium !text-black !no-underline underline-offset-2 transition-all hover:!underline"
+        >
+          {label}
+        </a>
+        {trailing}
+      </span>
+    );
+  });
+}
+
+function FaqRow({ f }: { f: Faq }) {
+  return (
+    <AccordionItem value={f.key} className="border-0">
+      <AccordionTrigger className="text-left hover:no-underline [&_svg]:text-muted-foreground bg-white text-black p-5">
+        <span className="inline-block mr-3 text-[12px] lg:text-[14px] font-medium leading-[120%]">
+          {f.question}
+        </span>
+      </AccordionTrigger>
+      <AccordionContent className="p-5 mt-0.5 text-[12px] lg:text-[14px] leading-[120%] text-black bg-white rounded-[8px]">
+        {renderAnswer(f.answer)}
+      </AccordionContent>
+    </AccordionItem>
+  );
+}
+
 export function FaqBlock({
   items,
   className,
+  collapseAfter,
 }: {
   items: Faq[];
   className?: string;
+  collapseAfter?: number;
 }) {
+  const [expanded, setExpanded] = useState(false);
+
   if (items.length === 0) return null;
+
+  const canCollapse =
+    typeof collapseAfter === "number" && items.length > collapseAfter;
+  const baseItems = canCollapse ? items.slice(0, collapseAfter) : items;
+  const extraItems = canCollapse ? items.slice(collapseAfter) : [];
+
   return (
-    <Accordion
-      hiddenUntilFound
-      className={`divide-y divide-border overflow-hidden rounded-lg border border-border gap-2 ${className ?? ""}`}
-    >
-      {items.map((f) => (
-        <AccordionItem key={f.key} value={f.key} className="border-0">
-          <AccordionTrigger className="text-left hover:no-underline [&_svg]:text-muted-foreground bg-white text-black p-5">
-            <span className="inline-block mr-3 text-[12px] lg:text-[14px] font-medium leading-[120%]">
-              {f.question}
-            </span>
-          </AccordionTrigger>
-          <AccordionContent className="p-5 mt-0.5 text-[12px] lg:text-[14px] leading-[120%] text-black bg-white rounded-[8px]">
-            {f.answer}
-          </AccordionContent>
-        </AccordionItem>
-      ))}
-    </Accordion>
+    <div className="flex flex-col gap-5">
+      <Accordion
+        hiddenUntilFound
+        className={`divide-y divide-border overflow-hidden rounded-lg border border-border gap-2 ${className ?? ""}`}
+      >
+        {baseItems.map((f) => (
+          <FaqRow key={f.key} f={f} />
+        ))}
+
+        {canCollapse && (
+          <div
+            className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+              expanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+            }`}
+          >
+            <div className="overflow-hidden">
+              <div className="flex flex-col gap-2 divide-y divide-border">
+                {extraItems.map((f) => (
+                  <FaqRow key={f.key} f={f} />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </Accordion>
+
+      {canCollapse && (
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          className="mx-auto rounded-lg border border-border bg-white px-6 py-3 text-[12px] lg:text-[14px] font-medium text-black transition-colors hover:bg-black/5"
+        >
+          {expanded ? "Показати менше" : "Показати більше"}
+        </button>
+      )}
+    </div>
   );
 }
