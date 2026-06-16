@@ -79,6 +79,15 @@ export default function RootLayout({
         {children}
         <LazyCartDrawer />
         <LazyScrollToTop />
+        {/* No-JS fallback: scroll-reveal relies on IntersectionObserver, which
+            never runs without JS, leaving content at opacity: 0. There is no
+            reliable CSS-only way to detect disabled JS (`@media (scripting:
+            none)` does not match when JS is turned off via DevTools), so we use
+            <noscript> to force the content visible for no-JS clients and
+            crawlers that do not execute scripts. */}
+        <noscript>
+          <style>{`.reveal-init{opacity:1!important;transform:none!important;transition:none!important}`}</style>
+        </noscript>
       </body>
     </html>
   );
