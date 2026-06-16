@@ -19,8 +19,7 @@ import { ComponentList } from "@/components/shared/ComponentList";
 import { IncludedFeaturesBlock } from "@/components/shared/IncludedFeaturesBlock";
 import { ReviewCard } from "@/components/shared/ReviewCard";
 import { LazyStickyBuyBar } from "./LazyStickyBuyBar";
-import { SimilarBuildsSection } from "./SimilarBuildsSection";
-import { AccessoriesRailSection } from "./AccessoriesRailSection";
+import { BuildCardStatic } from "@/components/shared/BuildCardStatic";
 import { ProductConfiguratorProvider } from "@/components/shared/ProductConfigurator";
 import { BuildIdentityColumn } from "@/components/shared/BuildIdentityColumn";
 import { BuildRepeatCta } from "@/components/shared/BuildRepeatCta";
@@ -31,7 +30,10 @@ import {
   breadcrumbJsonLd,
   faqPageJsonLd,
 } from "@/lib/seo";
-import { getBuildBySlug, getBuildSlugs } from "@/lib/sanity-pc/builds";
+import { getAllBuilds, getBuildBySlug, getBuildSlugs, pickSimilarBuilds } from "@/lib/sanity-pc/builds";
+import { getAllGames, makeGameLabelMap, makeGameShortLabelMap } from "@/lib/sanity-pc/games";
+import { getAddonItems } from "@/lib/sanity/fetchers";
+import { groupProducts } from "@/lib/catalog/group";
 import { faqsByScope } from "@/lib/mock/faqs";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
@@ -39,14 +41,13 @@ import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
 import { buildBlogMetadata } from "@/lib/sanity/blogSeo";
 import { resolveProductImageUrl } from "@/lib/sanity/seoImage";
 import { LazyMarqueeLine } from "@/components/shared/LazyMarqueeLine";
-import { LazyFaqSection } from "../../garantiya/LazyFaqSection";
+import { FaqBlockSeo } from "@/components/shared/FaqBlockSeo";
+import { FpsTable } from "@/components/shared/FpsTable";
+import { AccessoriesRailContent } from "@/components/catalog/AccessoriesRailContent";
 import Image from "next/image";
-import { SimilarBuildsSkeleton } from "./SimilarBuildsSkeleton";
 import { BuildHeroLcpImage } from "./BuildHeroLcpImage";
 import { BuildHeroTitle } from "./BuildHeroTitle";
 import { LazyProductGallery } from "./LazyProductGallery";
-import { FpsTableSection } from "./FpsTableSection";
-import { FpsTableSkeleton } from "./FpsTableSkeleton";
 import { BuildGameplayVideo } from "./BuildGameplayVideo";
 
 export const revalidate = 60;
@@ -153,8 +154,20 @@ export default async function BuildPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const build = await getBuildBySlug(slug);
+
+  const [builds, gamesCatalog, addons] = await Promise.all([
+    getAllBuilds(),
+    getAllGames(),
+    getAddonItems(),
+  ]);
+
+  const build = builds.find((b) => b.slug === slug);
   if (!build) notFound();
+
+  const similarBuilds = pickSimilarBuilds(builds, slug, 3);
+  const gameShortLabels = makeGameShortLabelMap(gamesCatalog);
+  const gameLabels = makeGameLabelMap(gamesCatalog);
+  const accessoryGroups = groupProducts(addons ?? []).slice(0, 4);
 
   const accent =
     SKU_ACCENTS[build.slug as keyof typeof SKU_ACCENTS] ??
@@ -246,9 +259,16 @@ export default async function BuildPage({
             <BuildAudience build={build} />
           </div> */}
 
-        <Suspense fallback={<FpsTableSkeleton />}>
-          <FpsTableSection build={build} />
-        </Suspense>
+        <Section className="pt-3 pb-15 lg:pb-0 lg:pt-[128px]">
+          <SectionHeader
+            kicker="Що ти отримаєш"
+            title="СКІЛЬКИ FPS ТИ ОТРИМАЄШ У СВОЇХ ІГРАХ"
+            subtitle="Тестуємо кожну збірку в нашій лабораторії. Значення нижче — середні FPS на налаштуваннях «Високі»."
+            titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
+            subtitleClassName="lg:max-w-[466px]"
+          />
+          <FpsTable build={build} gameShortLabels={gameShortLabels} />
+        </Section>
 
         {build.gameplayVideoUrl ? (
           <Section className="pb-22 lg:pb-0 lg:pt-30">
@@ -329,7 +349,8 @@ export default async function BuildPage({
         ) : null}
 
         {/* BLOCK 6.5 — ACCESSORIES CROSS-SELL */}
-        <AccessoriesRailSection
+        <AccessoriesRailContent
+          groups={accessoryGroups}
           title={`Аксесуари до ${build.name}`}
           subtitle="Клавіатура, миша, ігрова поверхня — обираються окремо й доповнюють збірку."
         />
@@ -541,14 +562,35 @@ export default async function BuildPage({
               className="lg:max-w-[706px] lg:mx-auto"
             />
             <div className="lg:max-w-[706px] lg:mx-auto">
-              <LazyFaqSection items={faqs} />
+              <FaqBlockSeo items={faqs} />
             </div>
           </div>
         </section>
 
-        <Suspense fallback={<SimilarBuildsSkeleton />}>
-          <SimilarBuildsSection slug={build.slug} />
-        </Suspense>
+        {similarBuilds.length > 0 ? (
+          <section className="">
+            <div className="relative container-site pt-[92px] lg:pt-30 lg:pb-[77px]">
+              <SectionHeader
+                kicker="Альтернативи"
+                title="ІНШІ ЗБІРКИ ЦЬОГО КЛАСУ"
+                subtitle="Порівняйте альтернативні збірки в цьому ціновому сегменті."
+                titleClassName="mt-3 lg:mt-7 mb-5 lg:mb-10 lg:text-[36px]"
+              />
+              <div className="grid gap-4 md:grid-cols-3">
+                {similarBuilds.map((s) => (
+                  <BuildCardStatic
+                    key={s.slug}
+                    build={s}
+                    variant="compact"
+                    gameLabels={gameLabels}
+                    gameShortLabels={gameShortLabels}
+                    highlightGames={["cs2", "warzone", "cyberpunk"]}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
 
         <LazyStickyBuyBar
           name={build.name}

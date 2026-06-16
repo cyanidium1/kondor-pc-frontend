@@ -465,15 +465,30 @@ export async function getPopularBuilds(
     .filter((b): b is Build => Boolean(b));
 }
 
-export async function getSimilarBuilds(currentSlug: string, limit = 3): Promise<Build[]> {
-  const builds = await getAllBuilds();
+export function pickSimilarBuilds(
+  builds: Build[],
+  currentSlug: string,
+  limit = 3,
+): Build[] {
   const current = builds.find((b) => b.slug === currentSlug);
   if (!current) return [];
 
   return builds
     .filter((b) => b.slug !== currentSlug)
-    .sort((a, b) => Math.abs(a.priceUah - current.priceUah) - Math.abs(b.priceUah - current.priceUah))
+    .sort(
+      (a, b) =>
+        Math.abs(a.priceUah - current.priceUah) -
+        Math.abs(b.priceUah - current.priceUah),
+    )
     .slice(0, limit);
+}
+
+export async function getSimilarBuilds(
+  currentSlug: string,
+  limit = 3,
+): Promise<Build[]> {
+  const builds = await getAllBuilds();
+  return pickSimilarBuilds(builds, currentSlug, limit);
 }
 
 export async function getBuildSlugs(): Promise<Array<{ slug: string }>> {
