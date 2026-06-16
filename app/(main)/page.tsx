@@ -346,7 +346,7 @@ export default async function HomePage() {
                 Instagram <ArrowIcon className="-rotate-45 size-5" />
               </a>
               <a
-                href="https://g.page/kondor-pc"
+                href="https://share.google/9Uu4k5ZAzu4SRuKJA"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cn(
