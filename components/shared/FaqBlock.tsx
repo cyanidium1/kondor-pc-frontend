@@ -63,7 +63,7 @@ function FaqRow({ f }: { f: Faq }) {
 export function FaqBlock({
   items,
   className,
-  collapseAfter,
+  collapseAfter = 4,
 }: {
   items: Faq[];
   className?: string;
