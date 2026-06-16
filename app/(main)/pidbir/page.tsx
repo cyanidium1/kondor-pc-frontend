@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LazySelectionForm } from "./LazySelectionForm";
+import { SelectionForm } from "./SelectionForm";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { getAllGames } from "@/lib/sanity-pc/games";
 import Image from "next/image";
@@ -71,7 +71,7 @@ fetchPriority="low"
           </div>
         </section>
         <div className="container-site">
-          <LazySelectionForm gamesCatalog={gamesCatalog} />
+          <SelectionForm gamesCatalog={gamesCatalog} />
         </div>
       </div>
     </>

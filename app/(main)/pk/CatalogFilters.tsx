@@ -52,7 +52,6 @@ export function CatalogFilters({
   filters: CatalogFilters;
 }) {
   const router = useRouter();
-  const popularGames = games.filter((g) => g.isPopular);
   const budgetLabelId = useId();
   const sortLabelId = useId();
   const [filtersExpanded, setFiltersExpanded] = useState(true);
@@ -201,7 +200,7 @@ export function CatalogFilters({
                   <span className="flex-1">Усі ігри та задачі</span>
                 </label>
               </li>
-              {popularGames.map((g) => {
+              {games.map((g) => {
                 const active = allGamesSelected
                   ? true
                   : filters.gameSlugs.includes(g.slug);
