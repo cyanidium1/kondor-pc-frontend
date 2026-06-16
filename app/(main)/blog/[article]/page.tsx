@@ -13,7 +13,7 @@ import {
 import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
 import { pageCanonicalUrl, buildPageMetadata } from "@/lib/sanity/pageSeo";
 import { resolveOrganizationLogoUrl } from "@/lib/sanity/seoImage";
-import { LazyBlogFaq } from "./LazyBlogFaq";
+import BlogFaq from "@/components/blog/BlogFaq";
 import {
   RecommendedPostsAside,
   RecommendedPostsRail,
@@ -98,9 +98,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           {currentArticle.content && currentArticle.content.length > 0 && (
             <ContentSection article={currentArticle} />
           )}
-          {currentArticle.faq && (
-            <LazyBlogFaq
-              faq={currentArticle.faq}
+          {currentArticle.customFaq && currentArticle.customFaq.length > 0 && (
+            <BlogFaq
+              items={currentArticle.customFaq}
               uniqueKey={`${uniqueKey}-faq`}
             />
           )}

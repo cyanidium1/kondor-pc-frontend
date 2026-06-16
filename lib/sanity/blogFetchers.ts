@@ -4,6 +4,7 @@
  */
 import { cache } from "react";
 import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
+import { portableTextToContent, portableTextToPlain } from "@/lib/sanity/portableText";
 import { contentClient } from "./contentClient";
 import {
   ALL_BLOG_POSTS_QUERY,
@@ -11,7 +12,46 @@ import {
   BLOG_PAGE_QUERY,
   BLOG_POST_BY_SLUG_QUERY,
 } from "./blogQueries";
-import type { BlogPost, BlogPostPreview, PageSeo } from "@/types/blogPost";
+import type { BlogFaqItem, BlogPost, BlogPostPreview, PageSeo } from "@/types/blogPost";
+
+type RawFaqRow = {
+  _key?: string;
+  question?: string;
+  answer?: unknown;
+};
+
+type RawBlogPost = Omit<BlogPost, "customFaq"> & {
+  customFaq?: RawFaqRow[];
+};
+
+function mapBlogCustomFaq(rows?: RawFaqRow[]): BlogFaqItem[] | undefined {
+  if (!rows?.length) return undefined;
+  const list = rows
+    .map((row) => {
+      const pt = row.answer as Parameters<typeof portableTextToPlain>[0];
+      const answerContent = portableTextToContent(pt);
+      const answer = portableTextToPlain(pt);
+      return {
+        _key: row._key,
+        question: row.question?.trim() || "",
+        answer,
+        answerContent,
+      };
+    })
+    .filter(
+      (row) =>
+        row.question.length > 0 &&
+        (row.answer.length > 0 || row.answerContent.length > 0),
+    );
+  return list.length > 0 ? list : undefined;
+}
+
+function mapBlogPost(raw: RawBlogPost): BlogPost {
+  return {
+    ...raw,
+    customFaq: mapBlogCustomFaq(raw.customFaq),
+  };
+}
 
 export const getAllBlogPosts = cache(async (): Promise<BlogPostPreview[]> => {
   const rows = await contentClient.fetch<BlogPostPreview[]>(
@@ -36,7 +76,7 @@ export async function getAllBlogPostSlugs(): Promise<string[]> {
 export async function getBlogPostBySlug(
   slug: string,
 ): Promise<BlogPost | null> {
-  return contentClient.fetch<BlogPost | null>(
+  const raw = await contentClient.fetch<RawBlogPost | null>(
     BLOG_POST_BY_SLUG_QUERY,
     { slug },
     {
@@ -46,6 +86,8 @@ export async function getBlogPostBySlug(
       },
     },
   );
+  if (!raw) return null;
+  return mapBlogPost(raw);
 }
 
 export async function getBlogPageSeo(): Promise<{ seo: PageSeo | null } | null> {

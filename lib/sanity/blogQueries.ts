@@ -108,17 +108,7 @@ export const BLOG_POST_BY_SLUG_QUERY = groq`*[
       }
     }
   },
-  faq{
-    _type,
-    "type": _type,
-    description,
-    items[]{
-      _key,
-      question,
-      answer,
-      buttons
-    }
-  },
+  "customFaq": coalesce(customFaq[]{_key, question, answer}, []),
   seo{
     metaTitle,
     metaDescription,

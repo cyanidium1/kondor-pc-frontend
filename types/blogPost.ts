@@ -3,6 +3,8 @@
  * Data source: kondor-pc-admin Sanity project `if6dzz62`, document `blogPost` / `blogPage`.
  */
 
+import type { ContentNode } from "@/lib/data/types/content";
+
 export type SanityReference = {
   _type: "reference";
   _ref: string;
@@ -40,16 +42,11 @@ export type PageSeo = {
   schemaJsonUrl?: string;
 };
 
-export type FaqSection = {
-  _type: "faqSection";
-  type: "faqSection";
-  description?: string;
-  items: Array<{
-    _key?: string;
-    question: string;
-    answer: string;
-    buttons?: string[];
-  }>;
+export type BlogFaqItem = {
+  _key?: string;
+  question: string;
+  answer: string;
+  answerContent: ContentNode[];
 };
 
 export type BlogPostContentBlock = {
@@ -120,7 +117,7 @@ export type BlogPost = {
   heroMobileImage: SanityImage;
   slug: string;
   content: BlogPostContent[];
-  faq?: FaqSection | null;
+  customFaq?: BlogFaqItem[];
   seo?: PageSeo | null;
   _createdAt?: string;
   _updatedAt?: string;
