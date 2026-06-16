@@ -13,7 +13,8 @@ export type ContentNode =
   | { type: "h3"; text: string; id?: string }
   | { type: "p"; children: InlineNode[] }
   | { type: "list"; ordered?: boolean; items: InlineNode[][] }
-  | { type: "quote"; text: string; cite?: string };
+  | { type: "quote"; text: string; cite?: string }
+  | { type: "button"; label: string; href: string; newTab?: boolean };
 
 export type ImageAsset = {
   src: string;

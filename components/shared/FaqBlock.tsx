@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import type { Faq } from "@/types/build";
 import type { ContentNode, InlineNode } from "@/lib/data/types/content";
+import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 
 const URL_SPLIT_RE = /(https?:\/\/[^\s]+)/g;
 const URL_TEST_RE = /^https?:\/\/[^\s]+$/;
@@ -78,6 +79,21 @@ function FaqAnswerContent({ nodes }: { nodes: ContentNode[] }) {
               </Tag>
             );
           }
+          case "button":
+            return (
+              <div key={i} className="mt-2">
+                <TechButtonLink
+                  href={node.href}
+                  size="sm"
+                  variant="primary"
+                  className="h-[36px] px-5 text-[12px] lg:text-[14px] !no-underline hover:!no-underline"
+                  target={node.newTab ? "_blank" : undefined}
+                  rel={node.newTab ? "noopener noreferrer" : undefined}
+                >
+                  {node.label}
+                </TechButtonLink>
+              </div>
+            );
           default:
             return null;
         }

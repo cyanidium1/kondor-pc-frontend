@@ -10,10 +10,7 @@
  *   - listItem: 'bullet' | 'number' → grouped into list nodes
  *   - decorators: 'strong', 'em' → inline marks
  *   - annotations: 'link' (href + newTab) → inline links
- *
- * NOT supported (silently dropped):
- *   - inline images (would need a different shape)
- *   - custom annotations (buildLink, etc.) — render as plain text
+ *   - faqAnswerButton blocks → CTA button nodes
  */
 import type {ContentNode, InlineNode} from "@/lib/data/types/content";
 
@@ -34,7 +31,15 @@ type PtBlock = {
   markDefs?: Array<{_key: string; _type: string; href?: string; newTab?: boolean}>;
 };
 
-type PtArray = Array<PtBlock | {_type: string; [k: string]: unknown}>;
+type PtFaqAnswerButton = {
+  _type: "faqAnswerButton";
+  _key?: string;
+  label?: string;
+  href?: string;
+  newTab?: boolean;
+};
+
+type PtArray = Array<PtBlock | PtFaqAnswerButton | {_type: string; [k: string]: unknown}>;
 
 function spansToInlines(
   spans: PtSpan[] | undefined,
@@ -89,6 +94,22 @@ export function portableTextToContent(pt: PtArray | undefined): ContentNode[] {
   };
 
   for (const node of pt) {
+    if (node._type === "faqAnswerButton") {
+      flushList();
+      const btn = node as PtFaqAnswerButton;
+      const label = btn.label?.trim();
+      const href = btn.href?.trim();
+      if (label && href) {
+        out.push({
+          type: "button",
+          label,
+          href,
+          newTab: !!btn.newTab,
+        });
+      }
+      continue;
+    }
+
     if (node._type !== "block") continue;
     const block = node as PtBlock;
 
@@ -171,8 +192,12 @@ function spansToPlainText(
 export function portableTextToPlain(pt: PtArray | undefined): string {
   if (!pt || !Array.isArray(pt)) return "";
   return pt
-    .filter((n) => n._type === "block")
     .map((n) => {
+      if (n._type === "faqAnswerButton") {
+        const btn = n as PtFaqAnswerButton;
+        return btn.label?.trim() || btn.href?.trim() || "";
+      }
+      if (n._type !== "block") return "";
       const b = n as PtBlock;
       return spansToPlainText(b.children, b.markDefs);
     })
