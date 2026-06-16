@@ -17,6 +17,7 @@ import Image from "next/image";
 import { Reveal } from "@/components/shared/Reveal";
 import { DeferredSitePageSchema } from "@/components/seo/DeferredSitePageSchema";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
+import { JsonLd, faqPageJsonLd } from "@/lib/seo";
 import { DeliveryBusinessSection } from "./DeliveryBusinessSection";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -105,12 +106,17 @@ function visiblePaymentOptions() {
 
 const faqs = [...faqsByScope("delivery"), ...faqsByScope("payment")];
 const items = faqs.length > 0 ? faqs : visibleFaqs().slice(0, 5);
+const faqSchema = faqPageJsonLd(items);
 const paymentOptions = visiblePaymentOptions();
 
 export default function DeliveryPaymentPage() {
   return (
     <>
-      <DeferredSitePageSchema pageId="seoDeliveryPaymentPage" />
+      <DeferredSitePageSchema
+        pageId="seoDeliveryPaymentPage"
+        excludeTypes={["FAQPage"]}
+      />
+      {faqSchema ? <JsonLd data={faqSchema} /> : null}
       <div className="rounded-b-[28px] lg:rounded-b-[40px] overflow-hidden">
         <section>
           <div className="relative container-site pt-8 lg:pt-12 pb-[50px] lg:pb-25">

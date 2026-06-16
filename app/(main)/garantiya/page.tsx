@@ -14,6 +14,7 @@ import { Reveal } from "@/components/shared/Reveal";
 import { LazyMarqueeLine } from "@/components/shared/LazyMarqueeLine";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
+import { JsonLd, faqPageJsonLd } from "@/lib/seo";
 import { FaqBlock } from "@/components/shared/FaqBlock";
 import { formatUah } from "@/lib/format";
 import { WarrantyContactsBlock } from "./WarrantyContactsBlock";
@@ -81,11 +82,16 @@ const faqs =
   faqsByScope("warranty").length > 0
     ? faqsByScope("warranty")
     : visibleFaqs().slice(0, 5);
+const faqSchema = faqPageJsonLd(faqs);
 
 export default function WarrantyPage() {
   return (
     <>
-      <SitePageSchemaJson pageId="seoWarrantyPage" />
+      <SitePageSchemaJson
+        pageId="seoWarrantyPage"
+        excludeTypes={["FAQPage"]}
+      />
+      {faqSchema ? <JsonLd data={faqSchema} /> : null}
       {/* Hero */}
       <section className="relative">
         <div className="absolute -z-10 top-[-223px] lg:top-[-154px] left-[-860px] lg:left-[-120px] w-[1929px] h-[2007px] pointer-events-none">
