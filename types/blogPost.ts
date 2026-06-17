@@ -41,6 +41,7 @@ export type PageSeo = {
   opengraphTitle?: string;
   opengraphDescription?: string;
   opengraphImage?: SanityImage;
+  content?: BlogPostContent[];
   schemaJsonUrl?: string;
 };
 

@@ -13,6 +13,7 @@ import Image from "next/image";
 import { Reveal } from "@/components/shared/Reveal";
 import { LazyMarqueeLine } from "@/components/shared/LazyMarqueeLine";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 import { JsonLd, faqPageJsonLd } from "@/lib/seo";
 import { FaqBlock } from "@/components/shared/FaqBlock";
@@ -447,6 +448,7 @@ fetchPriority="low"
           </section>
         </Reveal>
       </div>
+      <SitePageSeoContent pageId="seoWarrantyPage" />
     </>
   );
 }

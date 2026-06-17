@@ -12,6 +12,7 @@ import {
   getBlogPostBySlug,
 } from "@/lib/sanity/blogFetchers";
 import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
+import { SeoContentBlock } from "@/components/seo/SeoContentBlock";
 import { pageCanonicalUrl, buildPageMetadata } from "@/lib/sanity/pageSeo";
 import { resolveOrganizationLogoUrl } from "@/lib/sanity/seoImage";
 import BlogFaq from "@/components/blog/BlogFaq";
@@ -120,6 +121,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <Suspense fallback={null}>
         <RecommendedPostsRail slug={slug} uniqueKey={uniqueKey} />
       </Suspense>
+      <SeoContentBlock seo={currentArticle.seo} scopeKey={`blog-${slug}`} />
     </>
   );
 }

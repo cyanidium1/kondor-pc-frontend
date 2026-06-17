@@ -7,6 +7,7 @@ import {
   resolvePageContext,
 } from "@/lib/data/adapter";
 import {SchemaJsonFromSeo} from "@/components/seo/SchemaJsonFromUrl";
+import {SeoContentBlock} from "@/components/seo/SeoContentBlock";
 import {LandingPageBody} from "@/components/landings/LandingPageBody";
 import {buildLandingMetadata} from "@/lib/sanity/landingSeo";
 import {JsonLd, faqPageJsonLd} from "@/lib/seo";
@@ -56,6 +57,7 @@ export default async function DlyaLandingPage({
       <SchemaJsonFromSeo seo={page.seo} excludeTypes={["FAQPage"]} />
       {faqSchema ? <JsonLd data={faqSchema} /> : null}
       <LandingPageBody page={page} pageContext={pageContext} />
+      <SeoContentBlock seo={page.seo} scopeKey={`dlya-${slug}`} />
     </>
   );
 }

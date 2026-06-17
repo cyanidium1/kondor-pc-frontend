@@ -4,6 +4,7 @@ import BlogList from "@/components/blog/BlogList";
 import BlogBreadcrumbs from "@/components/blog/BlogBreadcrumbs";
 import { getAllBlogPosts, getBlogPageSeo } from "@/lib/sanity/blogFetchers";
 import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
+import { SeoContentBlock } from "@/components/seo/SeoContentBlock";
 import { buildPageMetadata } from "@/lib/sanity/pageSeo";
 import { JsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
@@ -66,6 +67,7 @@ export default async function BlogPage({
       <BlogBreadcrumbs crumbs={crumbs} />
       <BlogHero />
       <BlogList blogPosts={blogPosts} currentPage={currentPage} />
+      <SeoContentBlock seo={pageData?.seo ?? null} scopeKey="blog" />
     </>
   );
 }

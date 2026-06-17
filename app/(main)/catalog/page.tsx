@@ -4,6 +4,7 @@ import { CatalogFilters } from "./CatalogFilters";
 import { CatalogCardStatic } from "@/components/catalog/CatalogCardStatic";
 import Image from "next/image";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import {
@@ -186,6 +187,7 @@ className="object-cover"
           </div>
         </div>
       </div>
+      <SitePageSeoContent pageId="seoAccessoriesPage" />
     </>
   );
 }

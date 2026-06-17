@@ -1,28 +1,21 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { CheckoutView } from "./CheckoutView";
-import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
-import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const metadata = await metadataForSitePage("seoCheckoutPage");
-  return {
-    ...metadata,
-    robots: {
+export const metadata: Metadata = {
+  title: { absolute: "Оформлення замовлення" },
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
       index: false,
       follow: false,
-      googleBot: {
-        index: false,
-        follow: false,
-      },
     },
-  };
-}
+  },
+};
 
 export default async function OformlennyaPage() {
   return (
-    <>
-      <SitePageSchemaJson pageId="seoCheckoutPage" />
     <div className="container-site py-10 md:py-14">
       <h1 className="font-display mb-8 text-3xl font-bold md:text-4xl">
         Оформлення замовлення
@@ -45,6 +38,5 @@ export default async function OformlennyaPage() {
         <CheckoutView />
       </Suspense>
     </div>
-    </>
   );
 }

@@ -19,6 +19,7 @@ import { DeferredSitePageSchema } from "@/components/seo/DeferredSitePageSchema"
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 import { JsonLd, faqPageJsonLd } from "@/lib/seo";
 import { DeliveryBusinessSection } from "./DeliveryBusinessSection";
+import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 
 export async function generateMetadata(): Promise<Metadata> {
   return metadataForSitePage("seoDeliveryPaymentPage");
@@ -328,6 +329,7 @@ export default function DeliveryPaymentPage() {
       </section>
 
       <DeliveryBusinessSection items={items} />
+      <SitePageSeoContent pageId="seoDeliveryPaymentPage" />
     </>
   );
 }

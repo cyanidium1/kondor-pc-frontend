@@ -37,6 +37,7 @@ import { groupProducts } from "@/lib/catalog/group";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
 import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
+import { SeoContentBlock } from "@/components/seo/SeoContentBlock";
 import { ProductOgType } from "@/components/seo/ProductOgType";
 import { buildPageMetadata } from "@/lib/sanity/pageSeo";
 import { resolveProductImageUrl } from "@/lib/sanity/seoImage";
@@ -598,6 +599,7 @@ export default async function BuildPage({
           priceUah={build.priceUah}
           image={build.heroImageUrl}
         />
+        <SeoContentBlock seo={build.seo} scopeKey={`pk-${build.slug}`} />
       </div>
     </ProductConfiguratorProvider>
   );

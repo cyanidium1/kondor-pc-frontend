@@ -6,6 +6,7 @@ import {
   getLandingPageBySlug,
 } from "@/lib/data/adapter";
 import {SchemaJsonFromSeo} from "@/components/seo/SchemaJsonFromUrl";
+import {SeoContentBlock} from "@/components/seo/SeoContentBlock";
 import {LandingPageBody} from "@/components/landings/LandingPageBody";
 import {buildLandingMetadata} from "@/lib/sanity/landingSeo";
 import {JsonLd, faqPageJsonLd} from "@/lib/seo";
@@ -85,6 +86,7 @@ export default async function PromoLandingPage({
       {faqSchema ? <JsonLd data={faqSchema} /> : null}
       {isExpired ? <PromoExpiredBanner /> : null}
       <LandingPageBody page={page} pageContext={pageContext} />
+      <SeoContentBlock seo={page.seo} scopeKey={`promo-${slug}`} />
     </>
   );
 }

@@ -7,6 +7,7 @@ import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import Image from "next/image";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 import {
   filterBuilds,
@@ -152,6 +153,7 @@ className="object-cover"
           </div>
         </div>
       </section>
+      <SitePageSeoContent pageId="seoPcCatalogPage" />
     </>
   );
 }

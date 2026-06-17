@@ -4,6 +4,7 @@ import { LazyMarqueeLine } from "@/components/shared/LazyMarqueeLine";
 import Image from "next/image";
 import { Reveal } from "@/components/shared/Reveal";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 import { LazyContactForm } from "./LazyContactForm";
 import { ContactsPanel } from "./ContactsPanel";
@@ -80,6 +81,7 @@ export default function ContactsPage() {
       <LazyMarqueeLine />
 
       <RequisitesSection />
+      <SitePageSeoContent pageId="seoContactsPage" />
     </>
   );
 }

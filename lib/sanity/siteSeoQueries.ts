@@ -4,6 +4,8 @@ const groq = (strings: TemplateStringsArray, ...values: unknown[]) =>
     "",
   );
 
+import { ARTICLE_PORTABLE_TEXT_ARRAY_PROJECTION } from "@/lib/sanity/articlePortableTextProjection";
+
 export const SEO_SETTINGS_PROJECTION = `{
   metaTitle,
   metaDescription,
@@ -14,6 +16,7 @@ export const SEO_SETTINGS_PROJECTION = `{
     ...,
     "alt": alt
   },
+  "content": content${ARTICLE_PORTABLE_TEXT_ARRAY_PROJECTION},
   "schemaJsonUrl": schemaJson.asset->url
 }`;
 

@@ -33,6 +33,7 @@ import { HomeTopBuildsSection } from "./home/HomeTopBuildsSection";
 import { HomePcTasksSection } from "./home/HomePcTasksSection";
 import { HomeOrganizationJsonLd } from "./home/HomeOrganizationJsonLd";
 import { FaqBlock } from "@/components/shared/FaqBlock";
+import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 
 export const revalidate = 60;
 
@@ -468,6 +469,7 @@ export default async function HomePage() {
               kickerClassName="text-black"
               titleClassName="text-black py-4"
               subtitleClassName="text-black lg:max-w-[424px]"
+              showKickerDot={false}
             />
           </Reveal>
           <Reveal delay={80}>
@@ -498,6 +500,7 @@ export default async function HomePage() {
           </Reveal>
         </div>
       </section>
+      <SitePageSeoContent pageId="seoHomePage" />
     </>
   );
 }

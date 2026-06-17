@@ -4,6 +4,7 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import { getAllGames } from "@/lib/sanity-pc/games";
 import Image from "next/image";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -74,6 +75,7 @@ fetchPriority="low"
           <SelectionForm gamesCatalog={gamesCatalog} />
         </div>
       </div>
+      <SitePageSeoContent pageId="seoPickerPage" />
     </>
   );
 }

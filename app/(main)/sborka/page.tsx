@@ -3,6 +3,7 @@ import { LazyCustomBuildForm } from "./LazyCustomBuildForm";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import Image from "next/image";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -108,6 +109,7 @@ fetchPriority="low"
 
         <LazyCustomBuildForm />
       </div>
+      <SitePageSeoContent pageId="seoCustomBuildPage" />
     </>
   );
 }

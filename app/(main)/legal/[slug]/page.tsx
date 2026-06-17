@@ -14,6 +14,7 @@ import {
   getSiteContacts,
 } from "@/lib/sanity/siteContacts";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 import { LEGAL_SEO_BY_SLUG } from "@/lib/sanity/siteSeoConfig";
 import { metadataForLegalSlug } from "@/lib/sanity/siteSeoFetcher";
 
@@ -141,6 +142,7 @@ export default async function LegalPage({
           ))}
         </article>
       </div>
+      {legalSeoPageId ? <SitePageSeoContent pageId={legalSeoPageId} /> : null}
     </>
   );
 }

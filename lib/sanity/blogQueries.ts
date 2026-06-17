@@ -5,6 +5,7 @@
  * Source: kondor-pc-admin (project `if6dzz62`, dataset `production`).
  */
 import { SEO_SETTINGS_PROJECTION } from "@/lib/sanity/siteSeoQueries";
+import { ARTICLE_PORTABLE_TEXT_ARRAY_PROJECTION } from "@/lib/sanity/articlePortableTextProjection";
 
 const groq = (strings: TemplateStringsArray, ...values: unknown[]) =>
   strings.reduce(
@@ -57,64 +58,7 @@ export const BLOG_POST_BY_SLUG_QUERY = groq`*[
     }
   },
   "heroImageUrl": heroDesktopImage.asset->url,
-  content[]{
-    ...,
-    _type == "block" => {
-      ...,
-      children[]{
-        ...,
-        marks[]
-      }
-    },
-    _type == "image" => {
-      _key,
-      _type,
-      asset,
-      crop,
-      hotspot,
-      alt,
-      "dimensions": asset->metadata.dimensions
-    },
-    _type == "gallerySection" => {
-      _key,
-      _type,
-      items[]{
-        _key,
-        _type,
-        image{
-          _type,
-          asset,
-          crop,
-          hotspot,
-          alt,
-          "dimensions": asset->metadata.dimensions
-        }
-      }
-    },
-    _type == "table" => {
-      _key,
-      _type,
-      rows[]{
-        cells[]
-      }
-    },
-    _type == "faqAnswerButton" => {
-      _key,
-      _type,
-      label,
-      href,
-      newTab
-    },
-    markDefs[]{
-      ...,
-      _type == "link" => {
-        _key,
-        _type,
-        href,
-        blank
-      }
-    }
-  },
+  content${ARTICLE_PORTABLE_TEXT_ARRAY_PROJECTION},
   "customFaq": coalesce(customFaq[]{_key, question, answer}, []),
   "seo": seo${SEO_SETTINGS_PROJECTION}
 }`;
