@@ -11,7 +11,6 @@ export default function RecommendedPostsDesktop({
   uniqueKey,
 }: RecommendedPostsDesktopProps) {
   if (!posts || posts.length === 0) return null;
-  const recommendedPosts = posts.slice(0, 6);
 
   return (
     <aside className="pt-10 lg:sticky lg:top-24">
@@ -19,7 +18,7 @@ export default function RecommendedPostsDesktop({
         Читайте також
       </h2>
       <ul className="flex flex-col gap-6">
-        {recommendedPosts.map((post) => (
+        {posts.map((post) => (
           <li key={`${uniqueKey}-${post.slug}`}>
             <BlogCard post={post} />
           </li>

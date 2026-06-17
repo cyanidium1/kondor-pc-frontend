@@ -113,14 +113,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               uniqueKey={`${uniqueKey}-faq`}
             />
           )}
+          <Suspense fallback={null}>
+            <RecommendedPostsRail slug={slug} uniqueKey={uniqueKey} />
+          </Suspense>
         </div>
         <Suspense fallback={<RecommendedAsideSkeleton />}>
           <RecommendedPostsAside slug={slug} uniqueKey={uniqueKey} />
         </Suspense>
       </div>
-      <Suspense fallback={null}>
-        <RecommendedPostsRail slug={slug} uniqueKey={uniqueKey} />
-      </Suspense>
       <SeoContentBlock seo={currentArticle.seo} scopeKey={`blog-${slug}`} />
     </>
   );
