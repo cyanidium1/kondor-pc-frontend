@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import { GoogleTagManager } from "@next/third-parties/google";
 import { Montserrat, Unbounded } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+
+const GTM_ID = "GTM-KWHVVR26";
 import { LazyCartDrawer } from "@/components/cart/LazyCartDrawer";
 import { LazyScrollToTop } from "@/components/shared/LazyScrollToTop";
 
@@ -76,6 +79,7 @@ export default function RootLayout({
       className={`${montserrat.variable} ${unbounded.variable} ${zenterSP.variable}`}
     >
       <body>
+        <GoogleTagManager gtmId={GTM_ID} />
         {children}
         <LazyCartDrawer />
         <LazyScrollToTop />
