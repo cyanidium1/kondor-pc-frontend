@@ -8,7 +8,9 @@ import ArrowIcon from "@/components/icons/ArrowIcon";
 import Image from "next/image";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
 import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
-import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
+import { metadataForSitePage, fetchSiteSeoByPageId } from "@/lib/sanity/siteSeoFetcher";
+import { SITE_SEO_CONFIG } from "@/lib/sanity/siteSeoConfig";
+import { JsonLd, pcCatalogCollectionPageJsonLd } from "@/lib/seo";
 import {
   filterBuilds,
   highlightGamesForFilters,
@@ -61,10 +63,30 @@ export default async function CatalogPage({
   );
   const gameShortLabels = makeGameShortLabelMap(games);
   const highlightGames = highlightGamesForFilters(filters);
+  const isFiltered = hasSeoFilterParams(params);
+  const catalogSeo = isFiltered
+    ? null
+    : await fetchSiteSeoByPageId("seoPcCatalogPage").catch(() => null);
+  const catalogSeoConfig = SITE_SEO_CONFIG.seoPcCatalogPage;
 
   return (
     <>
-      <SitePageSchemaJson pageId="seoPcCatalogPage" />
+      <SitePageSchemaJson
+        pageId="seoPcCatalogPage"
+        excludeTypes={["CollectionPage", "ItemList"]}
+      />
+      {!isFiltered ? (
+        <JsonLd
+          data={pcCatalogCollectionPageJsonLd(builds, {
+            name:
+              catalogSeo?.metaTitle?.trim() ||
+              `${catalogSeoConfig.defaultTitle} — Kondor PC`,
+            description:
+              catalogSeo?.metaDescription?.trim() ||
+              catalogSeoConfig.defaultDescription,
+          })}
+        />
+      ) : null}
       <section className="relative container-site pt-8 lg:pt-12 pb-12 lg:pb-16">
         <div className="absolute -z-10 top-[-223px] lg:top-[-154px] left-[-860px] lg:left-[-160px] w-[1929px] h-[2007px]">
           <Image
