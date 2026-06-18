@@ -2,15 +2,14 @@ import type { Build, Faq } from "@/types/build";
 import type { CatalogProductDetail } from "@/types/catalog";
 import type { FaqSchemaItem } from "@/lib/seo/faqSchema";
 import { pcBuildProductJsonLd } from "@/lib/seo/pcBuildProductJsonLd";
-import { DEFAULT_SOCIAL_IMAGE_URL, SITE_URL } from "@/lib/seo/constants";
+import { ORGANIZATION_LOGO_HEIGHT, ORGANIZATION_LOGO_URL, ORGANIZATION_LOGO_WIDTH, SITE_URL } from "@/lib/seo/constants";
 import {
   ensureHttps,
   getSiteContacts,
   telegramHref,
 } from "@/lib/sanity/siteContacts";
 
-export async function organizationJsonLd(options?: { logoUrl?: string }) {
-  const logoUrl = options?.logoUrl ?? DEFAULT_SOCIAL_IMAGE_URL;
+export async function organizationJsonLd() {
   const contacts = await getSiteContacts().catch(() => null);
 
   const phone = contacts?.phone ?? "+380633631066";
@@ -37,7 +36,9 @@ export async function organizationJsonLd(options?: { logoUrl?: string }) {
     url: siteUrl,
     logo: {
       "@type": "ImageObject",
-      url: logoUrl,
+      url: ORGANIZATION_LOGO_URL,
+      width: ORGANIZATION_LOGO_WIDTH,
+      height: ORGANIZATION_LOGO_HEIGHT,
     },
     foundingDate: "2020",
     telephone: phone,

@@ -1,5 +1,5 @@
 import type { PageSeo, SanityImage } from "@/types/blogPost";
-import { DEFAULT_SOCIAL_IMAGE_URL } from "@/lib/seo/constants";
+import { DEFAULT_SOCIAL_IMAGE_URL, ORGANIZATION_LOGO_URL } from "@/lib/seo/constants";
 import { contentImageUrl } from "./contentClient";
 
 /** Resolve OG image URL from Sanity `seoSettings.opengraphImage`. */
@@ -25,5 +25,5 @@ export function resolveProductImageUrl(
 }
 
 export function resolveOrganizationLogoUrl(seo?: PageSeo | null): string {
-  return resolveOpengraphImageUrl(seo) ?? DEFAULT_SOCIAL_IMAGE_URL;
+  return resolveOpengraphImageUrl(seo) ?? ORGANIZATION_LOGO_URL;
 }
