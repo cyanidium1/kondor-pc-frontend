@@ -4,8 +4,7 @@ import { notFound } from "next/navigation";
 import ArticleHero from "@/components/blog/ArticleHero";
 import ContentSection from "@/components/blog/ContentSection";
 import BlogBreadcrumbs from "@/components/blog/BlogBreadcrumbs";
-import ArticleSchema from "@/components/blog/ArticleSchema";
-import { JsonLd, breadcrumbJsonLd, faqPageJsonLd } from "@/lib/seo";
+import { JsonLd, breadcrumbJsonLd, faqPageJsonLd, blogPostingJsonLd } from "@/lib/seo";
 import { blogFaqToSchemaItems } from "@/lib/seo/faqSchema";
 import {
   getAllBlogPostSlugs,
@@ -13,8 +12,7 @@ import {
 } from "@/lib/sanity/blogFetchers";
 import { SchemaJsonFromSeo } from "@/components/seo/SchemaJsonFromUrl";
 import { SeoContentBlock } from "@/components/seo/SeoContentBlock";
-import { pageCanonicalUrl, buildPageMetadata } from "@/lib/sanity/pageSeo";
-import { resolveOrganizationLogoUrl } from "@/lib/sanity/seoImage";
+import { buildPageMetadata } from "@/lib/sanity/pageSeo";
 import BlogFaq from "@/components/blog/BlogFaq";
 import {
   RecommendedPostsAside,
@@ -67,39 +65,29 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     { label: heroTitle, href: `/blog/${slug}` },
   ];
 
-  const publisherLogoUrl = resolveOrganizationLogoUrl(currentArticle.seo);
   const uniqueKey = `blog-${slug}`;
   const faqSchema = faqPageJsonLd(
     blogFaqToSchemaItems(currentArticle.customFaq),
   );
+  const blogPostingSchema = blogPostingJsonLd(currentArticle);
 
   return (
     <>
       <Suspense fallback={null}>
         <SchemaJsonFromSeo
           seo={currentArticle.seo}
-          excludeTypes={["Article", "BreadcrumbList", "FAQPage"]}
+          excludeTypes={["Article", "BlogPosting", "BreadcrumbList", "FAQPage"]}
         />
       </Suspense>
       <JsonLd
         data={[
+          ...(blogPostingSchema ? [blogPostingSchema] : []),
           breadcrumbJsonLd(
             crumbs.map((c) => ({ name: c.label, url: c.href })),
           ),
           ...(faqSchema ? [faqSchema] : []),
         ]}
       />
-      {currentArticle._createdAt && (
-        <ArticleSchema
-          headline={heroTitle}
-          url={pageCanonicalUrl(`/blog/${slug}`)}
-          datePublished={currentArticle._createdAt}
-          dateModified={currentArticle._updatedAt}
-          imageUrl={currentArticle.heroImageUrl ?? undefined}
-          logoUrl={publisherLogoUrl}
-          author={currentArticle.author}
-        />
-      )}
       <BlogBreadcrumbs crumbs={crumbs} />
       <ArticleHero article={currentArticle} />
       <div className="container-site lg:flex lg:gap-12">
