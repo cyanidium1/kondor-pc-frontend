@@ -76,7 +76,7 @@ export async function Footer({ navItems }: { navItems: NavEntry[] }) {
 
   return (
     <footer className="relative bg-background pt-[92px] pb-10 md:pb-5">
-      <div className="container-site grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-[1.2fr_repeat(5,minmax(0,1fr))]">
+      <div className="container-site grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-[1.2fr_repeat(4,minmax(0,1fr))]">
         <div className="space-y-4 sm:col-span-2 md:col-span-3 lg:col-span-1">
           <Wordmark size="md" />
           <p className="max-w-sm text-[12px] leading-[120%] text-muted-foreground">

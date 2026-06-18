@@ -120,6 +120,20 @@ export const LANDING_SLUGS_BY_PREFIX = groq`
   expiresAt
 } | order(_updatedAt desc)`;
 
+/** Card previews for /dlya or /promo landing groups. */
+export const LANDING_PREVIEWS_BY_PREFIX = groq`
+*[_type=="page" && pathPrefix==$prefix && defined(slug.current)]{
+  "slug": slug.current,
+  "title": coalesce(seo.metaTitle, internalTitle, sections[_type=="heroSimple"][0].h1),
+  "description": coalesce(seo.metaDescription, sections[_type=="heroSimple"][0].subtitle, ""),
+  "image": coalesce(
+    seo.opengraphImage${IMAGE_FRAGMENT},
+    sections[_type=="heroSimple"][0].bgImage${IMAGE_FRAGMENT}
+  ),
+  publishedAt,
+  expiresAt
+} | order(coalesce(publishedAt, _updatedAt) desc)`;
+
 /** Nav menu items for /dlya or /promo landing groups. */
 export const LANDING_NAV_BY_PREFIX = groq`
 *[_type=="page" && pathPrefix==$prefix && defined(slug.current)]{

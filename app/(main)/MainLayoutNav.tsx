@@ -5,11 +5,8 @@ import { buildNav } from "@/components/layout/nav";
 import { fetchLandingNavItems } from "@/lib/sanity/landingAdapter";
 
 const loadNav = cache(async () => {
-  const [pidbirkyLinks, promoLinks] = await Promise.all([
-    fetchLandingNavItems("dlya").catch(() => []),
-    fetchLandingNavItems("promo").catch(() => []),
-  ]);
-  return buildNav(pidbirkyLinks, promoLinks);
+  const promoLinks = await fetchLandingNavItems("promo").catch(() => []);
+  return buildNav([], promoLinks);
 });
 
 export async function HeaderWithNav() {

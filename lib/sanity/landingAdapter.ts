@@ -21,7 +21,9 @@ import {
   LANDING_PAGE_BY_SLUG,
   LANDING_SLUGS_BY_PREFIX,
   LANDING_NAV_BY_PREFIX,
+  LANDING_PREVIEWS_BY_PREFIX,
 } from "@/lib/sanity/landingQueries";
+import type { SanityImage as BlogSanityImage } from "@/types/blogPost";
 import {
   portableTextToContent,
   portableTextToPlain,
@@ -217,7 +219,45 @@ export async function fetchLandingSlugs(
     .map((r) => r.slug);
 }
 
+export type LandingPagePreview = {
+  slug: string;
+  title: string;
+  description: string;
+  image?: BlogSanityImage;
+};
+
 export type LandingNavItem = { href: string; label: string };
+
+/** Card data for /dlya or /promo landing grids. */
+export async function fetchLandingPreviews(
+  prefix: LandingPathPrefix = "dlya",
+): Promise<LandingPagePreview[]> {
+  const rows: Array<LandingPagePreview & { expiresAt?: string }> =
+    await contentClient.fetch(
+      LANDING_PREVIEWS_BY_PREFIX,
+      { prefix },
+      {
+        next: {
+          revalidate: SANITY_REVALIDATE_SECONDS,
+          tags: ["landings:all", `landings:${prefix}`, "landings:previews"],
+        },
+      },
+    );
+
+  const now = Date.now();
+  return rows
+    .filter((r) => {
+      if (!r.slug || !r.title?.trim()) return false;
+      if (!r.expiresAt) return true;
+      return new Date(r.expiresAt).getTime() > now;
+    })
+    .map(({ slug, title, description, image }) => ({
+      slug,
+      title: title.trim(),
+      description: description?.trim() ?? "",
+      image,
+    }));
+}
 
 /** Links for the «Підбірки» nav group — /dlya/* pages from Sanity. */
 export async function fetchLandingNavItems(

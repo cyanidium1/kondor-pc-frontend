@@ -9,11 +9,8 @@ export default async function CheckoutLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [pidbirkyLinks, promoLinks] = await Promise.all([
-    fetchLandingNavItems("dlya").catch(() => []),
-    fetchLandingNavItems("promo").catch(() => []),
-  ]);
-  const nav = buildNav(pidbirkyLinks, promoLinks);
+  const promoLinks = await fetchLandingNavItems("promo").catch(() => []);
+  const nav = buildNav([], promoLinks);
 
   return (
     <>

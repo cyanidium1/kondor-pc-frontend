@@ -3,8 +3,8 @@
  * Single source of truth — consumed by Header (desktop), MobileMenu (burger),
  * and Footer. Edit here, all three update at once.
  *
- * «Підбірки» and «Промо» groups are populated at runtime from Sanity
- * `/dlya/*` and `/promo/*` pages via `buildNav()` in layouts.
+ * «Промо» group is populated at runtime from Sanity `/promo/*` pages via
+ * `buildNav()` in layouts. `/dlya/*` landings are shown on `/pidbir` only.
  */
 
 export type NavLink = { href: string; label: string };
