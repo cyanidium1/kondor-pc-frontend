@@ -66,6 +66,20 @@ export async function organizationJsonLd(options?: { logoUrl?: string }) {
   };
 }
 
+export function websiteJsonLd() {
+  const siteUrl = SITE_URL.replace(/\/$/, "");
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    name: "Kondor PC",
+    url: siteUrl,
+    inLanguage: "uk-UA",
+    publisher: { "@id": `${siteUrl}/#organization` },
+  };
+}
+
 export function breadcrumbJsonLd(
   items: Array<{ name: string; url: string }>,
 ) {
