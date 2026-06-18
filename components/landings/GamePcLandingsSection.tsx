@@ -2,11 +2,11 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import type { LandingPagePreview } from "@/lib/sanity/landingAdapter";
 import LandingCard from "./LandingCard";
 
-interface DlyaLandingsSectionProps {
+interface GamePcLandingsSectionProps {
   landings: LandingPagePreview[];
 }
 
-export default function DlyaLandingsSection({ landings }: DlyaLandingsSectionProps) {
+export default function GamePcLandingsSection({ landings }: GamePcLandingsSectionProps) {
   if (!landings.length) return null;
 
   return (

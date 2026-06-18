@@ -18,7 +18,7 @@ export const revalidate = 60;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const slugs = await getAllLandingPageSlugs("dlya");
+  const slugs = await getAllLandingPageSlugs("game-pc");
   return slugs.map((slug) => ({slug}));
 }
 
@@ -28,27 +28,27 @@ export async function generateMetadata({
   params: Promise<{slug: string}>;
 }): Promise<Metadata> {
   const {slug} = await params;
-  const page = await getLandingPageBySlug(slug, "dlya");
+  const page = await getLandingPageBySlug(slug, "game-pc");
   if (!page) return {title: "Не знайдено"};
   return buildLandingMetadata({
     seo: page.seo,
-    path: `/dlya/${slug}`,
+    path: `/game-pc/${slug}`,
     defaultTitle: page.internalTitle ?? slug,
   });
 }
 
-export default async function DlyaLandingPage({
+export default async function GamePcLandingPage({
   params,
 }: {
   params: Promise<{slug: string}>;
 }) {
   const {slug} = await params;
-  const page = await getLandingPageBySlug(slug, "dlya");
+  const page = await getLandingPageBySlug(slug, "game-pc");
   if (!page) notFound();
 
   const pageContext = page.context
     ? await resolvePageContext(page.context)
-    : buildSanityPageContext("dlya", slug);
+    : buildSanityPageContext("game-pc", slug);
 
   const faqSchema = faqPageJsonLd(extractLandingFaqSchemaItems(page.sections));
 
@@ -57,7 +57,7 @@ export default async function DlyaLandingPage({
       <SchemaJsonFromSeo seo={page.seo} excludeTypes={["FAQPage"]} />
       {faqSchema ? <JsonLd data={faqSchema} /> : null}
       <LandingPageBody page={page} pageContext={pageContext} />
-      <SeoContentBlock seo={page.seo} scopeKey={`dlya-${slug}`} />
+      <SeoContentBlock seo={page.seo} scopeKey={`game-pc-${slug}`} />
     </>
   );
 }

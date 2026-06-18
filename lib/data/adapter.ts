@@ -1,5 +1,5 @@
 /**
- * Single source of data for /dlya and /promo landing blocks.
+ * Single source of data for /game-pc and /promo landing blocks.
  *
  * Sanity-first: pages live in the kondor-pc-admin project (`if6dzz62`).
  * Local mocks back build/testimonial blocks that still depend on mocked data.
@@ -67,13 +67,13 @@ export async function getTestimonialsByGameTag(
 
 export async function getLandingPageBySlug(
   slug: string,
-  prefix: LandingPathPrefix = "dlya",
+  prefix: LandingPathPrefix = "game-pc",
 ): Promise<LandingPage | null> {
   return fetchLandingPageBySlug(slug, prefix);
 }
 
 export async function getAllLandingPageSlugs(
-  prefix: LandingPathPrefix = "dlya",
+  prefix: LandingPathPrefix = "game-pc",
 ): Promise<string[]> {
   return fetchLandingSlugs(prefix);
 }

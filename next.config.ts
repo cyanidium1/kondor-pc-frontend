@@ -17,6 +17,15 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react", "@base-ui/react"],
   },
+  async redirects() {
+    return [
+      {
+        source: "/dlya/:path*",
+        destination: "/game-pc/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

@@ -9,7 +9,7 @@ interface LandingSeoParams {
   defaultDescription?: string;
 }
 
-/** Next.js Metadata for /dlya and /promo landing pages from Sanity `page.seo` (`seoSettings`). */
+/** Next.js Metadata for /game-pc and /promo landing pages from Sanity `page.seo` (`seoSettings`). */
 export function buildLandingMetadata({
   seo,
   path,

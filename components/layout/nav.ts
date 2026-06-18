@@ -4,7 +4,7 @@
  * and Footer. Edit here, all three update at once.
  *
  * «Промо» group is populated at runtime from Sanity `/promo/*` pages via
- * `buildNav()` in layouts. `/dlya/*` landings are shown on `/pidbir` only.
+ * `buildNav()` in layouts. `/game-pc/*` landings are shown on `/pidbir` only.
  */
 
 export type NavLink = { href: string; label: string };

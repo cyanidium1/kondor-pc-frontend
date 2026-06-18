@@ -5,12 +5,12 @@ import type { LandingPagePreview } from "@/lib/sanity/landingAdapter";
 
 interface LandingCardProps {
   landing: LandingPagePreview;
-  hrefPrefix?: "dlya" | "promo";
+  hrefPrefix?: "game-pc" | "promo";
 }
 
 export default function LandingCard({
   landing,
-  hrefPrefix = "dlya",
+  hrefPrefix = "game-pc",
 }: LandingCardProps) {
   const { image, title, description, slug } = landing;
 

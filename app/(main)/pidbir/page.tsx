@@ -8,7 +8,7 @@ import { SiteWebPageJsonLd } from "@/components/seo/SiteWebPageJsonLd";
 import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 import { fetchLandingPreviews } from "@/lib/sanity/landingAdapter";
-import DlyaLandingsSection from "@/components/landings/DlyaLandingsSection";
+import GamePcLandingsSection from "@/components/landings/GamePcLandingsSection";
 
 export async function generateMetadata(): Promise<Metadata> {
   return metadataForSitePage("seoPickerPage");
@@ -17,9 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export const revalidate = 60;
 
 export default async function PidbirPage() {
-  const [gamesCatalog, dlyaLandings] = await Promise.all([
+  const [gamesCatalog, gamePcLandings] = await Promise.all([
     getAllGames(),
-    fetchLandingPreviews("dlya").catch(() => []),
+    fetchLandingPreviews("game-pc").catch(() => []),
   ]);
   return (
     <>
@@ -82,7 +82,7 @@ fetchPriority="low"
           <SelectionForm gamesCatalog={gamesCatalog} />
         </div>
       </div>
-      <DlyaLandingsSection landings={dlyaLandings} />
+      <GamePcLandingsSection landings={gamePcLandings} />
       <SitePageSeoContent pageId="seoPickerPage" />
     </>
   );

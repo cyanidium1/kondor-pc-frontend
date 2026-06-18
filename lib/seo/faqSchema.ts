@@ -3,7 +3,7 @@ import type { BlogFaqItem } from "@/types/blogPost";
 
 export type FaqSchemaItem = { question: string; answer: string };
 
-/** FAQ items from landing `faqAccordion` sections (dlya / promo). */
+/** FAQ items from landing `faqAccordion` sections (game-pc / promo). */
 export function extractLandingFaqSchemaItems(
   sections: Section[],
 ): FaqSchemaItem[] {

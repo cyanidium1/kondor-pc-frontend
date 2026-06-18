@@ -2,7 +2,7 @@ import {BLOCKS} from "@/components/blocks";
 import type {LandingPage, ResolvedPageContext, Section} from "@/lib/data/types";
 
 /**
- * LandingPageBody — shared section renderer for /dlya/[slug] and /promo/[slug].
+ * LandingPageBody — shared section renderer for /game-pc/[slug] and /promo/[slug].
  *
  * Iterates `page.sections` and looks each up in the `BLOCKS` registry by
  * `_type`. Unknown types are skipped (with a dev-only warning). Sections

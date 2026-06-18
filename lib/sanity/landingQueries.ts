@@ -120,7 +120,7 @@ export const LANDING_SLUGS_BY_PREFIX = groq`
   expiresAt
 } | order(_updatedAt desc)`;
 
-/** Card previews for /dlya or /promo landing groups. */
+/** Card previews for /game-pc or /promo landing groups. */
 export const LANDING_PREVIEWS_BY_PREFIX = groq`
 *[_type=="page" && pathPrefix==$prefix && defined(slug.current)]{
   "slug": slug.current,
@@ -134,7 +134,7 @@ export const LANDING_PREVIEWS_BY_PREFIX = groq`
   expiresAt
 } | order(coalesce(publishedAt, _updatedAt) desc)`;
 
-/** Nav menu items for /dlya or /promo landing groups. */
+/** Nav menu items for /game-pc or /promo landing groups. */
 export const LANDING_NAV_BY_PREFIX = groq`
 *[_type=="page" && pathPrefix==$prefix && defined(slug.current)]{
   "slug": slug.current,

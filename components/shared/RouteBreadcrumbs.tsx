@@ -18,7 +18,7 @@ const LABELS: Record<string, string> = {
   "politika-konfidentsiynosti": "Політика конфіденційності",
   "pravova-informatsiya": "Правова інформація · Реквізити",
   blog: "Блог",
-  dlya: "Для",
+  "game-pc": "Ігрові ПК",
   promo: "Промо",
   styleguide: "Styleguide",
   oformlennya: "Оформлення",
@@ -41,7 +41,7 @@ function segmentLabel(segment: string): string {
 export function RouteBreadcrumbs() {
   const pathname = usePathname();
   if (!pathname || pathname === "/") return null;
-  if (pathname.startsWith("/dlya/") || pathname.startsWith("/promo/"))
+  if (pathname.startsWith("/game-pc/") || pathname.startsWith("/promo/"))
     return null;
   if (pathname.startsWith("/blog")) return null;
 

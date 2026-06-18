@@ -102,7 +102,7 @@ export async function GET() {
       { loc: "/kontakty", lastmod: now, changefreq: "monthly", priority: 0.5 },
     ];
 
-    const [builds, dlyaPagesRaw, promoPagesRaw, catalogItems, blogPosts] =
+    const [builds, gamePcPagesRaw, promoPagesRaw, catalogItems, blogPosts] =
       await Promise.all([
         sanityPcClient
           .fetch<Array<{ slug: string; updatedAt?: string }>>(BUILD_SITEMAP_QUERY)
@@ -110,7 +110,7 @@ export async function GET() {
         contentClient
           .fetch<Array<{ slug: string; updatedAt?: string; expiresAt?: string }>>(
             LANDING_SITEMAP_QUERY,
-            { prefix: "dlya" },
+            { prefix: "game-pc" },
           )
           .catch(() => []),
         contentClient
@@ -140,10 +140,10 @@ export async function GET() {
       return Number.isFinite(expiresAtMs) && expiresAtMs > Date.now();
     };
 
-    const dlyaPages: SitemapUrl[] = dlyaPagesRaw
+    const gamePcPages: SitemapUrl[] = gamePcPagesRaw
       .filter((page) => isNotExpired(page.expiresAt))
       .map((page) => ({
-        loc: `/dlya/${page.slug}`,
+        loc: `/game-pc/${page.slug}`,
         lastmod: page.updatedAt ?? now,
         changefreq: "weekly",
         priority: 0.7,
@@ -184,7 +184,7 @@ export async function GET() {
     const xml = generateSitemapXml(baseUrl, [
       ...staticPages,
       ...buildPages,
-      ...dlyaPages,
+      ...gamePcPages,
       ...promoPages,
       ...productPages,
       ...blogPostPages,

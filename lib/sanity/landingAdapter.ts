@@ -161,7 +161,7 @@ function normalizeSection(s: any): Section {
   }
 }
 
-export type LandingPathPrefix = "dlya" | "promo";
+export type LandingPathPrefix = "game-pc" | "promo";
 
 export async function fetchLandingPageBySlug(
   slug: string,
@@ -228,9 +228,9 @@ export type LandingPagePreview = {
 
 export type LandingNavItem = { href: string; label: string };
 
-/** Card data for /dlya or /promo landing grids. */
+/** Card data for /game-pc or /promo landing grids. */
 export async function fetchLandingPreviews(
-  prefix: LandingPathPrefix = "dlya",
+  prefix: LandingPathPrefix = "game-pc",
 ): Promise<LandingPagePreview[]> {
   const rows: Array<LandingPagePreview & { expiresAt?: string }> =
     await contentClient.fetch(
@@ -259,9 +259,9 @@ export async function fetchLandingPreviews(
     }));
 }
 
-/** Links for the «Підбірки» nav group — /dlya/* pages from Sanity. */
+/** Links for the «Підбірки» nav group — /game-pc/* pages from Sanity. */
 export async function fetchLandingNavItems(
-  prefix: LandingPathPrefix = "dlya",
+  prefix: LandingPathPrefix = "game-pc",
 ): Promise<LandingNavItem[]> {
   const rows: Array<{
     slug: string;
