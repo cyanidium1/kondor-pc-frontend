@@ -35,16 +35,6 @@ export async function organizationJsonLd(options?: { logoUrl?: string }) {
   };
 }
 
-export function websiteJsonLd() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "Kondor PC",
-    url: SITE_URL,
-    inLanguage: "uk-UA",
-  };
-}
-
 export function breadcrumbJsonLd(
   items: Array<{ name: string; url: string }>,
 ) {

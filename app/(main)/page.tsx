@@ -11,7 +11,7 @@ import {
   selectHomeTopBuilds,
 } from "@/lib/sanity-pc/builds";
 import { faqsByScope } from "@/lib/mock/faqs";
-import { JsonLd, websiteJsonLd, faqPageJsonLd } from "@/lib/seo";
+import { JsonLd, faqPageJsonLd } from "@/lib/seo";
 import { Reveal } from "@/components/shared/Reveal";
 import { BudgetChipLink } from "@/components/shared/BudgetChipLink";
 import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
@@ -111,9 +111,7 @@ export default async function HomePage() {
       <Suspense fallback={null}>
         <HomeOrganizationJsonLd />
       </Suspense>
-      <JsonLd
-        data={[websiteJsonLd(), ...(homeFaqSchema ? [homeFaqSchema] : [])]}
-      />
+      {homeFaqSchema ? <JsonLd data={homeFaqSchema} /> : null}
       {/* 1 · HERO */}
       <section className="relative overflow-hidden rounded-b-[28px]">
         <div className="absolute bottom-[-92px] md:bottom-[-319px] left-[-261px] size-[469px] rounded-full bg-[#00FFFE] blur-[100px]" />
