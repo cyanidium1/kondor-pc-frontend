@@ -11,27 +11,58 @@ import {
 export async function organizationJsonLd(options?: { logoUrl?: string }) {
   const logoUrl = options?.logoUrl ?? DEFAULT_SOCIAL_IMAGE_URL;
   const contacts = await getSiteContacts().catch(() => null);
-  const sameAs = [
-    contacts?.instagramUrl ? ensureHttps(contacts.instagramUrl) : null,
-    contacts?.telegramChatUrl ? ensureHttps(contacts.telegramChatUrl) : null,
-    contacts?.youtubeUrl ? ensureHttps(contacts.youtubeUrl) : null,
-    contacts?.telegram ? telegramHref(contacts.telegram) : null,
-  ].filter((url): url is string => Boolean(url));
+
+  const phone = contacts?.phone ?? "+380633631066";
+  const email = contacts?.email ?? "info@kondor-pc.ua";
+  const telegramUrl = contacts?.telegramChatUrl
+    ? ensureHttps(contacts.telegramChatUrl)
+    : contacts?.telegram
+      ? telegramHref(contacts.telegram)
+      : "https://t.me/kondor_pc";
+  const instagramUrl = contacts?.instagramUrl
+    ? ensureHttps(contacts.instagramUrl)
+    : "https://www.instagram.com/kondor_pc";
+  const youtubeUrl = contacts?.youtubeUrl
+    ? ensureHttps(contacts.youtubeUrl)
+    : "https://www.youtube.com/@kondorpc";
+
+  const siteUrl = SITE_URL.replace(/\/$/, "");
 
   return {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": ["Organization", "OnlineStore"],
+    "@id": `${siteUrl}/#organization`,
     name: "Kondor PC",
-    url: SITE_URL,
-    logo: logoUrl,
-    ...(sameAs.length > 0 ? { sameAs } : {}),
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Київ",
-      addressCountry: "UA",
+    url: siteUrl,
+    logo: {
+      "@type": "ImageObject",
+      url: logoUrl,
     },
-    ...(contacts?.phone ? { telephone: contacts.phone } : {}),
-    ...(contacts?.email ? { email: contacts.email } : {}),
+    foundingDate: "2020",
+    telephone: phone,
+    email,
+    areaServed: "UA",
+    sameAs: [telegramUrl, instagramUrl, youtubeUrl],
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        telephone: phone,
+        contactType: "customer service",
+        areaServed: "UA",
+        availableLanguage: "Ukrainian",
+      },
+      {
+        "@type": "ContactPoint",
+        email,
+        contactType: "customer service",
+        areaServed: "UA",
+      },
+      {
+        "@type": "ContactPoint",
+        url: telegramUrl,
+        contactType: "customer service",
+      },
+    ],
   };
 }
 

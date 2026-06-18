@@ -4,6 +4,7 @@ import { Footer } from "@/components/layout/Footer";
 import { RouteBreadcrumbs } from "@/components/shared/RouteBreadcrumbs";
 import { NAV } from "@/components/layout/nav";
 import { FooterWithNav, HeaderWithNav } from "./MainLayoutNav";
+import { OrganizationJsonLd } from "@/components/seo/OrganizationJsonLd";
 
 export default function MainLayout({
   children,
@@ -12,6 +13,9 @@ export default function MainLayout({
 }) {
   return (
     <>
+      <Suspense fallback={null}>
+        <OrganizationJsonLd />
+      </Suspense>
       <Suspense fallback={<Header navItems={NAV} />}>
         <HeaderWithNav />
       </Suspense>

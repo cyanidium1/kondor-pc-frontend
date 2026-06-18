@@ -31,7 +31,6 @@ import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 import { HomeHeroBuild } from "./home/HomeHeroBuild";
 import { HomeTopBuildsSection } from "./home/HomeTopBuildsSection";
 import { HomePcTasksSection } from "./home/HomePcTasksSection";
-import { HomeOrganizationJsonLd } from "./home/HomeOrganizationJsonLd";
 import { FaqBlock } from "@/components/shared/FaqBlock";
 import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 
@@ -106,11 +105,8 @@ export default async function HomePage() {
     <>
       <DeferredSitePageSchema
         pageId="seoHomePage"
-        excludeTypes={["Organization", "WebSite", "FAQPage"]}
+        excludeTypes={["Organization", "OnlineStore", "WebSite", "FAQPage"]}
       />
-      <Suspense fallback={null}>
-        <HomeOrganizationJsonLd />
-      </Suspense>
       {homeFaqSchema ? <JsonLd data={homeFaqSchema} /> : null}
       {/* 1 · HERO */}
       <section className="relative overflow-hidden rounded-b-[28px]">
