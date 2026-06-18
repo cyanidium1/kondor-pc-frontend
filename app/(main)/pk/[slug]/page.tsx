@@ -29,6 +29,7 @@ import {
   productJsonLd,
   breadcrumbJsonLd,
   faqPageJsonLd,
+  howToAssemblyJsonLd,
 } from "@/lib/seo";
 import { getAllBuilds, getBuildBySlug, getBuildSlugs, pickSimilarBuilds } from "@/lib/sanity-pc/builds";
 import { getAllGames, makeGameLabelMap, makeGameShortLabelMap } from "@/lib/sanity-pc/games";
@@ -200,7 +201,7 @@ export default async function BuildPage({
         <Suspense fallback={null}>
           <SchemaJsonFromSeo
             seo={build.seo}
-            excludeTypes={["Product", "BreadcrumbList", "FAQPage"]}
+            excludeTypes={["Product", "BreadcrumbList", "FAQPage", "HowTo"]}
           />
         </Suspense>
         <JsonLd
@@ -214,6 +215,7 @@ export default async function BuildPage({
               { name: build.name, url: `/pk/${build.slug}` },
             ]),
             ...(faqSchema ? [faqSchema] : []),
+            howToAssemblyJsonLd(),
           ]}
         />
         {/* BLOCK 1 — ID + PRICE + CTA */}

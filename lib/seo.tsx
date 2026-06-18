@@ -120,6 +120,8 @@ export function breadcrumbJsonLd(
   };
 }
 
+export { howToAssemblyJsonLd } from "@/lib/seo/howToAssemblyJsonLd";
+
 export function productJsonLd(
   build: Build,
   imageUrl: string,
