@@ -205,7 +205,9 @@ export default async function BuildPage({
         </Suspense>
         <JsonLd
           data={[
-            productJsonLd(build, productImageUrl),
+            productJsonLd(build, productImageUrl, {
+              gameLabels: gameShortLabels,
+            }),
             breadcrumbJsonLd([
               { name: "Головна", url: "/" },
               { name: "Ігрові ПК", url: "/pk" },

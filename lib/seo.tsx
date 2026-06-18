@@ -1,6 +1,7 @@
 import type { Build, Faq } from "@/types/build";
 import type { CatalogProductDetail } from "@/types/catalog";
 import type { FaqSchemaItem } from "@/lib/seo/faqSchema";
+import { pcBuildProductJsonLd } from "@/lib/seo/pcBuildProductJsonLd";
 import { DEFAULT_SOCIAL_IMAGE_URL, SITE_URL } from "@/lib/seo/constants";
 import {
   ensureHttps,
@@ -118,28 +119,12 @@ export function breadcrumbJsonLd(
   };
 }
 
-export function productJsonLd(build: Build, imageUrl: string) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: `${build.name} — Ігровий ПК`,
-    description: `Ігровий ПК з ${build.spec.cpu}, ${build.spec.gpu}, ${build.spec.ram}.`,
-    image: imageUrl,
-    brand: { "@type": "Brand", name: "Kondor PC" },
-    offers: {
-      "@type": "Offer",
-      url: `${SITE_URL}/pk/${build.slug}`,
-      priceCurrency: "UAH",
-      price: String(build.priceUah),
-      availability:
-        build.status === "in_stock"
-          ? "https://schema.org/InStock"
-          : build.status === "assemble_on_order"
-            ? "https://schema.org/PreOrder"
-            : "https://schema.org/OutOfStock",
-      itemCondition: "https://schema.org/NewCondition",
-    },
-  };
+export function productJsonLd(
+  build: Build,
+  imageUrl: string,
+  options?: { gameLabels?: Record<string, string> },
+) {
+  return pcBuildProductJsonLd(build, imageUrl, options);
 }
 
 export function catalogProductJsonLd(
