@@ -10,6 +10,7 @@ import type { PageSeo } from "@/types/blogPost";
 import type { ContentNode } from "@/lib/data/types/content";
 import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/revalidate";
 import { portableTextToContent, portableTextToPlain } from "@/lib/sanity/portableText";
+import { normalizeSanityDatetime } from "@/lib/sanity/normalizeDatetime";
 import { SEO_SETTINGS_PROJECTION } from "@/lib/sanity/siteSeoQueries";
 import { sanityPcClient } from "./client";
 import { urlForPc } from "./image";
@@ -83,8 +84,10 @@ type RawBuild = {
   gallery?: unknown[];
   assemblyVideoUrl?: string;
   assemblyVideoPoster?: unknown;
+  assemblyVideoUploadDate?: string;
   gameplayVideoUrl?: string;
   gameplayVideoPoster?: unknown;
+  gameplayVideoUploadDate?: string;
   fpsCoefficient?: number;
   gpuDoc?: {
     brand?: string;
@@ -134,8 +137,10 @@ const BUILDS_QUERY = `
   "gallery": coalesce(gallery, []),
   assemblyVideoUrl,
   assemblyVideoPoster,
+  assemblyVideoUploadDate,
   gameplayVideoUrl,
   gameplayVideoPoster,
+  gameplayVideoUploadDate,
   fpsCoefficient,
   "gpuDoc": gpu->{
     brand,
@@ -437,8 +442,10 @@ function mapBuild(raw: RawBuild): Build {
     galleryImageUrls: galleryImageUrls.length > 0 ? galleryImageUrls : undefined,
     assemblyVideoUrl: raw.assemblyVideoUrl,
     assemblyVideoPosterUrl,
+    assemblyVideoUploadDate: normalizeSanityDatetime(raw.assemblyVideoUploadDate),
     gameplayVideoUrl: raw.gameplayVideoUrl,
     gameplayVideoPosterUrl,
+    gameplayVideoUploadDate: normalizeSanityDatetime(raw.gameplayVideoUploadDate),
     configurableOptions: makeConfigGroups(raw),
     seo: raw.seo ?? null,
   };

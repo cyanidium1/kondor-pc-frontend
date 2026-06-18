@@ -30,6 +30,7 @@ import {
   breadcrumbJsonLd,
   faqPageJsonLd,
   howToAssemblyJsonLd,
+  pcBuildVideoObjectJsonLd,
 } from "@/lib/seo";
 import { getAllBuilds, getBuildBySlug, getBuildSlugs, pickSimilarBuilds } from "@/lib/sanity-pc/builds";
 import { getAllGames, makeGameLabelMap, makeGameShortLabelMap } from "@/lib/sanity-pc/games";
@@ -193,6 +194,9 @@ export default async function BuildPage({
   const needsInteractiveGallery =
     galleryImages.length > 1 || Boolean(build.assemblyVideoUrl);
   const faqSchema = faqPageJsonLd(faqs);
+  const videoSchemas = pcBuildVideoObjectJsonLd(build, {
+    gameLabels: gameShortLabels,
+  });
 
   return (
     <ProductConfiguratorProvider build={build}>
@@ -201,7 +205,7 @@ export default async function BuildPage({
         <Suspense fallback={null}>
           <SchemaJsonFromSeo
             seo={build.seo}
-            excludeTypes={["Product", "BreadcrumbList", "FAQPage", "HowTo"]}
+            excludeTypes={["Product", "BreadcrumbList", "FAQPage", "HowTo", "VideoObject"]}
           />
         </Suspense>
         <JsonLd
@@ -216,6 +220,7 @@ export default async function BuildPage({
             ]),
             ...(faqSchema ? [faqSchema] : []),
             howToAssemblyJsonLd(),
+            ...videoSchemas,
           ]}
         />
         {/* BLOCK 1 — ID + PRICE + CTA */}

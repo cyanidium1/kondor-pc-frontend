@@ -112,10 +112,14 @@ export interface Build {
   assemblyVideoUrl?: string;
   /** Постер відео збірки (Sanity `assemblyVideoPoster`). */
   assemblyVideoPosterUrl?: string;
+  /** Дата публікації відеозвіту (Sanity `assemblyVideoUploadDate`, ISO). */
+  assemblyVideoUploadDate?: string;
   /** Відео секції «Реальні тести» (Sanity `gameplayVideoUrl`). */
   gameplayVideoUrl?: string;
   /** Постер відео секції «Реальні тести» (Sanity `gameplayVideoPoster`). */
   gameplayVideoPosterUrl?: string;
+  /** Дата публікації геймплей-відео (Sanity `gameplayVideoUploadDate`, ISO). */
+  gameplayVideoUploadDate?: string;
   /** Optional upgrade/option groups shown on the PC page configurator. When absent — configurator is hidden. */
   configurableOptions?: ConfigGroup[];
   /** Відгуки з Sanity (масив на документі збірки). */

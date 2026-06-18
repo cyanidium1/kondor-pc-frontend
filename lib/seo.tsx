@@ -122,6 +122,7 @@ export function breadcrumbJsonLd(
 
 export { howToAssemblyJsonLd } from "@/lib/seo/howToAssemblyJsonLd";
 export { pcCatalogCollectionPageJsonLd } from "@/lib/seo/pcCatalogCollectionPageJsonLd";
+export { pcBuildVideoObjectJsonLd } from "@/lib/seo/pcBuildVideoObjectJsonLd";
 
 export function productJsonLd(
   build: Build,
