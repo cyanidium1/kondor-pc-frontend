@@ -14,6 +14,7 @@ import {
   getSiteContacts,
 } from "@/lib/sanity/siteContacts";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { SiteWebPageJsonLd } from "@/components/seo/SiteWebPageJsonLd";
 import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 import { LEGAL_SEO_BY_SLUG } from "@/lib/sanity/siteSeoConfig";
 import { metadataForLegalSlug } from "@/lib/sanity/siteSeoFetcher";
@@ -71,7 +72,15 @@ export default async function LegalPage({
 
   return (
     <>
-      {legalSeoPageId ? <SitePageSchemaJson pageId={legalSeoPageId} /> : null}
+      {legalSeoPageId ? (
+        <>
+          <SitePageSchemaJson
+            pageId={legalSeoPageId}
+            excludeTypes={["WebPage"]}
+          />
+          <SiteWebPageJsonLd pageId={legalSeoPageId} />
+        </>
+      ) : null}
       <div className="container-site py-16 md:py-24">
         <div className="mb-10">
           <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">

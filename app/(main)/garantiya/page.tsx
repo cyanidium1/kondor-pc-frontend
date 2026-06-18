@@ -13,6 +13,7 @@ import Image from "next/image";
 import { Reveal } from "@/components/shared/Reveal";
 import { LazyMarqueeLine } from "@/components/shared/LazyMarqueeLine";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { SiteWebPageJsonLd } from "@/components/seo/SiteWebPageJsonLd";
 import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 import { JsonLd, faqPageJsonLd } from "@/lib/seo";
@@ -90,8 +91,9 @@ export default function WarrantyPage() {
     <>
       <SitePageSchemaJson
         pageId="seoWarrantyPage"
-        excludeTypes={["FAQPage"]}
+        excludeTypes={["FAQPage", "WebPage"]}
       />
+      <SiteWebPageJsonLd pageId="seoWarrantyPage" />
       {faqSchema ? <JsonLd data={faqSchema} /> : null}
       {/* Hero */}
       <section className="relative">

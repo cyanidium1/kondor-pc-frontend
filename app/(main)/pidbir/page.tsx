@@ -4,6 +4,7 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import { getAllGames } from "@/lib/sanity-pc/games";
 import Image from "next/image";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { SiteWebPageJsonLd } from "@/components/seo/SiteWebPageJsonLd";
 import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
@@ -17,7 +18,8 @@ export default async function PidbirPage() {
   const gamesCatalog = await getAllGames();
   return (
     <>
-      <SitePageSchemaJson pageId="seoPickerPage" />
+      <SitePageSchemaJson pageId="seoPickerPage" excludeTypes={["WebPage"]} />
+      <SiteWebPageJsonLd pageId="seoPickerPage" />
       <div className="">
         <section className="relative py-[150px] lg:pb-30 mb-15 lg:mb-25 rounded-b-[40px] overflow-hidden">
           <div className="relative container-site">

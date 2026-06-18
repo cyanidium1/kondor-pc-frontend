@@ -3,6 +3,7 @@ import { LazyCustomBuildForm } from "./LazyCustomBuildForm";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import Image from "next/image";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { SiteWebPageJsonLd } from "@/components/seo/SiteWebPageJsonLd";
 import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
@@ -38,7 +39,11 @@ const STEPS = [
 export default function SborkaPage() {
   return (
     <>
-      <SitePageSchemaJson pageId="seoCustomBuildPage" />
+      <SitePageSchemaJson
+        pageId="seoCustomBuildPage"
+        excludeTypes={["WebPage"]}
+      />
+      <SiteWebPageJsonLd pageId="seoCustomBuildPage" />
       <div className="relative container-site pt-8 lg:pt-12 pb-16 lg:py-24">
         <div className="absolute -z-20 top-[-97px] sm:top-[-197px] lg:top-[-167px] right-[-615px] lg:right-[-420px] w-[1876px] h-[1990px]">
           <Image

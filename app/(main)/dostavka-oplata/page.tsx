@@ -16,6 +16,7 @@ import { LazyMarqueeLine } from "@/components/shared/LazyMarqueeLine";
 import Image from "next/image";
 import { Reveal } from "@/components/shared/Reveal";
 import { DeferredSitePageSchema } from "@/components/seo/DeferredSitePageSchema";
+import { SiteWebPageJsonLd } from "@/components/seo/SiteWebPageJsonLd";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 import { JsonLd, faqPageJsonLd } from "@/lib/seo";
 import { DeliveryBusinessSection } from "./DeliveryBusinessSection";
@@ -115,8 +116,9 @@ export default function DeliveryPaymentPage() {
     <>
       <DeferredSitePageSchema
         pageId="seoDeliveryPaymentPage"
-        excludeTypes={["FAQPage"]}
+        excludeTypes={["FAQPage", "WebPage"]}
       />
+      <SiteWebPageJsonLd pageId="seoDeliveryPaymentPage" />
       {faqSchema ? <JsonLd data={faqSchema} /> : null}
       <div className="rounded-b-[28px] lg:rounded-b-[40px] overflow-hidden">
         <section>

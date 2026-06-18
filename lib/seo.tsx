@@ -80,6 +80,29 @@ export function websiteJsonLd() {
   };
 }
 
+export function webPageJsonLd({
+  path,
+  name,
+}: {
+  path: string;
+  name: string;
+}) {
+  const siteUrl = SITE_URL.replace(/\/$/, "");
+  const pathname =
+    path === "/" ? "" : path.startsWith("/") ? path : `/${path}`;
+  const url = `${siteUrl}${pathname}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${url}#webpage`,
+    name,
+    url,
+    inLanguage: "uk-UA",
+    publisher: { "@id": `${siteUrl}/#organization` },
+  };
+}
+
 export function breadcrumbJsonLd(
   items: Array<{ name: string; url: string }>,
 ) {

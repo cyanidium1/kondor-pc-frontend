@@ -27,6 +27,7 @@ import {
 import Image from "next/image";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import { DeferredSitePageSchema } from "@/components/seo/DeferredSitePageSchema";
+import { SiteWebPageJsonLd } from "@/components/seo/SiteWebPageJsonLd";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 import { HomeHeroBuild } from "./home/HomeHeroBuild";
 import { HomeTopBuildsSection } from "./home/HomeTopBuildsSection";
@@ -105,8 +106,9 @@ export default async function HomePage() {
     <>
       <DeferredSitePageSchema
         pageId="seoHomePage"
-        excludeTypes={["Organization", "OnlineStore", "WebSite", "FAQPage"]}
+        excludeTypes={["Organization", "OnlineStore", "WebSite", "FAQPage", "WebPage"]}
       />
+      <SiteWebPageJsonLd pageId="seoHomePage" />
       {homeFaqSchema ? <JsonLd data={homeFaqSchema} /> : null}
       {/* 1 · HERO */}
       <section className="relative overflow-hidden rounded-b-[28px]">

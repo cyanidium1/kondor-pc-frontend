@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { TechButtonLink } from "@/components/shared/TechButtonPrimitives";
 import ArrowIcon from "@/components/icons/ArrowIcon";
 import { SitePageSchemaJson } from "@/components/seo/SitePageSchemaJson";
+import { SiteWebPageJsonLd } from "@/components/seo/SiteWebPageJsonLd";
 import { SitePageSeoContent } from "@/components/seo/SitePageSeoContent";
 import { metadataForSitePage } from "@/lib/sanity/siteSeoFetcher";
 
@@ -81,7 +82,11 @@ export default async function ResultPage({
 
   return (
     <>
-      <SitePageSchemaJson pageId="seoPickerResultPage" />
+      <SitePageSchemaJson
+        pageId="seoPickerResultPage"
+        excludeTypes={["WebPage"]}
+      />
+      <SiteWebPageJsonLd pageId="seoPickerResultPage" />
     <div className="container-site py-12 md:py-16">
       <div className="mb-10">
         <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">

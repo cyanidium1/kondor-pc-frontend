@@ -2,6 +2,7 @@ import { cache } from "react";
 import type { Metadata } from "next";
 import type { PageSeo } from "@/types/blogPost";
 import { buildPageMetadata } from "@/lib/sanity/pageSeo";
+import { webPageJsonLd } from "@/lib/seo";
 import {
   LEGAL_SEO_BY_SLUG,
   SITE_SEO_CONFIG,
@@ -39,6 +40,14 @@ export async function metadataForSitePage(
     defaultTitle: config.defaultTitle,
     defaultDescription: config.defaultDescription,
   });
+}
+
+/** WebPage JSON-LD for a configured site page (Sanity meta title → defaults). */
+export async function webPageSchemaForSitePage(pageId: SiteSeoPageId) {
+  const config = SITE_SEO_CONFIG[pageId];
+  const seo = await fetchSiteSeoByPageId(pageId).catch(() => null);
+  const name = seo?.metaTitle?.trim() || config.defaultTitle;
+  return webPageJsonLd({ path: config.path, name });
 }
 
 /** SEO for `/legal/[slug]` when slug maps to a site SEO singleton. */
